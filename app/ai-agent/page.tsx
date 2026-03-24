@@ -109,6 +109,7 @@ export default function AIAgentCorePage() {
         subheadline="Connect AI agents to pricing, validation, and production through PrintPrice OS. From prompt to printed output — fully controlled."
         primaryAction={{ label: "Get API access →", href: "/contact" }}
         secondaryAction={{ label: "See the flow ↓", href: "#flow" }}
+        variant="particles"
       />
       
       <div style={{ textAlign: 'center', marginTop: '-4rem', marginBottom: '6rem', opacity: 0.6 }}>

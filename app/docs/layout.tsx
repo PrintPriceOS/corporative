@@ -88,6 +88,27 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
               </ul>
             </div>
           ))}
+          
+          <div style={{ 
+            marginTop: '2rem', 
+            padding: '1.5rem', 
+            background: 'rgba(220, 0, 0, 0.05)', 
+            border: '1px solid var(--accent-primary)',
+            borderRadius: '2px'
+          }}>
+            <h6 className="technical-text" style={{ fontSize: '0.6rem', color: 'var(--accent-primary)', marginBottom: '0.75rem', letterSpacing: '0.1em' }}>EXTERNAL_CORE</h6>
+            <a href="https://docs.printprice.pro/" target="_blank" rel="noopener noreferrer" style={{
+              fontSize: '0.8rem',
+              fontWeight: 800,
+              color: 'var(--text-primary)',
+              textDecoration: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}>
+              EXPLORE FULL DOCS →
+            </a>
+          </div>
         </nav>
       </aside>
 

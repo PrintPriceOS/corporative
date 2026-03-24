@@ -5,12 +5,14 @@ interface SectionProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactNode;
   variant?: 'primary' | 'secondary' | 'bright' | 'dark' | 'transparent';
   showGrid?: boolean;
+  background?: React.ReactNode;
 }
 
 export const Section: React.FC<SectionProps> = ({ 
   children, 
   variant = 'primary', 
   showGrid = true,
+  background,
   className = '', 
   style = {},
   ...props 
@@ -45,6 +47,7 @@ export const Section: React.FC<SectionProps> = ({
       }}
       {...props}
     >
+      {background}
       <Container>
         {children}
       </Container>

@@ -25,6 +25,7 @@ export default function BudgetPage() {
         subheadline="Get exact printing costs in seconds. No estimates. No guesswork. Real production costs instantly — based on your exact specs."
         primaryAction={{ label: "Calculate my print cost →", href: "https://budget.printprice.pro" }}
         secondaryAction={{ label: "See how it works →", href: "#features" }}
+        variant="particles"
       />
 
       {/* Feature Grid - No-Line Rule */}

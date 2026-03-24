@@ -16,6 +16,7 @@ export default function PlatformPage() {
         subheadline="Replace manual workflows with a single system that handles pricing, validation, and production. Calculate costs, validate files, and route production — automatically."
         primaryAction={{ label: "Explore the platform →", href: "#architecture" }}
         secondaryAction={{ label: "Talk to an expert", href: "/contact" }}
+        variant="particles"
       />
 
       {/* The 7 Surfaces Grid - Specialized Component Enforcement (Refined Copy v1.2) */}

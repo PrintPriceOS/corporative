@@ -58,6 +58,7 @@ export default function ControlPage() {
         subheadline="From pricing to production — every step controlled, tracked, and enforced. Orchestrate every job, queue, and node in real time."
         primaryAction={{ label: "Open control center →", href: "https://control.printprice.pro" }}
         secondaryAction={{ label: "View live system →", href: "#system-sim" }}
+        variant="particles"
       />
 
       {/* AUTHORITY TAGLINE */}

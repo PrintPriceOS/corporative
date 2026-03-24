@@ -64,6 +64,7 @@ console.log(audit.status.id);`;
         subheadline="Calculate costs, validate files, and route production — all via API. Integrate pricing, preflight, and production into your system effortlessly."
         primaryAction={{ label: "Get API access →", href: "/contact" }}
         secondaryAction={{ label: "View API docs →", href: "https://docs.printprice.pro" }}
+        variant="particles"
       />
 
       {/* Quickstart Section - REFINED Activation Node v1.2 */}

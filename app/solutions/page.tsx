@@ -44,6 +44,7 @@ export default function SolutionsHub() {
         subheadline="Calculate costs, validate files, and produce — no matter your print workflow. From packaging to large format, one system to control everything."
         primaryAction={{ label: "Start your project →", href: "https://budget.printprice.pro" }}
         secondaryAction={{ label: "See how it works →", href: "#use-cases" }}
+        variant="particles"
       />
 
       {/* Solutions Grid - Component Enforcement */}

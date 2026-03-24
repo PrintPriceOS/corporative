@@ -1,10 +1,9 @@
 import { Section } from "@/components/ui/Section";
-import { Button } from "@/components/ui/Button";
-import Link from "next/link";
 import { ActionCTA } from "@/components/monolith/ActionCTA";
 import { Icon } from "@/components/ui/Icon";
 import { SystemCardHover } from "@/components/ui/effects/SystemCardHover";
 import { constructMetadata } from "@/lib/seo";
+import { HeroPlatform } from "@/components/monolith/HeroPlatform";
 
 export const metadata = constructMetadata({
   title: "Production Governance & Compliance",
@@ -16,48 +15,27 @@ export default function GovernancePage() {
   return (
     <div className="governance-page">
       {/* Governance Hero - Monolith Narrative */}
-      <Section variant="primary" style={{ paddingTop: '10rem' }}>
-        <span className="technical-text" style={{ 
-          color: 'var(--accent-primary)', 
-          fontSize: '0.8rem', 
-          textTransform: 'uppercase', 
-          letterSpacing: '0.2rem',
-          marginBottom: '1.5rem',
-          display: 'block',
-          fontWeight: 900
-        }}>
-          PRODUCTION CONTROL / v2.4-certified
-        </span>
-        <h1 style={{ 
-          fontSize: 'clamp(3.5rem, 8vw, 5.5rem)', 
-          lineHeight: 0.95, 
-          letterSpacing: '-0.06em',
-          marginBottom: '2.5rem'
-        }}>
-          YOUR PRODUCTION <br/>
-          <span style={{ color: 'var(--accent-primary)' }}>CANNOT FAIL</span>
-        </h1>
-        <p style={{ 
-            fontSize: '1.4rem', 
-            color: 'var(--text-secondary)', 
-            lineHeight: 1.5, 
-            marginBottom: '4rem',
-            maxWidth: '650px'
-        }}>
-          Every production run — validated, controlled, and safe. We enforce structural policy 
-          automatically to ensure zero errors and deterministic execution.
-        </p>
-        <div className="technical-text" style={{ fontSize: '0.75rem', opacity: 0.6, letterSpacing: '0.1em', display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+      <HeroPlatform 
+        label="PRODUCTION CONTROL / v2.4-certified"
+        title={<>YOUR PRODUCTION <br/> <span style={{ color: 'var(--accent-primary)' }}>CANNOT FAIL</span></>}
+        slogan={["RECORDS", "CONTROL", "AUDIT"]}
+        isHeadlineSlogan={false}
+        subheadline="Every production run — validated, controlled, and safe. We enforce structural policy automatically to ensure zero errors and deterministic execution."
+        primaryAction={{ label: "Start secure flow →", href: "https://control.printprice.pro" }}
+        secondaryAction={{ label: "View Core Principles ↓", href: "#principles" }}
+        variant="particles"
+      />
+
+      <div className="technical-text" style={{ textAlign: 'center', marginTop: '-4rem', marginBottom: '8rem', fontSize: '0.75rem', opacity: 0.6, letterSpacing: '0.1em', display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center' }}>
           <span>EVERY ACTION IS RECORDED</span>
           <span>•</span>
           <span>NOTHING HAPPENS SILENTLY</span>
           <span>•</span>
           <span>EVERY DECISION IS TRACEABLE</span>
-        </div>
-      </Section>
+      </div>
 
       {/* How it works Section - NEW */}
-      <Section variant="secondary">
+      <Section variant="secondary" id="principles">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(450px, 100%), 1fr))', gap: '8rem', alignItems: 'start' }}>
           <div>
             <div style={{ marginBottom: '6rem' }}>

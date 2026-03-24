@@ -9,6 +9,7 @@ import { trackEvent, events } from '@/lib/telemetry';
 import Hyperspeed from '../ui/effects/Hyperspeed';
 import { hyperspeedPresets } from '../ui/effects/HyperSpeedPresets';
 import { Logo } from '../brand/Logo';
+import Particles from '../ui/effects/Particles';
 
 interface HeroPlatformProps {
   label: string;
@@ -18,6 +19,7 @@ interface HeroPlatformProps {
   primaryAction?: { label: string; href: string; sublabel?: string };
   secondaryAction?: { label: string; href: string };
   isHeadlineSlogan?: boolean;
+  variant?: 'hyperspeed' | 'particles';
 }
 
 export const HeroPlatform: React.FC<HeroPlatformProps> = ({ 
@@ -27,7 +29,8 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
   subheadline,
   primaryAction, 
   secondaryAction,
-  isHeadlineSlogan = true
+  isHeadlineSlogan = true,
+  variant = 'hyperspeed'
 }) => {
   const [visibleLines, setVisibleLines] = useState<number>(0);
 
@@ -40,16 +43,50 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
     }
   }, [slogan]);
 
+  const backgroundEffect = (
+    <div style={{ 
+      position: 'absolute', 
+      top: 0, 
+      left: 0, 
+      width: '100%', 
+      height: '100%', 
+      zIndex: 0, 
+      opacity: 1.0,
+      pointerEvents: 'none',
+      ...({} as any)
+    }}>
+      {variant === 'hyperspeed' ? (
+        <Hyperspeed effectOptions={hyperspeedPresets.two} />
+      ) : (
+        <Particles
+          particleColors={["#c70000"]}
+          particleCount={800}
+          particleSpread={15}
+          speed={0.5}
+          particleBaseSize={12}
+          moveParticlesOnHover={true}
+          alphaParticles={false}
+          disableRotation={false}
+          pixelRatio={3}
+          cameraDistance={15}
+        />
+      )}
+    </div>
+  );
+
   return (
     <div className="hero-dark">
-      <Section style={{ 
-        paddingTop: 'clamp(6rem, 15vw, 12rem)', 
-        position: 'relative', 
-        overflow: 'hidden',
-        background: '#131314', // FORCED DARK
-        color: '#e5e2e3',      // FORCED DARK
-        ...({} as any) 
-      }}>
+      <Section 
+        background={backgroundEffect}
+        style={{ 
+          paddingTop: 'clamp(6rem, 15vw, 12rem)', 
+          position: 'relative', 
+          overflow: 'hidden',
+          background: '#131314', // FORCED DARK
+          color: '#e5e2e3',      // FORCED DARK
+          ...({} as any) 
+        }}
+      >
         <style>{`
           .hero-actions {
             display: flex;
@@ -66,20 +103,6 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
           }
         `}</style>
         
-        {/* BACKGROUND EFFECT */}
-        <div style={{ 
-          position: 'absolute', 
-          top: 0, 
-          left: 0, 
-          width: '100%', 
-          height: '100%', 
-          zIndex: 0, 
-          opacity: 0.6,
-          ...({} as any)
-        }}>
-          <Hyperspeed effectOptions={hyperspeedPresets.two} />
-        </div>
-
         {/* CONTENT LAYER */}
         <div style={{ position: 'relative', zIndex: 1, ...({} as any) }}>
           <span className="technical-text" style={{ 

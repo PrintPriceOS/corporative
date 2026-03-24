@@ -28,6 +28,7 @@ export default function PreflightPage() {
         subheadline="Detect, fix, and certify your print files automatically — before they reach production. Automated file validation and correction for real production workflows."
         primaryAction={{ label: "Check my file →", href: "#" }}
         secondaryAction={{ label: "View technical specs →", href: "#engine" }}
+        variant="particles"
       />
 
       {/* Visual Reinforcement - Diagnostic Pipeline */}

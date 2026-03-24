@@ -9,10 +9,11 @@ import { ThemeToggle } from '../ui/ThemeToggle';
 import { Logo } from '../brand/Logo';
 
 const PRODUCT_ITEMS = [
-  { name: "Pricing Engine", desc: "Exact print cost calculation", icon: "calculator" as const, badge: "CORE", href: "https://budget.printprice.pro/" },
+  { name: "Pricing Engine", desc: "Exact print cost calculation", icon: "calculator" as const, badge: "CORE", href: "/products/budget" },
   { name: "File Validation", desc: "Validate production files", icon: "shield" as const, badge: "CORE", href: "/products/preflight" },
   { name: "Control Plane", desc: "Manage jobs and infrastructure", icon: "activity" as const, badge: "LIVE", href: "/products/control" },
   { name: "Developers", desc: "Integrate the system", icon: "code" as const, badge: "DEV", href: "/developers" },
+  { name: "Documentation", desc: "Complete system architecture & specs", icon: "specs" as const, badge: "DOCS", href: "/docs/platform/overview" },
 ];
 
 export const Header: React.FC = () => {
@@ -26,6 +27,7 @@ export const Header: React.FC = () => {
     { name: "Products", href: "/products", isMega: true },
     { name: "Solutions", href: "/solutions" },
     { name: "Developers", href: "/developers" },
+    { name: "Are you a Printhouse?", href: "/contact/partner" },
   ];
 
   const handleMouseEnter = () => {
