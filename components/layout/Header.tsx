@@ -344,7 +344,7 @@ export const Header: React.FC = () => {
         <style>{`
           @media (max-width: 1024px) {
             .desktop-only { display: none !important; }
-            .mobile-only { display: block !important; }
+            .mobile-only { display: flex !important; align-items: center; }
           }
           @media (min-width: 1025px) {
             .mobile-only { display: none !important; }

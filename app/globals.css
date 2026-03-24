@@ -196,6 +196,19 @@ button {
   border: none;
 }
 
-.btn-ghost:hover {
-  color: var(--text-primary);
+/* REFINED V1.3: UTILITY CLASSES */
+.mobile-hide-text {
+  display: inline !important;
 }
+
+@media (max-width: 640px) {
+  .mobile-hide-text {
+    display: none !important;
+  }
+}
+
+.theme-toggle:hover {
+    border-color: var(--accent-primary) !important;
+    color: var(--accent-primary) !important;
+}
+

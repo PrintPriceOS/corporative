@@ -73,8 +73,14 @@ export function constructMetadata({
         follow: !noIndex,
       },
     },
+    icons: {
+      icon: '/assets/logo.png',
+      shortcut: '/assets/logo.png',
+      apple: '/assets/logo.png',
+    },
   };
 }
+
 
 export const JSON_LD_ORGANIZATION = {
   '@context': 'https://schema.org',
