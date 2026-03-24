@@ -5,6 +5,13 @@ import Link from "next/link";
 import { ActionCTA } from "@/components/monolith/ActionCTA";
 import { Icon } from "@/components/ui/Icon";
 import { SystemCardHover } from "@/components/ui/effects/SystemCardHover";
+import { constructMetadata } from "@/lib/seo";
+
+export const metadata = constructMetadata({
+  title: "Production Control & Orchestration Plane",
+  description: "Orchestrate every job, queue, and node in real-time. The PrintPrice Control Plane provides full observability and structural governance for print manufacturing.",
+  canonical: "/products/control"
+});
 
 export default function ControlPage() {
   const features = [

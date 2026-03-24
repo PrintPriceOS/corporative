@@ -5,6 +5,13 @@ import Link from "next/link";
 import { ActionCTA } from "@/components/monolith/ActionCTA";
 import { Icon } from "@/components/ui/Icon";
 import { SystemCardHover } from "@/components/ui/effects/SystemCardHover";
+import { constructMetadata } from "@/lib/seo";
+
+export const metadata = constructMetadata({
+  title: "Print Cost Calculator & Estimator",
+  description: "Calculate exact printing costs in seconds with our high-precision Pricing Engine. No guesswork—real production costs for books, packaging, and commercial print.",
+  canonical: "/products/budget"
+});
 
 export default function BudgetPage() {
   return (

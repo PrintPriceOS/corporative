@@ -7,6 +7,13 @@ import { ActionCTA } from "@/components/monolith/ActionCTA";
 import { Icon } from "@/components/ui/Icon";
 import { SystemCardHover } from "@/components/ui/effects/SystemCardHover";
 import Link from "next/link";
+import { constructMetadata } from "@/lib/seo";
+
+export const metadata = constructMetadata({
+  title: "API for Print Manufacturing & Automation",
+  description: "Integrate budgeting, PDF preflight, and production routing directly into your app. Explore the PrintPrice OS API for automated manufacturing workflows.",
+  canonical: "/developers"
+});
 
 export default function DeveloperPortal() {
   const quickstartCode = `// Initialize SDK

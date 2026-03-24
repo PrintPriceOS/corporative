@@ -4,6 +4,13 @@ import Link from "next/link";
 import { ActionCTA } from "@/components/monolith/ActionCTA";
 import { Icon } from "@/components/ui/Icon";
 import { SystemCardHover } from "@/components/ui/effects/SystemCardHover";
+import { constructMetadata } from "@/lib/seo";
+
+export const metadata = constructMetadata({
+  title: "Production Governance & Compliance",
+  description: "Ensure deterministic execution and forensic auditability in print manufacturing. Discover how PrintPrice OS enforces structural policy across every production run.",
+  canonical: "/governance"
+});
 
 export default function GovernancePage() {
   return (
