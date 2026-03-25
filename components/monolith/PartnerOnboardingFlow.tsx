@@ -3,11 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { Button } from '@/components/ui/Button';
+import Link from 'next/link';
 
 import { submitPartnerOnboarding } from '@/lib/actions';
 
 // STEP DEFINITIONS
 const STEPS = [
+  { id: 0, label: 'Legal', icon: 'policy' as any },
   { id: 1, label: 'Company', icon: 'factory' as any },
   { id: 2, label: 'Capabilities', icon: 'layers' as any },
   { id: 3, label: 'Machinery', icon: 'specs' as any },
@@ -17,9 +19,15 @@ const STEPS = [
 ];
 
 export const PartnerOnboardingFlow: React.FC = () => {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(0);
   const [startTime] = useState(Date.now());
   const [formData, setFormData] = useState({
+    // Step 0: Legal
+    termsAccepted: false,
+    termsReviewed: false,
+    acceptedAt: '',
+    termsVersion: '1.0',
+    acceptanceTraceId: '',
     // Step 1: Company
     companyName: '',
     website: '',
@@ -42,8 +50,9 @@ export const PartnerOnboardingFlow: React.FC = () => {
     integrationLevel: '',
     // Step 6: Compliance
     standards: false,
-    certifications: '',
-    qaProcess: '',
+    certifications: [] as string[],
+    qaModules: [] as string[],
+    qaCustomDetails: '',
     // Anti-Spam
     _honeypot: '',
   });
@@ -66,8 +75,21 @@ export const PartnerOnboardingFlow: React.FC = () => {
     localStorage.setItem('ppp_partner_onboarding', JSON.stringify(newData));
   };
 
-  const nextStep = () => setCurrentStep((s) => Math.min(s + 1, STEPS.length));
-  const prevStep = () => setCurrentStep((s) => Math.max(s - 1, 1));
+  const nextStep = () => {
+    if (currentStep === 0 && !formData.termsAccepted) return;
+    setCurrentStep((s) => Math.min(s + 1, STEPS.length - 1));
+  };
+  const prevStep = () => setCurrentStep((s) => Math.max(s - 1, 0));
+
+  const handleTermsScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.currentTarget;
+    if (formData.termsReviewed) return;
+    
+    const isAtBottom = target.scrollHeight - target.scrollTop <= target.clientHeight + 20;
+    if (isAtBottom) {
+      updateForm({ termsReviewed: true });
+    }
+  };
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
@@ -190,6 +212,108 @@ export const PartnerOnboardingFlow: React.FC = () => {
             <p className="technical-text" style={{ fontSize: '0.8rem', color: 'var(--accent-primary)', fontWeight: 800 }}>
               {submissionError}
             </p>
+          </div>
+        )}
+
+        {/* STEP 0: PARTNER TERMS */}
+        {currentStep === 0 && (
+          <div style={{ animation: 'fade-in 0.4s ease' }}>
+            <div style={{ marginBottom: '2.5rem' }}>
+              <h4 className="technical-text" style={{ fontSize: '0.7rem', color: 'var(--accent-primary)', letterSpacing: '0.2em', marginBottom: '1rem', fontWeight: 900 }}>PARTNER TERMS / NETWORK ONBOARDING</h4>
+              <h3 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.04em' }}>Review the Partner Terms</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>
+                Before joining the PrintPrice OS network, you must review and accept the Partner Terms for production partners.
+              </p>
+            </div>
+
+            <div 
+              onScroll={handleTermsScroll}
+              style={{
+                height: '420px',
+                overflowY: 'auto',
+                padding: '2rem',
+                background: 'rgba(255, 255, 255, 0.02)',
+                border: '1px solid var(--border-color)',
+                marginBottom: '2.5rem',
+                fontSize: '0.9rem',
+                lineHeight: '1.6',
+                color: 'var(--text-secondary)',
+                position: 'relative'
+              }}
+              className="terms-container custom-scrollbar"
+            >
+              <div style={{ marginBottom: '2rem' }}>
+                <h4 style={{ color: 'var(--text-primary)', fontWeight: 800, marginBottom: '0.5rem' }}>Print House / Production Node Terms</h4>
+                <p className="technical-text" style={{ fontSize: '0.7rem', opacity: 0.5 }}>Last updated: 2026-03-25</p>
+              </div>
+
+              <div style={{ fontFamily: 'var(--font-main)', color: 'var(--text-secondary)' }}>
+                {[
+                  { title: "1. Scope", text: "These Partner Terms govern the commercial relationship between Print Price Pro SIA (“PrintPrice Pro”, “we”, “us”) and the printing company or production partner applying to join the PrintPrice OS network as a Print House / Production Node (“Partner”, “you”)." },
+                  { title: "2. Nature of the Relationship", text: "PrintPrice Pro operates a production intelligence and orchestration system that connects validated demand with qualified production partners.\n\nThe Partner acknowledges that:\n1. PrintPrice Pro is not the manufacturer of any printed product.\n2. The Partner remains the independent production entity responsible for manufacturing.\n3. PrintPrice Pro acts as an intermediary orchestration layer.\n4. No joint venture or employment relationship is created." },
+                  { title: "3. Partner Admission and Qualification", text: "Admission is subject to PrintPrice Pro’s internal qualification criteria. The Partner must provide accurate and complete information regarding legal entity details, production capabilities, machine and finishing equipment, quality controls, certifications, geographic coverage, capacity, and lead times." },
+                  { title: "4. Partner Obligations", text: "The Partner shall:\n1. maintain accurate capability, capacity, and production information at all times;\n2. manufacture jobs in accordance with accepted specifications;\n3. process only jobs routed through approved PrintPrice Pro workflows;\n4. comply with all applicable laws and environmental standards;\n5. protect all files and commercial information received;\n6. refrain from bypassing PrintPrice Pro for platform-sourced jobs;\n7. cooperate in audits and dispute handling." },
+                  { title: "5. PrintPrice Pro Obligations", text: "PrintPrice Pro shall operate the system with reasonable care and provide the Partner with job specifications and files necessary for execution." },
+                  { title: "6. No Volume Guarantee", text: "Admission to the network does not guarantee any minimum number of jobs or exclusivity." },
+                  { title: "7. Job Acceptance and Execution", text: "A routed job becomes binding only when accepted through the designated workflow. Once accepted, the Partner is responsible for timely and compliant execution." },
+                  { title: "8. Quality and Non-Conformity", text: "The Partner is responsible for ensuring production conforms to approved specifications. Defective jobs may require reprint or remediation contribution." },
+                  { title: "9. Pricing, Fees, and Commercial Terms", text: "Commercial terms include routed job pricing, commissions, and platform fees as communicated during onboarding." },
+                  { title: "10. Non-Circumvention", text: "The Partner shall not circumvent PrintPrice Pro to avoid fees or governance obligations." },
+                  { title: "11. Confidentiality", text: "The Partner shall keep confidential all non-public information received from PrintPrice Pro." },
+                  { title: "12. Intellectual Property", text: "Customer files and metadata remain the property of their respective owners. The Partner receives only a limited right to use materials for job fulfillment." },
+                  { title: "13. Data Protection", text: "Each party shall comply with applicable data protection laws, including GDPR." },
+                  { title: "14. Technical Integration and System Use", text: "The Partner shall use authorized credentials and not interfere with platform security or integrity." },
+                  { title: "15. Audit and Monitoring", text: "PrintPrice Pro may retain logs and execution states for dispute resolution and quality review." },
+                  { title: "16. Suspension and Termination", text: "Access may be suspended for breach of terms, quality failure, or circumvention attempts." },
+                  { title: "17. Governing Law and Jurisdiction", text: "These Terms are governed by the laws of Latvia. Disputes are subject to the exclusive jurisdiction of the courts of Riga." }
+                ].map((section, idx) => (
+                  <div key={idx} style={{ marginBottom: '2rem' }}>
+                    <h4 style={{ color: 'var(--text-primary)', fontSize: '0.8rem', fontWeight: 900, marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{section.title}</h4>
+                    <p style={{ fontSize: '0.9rem', lineHeight: '1.6', opacity: 0.8, whiteSpace: 'pre-wrap' }}>{section.text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <label style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '1rem', 
+                cursor: formData.termsReviewed ? 'pointer' : 'not-allowed',
+                opacity: formData.termsReviewed ? 1 : 0.5,
+                transition: 'all 0.3s ease'
+              }}>
+                <input 
+                  type="checkbox" 
+                  disabled={!formData.termsReviewed}
+                  checked={formData.termsAccepted}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      updateForm({ 
+                        termsAccepted: true, 
+                        acceptedAt: new Date().toISOString(),
+                        acceptanceTraceId: Math.random().toString(36).substring(7).toUpperCase()
+                      });
+                    } else {
+                      updateForm({ termsAccepted: false });
+                    }
+                  }}
+                  style={{ width: '22px', height: '22px', accentColor: 'var(--accent-primary)' }}
+                />
+                <span style={{ fontWeight: 700, fontSize: '1rem' }}>I have read and accept the Partner Terms</span>
+              </label>
+              <div className="technical-text" style={{ fontSize: '0.65rem', opacity: 0.5, marginLeft: '2.4rem' }}>
+                {!formData.termsReviewed ? "Scroll to the bottom of the terms to enable acceptance." : "Acceptance is required to proceed with partner onboarding."}
+              </div>
+              <div className="technical-text" style={{ fontSize: '0.65rem', opacity: 0.3, marginLeft: '2.4rem' }}>
+                Your acceptance will be recorded with timestamp and session trace for audit purposes.
+              </div>
+              
+              <div style={{ marginTop: '1rem', marginLeft: '2.4rem' }}>
+                <Link href="/legal/partner-terms" target="_blank" style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textDecoration: 'underline', fontWeight: 800 }}>View or Save Terms (PDF/Print)</Link>
+              </div>
+            </div>
           </div>
         )}
 
@@ -319,17 +443,17 @@ export const PartnerOnboardingFlow: React.FC = () => {
             <h3 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '2.5rem', letterSpacing: '-0.04em' }}>[04] Capacity Audit</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5rem' }}>
               <div className="onboarding-field">
-                <label className="technical-text" style={{ fontSize: '0.7rem', display: 'block', marginBottom: '0.75rem', color: 'var(--accent-primary)', fontWeight: 800 }}>MONTHLY_PRINT_VOLUME</label>
+                <label className="technical-text" style={{ fontSize: '0.7rem', display: 'block', marginBottom: '0.75rem', color: 'var(--accent-primary)', fontWeight: 800 }}>MONTHLY_FINISHED_COPIES</label>
                 <select 
                     value={formData.monthlyVolume}
                     onChange={(e) => updateForm({ monthlyVolume: e.target.value })}
                     style={inputStyle as any}
                 >
-                    <option value="">Select range...</option>
-                    <option value="< €50k">&lt; €50k</option>
-                    <option value="€50k–€250k">€50k–€250k</option>
-                    <option value="€250k–€1M">€250k–€1M</option>
-                    <option value="€1M+">€1M+</option>
+                    <option value="">Range of monthly production...</option>
+                    <option value="< 10k copies">&lt; 10,000 copies</option>
+                    <option value="10k – 50k copies">10,000 – 50,000 copies</option>
+                    <option value="50k – 200k copies">50,000 – 200,000 copies</option>
+                    <option value="200k+ copies">200,000+ copies</option>
                 </select>
               </div>
               <div className="onboarding-field">
@@ -403,22 +527,94 @@ export const PartnerOnboardingFlow: React.FC = () => {
                     <span style={{ fontWeight: 700 }}>We follow ISO print standards and FOGRA/GRACoL certifications.</span>
                 </label>
                 <div className="onboarding-field">
-                    <label className="technical-text" style={{ fontSize: '0.7rem', display: 'block', marginBottom: '0.75rem', color: 'var(--accent-primary)', fontWeight: 800 }}>CERTIFICATIONS</label>
-                    <input 
-                        type="text" 
-                        value={formData.certifications}
-                        onChange={(e) => updateForm({ certifications: e.target.value })}
-                        style={inputStyle} 
-                        placeholder="ISO 12647, FSC, PEFC, etc."
-                    />
+                    <label className="technical-text" style={{ fontSize: '0.7rem', display: 'block', marginBottom: '1.25rem', color: 'var(--accent-primary)', fontWeight: 800 }}>CERTIFICATIONS_REGISTRY</label>
+                    
+                    {[
+                        { group: "Color Quality", certs: ['ISO 12647 (PSO)', 'FOGRA Cert', 'GRACoL / G7'] },
+                        { group: "Management & Processes", certs: ['ISO 9001', 'ISO 14001', 'BRC Packaging'] },
+                        { group: "Sustainability", certs: ['FSC Certified', 'PEFC', 'SGP Partnership', 'EMAS'] }
+                    ].map((group) => (
+                        <div key={group.group} style={{ marginBottom: '2.5rem' }}>
+                            <h5 className="technical-text" style={{ fontSize: '0.6rem', opacity: 0.6, marginBottom: '1rem', letterSpacing: '0.1em' }}>{group.group.toUpperCase()}</h5>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem' }}>
+                                {group.certs.map(cert => {
+                                    const isSelected = formData.certifications.includes(cert);
+                                    return (
+                                        <button 
+                                            key={cert}
+                                            onClick={() => {
+                                                const certs = isSelected 
+                                                    ? formData.certifications.filter(c => c !== cert)
+                                                    : [...formData.certifications, cert];
+                                                updateForm({ certifications: certs });
+                                            }}
+                                            style={{
+                                                padding: '1rem',
+                                                background: isSelected ? 'rgba(255,0,0,0.1)' : 'var(--bg-secondary)',
+                                                border: isSelected ? '1px solid var(--accent-primary)' : '1px solid var(--border-color)',
+                                                color: isSelected ? 'var(--text-primary)' : 'var(--text-secondary)',
+                                                fontSize: '0.75rem',
+                                                fontWeight: 800,
+                                                textAlign: 'left',
+                                                cursor: 'pointer',
+                                                transition: 'all 0.2s ease',
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center'
+                                            }}
+                                        >
+                                            {cert}
+                                            {isSelected && <span style={{ color: 'var(--accent-primary)', fontSize: '0.6rem' }}>●</span>}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    ))}
                 </div>
                 <div className="onboarding-field">
-                    <label className="technical-text" style={{ fontSize: '0.7rem', display: 'block', marginBottom: '0.75rem', color: 'var(--accent-primary)', fontWeight: 800 }}>QA_PROTOCOL_LOG</label>
+                    <label className="technical-text" style={{ fontSize: '0.7rem', display: 'block', marginBottom: '1.25rem', color: 'var(--accent-primary)', fontWeight: 800 }}>QA_PROTOCOL_MODULES</label>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '2.5rem' }}>
+                        {[
+                            { id: 'preflight', label: 'File Validation / Preflight Audit', desc: 'Pre-production verification of digital assets and trapping.' },
+                            { id: 'densitometry', label: 'On-press Densitometry', desc: 'Real-time monitoring of color density and registration.' },
+                            { id: 'sampling', label: 'In-process Random Sampling', desc: 'Periodic quality checks during high-volume production.' },
+                            { id: 'finishing', label: 'Post-press / Finishing Audit', desc: 'Verification of binding, cutting, and lamination tolerances.' },
+                            { id: 'traceability', label: 'Traceability / Batch Logging', desc: 'Detailed event logging for every production node state.' },
+                            { id: 'packaging', label: 'Final Packaging QC', desc: 'Automated weight and quantity audit before dispatch.' }
+                        ].map(module => {
+                            const isSelected = formData.qaModules.includes(module.id);
+                            return (
+                                <button 
+                                    key={module.id}
+                                    onClick={() => {
+                                        const modules = isSelected 
+                                            ? formData.qaModules.filter(m => m !== module.id)
+                                            : [...formData.qaModules, module.id];
+                                        updateForm({ qaModules: modules });
+                                    }}
+                                    style={{
+                                        padding: '1.25rem',
+                                        background: isSelected ? 'rgba(255,0,0,0.05)' : 'var(--bg-secondary)',
+                                        border: isSelected ? '1px solid var(--accent-primary)' : '1px solid var(--border-color)',
+                                        textAlign: 'left',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s ease'
+                                    }}
+                                >
+                                    <h4 style={{ fontSize: '0.9rem', fontWeight: 800, color: isSelected ? 'var(--text-primary)' : 'var(--text-secondary)', marginBottom: '0.5rem' }}>{module.label}</h4>
+                                    <p style={{ fontSize: '0.75rem', opacity: 0.6, lineHeight: 1.4, color: 'var(--text-secondary)' }}>{module.desc}</p>
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    <label className="technical-text" style={{ fontSize: '0.7rem', display: 'block', marginBottom: '0.75rem', color: 'var(--text-muted)', fontWeight: 800 }}>ADDITIONAL_QA_DETAILS</label>
                     <textarea 
-                        value={formData.qaProcess}
-                        onChange={(e) => updateForm({ qaProcess: e.target.value })}
+                        value={formData.qaCustomDetails}
+                        onChange={(e) => updateForm({ qaCustomDetails: e.target.value })}
                         style={textareaStyle} 
-                        placeholder="Describe your internal quality audit flow..."
+                        placeholder="Describe any proprietary quality controls or specific client audit procedures..."
                     />
                 </div>
             </div>
@@ -452,7 +648,9 @@ export const PartnerOnboardingFlow: React.FC = () => {
                 ← PREVIOUS_STEP
             </button>
             {currentStep < 6 ? (
-                <Button size="lg" onClick={nextStep}>CONTINUE_ONBOARDING →</Button>
+                <Button size="lg" onClick={nextStep} disabled={currentStep === 0 && !formData.termsAccepted}>
+                    {currentStep === 0 ? 'CONTINUE_ONBOARDING →' : 'NEXT_STEP →'}
+                </Button>
             ) : (
                 <Button size="lg" onClick={handleSubmit} disabled={isSubmitting}>
                     {isSubmitting ? 'ENFORCING_QUALIFICATION...' : 'ACTIVATE_PARTNER_PROFILE →'}

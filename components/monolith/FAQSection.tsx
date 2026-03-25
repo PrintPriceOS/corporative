@@ -86,12 +86,25 @@ export const FAQSection: React.FC = () => {
                     </p>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0', ...({} as any) }}>
+                <style>{`
+                    @media (max-width: 767px) {
+                        .faq-grid {
+                            grid-template-columns: 1fr !important;
+                            gap: 3rem !important;
+                        }
+                    }
+                `}</style>
+
+                <div className="faq-grid" style={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: 'repeat(2, 1fr)', 
+                    gap: '4rem clamp(2rem, 5vw, 6rem)', 
+                    ...({} as any) 
+                }}>
                     {FAQ_DATA.map((group, gIdx) => (
                         <div key={group.category} style={{
                             borderTop: '1px solid var(--border-color)',
-                            paddingTop: '3rem',
-                            marginTop: gIdx === 0 ? 0 : '3rem'
+                            paddingTop: '2.5rem'
                         }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2.5rem' }}>
                                 <span style={{
@@ -179,26 +192,6 @@ export const FAQSection: React.FC = () => {
                             </div>
                         </div>
                     ))}
-                </div>
-
-                <div style={{
-                    marginTop: '8rem',
-                    padding: '4rem',
-                    background: 'var(--bg-secondary)',
-                    border: '1px solid var(--border-color)',
-                    textAlign: 'center',
-                    borderRadius: '2px',
-                    ...({} as any)
-                }}>
-                    <h3 style={{ fontSize: '1.75rem', marginBottom: '2.5rem', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>Still unsure? Try a simple project.</h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem' }}>
-                        <Link href="https://budget.printprice.pro/">
-                            <Button size="lg">Calculate your print cost</Button>
-                        </Link>
-                        <Link href="/contact" className="nav-link-technical" style={{ fontSize: '0.85rem', fontWeight: 800, opacity: 0.5, color: 'var(--text-secondary)', display: 'inline-block' }}>
-                            OR CONSULT AN ARCHITECT →
-                        </Link>
-                    </div>
                 </div>
             </div>
         </Section>

@@ -86,15 +86,15 @@ export const ProofLayer: React.FC = () => {
                 </div>
                 
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '2.5rem', ...({} as any) }}>
-                    <li style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', opacity: 0.6, fontWeight: 400 }}>
+                    <li style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', opacity: 0.85, fontWeight: 400 }}>
                         <span style={{ color: 'var(--accent-primary)', marginRight: '1rem', opacity: 0.5 }}>✕</span>
                         You don’t know the real cost
                     </li>
-                    <li style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', opacity: 0.6, fontWeight: 400 }}>
+                    <li style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', opacity: 0.85, fontWeight: 400 }}>
                         <span style={{ color: 'var(--accent-primary)', marginRight: '1rem', opacity: 0.5 }}>✕</span>
                         You fix files manually, again and again
                     </li>
-                    <li style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', opacity: 0.6, fontWeight: 400 }}>
+                    <li style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', opacity: 0.85, fontWeight: 400 }}>
                         <span style={{ color: 'var(--accent-primary)', marginRight: '1rem', opacity: 0.5 }}>✕</span>
                         You choose printers without real data
                     </li>

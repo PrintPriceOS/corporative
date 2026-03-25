@@ -4,6 +4,7 @@ import React from 'react';
 import { Container } from '../ui/Container';
 import Link from 'next/link';
 import { Logo } from '../brand/Logo';
+import { Icon } from '../ui/Icon';
 
 export const Footer: React.FC = () => {
   const headingStyle = {
@@ -31,7 +32,7 @@ export const Footer: React.FC = () => {
       marginTop: 'auto',
       ...({} as any)
     }}>
-      <Container style={{
+      <Container className="footer-grid" style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(clamp(150px, 45%, 200px), 1fr))',
         gap: 'clamp(2rem, 5vw, 4rem)',
@@ -39,6 +40,40 @@ export const Footer: React.FC = () => {
       }}>
         <div className="footer-brand" style={{ gridColumn: '1 / -1', marginBottom: '1rem', ...({} as any) }}>
           <style>{`
+            @media (max-width: 639px) {
+              .footer-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 2.5rem 1rem !important;
+              }
+              .footer-links h4 {
+                margin-bottom: 1.25rem !important;
+                font-size: 0.7rem !important;
+              }
+              .footer-brand {
+                margin-bottom: 2rem !important;
+              }
+              .social-links {
+                justify-content: flex-start !important;
+              }
+            }
+            .social-link {
+              color: var(--text-secondary);
+              transition: all var(--transition-monolith);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 36px;
+              height: 36px;
+              border: 1px solid var(--border-color);
+              background: rgba(255, 255, 255, 0.02);
+            }
+            .social-link:hover {
+              color: #ffffff !important;
+              border-color: var(--accent-primary) !important;
+              background: rgba(220, 0, 0, 0.1) !important;
+              box-shadow: 0 0 15px rgba(220, 0, 0, 0.2);
+              transform: translateY(-2px);
+            }
             @media (min-width: 1024px) {
               .footer-brand { grid-column: auto !important; margin-bottom: 0 !important; }
             }
@@ -68,6 +103,20 @@ export const Footer: React.FC = () => {
           </p>
           <div className="technical-text" style={{ fontSize: '0.65rem', color: 'var(--accent-primary)', opacity: 0.6, letterSpacing: '0.1rem', fontWeight: 800 }}>
             PRICE IT. FIX IT. PRINT IT.
+          </div>
+          <div className="social-links" style={{ display: 'flex', gap: '0.75rem', marginTop: '2rem', ...({} as any) }}>
+            <Link href="https://x.com/PRINTPRICEPRO" target="_blank" className="social-link" title="Follow us on X">
+              <Icon name="x" size={16} />
+            </Link>
+            <Link href="https://www.linkedin.com/company/print-price-pro/" target="_blank" className="social-link" title="Connect on LinkedIn">
+              <Icon name="linkedin" size={16} />
+            </Link>
+            <Link href="https://www.facebook.com/printpricepro" target="_blank" className="social-link" title="Visit our Facebook">
+              <Icon name="facebook" size={16} />
+            </Link>
+            <Link href="https://www.tiktok.com/@printpricepro" target="_blank" className="social-link" title="Follow us on TikTok">
+              <Icon name="tiktok" size={16} />
+            </Link>
           </div>
         </div>
         
@@ -144,8 +193,16 @@ export const Footer: React.FC = () => {
         <div style={{ opacity: 0.5 }}>
           We use analytics and telemetry to improve your experience. No personal data is sold.
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-          <span>© 2026 PrintPrice Pro (v2.4)</span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1.5rem', alignItems: 'flex-end' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <span style={{ opacity: 0.8 }}>© 2026 PrintPrice Pro (v2.4) — Print Price Pro SIA</span>
+            <span style={{ opacity: 0.5, fontSize: '0.65rem' }}>
+              Bruņinieku iela 60-8, Latgales priekšpilsēta, Rīga, LV-1009, Latvia
+            </span>
+            <span style={{ opacity: 0.5, fontSize: '0.65rem' }}>
+              Registration Number: 40203631570 — VAT ID: LV40203631570
+            </span>
+          </div>
           <span>Infrastructure by PrintPrice OS</span>
         </div>
       </Container>

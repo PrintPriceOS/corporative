@@ -29,6 +29,10 @@ export type IconName =
   | 'node'          // Infrastructure Node
   | 'pipeline'      // Automated Process
   | 'web'           // Client Interface
+  | 'facebook'      // Social
+  | 'linkedin'      // Social
+  | 'tiktok'        // Social
+  | 'x'             // Social
   | 'packaging'     // DEPRECATED: use 'box'
   | 'largeFormat'   // DEPRECATED: use 'expand'
   | 'commercial'    // DEPRECATED: use 'layers'
@@ -220,6 +224,28 @@ export const Icon: React.FC<IconProps> = ({
             <rect width="18" height="14" x="3" y="4" rx="2" />
             <line x1="3" x2="21" y1="10" y2="10" />
             <path d="M7 14h.01M11 14h.01M15 14h.01" />
+        </svg>
+    ),
+    facebook: (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+        </svg>
+    ),
+    linkedin: (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+            <rect x="2" y="9" width="4" height="12" />
+            <circle cx="4" cy="4" r="2" />
+        </svg>
+    ),
+    tiktok: (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+        </svg>
+    ),
+    x: (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 4l11.733 16h4.267l-11.733-16zM4 20l6.768-6.768m2.464-2.464l6.768-6.768" />
         </svg>
     ),
     packaging: (

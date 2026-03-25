@@ -85,7 +85,7 @@ export const ProductSurfaceGrid: React.FC<ProductSurfaceGridProps> = ({
             {groupKey !== 'DEFAULT' && (
               <div className="category-header">
                 <div style={{ width: '8px', height: '8px', background: 'var(--accent-primary)', opacity: 0.5 }} />
-                <h4 className="technical-text" style={{ fontSize: '0.8rem', letterSpacing: '0.2em', opacity: 0.6, fontWeight: 900 }}>{groupKey}</h4>
+                <h4 className="technical-text" style={{ fontSize: '0.8rem', letterSpacing: '0.2em', opacity: 0.85, fontWeight: 900 }}>{groupKey}</h4>
               </div>
             )}
             {groups[groupKey].map((product, i) => (

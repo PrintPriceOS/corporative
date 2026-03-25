@@ -26,8 +26,8 @@
   --accent-container: rgba(220, 0, 0, 0.1);
   
   --text-primary: #e5e2e3;    /* On-Surface High Contrast */
-  --text-secondary: #8d8d91;  /* Neutral On-Surface */
-  --text-muted: #5e3f3a;      /* Ghost Border Fallback */
+  --text-secondary: #b1b1b4;  /* Neutral On-Surface - Lighter for accessibility */
+  --text-muted: #71717a;      /* Lighter muted text for readability */
 
   --border-color: rgba(255, 255, 255, 0.08);
 
@@ -62,8 +62,8 @@
   --bg-secondary: #0e0e0f;
   --bg-elevated: #3a393a;
   --text-primary: #e5e2e3;
-  --text-secondary: #8d8d91;
-  --text-muted: #5e3f3a;
+  --text-secondary: #b1b1b4;
+  --text-muted: #71717a;
   --border-color: rgba(255, 255, 255, 0.08);
   background: var(--bg-primary) !important;
   color: var(--text-primary) !important;

@@ -266,7 +266,7 @@ export default function Home() {
               </div>
               <div>
                 <div className="technical-text" style={{ fontSize: '0.75rem', color: 'var(--accent-primary)', fontWeight: 900 }}>PRODUCTION READY</div>
-                <div className="technical-text" style={{ fontSize: '0.6rem', opacity: 0.6 }}>OPTIMIZED NODE ASSIGNED / READY FOR ACTIVATION</div>
+                <div className="technical-text" style={{ fontSize: '0.6rem', opacity: 0.85 }}>OPTIMIZED NODE ASSIGNED / READY FOR ACTIVATION</div>
               </div>
             </div>
           </div>

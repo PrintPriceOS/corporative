@@ -1,0 +1,58 @@
+Partner Terms / Network Onboarding Agreement (v1.0)
+Last updated: 2026-03-25
+
+1. Scope
+These Partner Terms govern the commercial relationship between Print Price Pro SIA (“PrintPrice Pro”, “we”, “us”) and the printing company or production partner (“Partner”, “you”).
+
+2. Nature of the Relationship
+PrintPrice Pro operates a production intelligence system. The Partner remains the independent production entity.
+
+3. Partner Admission
+Admission is conditional on qualification and criteria verification by PrintPrice Pro.
+
+4. Partner Obligations
+Maintain accurate information, produce jobs within specifications, and use only approved system workflows.
+
+5. PrintPrice Pro Obligations
+Orchestrate routing and provide valid production assets to the Partner.
+
+6. No Volume Guarantee
+Admission to the network does not guarantee any minimum jobs or exclusivity.
+
+7. Job Acceptance
+Routed jobs become binding only when accepted in the system.
+
+8. Quality and Non-Conformity
+Partner is responsible for production quality and remediation costs if standards are not met.
+
+9. Pricing and Fees
+Commercial terms are defined in the specific onboarding schedules.
+
+10. Non-Circumvention
+Partners must not bypass the platform for introduced customers.
+
+11. Confidentiality
+All non-public data must be treated as confidential.
+
+12. Intellectual Property
+Files and metadata remain owned by the respective customers.
+
+13. Data Protection
+Parties must comply with GDPR and relevant regulations.
+
+14. System Use
+Credentials must be protected and system integrity monitored.
+
+15. Audit
+PrintPrice Pro may monitor logs for security and quality purposes.
+
+16. Termination
+Either party may terminate the relationship with notice or immediately for breach.
+
+17. Governing Law
+Latvian law applies with exclusive jurisdiction in Riga.
+
+Print Price Pro SIA
+Registration: 40203631570
+VAT ID: LV40203631570
+Email: info@printprice.pro
