@@ -19,17 +19,17 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     // 1. AUTHENTICATIONAudit: API Key required
     if (!apiKey) {
-        return NextResponse.json({ 
-            error: "UNAUTHORIZED", 
-            message: "X-API-KEY header required for this infrastructure node." 
+        return NextResponse.json({
+            error: "UNAUTHORIZED",
+            message: "X-API-KEY header required for this infrastructure node."
         }, { status: 401 });
     }
 
     const keyData = VALID_KEYS.find(k => k.key === apiKey);
     if (!keyData) {
-        return NextResponse.json({ 
-            error: "FORBIDDEN", 
-            message: "Invalid API key profile detected." 
+        return NextResponse.json({
+            error: "FORBIDDEN",
+            message: "Invalid API key profile detected."
         }, { status: 403 });
     }
 
@@ -41,18 +41,18 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     if (path.startsWith('agents')) requiredScope = 'agents:execute';
 
     if (requiredScope && !hasPermission(keyData, requiredScope)) {
-        return NextResponse.json({ 
-            error: "FORBIDDEN", 
-            message: `Scope '${requiredScope}' required for path: /v1/${path}` 
+        return NextResponse.json({
+            error: "FORBIDDEN",
+            message: `Scope '${requiredScope}' required for path: /v1/${path}`
         }, { status: 403 });
     }
 
     // 3. INPUT SCANNING: Payload size limit
     const contentLength = parseInt(request.headers.get('content-length') || '0', 10);
     if (contentLength > 5 * 1024 * 1024) { // 5MB limit
-        return NextResponse.json({ 
-            error: "PAYLOAD_TOO_LARGE", 
-            message: "Payload exceeds infrastructure limit (5MB)." 
+        return NextResponse.json({
+            error: "PAYLOAD_TOO_LARGE",
+            message: "Payload exceeds infrastructure limit (5MB)."
         }, { status: 413 });
     }
 
@@ -61,16 +61,16 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const suspiciousPatterns = ['<script', 'javascript:', 'drop table', '--', 'UNION SELECT'];
     if (suspiciousPatterns.some(p => bodyText.toLowerCase().includes(p))) {
         console.warn(`[SECURITY][INJECTION_DETECTED] Suspicious payload from ${keyData.owner} at /v1/${path}`);
-        return NextResponse.json({ 
-            error: "SECURITY_PROTOCOL_ENFORCED", 
-            message: "Payload rejected by infrastructure guardrail." 
+        return NextResponse.json({
+            error: "SECURITY_PROTOCOL_ENFORCED",
+            message: "Payload rejected by infrastructure guardrail."
         }, { status: 400 });
     }
 
     // 5. REDIRECT OR MOCK RESPONSE
     // In a real system, proxy to internal backend service here
-    return NextResponse.json({ 
-        node_execution: "SUCCESS", 
+    return NextResponse.json({
+        node_execution: "SUCCESS",
         node: "PPOS_GATEWAY_V2.4",
         path: `/v1/${path}`,
         trace_id: `trc_${Math.random().toString(36).substr(2, 9)}`,

@@ -126,6 +126,7 @@ export const Footer: React.FC = () => {
             <li><Link href="/platform" className="nav-link-technical" style={linkStyle}>Overview</Link></li>
             <li><Link href="/products/budget" className="nav-link-technical" style={linkStyle}>Pricing Engine</Link></li>
             <li><Link href="/products/preflight" className="nav-link-technical" style={linkStyle}>File Validation</Link></li>
+            <li><Link href="/products/mockup" className="nav-link-technical" style={linkStyle}>Mockup Engine</Link></li>
             <li><Link href="/products/control" className="nav-link-technical" style={linkStyle}>Control Plane</Link></li>
           </ul>
         </div>

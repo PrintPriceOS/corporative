@@ -10,19 +10,25 @@ export default function ProductsHub() {
     {
       title: "Commercial & Sales",
       products: [
-        { name: "Budget", description: "Enterprise-grade pricing engine for complex estimations. Substrate-aware logic and MIS sync.", href: "/products/budget", code: "E-01", icon: "calculator" }
+        { name: "Budget", description: "Enterprise-grade pricing engine for complex estimations. Substrate-aware logic and MIS sync.", href: "/products/budget", code: "E-01", icon: "calculator", ctaText: "CALCULATE COST" }
+      ]
+    },
+    {
+      title: "Marketing & Visualization",
+      products: [
+        { name: "Mockup Engine", description: "AI-powered workstation for high-fidelity book visualization and retail-ready renders.", href: "/products/mockup", code: "M-04", icon: "camera", ctaText: "VISUALIZE ASSETS" }
       ]
     },
     {
       title: "Operations & Quality",
       products: [
-        { name: "Preflight", description: "Internal AI-driven validation layer and auto-fix engine. Certified production safe.", href: "/products/preflight", code: "V-02", icon: "shield" }
+        { name: "Preflight", description: "Internal AI-driven validation layer and auto-fix engine. Certified production safe.", href: "/products/preflight", code: "V-02", icon: "shield", ctaText: "VALIDATE FILES" }
       ]
     },
     {
       title: "Operational Control Plane",
       products: [
-        { name: "Control Plane", description: "Monitor, track, and orchestrate every job and infrastructure node in real time. The operational brain.", href: "/products/control", code: "O-03", icon: "activity" }
+        { name: "Control Plane", description: "Monitor, track, and orchestrate every job and infrastructure node in real time. The operational brain.", href: "/products/control", code: "O-03", icon: "activity", ctaText: "MANAGE JOBS" }
       ]
     }
   ];

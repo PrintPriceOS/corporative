@@ -11,6 +11,7 @@ import { Logo } from '../brand/Logo';
 const PRODUCT_ITEMS = [
   { name: "Pricing Engine", desc: "Exact print cost calculation", icon: "calculator" as const, badge: "CORE", href: "/products/budget" },
   { name: "File Validation", desc: "Validate production files", icon: "shield" as const, badge: "CORE", href: "/products/preflight" },
+  { name: "Mockup Engine", desc: "AI-driven book visualization", icon: "camera" as const, badge: "NEW", href: "/products/mockup" },
   { name: "Control Plane", desc: "Manage jobs and infrastructure", icon: "activity" as const, badge: "LIVE", href: "/products/control" },
   { name: "Developers", desc: "Integrate the system", icon: "code" as const, badge: "DEV", href: "/developers" },
   { name: "Documentation", desc: "Complete system architecture & specs", icon: "specs" as const, badge: "DOCS", href: "/docs/platform/overview" },

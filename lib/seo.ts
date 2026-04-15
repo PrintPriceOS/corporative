@@ -35,7 +35,7 @@ export function constructMetadata({
   type?: string;
 } = {}): Metadata {
   const finalTitle = title.includes('|') ? title : `${title} | PrintPrice Pro`;
-  
+
   return {
     title: finalTitle,
     description,
@@ -89,8 +89,8 @@ export const JSON_LD_ORGANIZATION = {
   'url': 'https://printprice.pro',
   'logo': 'https://printprice.pro/logo.png',
   'contactPoint': {
-      '@type': 'ContactPoint',
-      'email': 'sales@printprice.pro',
-      'contactType': 'customer service'
+    '@type': 'ContactPoint',
+    'email': 'sales@printprice.pro',
+    'contactType': 'customer service'
   }
 };
