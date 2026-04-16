@@ -11,7 +11,7 @@ export default function PreflightEnginePage() {
         letterSpacing: '0.15em',
         marginBottom: '1rem',
         display: 'block'
-      }}>Core Engines / v2.4</span>
+      }}>Core Engines / v2.5</span>
       
       <h1 style={{ fontSize: '3.5rem', letterSpacing: '-0.06em', marginBottom: '2rem' }}>
         Preflight <br/> Engine

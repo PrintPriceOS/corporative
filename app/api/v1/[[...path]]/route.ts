@@ -71,7 +71,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     // In a real system, proxy to internal backend service here
     return NextResponse.json({
         node_execution: "SUCCESS",
-        node: "PPOS_GATEWAY_V2.4",
+        node: "PPOS_GATEWAY_v2.5",
         path: `/v1/${path}`,
         trace_id: `trc_${Math.random().toString(36).substr(2, 9)}`,
         status: "consistent"

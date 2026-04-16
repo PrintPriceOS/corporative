@@ -1,4 +1,4 @@
-# Launch Checklist (Monolith v2.4 Certified)
+# Launch Checklist (Monolith v2.5 Certified)
 
 Before final deployment, the following nodes must be verified:
 

@@ -132,7 +132,7 @@ export function trackEvent(eventName: string, payload: Record<string, any> = {})
 
   const telemetryData: TelemetryEvent = {
     event: eventName,
-    system_version: "v2.4-certified-monolith",
+    system_version: "v2.5-certified-monolith",
     path: window.location.pathname,
     referrer: document.referrer,
     session_id: getSessionId(),

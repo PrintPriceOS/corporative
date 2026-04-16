@@ -53,7 +53,7 @@ export default function GrowthDashboard() {
       <Section>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4rem' }}>
           <div>
-            <h4 className="technical-text" style={{ color: 'var(--accent-primary)', marginBottom: '1rem', letterSpacing: '0.2em' }}>OPERATIONAL ANALYTICS V2.4</h4>
+            <h4 className="technical-text" style={{ color: 'var(--accent-primary)', marginBottom: '1rem', letterSpacing: '0.2em' }}>OPERATIONAL ANALYTICS v2.5</h4>
             <h1 style={{ fontSize: '3rem', letterSpacing: '-0.04em' }}>Growth Control Plane</h1>
           </div>
           <div style={{ display: 'flex', gap: '1rem' }}>

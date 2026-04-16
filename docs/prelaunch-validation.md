@@ -33,4 +33,4 @@ Validate if a first-time user can understand the platform nature and perform a p
 - **Visual Friction**: Parts of the page that are "too technical" to understand instantly.
 
 ---
-*Status: Pre-Flight Validation Certified v2.4*
+*Status: Pre-Flight Validation Certified v2.5*

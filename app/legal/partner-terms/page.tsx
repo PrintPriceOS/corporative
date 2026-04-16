@@ -57,7 +57,7 @@ export default function PartnerTermsPage() {
         </div>
 
         <div style={{ marginTop: '5rem', paddingTop: '2rem', borderTop: '1px solid #eee', fontSize: '0.8rem', opacity: 0.5 }}>
-          PrintPrice Pro Legal Document Repository / v2.4
+          PrintPrice Pro Legal Document Repository / v2.5
         </div>
       </Section>
       

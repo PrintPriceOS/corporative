@@ -84,7 +84,7 @@ export const CookieBanner: React.FC = () => {
         backgroundColor: 'var(--bg-secondary)',
         backdropFilter: 'blur(10px)',
         border: '1px solid var(--border-color)',
-        borderRadius: '0px', // MONOLITH v2.4 STRICT - NO CORNERS
+        borderRadius: '0px', // MONOLITH v2.5 STRICT - NO CORNERS
         padding: '1.5rem',
         boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
         ...({} as any)

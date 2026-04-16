@@ -129,7 +129,7 @@ export default function ContactPage() {
   return (
     <div className={`contact-page ${isTransitioning ? 'opacity-50 pointer-events-none' : ''}`}>
       <HeroPlatform 
-        label="ROUTING LAYER / v2.4"
+        label="ROUTING LAYER / v2.5"
         title={<>START WITH THE <br/> <span style={{ color: 'var(--accent-primary)' }}>RIGHT WORKFLOW</span></>}
         subheadline="Fastest way to pricing, validation, production, or API access. The system will guide you."
         isHeadlineSlogan={false}
@@ -216,7 +216,7 @@ export default function ContactPage() {
                 
                 <div style={{ marginTop: '4rem', opacity: 0.4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div className="technical-text" style={{ fontSize: '0.65rem', fontWeight: 800 }}>STATE: CONFIDENT</div>
-                    <div className="technical-text" style={{ fontSize: '0.65rem', opacity: 0.6 }}>SYSTEM_INFERRED_v2.4</div>
+                    <div className="technical-text" style={{ fontSize: '0.65rem', opacity: 0.6 }}>SYSTEM_INFERRED_v2.5</div>
                 </div>
             </div>
           </div>

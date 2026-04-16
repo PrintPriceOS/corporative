@@ -11,7 +11,7 @@ export default function IntegrationContractsPage() {
         letterSpacing: '0.15em',
         marginBottom: '1rem',
         display: 'block'
-      }}>API / v2.4</span>
+      }}>API / v2.5</span>
       
       <h1 style={{ fontSize: '3rem', letterSpacing: '-0.06em', marginBottom: '2rem' }}>
         Integration <br/> Contracts

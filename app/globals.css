@@ -44,7 +44,7 @@
   --transition-monolith: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* LIGHT THEME DEFINITION - v2.4.15.1 */
+/* LIGHT THEME DEFINITION - v2.5.15.1 */
 [data-theme='light'] {
   --bg-primary: #ffffff;
   --bg-secondary: #f4f4f5;
@@ -56,7 +56,7 @@
   --border-color: rgba(0, 0, 0, 0.1);
 }
 
-/* HERO ISOLATION - ALWAYS DARK v2.4 */
+/* HERO ISOLATION - ALWAYS DARK v2.5 */
 .hero-dark {
   --bg-primary: #131314;
   --bg-secondary: #0e0e0f;

@@ -336,7 +336,7 @@ export const Header: React.FC = () => {
                     <Button size="lg" style={{ width: '100%' }}>Consult an Architect</Button>
                 </Link>
                 <Link href="https://control.printprice.pro" style={{ textAlign: 'center' }}>
-                    <span className="technical-text" style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', letterSpacing: '0.1em' }}>GET MANAGED ACCESS / REGISTRY V2.4</span>
+                    <span className="technical-text" style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', letterSpacing: '0.1em' }}>GET MANAGED ACCESS / REGISTRY v2.5</span>
                 </Link>
             </div>
           </div>

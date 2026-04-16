@@ -16,7 +16,7 @@ export default function GovernancePage() {
     <div className="governance-page">
       {/* Governance Hero - Monolith Narrative */}
       <HeroPlatform 
-        label="PRODUCTION CONTROL / v2.4-certified"
+        label="PRODUCTION CONTROL / v2.5-certified"
         title={<>YOUR PRODUCTION <br/> <span style={{ color: 'var(--accent-primary)' }}>CANNOT FAIL</span></>}
         slogan={["RECORDS", "CONTROL", "AUDIT"]}
         isHeadlineSlogan={false}
@@ -170,7 +170,7 @@ export default function GovernancePage() {
           <div>
             <h2 style={{ fontSize: '3rem', letterSpacing: '-0.04em', marginBottom: '2rem', ...({} as any) }}>System <br/> Integrity</h2>
             <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.8, marginBottom: '3rem', ...({} as any) }}>
-              Our platform adheres to the v2.4 Enterprise Assurance Baseline. 
+              Our platform adheres to the v2.5 Enterprise Assurance Baseline. 
               We don't just provide tools; we provide a safe foundation for mission-critical production environments.
             </p>
             <div style={{ display: 'flex', gap: '1.5rem', ...({} as any) }}>

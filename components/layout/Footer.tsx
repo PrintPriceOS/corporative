@@ -196,7 +196,7 @@ export const Footer: React.FC = () => {
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1.5rem', alignItems: 'flex-end' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <span style={{ opacity: 0.8 }}>© 2026 PrintPrice Pro (v2.4) — Print Price Pro SIA</span>
+            <span style={{ opacity: 0.8 }}>© 2026 PrintPrice Pro (v2.5) — Print Price Pro SIA</span>
             <span style={{ opacity: 0.5, fontSize: '0.65rem' }}>
               Bruņinieku iela 60-8, Latgales priekšpilsēta, Rīga, LV-1009, Latvia
             </span>

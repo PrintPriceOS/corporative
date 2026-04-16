@@ -7,11 +7,16 @@ This protocol governs the final activation of the PrintPrice Pro Monolith.
 - [ ] Verify `lib/telemetry.ts` logs events to console in development.
 - [ ] Check `docs/launch-checklist.md` for 100% compliance.
 
-## 2. Deployment Sequence (T-0)
-1. **Build**: Generate optimized production nodes.
-2. **Push**: Sync to the primary production surface.
-3. **Heat-Check**: Immediately open `/` and perform one "Start Production Audit" click.
-4. **Log-Watch**: Verify `[MONOLITH_TELEMETRY]` appears in the logs for the first interaction.
+## 2. Production Deployment Sequence (T-0)
+1. **Navigate**: `cd /var/www/vhosts/printprice.pro/httpdocs`
+2. **Pull**: `git pull origin master`
+3. **Clean**: `rm -rf .next`
+4. **Install**: `npm ci`
+5. **Build**: `npm run build`
+6. **Activate**: `pm2 restart printprice-web`
+7. **Persist**: `pm2 save`
+8. **Heat-Check**: Immediately open `/` and perform one "Start Production Audit" click.
+9. **Log-Watch**: Verify `[MONOLITH_TELEMETRY]` appears in the logs.
 
 ## 3. Real-Time Observability (Day 1)
 Monitor the following metrics in your analytics/console:

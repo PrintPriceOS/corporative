@@ -28,5 +28,5 @@ Before shipping or approving any page or component, verify these criteria:
 - **Asset Fit**: Images and diagrams must follow the dark, technical, structured aesthetic.
 
 ---
-**Status**: Certified System (v2.4)
+**Status**: Certified System (v2.5)
 **Repository**: PrintPrice Pro (f:\PPP_Website)

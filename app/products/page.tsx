@@ -37,7 +37,7 @@ export default function ProductsHub() {
     <div className="products-hub">
       {/* Hero Section - Monolith Enforcement */}
       <HeroPlatform
-        label="Capability Portfolio / v2.4"
+        label="Capability Portfolio / v2.5"
         title={<>THE COMMAND <br /> <span style={{ color: 'var(--accent-primary)' }}>SURFACES</span></>}
         subheadline="A comprehensive suite of applications engineered to orchestrate the world's most complex print production environments from a unified platform."
         variant="particles"

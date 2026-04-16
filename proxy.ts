@@ -29,7 +29,7 @@ export function proxy(request: NextRequest) {
   const response = NextResponse.next();
 
   // 4. SECURITY HEADERS
-  // Content Security Policy (Monolith v2.4 Hardened)
+  // Content Security Policy (Monolith v2.5 Hardened)
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com https://challenges.cloudflare.com;

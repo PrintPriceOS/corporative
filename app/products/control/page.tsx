@@ -99,7 +99,7 @@ export default function ControlPage() {
                 boxShadow: '0 20px 50px rgba(0,0,0,0.1)'
             }} data-monolith-action="control_live_view">
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2.5rem' }}>
-                    <h5 className="technical-text" style={{ fontSize: '0.65rem', opacity: 0.4 }}>CONTROL_STATE_v2.4</h5>
+                    <h5 className="technical-text" style={{ fontSize: '0.65rem', opacity: 0.4 }}>CONTROL_STATE_v2.5</h5>
                     <div className="technical-text" style={{ fontSize: '0.6rem', color: '#00ff00', background: 'rgba(0,255,0,0.05)', padding: '0.2rem 0.5rem', fontWeight: 900 }}>SYSTEM: ACTIVE</div>
                 </div>
 
@@ -204,7 +204,7 @@ export default function ControlPage() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3.5rem', opacity: 0.8 }}>
               <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
                 <span className="technical-text" style={{ fontSize: '0.65rem', borderRight: '1px solid rgba(255,255,255,0.1)', paddingRight: '1.5rem', fontWeight: 900 }}>PRODUCTION ENVIRONMENT</span>
-                <span className="technical-text" style={{ fontSize: '0.65rem', borderRight: '1px solid rgba(255,255,255,0.1)', paddingRight: '1.5rem', fontWeight: 800 }}>V2.4_CERTIFIED_OS_CORE</span>
+                <span className="technical-text" style={{ fontSize: '0.65rem', borderRight: '1px solid rgba(255,255,255,0.1)', paddingRight: '1.5rem', fontWeight: 800 }}>v2.5_CERTIFIED_OS_CORE</span>
                 <span className="technical-text" style={{ fontSize: '0.65rem', opacity: 0.6 }}>REGION: EU-WEST-1</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>

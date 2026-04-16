@@ -1,5 +1,5 @@
 /**
- * PPOS Security Utilities (v2.4)
+ * PPOS Security Utilities (v2.5)
  * Hardened validation for production-grade infrastructure.
  */
 

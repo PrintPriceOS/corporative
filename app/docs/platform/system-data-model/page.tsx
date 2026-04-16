@@ -11,7 +11,7 @@ export default function SystemDataModelPage() {
         letterSpacing: '0.15em',
         marginBottom: '1rem',
         display: 'block'
-      }}>Platform / v2.4</span>
+      }}>Platform / v2.5</span>
       
       <h1 style={{ fontSize: '3rem', letterSpacing: '-0.04em', marginBottom: '2rem' }}>
         System Data <br/> Model

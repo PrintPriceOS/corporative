@@ -24,7 +24,7 @@ export default function Home() {
         Optimized for Clarity and Transactional Intent
       */}
       <HeroPlatform
-        label="Production Intelligence / v2.4 Certified"
+        label="Production Intelligence / v2.5 Certified"
         slogan={["PRICE IT.", "FIX IT.", "PRINT IT."]}
         subheadline={<>Know the exact cost. Fix your files <br /> Get the best printer instantly.</>}
         primaryAction={{

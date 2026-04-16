@@ -6,18 +6,18 @@ import { Icon } from '../ui/Icon';
 import Link from 'next/link';
 import { Button } from '../ui/Button';
 
-interface FAQItem {
+export interface FAQItem {
     id: string;
     q: string;
     a: string;
 }
 
-interface FAQGroup {
+export interface FAQGroup {
     category: string;
     items: FAQItem[];
 }
 
-const FAQ_DATA: FAQGroup[] = [
+export const DEFAULT_FAQ_DATA: FAQGroup[] = [
     {
         category: "Getting Started",
         items: [
@@ -54,7 +54,19 @@ const FAQ_DATA: FAQGroup[] = [
     }
 ];
 
-export const FAQSection: React.FC = () => {
+interface FAQSectionProps {
+    data?: FAQGroup[];
+    label?: string;
+    title?: string;
+    subtitle?: string;
+}
+
+export const FAQSection: React.FC<FAQSectionProps> = ({
+    data = DEFAULT_FAQ_DATA,
+    label = "QUESTIONS, ANSWERED",
+    title = "Everything you need to know.",
+    subtitle = "Direct answers about print costs, files, and printers."
+}) => {
     // Open the first item of the first category by default
     const [openId, setOpenId] = useState<string | null>("0-0");
 
@@ -77,12 +89,12 @@ export const FAQSection: React.FC = () => {
                         letterSpacing: '0.2em',
                         fontWeight: 800,
                         ...({} as any)
-                    }}>QUESTIONS, ANSWERED</h4>
+                    }}>{label}</h4>
                     <h2 style={{ fontSize: 'clamp(2.5rem, 8vw, 3.5rem)', letterSpacing: '-0.04em', lineHeight: 1.1, marginBottom: '1.5rem', color: 'var(--text-primary)', ...({} as any) }}>
-                        Everything you need to know.
+                        {title}
                     </h2>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', maxWidth: '500px', marginInline: 'auto' }}>
-                        Direct answers about print costs, files, and printers.
+                        {subtitle}
                     </p>
                 </div>
 
@@ -101,7 +113,7 @@ export const FAQSection: React.FC = () => {
                     gap: '4rem clamp(2rem, 5vw, 6rem)', 
                     ...({} as any) 
                 }}>
-                    {FAQ_DATA.map((group, gIdx) => (
+                    {data.map((group, gIdx) => (
                         <div key={group.category} style={{
                             borderTop: '1px solid var(--border-color)',
                             paddingTop: '2.5rem'

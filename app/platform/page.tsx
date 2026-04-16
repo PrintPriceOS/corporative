@@ -50,6 +50,17 @@ export default function PlatformPage() {
                 ctaText: 'Validate files',
                 icon: 'shield'
               },
+              { 
+                category: 'CORE FLOW',
+                name: 'Mockup Generator', 
+                description: 'Generate high-fidelity 3D book mockups in seconds.', 
+                code: 'mockup.printprice.pro', 
+                status: 'VISUALIZER', 
+                priority: true,
+                href: '/products/mockup', 
+                ctaText: 'Create mockup',
+                icon: 'camera'
+              },
               // OPERATIONS
               { 
                 category: 'OPERATIONS',
@@ -126,10 +137,12 @@ export default function PlatformPage() {
               ))}
             </ul>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', opacity: 0.3, fontSize: '0.7rem', fontWeight: 900, letterSpacing: '0.3em' }} className="technical-text">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', opacity: 0.3, fontSize: '0.7rem', fontWeight: 900, letterSpacing: '0.3em' }} className="technical-text">
                 <span>PRICE IT</span>
                 <span>→</span>
                 <span>FIX IT</span>
+                <span>→</span>
+                <span>VISUALIZE</span>
                 <span>→</span>
                 <span>PRINT IT</span>
             </div>
@@ -141,6 +154,7 @@ export default function PlatformPage() {
               steps={[
                   { label: 'Cost calculated', status: 'DONE', href: 'https://budget.printprice.pro/' },
                   { label: 'Files validated', status: 'VALIDATED', href: '/products/preflight' },
+                  { label: 'Visuals generated', status: 'READY', href: '/products/mockup' },
                   { label: 'Production ready', status: 'READY', href: '/products/control' },
               ]}
             />

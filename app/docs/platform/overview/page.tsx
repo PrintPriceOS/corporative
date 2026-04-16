@@ -12,7 +12,7 @@ export default function DocsOverviewPage() {
         marginBottom: '1rem',
         display: 'block',
         ...({} as any)
-      }}>Platform / v2.4</span>
+      }}>Platform / v2.5</span>
       <h1 style={{ fontSize: '3.5rem', letterSpacing: '-0.06em', marginBottom: '2rem', ...({} as any) }}>Platform <br/> Overview</h1>
       <p style={{ fontSize: '1.25rem', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '4rem', ...({} as any) }}>
         PrintPrice Pro is a high-performance operating system designed to orchestrate complex print production workflows. 

@@ -128,7 +128,7 @@ export const PreflightDiagnosticPipeline: React.FC = () => {
         </div>
       </div>
 
-      {/* Background Grid Pattern - Subtle Monolith v2.4 */}
+      {/* Background Grid Pattern - Subtle Monolith v2.5 */}
       <div style={{ 
         position: 'absolute', 
         inset: 0, 

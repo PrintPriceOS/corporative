@@ -8,7 +8,7 @@ export default function DocsPage() {
   const sections = [
     {
       title: "Platform Overview",
-      desc: "Comprehensive technical roadmap of the PrintPrice Pro ecosystem. v2.4 certified.",
+      desc: "Comprehensive technical roadmap of the PrintPrice Pro ecosystem. v2.5 certified.",
       href: "/docs/platform/overview",
       id: "P-01",
       icon: "web"

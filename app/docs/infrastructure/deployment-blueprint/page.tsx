@@ -11,7 +11,7 @@ export default function DeploymentBlueprintPage() {
         letterSpacing: '0.15em',
         marginBottom: '1rem',
         display: 'block'
-      }}>Infrastructure / v2.4</span>
+      }}>Infrastructure / v2.5</span>
       
       <h1 style={{ fontSize: '3rem', letterSpacing: '-0.06em', marginBottom: '2rem' }}>
         Deployment <br/> Blueprint
