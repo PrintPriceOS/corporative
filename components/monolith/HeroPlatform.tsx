@@ -20,6 +20,7 @@ interface HeroPlatformProps {
   secondaryAction?: { label: string; href: string };
   isHeadlineSlogan?: boolean;
   variant?: 'hyperspeed' | 'particles';
+  rightContent?: React.ReactNode;
 }
 
 export const HeroPlatform: React.FC<HeroPlatformProps> = ({ 
@@ -30,7 +31,8 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
   primaryAction, 
   secondaryAction,
   isHeadlineSlogan = true,
-  variant = 'hyperspeed'
+  variant = 'hyperspeed',
+  rightContent
 }) => {
   const [visibleLines, setVisibleLines] = useState<number>(0);
 
@@ -104,8 +106,17 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
         `}</style>
         
         {/* CONTENT LAYER */}
-        <div style={{ position: 'relative', zIndex: 1, ...({} as any) }}>
-          <span className="technical-text" style={{ 
+        <div style={{ 
+          position: 'relative', 
+          zIndex: 1, 
+          display: rightContent ? 'grid' : 'block',
+          gridTemplateColumns: rightContent ? 'repeat(auto-fit, minmax(min(500px, 100%), 1fr))' : 'none',
+          gap: '4rem',
+          alignItems: 'center',
+          ...({} as any) 
+        }}>
+          <div>
+            <span className="technical-text" style={{ 
             color: '#dc0000', // Hardcoded Red Accent
             fontSize: 'clamp(0.7rem, 2vw, 0.8rem)', 
             textTransform: 'uppercase', 
@@ -238,7 +249,13 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
                 <Button variant="secondary" size="lg" style={{ width: '100%', color: '#e5e2e3', borderColor: 'rgba(255,255,255,0.1)' }}>{secondaryAction.label}</Button>
               </Link>
             )}
+            </div>
           </div>
+          {rightContent && (
+            <div style={{ position: 'relative', zIndex: 2 }}>
+              {rightContent}
+            </div>
+          )}
         </div>
       </Section>
     </div>

@@ -4,7 +4,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://printprice.pro';
 
 export const SEO_DATA = {
   titleTemplate: '%s | PrintPrice Pro',
-  defaultTitle: 'Print Cost Calculator & File Validation | PrintPrice Pro',
+  defaultTitle: 'Price It Fix It Print It | PrintPrice Pro',
   description: 'Calculate exact print costs, validate files, and find the best print partner instantly through PrintPrice OS.',
   keywords: [
     'print cost calculator',

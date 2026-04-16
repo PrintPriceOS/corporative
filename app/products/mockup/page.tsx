@@ -28,6 +28,52 @@ export default function MockupPage() {
         primaryAction={{ label: "Launch Workstation →", href: "https://mockup.printprice.pro/" }}
         secondaryAction={{ label: "Watch how it works →", href: "#workflow" }}
         variant="particles"
+        rightContent={
+          <div style={{ 
+            position: 'relative', 
+            width: '100%', 
+            aspectRatio: '16/9', 
+            background: 'var(--bg-secondary)', 
+            border: '1px solid var(--border-color)',
+            overflow: 'hidden',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+          }}>
+            <div style={{ textAlign: 'center', opacity: 0.5 }}>
+                 <Icon name="activity" size={48} style={{ color: 'var(--accent-primary)', marginBottom: '1rem' }} />
+                 <p className="technical-text" style={{ fontSize: '0.7rem' }}>INITIALIZING_VIDEO_STREAM...</p>
+            </div>
+            {/* Real video integration would go here */}
+            <video 
+              autoPlay 
+              muted 
+              loop 
+              playsInline
+              style={{ 
+                position: 'absolute', 
+                top: 0, 
+                left: 0, 
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'cover',
+                opacity: 0.8
+              }}
+            >
+              <source src="/videos/mockup_generation.webm" type="video/webm" />
+            </video>
+            <div style={{ 
+              position: 'absolute', 
+              bottom: 0, 
+              left: 0, 
+              width: '100%', 
+              height: '40%', 
+              background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)',
+              zIndex: 1
+            }}></div>
+          </div>
+        }
       />
 
       {/* Instant Clarity - Render Pipeline */}
