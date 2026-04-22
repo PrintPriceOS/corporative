@@ -8,17 +8,41 @@ This protocol governs the final activation of the PrintPrice Pro Monolith.
 - [ ] Check `docs/launch-checklist.md` for 100% compliance.
 
 ## 2. Production Deployment Sequence (T-0)
-1. **Navigate**: `cd /var/www/vhosts/printprice.pro/httpdocs`
-2. **Pull**: `git pull origin master`
-3. **Clean**: `rm -rf .next`
-4. **Install**: `npm ci`
-5. **Build**: `npm run build`
-6. **Activate**: `pm2 restart printprice-web`
-7. **Persist**: `pm2 save`
-8. **Heat-Check**: Immediately open `/` and perform one "Start Production Audit" click.
-9. **Log-Watch**: Verify `[MONOLITH_TELEMETRY]` appears in the logs.
 
-## 3. Real-Time Observability (Day 1)
+> [!CAUTION]
+> **GOLDEN RULE**: Never run `npm run build` as `root`. This breaks static chunk routing and permissions.
+
+### Step A: System Reset (As Root)
+```bash
+cd /var/www/vhosts/printprice.pro/httpdocs
+rm -rf .next
+chown -R printprice.pro_a2w0fsu9yw9:psacln /var/www/vhosts/printprice.pro/httpdocs
+su - printprice.pro_a2w0fsu9yw9
+```
+
+### Step B: Application Build (As Domain User)
+```bash
+cd /var/www/vhosts/printprice.pro/httpdocs
+git pull origin master
+npm ci
+npm run build
+PORT=3010 pm2 restart printprice-web || PORT=3010 pm2 start server.js --name printprice-web
+pm2 save
+exit
+```
+
+### Step C: Network Reload (As Root)
+```bash
+nginx -t && systemctl reload nginx
+```
+
+## 3. Post-Deployment Verification
+Run these commands to verify the state of the monolith:
+1. **Ownership**: `stat -c '%U:%G %n' .next` (Must be `printprice.pro_a2w0fsu9yw9:psacln`)
+2. **Process**: `pm2 list` (Must show `printprice-web` as online)
+3. **Connectivity**: `curl -I https://printprice.pro/contact/partner` (Must return HTTP 200)
+
+## 4. Real-Time Observability (Day 1)
 Monitor the following metrics in your analytics/console:
 - **Hero_Primary_CTR**: Success if > 8%.
 - **Workflow_Interaction_Rate**: Success if > 15%.

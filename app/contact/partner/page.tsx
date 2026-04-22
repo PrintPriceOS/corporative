@@ -14,44 +14,19 @@ const PARTNER_FAQs: FAQGroup[] = [
     category: "Network & Growth",
     items: [
       { 
-        id: "receive_orders", 
-        q: "How do we receive orders from PrintPrice Pro?", 
-        a: "Your facility becomes a production node for budget.printprice.pro. Customers get instant quotes matched to your capability, sending pre-validated orders directly to your partner dashboard." 
+        id: "types_of_jobs", 
+        q: "What types of print jobs will we receive?", 
+        a: "You will mostly get book printing projects like: Paperbacks with perfect binding (B&W or color), Hardcovers with dust jackets or printed covers, and Special projects like spiral-bound or board books. Extra services like foil stamping or embossing are matched if you offer them. We match jobs to your skills, location, and capacity; you decide which jobs to accept via your dashboard." 
       },
       { 
-        id: "responsibility", 
-        q: "Who is responsible for production and delivery?", 
-        a: "You are. Our partners manage the entire manufacturing cycle and final delivery. PrintPrice Pro provides the technical matching and file validation layer; you provide the craftsmanship and fulfillment." 
-      }
-    ]
-  },
-  {
-    category: "Technical Tools",
-    items: [
-      { 
-        id: "preflight_access", 
-        q: "Do we get access to preflight tools?", 
-        a: "Yes. All qualified partners get full access to preflight.printprice.pro. This workstation allows you to perform deep forensic audits and automated fixes on customer PDFs before they hit your press." 
+        id: "control_jobs", 
+        q: "Can we set minimum order values or reject specific jobs?", 
+        a: "Yes, you have full control. In your Partner Portal you can set minimum quantities (e.g., 50+ copies), acceptable formats/finishes (e.g., 'no foil stamping'), geographic preferences, and capacity limits (e.g., pause at 80% capacity). You always say yes or no to each job; we never assign work automatically without your approval." 
       },
       { 
-        id: "validation_benefit", 
-        q: "How does the validation layer help our facility?", 
-        a: "Every job routed to your facility has already passed through our automated validation. This virtually eliminates pre-press overhead and avoids costly production stops due to file errors." 
-      }
-    ]
-  },
-  {
-    category: "Management & Control",
-    items: [
-      { 
-        id: "control_plane", 
-        q: "How do we manage our pricing and costs?", 
-        a: "All partners have full access to the Control Plane at control.printprice.pro. Here you can configure your exact production parameters, including paper costs, transport zones, and technical signatures (32p, 24p, 16p) to ensure automated quotes are always accurate." 
-      },
-      { 
-        id: "order_management", 
-        q: "How are orders tracked and managed?", 
-        a: "You can monitor every order (e.g., PPP-17APJM-E07D7) via your dashboard. Each order includes a full breakdown of technical specs like binding method, interior paper weight, and finishing options, along with real-time status updates." 
+        id: "pause_intake", 
+        q: "What happens if we are at capacity or need to pause?", 
+        a: "You can pause new jobs anytime via the 'Pause Intake' button in your dashboard. Accepted jobs remain your responsibility with no penalties for pausing. For planned maintenance or vacations, notifying your Account Manager is helpful but not required. High-performance partners (95%+ on-time delivery) receive priority when they resume." 
       }
     ]
   },
@@ -59,14 +34,69 @@ const PARTNER_FAQs: FAQGroup[] = [
     category: "Finance & Logistics",
     items: [
       { 
-        id: "payments", 
-        q: "How and when do we receive payments?", 
-        a: "Payments are processed through our automated settlement system. Once an order is marked as delivered and verified by the customer, the funds are cleared according to your specific partner agreement terms." 
+        id: "commission_fees", 
+        q: "What commission or fees does PrintPrice Pro charge?", 
+        a: "We keep it simple: No monthly fees to join. We take a percentage only when you complete and get paid for an order (usually 12-18%, depending on volume). File checking, customer acquisition, and payment processing are included. You see your exact earnings and our fee before accepting any job (e.g., on a €1,000 job, you might receive €850 and PrintPrice Pro keeps €150)." 
       },
       { 
-        id: "shipping", 
-        q: "Who manages shipping and logistics?", 
-        a: "As the production node, you are responsible for secure packaging and coordinating with the carrier. Our system integrates with major logistics providers to allow you to generate labels and track shipments directly from the Control Plane." 
+        id: "payment_terms", 
+        q: "What are the payment terms?", 
+        a: "The customer pays PrintPrice Pro upfront or on agreed terms. You invoice us upon job completion and quality check. We pay you within 15 days via bank transfer, Wise, or PayPal in your local currency with no extra exchange fees. You are fully protected from customer chargebacks." 
+      },
+      { 
+        id: "customer_service", 
+        q: "Who handles customer service, reprints, and returns?", 
+        a: "We share responsibility: We handle pre-sale support and file checking. If a production error occurs, the partner covers the reprint and shipping. For customer errors (wrong file approved), the customer pays. Shipping delays are managed by PrintPrice Pro via carrier claims. You'll receive a clear Partner Playbook with all guidelines." 
+      }
+    ]
+  },
+  {
+    category: "Requirements & Quality",
+    items: [
+      { 
+        id: "equipment_needed", 
+        q: "What equipment and capabilities do we need to join?", 
+        a: "To join as a book partner, you need digital or offset presses (B&W/Color), perfect binding equipment, the ability to work with PDF/X-1a or PDF/X-4, and a workflow that supports 24-72 hour short-run turnarounds. Reliable internet and a robust internal quality control process are essential." 
+      },
+      { 
+        id: "file_formats", 
+        q: "What file formats and specs are required?", 
+        a: "We accept PDF/X-1a, PDF/X-4, and high-res print-ready PDFs. Our system automatically validates bleed, trim, color space, and fonts before routing to you. We provide full technical specs (trim, paper, binding, finish) and pre-flight reports for every job." 
+      },
+      { 
+        id: "quality_control", 
+        q: "How is quality controlled and approved?", 
+        a: "We use three layers: 1. Automatic system validation. 2. Partner approval of proofs before the full run. 3. Random post-production checks and publisher feedback. Partners with 98%+ quality ratings get faster routing, bonus payments, and 'Verified Partner' status." 
+      },
+      { 
+        id: "approval_process", 
+        q: "What is the approval process to become a partner?", 
+        a: "Our onboarding takes 5-7 business days: 1. Application review. 2. 30-minute technical call. 3. Paid test job to verify quality. 4. Dashboard activation. There are no long-term contracts; you can pause or leave with 30 days notice." 
+      }
+    ]
+  },
+  {
+    category: "Technical Integration",
+    items: [
+      { 
+        id: "mis_erp_integration", 
+        q: "Do we need to integrate with our MIS or ERP system?", 
+        a: "No, integration is optional. You can manage everything manually via email and the partner dashboard. For high-volume partners, we offer REST API (webhooks), CSV/SFTP batching, and Zapier/Make.com connectors. Our tech team provides integration support at no extra cost." 
+      }
+    ]
+  },
+  {
+    category: "Getting Started",
+    items: [
+      { 
+        id: "first_job_timing", 
+        q: "How quickly can we get our first job after approval?", 
+        a: "Most partners receive their first job within 2-3 days of activation, depending on location, capability matches, and response speed (responding within 2 hours is recommended). Tip: A 100% complete profile with work photos significantly increases visibility." 
+      },
+      {
+        id: "ready_to_join",
+        q: "Ready to join the network?",
+        a: "Start your 21-day trial today and see how PrintPrice Pro can grow your business. For any questions, chat with us on WhatsApp (+371 20 899 797) or email partners@printprice.pro"
       }
     ]
   }
@@ -121,6 +151,15 @@ export default function PartnerOnboarding() {
         title="Scaling your facility."
         subtitle="Answers for printing houses joining the PrintPrice OS network."
         data={PARTNER_FAQs}
+      />
+
+      <ActionCTA 
+        slogan="READY TO JOIN?"
+        title="Start your 21-day trial today."
+        description="See how PrintPrice Pro can help grow your printing business. Have questions? Chat with us on WhatsApp (+371 20 899 797) or email partners@printprice.pro"
+        buttonLabel="Register as a Partner →"
+        buttonHref="#onboarding"
+        trackingAction="partner_ready_to_join"
       />
 
       {/* Footer System info */}

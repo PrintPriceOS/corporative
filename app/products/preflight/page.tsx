@@ -26,7 +26,7 @@ export default function PreflightPage() {
         slogan={["PLAN.", "FIX.", "SCALE."]}
         isHeadlineSlogan={false}
         subheadline="Detect, fix, and certify your print files automatically — before they reach production. Automated file validation and correction for real production workflows."
-        primaryAction={{ label: "Check my file →", href: "#" }}
+        primaryAction={{ label: "Check my file →", href: "https://preflight.printprice.pro/" }}
         secondaryAction={{ label: "View technical specs →", href: "#engine" }}
         variant="particles"
       />
@@ -230,7 +230,7 @@ export default function PreflightPage() {
         title="Stop printing errors."
         description="Avoid costly reprints and production delays. Get validation results in seconds. No signup required."
         buttonLabel="Check my file now →"
-        buttonHref="#"
+        buttonHref="https://preflight.printprice.pro/"
         trackingAction="preflight_cta_final_v2"
       />
       
