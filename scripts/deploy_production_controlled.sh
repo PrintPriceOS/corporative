@@ -53,14 +53,15 @@ EXPECTED_GROUP="${EXPECTED_GROUP:-psacln}"
 EXPECTED_PM2_APP="${EXPECTED_PM2_APP:-printprice-web}"
 EXPECTED_PORT="${EXPECTED_PORT:-3010}"
 EXPECTED_NODE_BIN="${EXPECTED_NODE_BIN:-/usr/bin/node}"
+export PM2_HOME="${PM2_HOME:-/var/www/vhosts/${DOMAIN}/.pm2}"
 
-# Helper de ejecución controlada para comandos PM2 según privilegios de ejecución
+# Helper de ejecución controlada para comandos PM2: siempre bajo EXPECTED_USER y con PM2_HOME explícito
 run_pm2_cmd() {
     local cmd="$1"
     if [ "$(id -u)" -eq 0 ]; then
-        su -s /bin/bash "${EXPECTED_USER}" -c "${cmd}"
+        su -s /bin/bash "${EXPECTED_USER}" -c "export PM2_HOME='${PM2_HOME}'; ${cmd}"
     else
-        eval "${cmd}"
+        PM2_HOME="${PM2_HOME}" eval "${cmd}"
     fi
 }
 
@@ -669,7 +670,9 @@ except Exception:
         mkdir -p "${STAGING_DIR}/.next/server/app/products/budget"
         echo "${MOCK_CANDIDATE_BUILD_ID:-CANDIDATE_BUILD_ID_SIM}" > "${STAGING_DIR}/.next/BUILD_ID"
         echo '{"name": "mock-web", "version": "0.1.0"}' > "${STAGING_DIR}/package.json"
-        echo 'console.log("candidate server");' > "${STAGING_DIR}/server.js"
+        if [ "${MOCK_CANDIDATE_NO_SERVER_JS:-false}" != "true" ]; then
+            echo 'console.log("candidate server");' > "${STAGING_DIR}/server.js"
+        fi
         echo 'CALCULATE PRINT PRODUCTION ESTIMATES IN SECONDS DRUCKANGEBOTE IN SEKUNDEN BERECHNEN' > "${STAGING_DIR}/.next/server/app/products/budget/page.js"
         echo '{"name": "mock-web"}' > "${STAGING_DIR}/package-lock.json"
         CANDIDATE_BUILD_ID="${MOCK_CANDIDATE_BUILD_ID:-CANDIDATE_BUILD_ID_SIM}"
@@ -732,6 +735,13 @@ EOF
         chown -R "${EXPECTED_USER}:${EXPECTED_GROUP}" "${STAGING_DIR}"
     fi
     echo "[OK] Artefacto compilado con BUILD_ID: ${CANDIDATE_BUILD_ID} y manifiesto generado."
+
+    # 3.2. Comprobar que el candidato construido contiene el archivo de entrada server.js ANTES del intercambio
+    if [ ! -f "${STAGING_DIR}/server.js" ]; then
+        echo "ERROR CRÍTICO: El candidato construido carece de 'server.js' en ${STAGING_DIR}. ABORTANDO ANTES DEL INTERCAMBIO." >&2
+        exit 1
+    fi
+    echo "[OK] Punto de entrada server.js acreditado en el candidato construido (${STAGING_DIR}/server.js)."
 
     # ==============================================================================
     # FASE 4: INTERCAMBIO SECUENCIAL CON TRANSICIÓN DE MÁQUINA DE ESTADOS

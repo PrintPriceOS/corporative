@@ -63,20 +63,21 @@ For governed, zero-downtime production deployment with verified state rollback a
 ### Script
 - **Path**: `scripts/deploy_production_controlled.sh`
 - **Guarantees**:
-  1. **Strict Candidate SHA Validation**: Verifies candidate git commit SHA (canonical 40-char hex format) before any filesystem writes. Uses an isolated temporary directory and `git fetch --depth 1` against the remote repository to ensure the commit exists; rejects invalid formats and remote errors immediately with non-zero exit.
-  2. **Supervisor Process & Explicit Injected Identity**: Sets `RELEASE_ID` explicitly into the process environment when starting or reloading the candidate (`RELEASE_ID=${CANDIDATE_BUILD_ID} PORT=${EXPECTED_PORT} pm2 reload ${EXPECTED_PM2_APP} --update-env`) and restores the previous `RELEASE_ID` on rollback. This prevents depending on file access timing or when Next.js loads modules and reads `.next/BUILD_ID`. Verifies subscription user, PM2 online status, `pm_cwd` matching `APP_ROOT`, and the served identity in memory via HTTP (`/api/health`, boot-captured, no secrets). Maintains documented verification boundary limits for legacy releases returning HTTP 404.
-  3. **Zero Alternative Validation Paths in SIMULATION_MODE**: The deployment script runs 100% production validation logic in both testing and production; test environments substitute only external boundary operations (`curl`, `git`, `pm2`).
+  1. **Strict Candidate SHA Validation & Clean Tools Checkout**: Verifies candidate git commit SHA (canonical 40-char hex format) before any filesystem writes. Uses an isolated temporary directory and `git fetch --depth 1` against the remote repository to ensure the commit exists; rejects invalid formats and remote errors immediately with non-zero exit. Operational tool checkout must also verify `git status --porcelain` to prevent executing with uncommitted local alterations.
+  2. **Supervisor Process & Explicit Injected Identity**: Sets `PM2_HOME=/var/www/vhosts/printprice.pro/.pm2` explicitly for all PM2 queries and reloads, executing exclusively under subscription user `printprice.pro_a2w0fsu9yw9` (never as root). Injects `RELEASE_ID` into the process environment when reloading candidate (`RELEASE_ID=${CANDIDATE_BUILD_ID} PORT=${EXPECTED_PORT} pm2 reload ${EXPECTED_PM2_APP} --update-env`) and restores previous `RELEASE_ID` on rollback, decoupling identity from file access timing. Verifies process health, `pm_cwd` matching `APP_ROOT`, and served memory identity via HTTP (`/api/health`, boot-captured, no secrets). Maintains documented verification boundary limits for legacy releases returning HTTP 404.
+  3. **Launcher & Entry Point Accreditation Before Swap**: Next.js production launcher `server.js` is versioned in repository root (dev=false, PORT fallback 3010, fatal error handling on `app.prepare()` and server error events with exit 1). The deployment script strictly checks `${STAGING_DIR}/server.js` in Phase 3 *before* Phase 4 directory swap to guarantee that live production is never touched if the entry point is missing.
   4. **Strict Release Classification & Origin ETag Comparison**:
      - *Origin OK + Public OK and updated* => `ACTIVE` (exit 0).
      - *Origin OK + Public HTTP 200 + Positive evidence of old version* => `PENDING_CACHE_INVALIDATION` (exit 0).
      - *Public content incorrect without old version evidence* => `PUBLIC_FAILED` (triggers rollback, exit 1).
-     - Completely eliminates `OR public_content_ok != true` which allowed declaring cache invalidation without evidence.
-     - Avoids false cache alarms on unchanged pages: compares public ETag with current origin response for the same route. Stale cache is only flagged if public ETag differs from origin and matches pre-deployment ETag, or if public `/api/health` serves previous release identity.
-  5. **State Machine Rollback**: Idempotent rollback across `INITIAL`, `LIVE_MOVED`, `STAGING_MOVED`, `VERIFYING`, `ORIGIN_FAILED`, `PUBLIC_FAILED`.
+     - *Origin local error or live process failure* => `ORIGIN_FAILED` (triggers immediate rollback, exit 1).
+     - Eliminates `OR public_content_ok != true` that falsely declared cache invalidation without evidence.
+     - Avoids false cache alarms on unchanged pages by comparing public ETag with current origin response for the same route.
+  5. **State Machine Rollback & Contingency Risk**: Rollback across `INITIAL`, `LIVE_MOVED`, `STAGING_MOVED`, `VERIFYING`, `ORIGIN_FAILED`, `PUBLIC_FAILED`. Rollback is not unconditionally guaranteed: severe disk corruption or unrecoverable legacy process state can result in `ROLLBACK_FAILED` (exit 2), requiring manual operator intervention.
 
 ### Simulation Test Suite
 - **Path**: `scripts/tests/test_runbook_simulation.sh`
-- **Coverage**: 28 end-to-end tests exercising real production script functions in an isolated sandbox with controllable test doubles:
+- **Coverage**: 29 end-to-end tests exercising real production script functions in an isolated sandbox with controllable test doubles:
   - Happy path `ACTIVE` (exit 0)
   - Stale cache detection `PENDING_CACHE_INVALIDATION` (exit 0)
   - Origin 500 failure rollback (`ORIGIN_FAILED`, exit 1)
@@ -89,6 +90,7 @@ For governed, zero-downtime production deployment with verified state rollback a
   - **Regression 1**: Public content incorrect without old version evidence strictly yields `PUBLIC_FAILED` and triggers rollback
   - **Regression 2**: Unchanged page retaining identical ETag between origin and public proxy classifies as `ACTIVE`
   - **Regression 3**: Candidate reload and rollback receive and serve respective `RELEASE_ID` via PM2 environment and boot introspection
+  - **Regression 4**: Built candidate without `server.js` strictly aborts in Phase 3 before Phase 4 swap (zero alteration of live production)
 - **Execution**:
   ```bash
   bash scripts/tests/test_runbook_simulation.sh

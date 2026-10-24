@@ -46,6 +46,7 @@ export EXPECTED_GROUP="$(id -g)"
 export EXPECTED_PM2_APP="mock-web"
 export EXPECTED_PORT="3019"
 export EXPECTED_NODE_BIN="/usr/bin/node"
+export PM2_HOME="${TEST_SANDBOX}/.pm2"
 export SIMULATION_MODE=true
 
 # Binarios externos sustituidos hacia wrappers de prueba en TEST_SANDBOX/bin
@@ -321,6 +322,7 @@ setup_dummy_env() {
     export MOCK_PUBLIC_SERVED_RELEASE_ID=""
     export MOCK_PUBLIC_STALE=false
     export MOCK_PUBLIC_CORRUPT=false
+    export MOCK_CANDIDATE_NO_SERVER_JS=false
     rm -f "${TEST_SANDBOX}/last_pm2_release_id.txt"
 }
 
@@ -831,6 +833,26 @@ else
     exit 1
 fi
 
+# ------------------------------------------------------------------------------
+# TEST 29: Candidato construido sin server.js aborta antes de FASE 4 (cero alteración)
+# ------------------------------------------------------------------------------
+echo -n "Test 29: Candidato sin server.js aborta antes de FASE 4 (exit 1)... "
+setup_dummy_env
+rm -rf "${STAGING_DIR}" "${BACKUP_DIR}"
+export MOCK_CANDIDATE_NO_SERVER_JS=true
+
+DEPLOY_29_RET=0
+( run_deployment "${CANDIDATE_SHA}" ) > "${TEST_SANDBOX}/test29.log" 2>&1 || DEPLOY_29_RET=$?
+export MOCK_CANDIDATE_NO_SERVER_JS=false
+
+if [ "${DEPLOY_29_RET}" -eq 1 ] && grep -q "El candidato construido carece de 'server.js'" "${TEST_SANDBOX}/test29.log" && [ "${SWAP_STATE}" = "INITIAL" ] && [ "$(cat "${APP_ROOT}/.next/BUILD_ID")" = "OLD_BUILD_ID_111" ]; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: ret=${DEPLOY_29_RET}, state=${SWAP_STATE}]"
+    cat "${TEST_SANDBOX}/test29.log"
+    exit 1
+fi
+
 echo "========================================================================"
-echo "TODAS LAS 28 PRUEBAS DE RESILIENCIA Y RECUPERACIÓN COMPLETADAS CON ÉXITO."
+echo "TODAS LAS 29 PRUEBAS DE RESILIENCIA Y RECUPERACIÓN COMPLETADAS CON ÉXITO."
 echo "========================================================================"
