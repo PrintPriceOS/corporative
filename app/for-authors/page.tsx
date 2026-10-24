@@ -6,6 +6,7 @@ import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { HeroPlatform } from '@/components/monolith/HeroPlatform';
 import { useLocale } from '@/lib/i18n';
+import { Calculator, ShieldCheck, Factory, BookOpen } from 'lucide-react';
 
 export default function ForAuthorsPage() {
   const { dict, locale } = useLocale();
@@ -192,8 +193,8 @@ export default function ForAuthorsPage() {
             {/* Tool 1: Price it */}
             <div className="rounded-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>
-                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
-                  💶
+                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                  <Calculator size={24} strokeWidth={1.75} />
                 </div>
                 <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>{dict.authorsPage.tool1Title}</h3>
                 <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
@@ -210,8 +211,8 @@ export default function ForAuthorsPage() {
             {/* Tool 2: Fix it */}
             <div className="rounded-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>
-                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
-                  ✓
+                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                  <ShieldCheck size={24} strokeWidth={1.75} />
                 </div>
                 <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>
                   {dict.authorsPage.tool2Title}
@@ -233,8 +234,8 @@ export default function ForAuthorsPage() {
             {/* Tool 3: Print it */}
             <div className="rounded-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>
-                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
-                  🏭
+                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                  <Factory size={24} strokeWidth={1.75} />
                 </div>
                 <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>{dict.authorsPage.tool3Title}</h3>
                 <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
@@ -267,7 +268,9 @@ export default function ForAuthorsPage() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'clamp(0.75rem, 2vw, 1.25rem)', flexWrap: 'wrap', flex: '1 1 260px' }}>
-              <span style={{ fontSize: '2rem', lineHeight: 1 }}>📖</span>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <BookOpen size={24} strokeWidth={1.75} />
+              </div>
               <div style={{ flex: '1 1 200px', minWidth: 0 }}>
                 <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
                   <span style={{ fontWeight: 800, fontSize: '0.975rem', lineHeight: 1.4 }}>

@@ -6,6 +6,7 @@ import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { HeroPlatform } from '@/components/monolith/HeroPlatform';
 import { useLocale } from '@/lib/i18n';
+import { BarChart3, Library, SearchCheck } from 'lucide-react';
 
 export default function ForPublishersPage() {
   const { dict, locale } = useLocale();
@@ -184,8 +185,8 @@ export default function ForPublishersPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
             <div className="rounded-card" style={{ padding: '2rem' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
-                📊
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                <BarChart3 size={24} strokeWidth={1.75} />
               </div>
               <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>{dict.publishersPage.tool1Title}</h3>
               <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
@@ -194,8 +195,8 @@ export default function ForPublishersPage() {
             </div>
 
             <div className="rounded-card" style={{ padding: '2rem' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
-                📚
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                <Library size={24} strokeWidth={1.75} />
               </div>
               <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>{dict.publishersPage.tool2Title}</h3>
               <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
@@ -205,8 +206,8 @@ export default function ForPublishersPage() {
 
             <div className="rounded-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>
-                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
-                  🔍
+                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                  <SearchCheck size={24} strokeWidth={1.75} />
                 </div>
                 <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>
                   {locale === 'es' ? 'Preflight Editorial: Revisión de Archivos' : locale === 'de' ? 'Verlags-Preflight: Dateiprüfung' : 'Publisher Preflight: File Review'}

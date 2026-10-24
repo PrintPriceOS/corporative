@@ -6,6 +6,7 @@ import { HeroPlatform } from '@/components/monolith/HeroPlatform';
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { useLocale } from '@/lib/i18n';
+import { Factory, ShieldCheck, CircleDollarSign, Zap } from 'lucide-react';
 
 export default function PrintProductPage() {
   const { locale } = useLocale();
@@ -49,22 +50,22 @@ export default function PrintProductPage() {
         {
           title: 'Red de Talleres Industriales',
           desc: 'Trabajamos con imprentas industriales y especializadas en artes gráficas con maquinaria offset y digital auditada.',
-          icon: '🏭'
+          icon: Factory
         },
         {
           title: 'Registro Técnico de Archivo y Pedido',
           desc: 'Cada encargo documenta las especificaciones acordadas en el pedido y el archivo validado en preflight para el taller.',
-          icon: '🔒'
+          icon: ShieldCheck
         },
         {
           title: 'Costes Transparentes',
           desc: 'Precios desglosados entre fabricación gráfica y papel. Sin recargos añadidos ni tarifas ocultas.',
-          icon: '💶'
+          icon: CircleDollarSign
         },
         {
           title: 'Cero Incidencias de Preimpresión',
           desc: 'Al llegar a máquina, el archivo ya ha sido verificado contra las tolerancias mecánicas reales de la máquina asignada.',
-          icon: '⚡'
+          icon: Zap
         }
       ],
 
@@ -125,22 +126,22 @@ export default function PrintProductPage() {
         {
           title: 'Vetted Partner Network',
           desc: 'We work with audited industrial printing plants equipped with state-of-the-art offset and digital presses.',
-          icon: '🏭'
+          icon: Factory
         },
         {
           title: 'Technical File and Order Log',
           desc: 'Every work order records the agreed order specifications and validated preflight file for the plant.',
-          icon: '🔒'
+          icon: ShieldCheck
         },
         {
           title: 'Transparent Cost Resolution',
           desc: 'De-coupled material and press costs with clear itemization and no hidden fees.',
-          icon: '💶'
+          icon: CircleDollarSign
         },
         {
           title: 'Zero Prepress Friction',
           desc: 'Files arrive at the press pre-validated against machine physical constraints and gripper tolerances.',
-          icon: '⚡'
+          icon: Zap
         }
       ],
 
@@ -201,22 +202,22 @@ export default function PrintProductPage() {
         {
           title: 'Zertifiziertes Partnernetzwerk',
           desc: 'Ausschließliche Zusammenarbeit mit auditierten Offset- und Digitaldruckereien mit modernstem Maschinenpark.',
-          icon: '🏭'
+          icon: Factory
         },
         {
           title: 'Technisches Datei- und Auftragsprotokoll',
           desc: 'Jeder Auftrag dokumentiert die im Auftrag vereinbarten Spezifikationen und die im Preflight validierte Datei für den Betrieb.',
-          icon: '🔒'
+          icon: ShieldCheck
         },
         {
           title: 'Transparente Kostenaufstellung',
           desc: 'Strikte Trennung von Fertigungs- und Papierkosten ohne versteckte Aufschläge.',
-          icon: '💶'
+          icon: CircleDollarSign
         },
         {
           title: 'Keine Vorstufenüberraschungen',
           desc: 'Die Druckdatei erreicht die Belichtung abgestimmt auf die realen Maschinentoleranzen und Greiferränder.',
-          icon: '⚡'
+          icon: Zap
         }
       ],
 
@@ -380,7 +381,9 @@ export default function PrintProductPage() {
                   border: '1px solid var(--border-color)'
                 }}
               >
-                <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>{pil.icon}</div>
+                <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                  <pil.icon size={22} strokeWidth={1.75} />
+                </div>
                 <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '0.75rem' }}>
                   {pil.title}
                 </h3>

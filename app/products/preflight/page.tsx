@@ -6,6 +6,7 @@ import { HeroPlatform } from '@/components/monolith/HeroPlatform';
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { useLocale } from '@/lib/i18n';
+import { PenTool, Library, Factory, Zap, Check } from 'lucide-react';
 
 export default function PreflightProductPage() {
   const { locale } = useLocale();
@@ -30,25 +31,25 @@ export default function PreflightProductPage() {
           title: 'Autores y Particulares',
           badge: 'FACILIDAD DE USO',
           desc: 'Comprueba sangrados, márgenes de seguridad y resolución de portada e interior sin necesidad de interpretar códigos de error complejos.',
-          icon: '✍️'
+          icon: PenTool
         },
         {
           title: 'Editoriales y Diseñadores',
           badge: 'CONTROL DE CALIDAD',
           desc: 'Audita colecciones y reediciones completas antes de enviar a imprenta. Detecta fuentes problemáticas, colores RGB y desajustes de lomo.',
-          icon: '📚'
+          icon: Library
         },
         {
           title: 'Imprentas y Talleres',
           badge: 'RECEPCIÓN DE ARCHIVOS',
           desc: 'Automatiza el filtro de entrada de artes finales. Recibe trabajos con fichas técnicas auditadas y elimina horas de revisión manual en preimpresión.',
-          icon: '🏭'
+          icon: Factory
         },
         {
           title: 'Desarrolladores y Plataformas',
           badge: 'API & WORKFLOWS',
           desc: 'Integra el motor de análisis y corrección automática directamente en tu software editorial, ERP o tienda online mediante API REST.',
-          icon: '⚡'
+          icon: Zap
         }
       ],
 
@@ -155,25 +156,25 @@ export default function PreflightProductPage() {
           title: 'Authors & Self-Publishers',
           badge: 'EASY TO USE',
           desc: 'Verify bleed, safety margins, and resolution for cover and interior without deciphering complex technical codes.',
-          icon: '✍️'
+          icon: PenTool
         },
         {
           title: 'Publishers & Art Directors',
           badge: 'QUALITY ASSURANCE',
           desc: 'Audit frontlist and backlist titles before sending to press. Catch problematic fonts, RGB elements, and spine mismatches.',
-          icon: '📚'
+          icon: Library
         },
         {
           title: 'Printhouses & Factories',
           badge: 'FILE INTAKE',
           desc: 'Automate print file validation. Receive production-ready jobs with audited technical specifications and eliminate prepress labor.',
-          icon: '🏭'
+          icon: Factory
         },
         {
           title: 'Developers & Platforms',
           badge: 'API & WORKFLOWS',
           desc: 'Embed automated PDF inspection and non-destructive remediation directly into your MIS, ERP, or web-to-print store via REST API.',
-          icon: '⚡'
+          icon: Zap
         }
       ],
 
@@ -275,25 +276,25 @@ export default function PreflightProductPage() {
           title: 'Autoren & Selbstverleger',
           badge: 'EINFACHE BEDIENUNG',
           desc: 'Überprüfen Sie Beschnitt, Sicherheitsabstände und Bildauflösung für Umschlag und Innenteil ohne kryptische Fachbegriffe.',
-          icon: '✍️'
+          icon: PenTool
         },
         {
           title: 'Verlage & Buchgestalter',
           badge: 'QUALITÄTSSICHERUNG',
           desc: 'Prüfen Sie Neuerscheinungen und Nachdrucke vor dem Druckgang. Erkennen Sie RGB-Elemente, fehlende Schriften und Rückenbreitenfehler.',
-          icon: '📚'
+          icon: Library
         },
         {
           title: 'Druckereien & Buchbindereien',
           badge: 'DATEIEINGANGSKONTROLLE',
           desc: 'Automatisieren Sie den Druckdateneingang. Erhalten Sie verifizierte Aufträge mit auditierter technischer Freigabe ohne manuellen Aufwand.',
-          icon: '🏭'
+          icon: Factory
         },
         {
           title: 'Entwickler & Plattformen',
           badge: 'API & INTEGRATION',
           desc: 'Integrieren Sie die deterministische PDF-Prüfung und -Reparatur über eine REST-API direkt in Ihr ERP-, MIS- oder Web-to-Print-System.',
-          icon: '⚡'
+          icon: Zap
         }
       ],
 
@@ -447,7 +448,9 @@ export default function PreflightProductPage() {
               >
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                    <span style={{ fontSize: '2rem' }}>{aud.icon}</span>
+                    <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <aud.icon size={22} strokeWidth={1.75} />
+                    </div>
                     <span
                       className="technical-text"
                       style={{ fontSize: '0.65rem', color: 'var(--accent-primary)', fontWeight: 800 }}
@@ -1118,7 +1121,7 @@ export default function PreflightProductPage() {
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {t.privacyPoints.map((pt, i) => (
                   <li key={i} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-                    <span style={{ color: 'var(--accent-primary)', fontWeight: 800, marginTop: '0.1rem' }}>✓</span>
+                    <Check size={18} strokeWidth={2.5} style={{ color: 'var(--accent-primary)', marginTop: '0.2rem', flexShrink: 0 }} />
                     <span style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6 }}>{pt}</span>
                   </li>
                 ))}

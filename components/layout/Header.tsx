@@ -8,6 +8,7 @@ import { ThemeToggle } from '../ui/ThemeToggle';
 import { LanguageSelector } from '../ui/LanguageSelector';
 import { Logo } from '../brand/Logo';
 import { useLocale } from '@/lib/i18n';
+import { Calculator, ShieldCheck, Factory, Settings, X, ArrowRight, ArrowUpRight } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const { dict, locale } = useLocale();
@@ -27,21 +28,21 @@ export const Header: React.FC = () => {
       desc: dict.nav.priceItDesc,
       badge: '01 / PRICE',
       href: '/products/budget',
-      icon: '💶',
+      icon: Calculator,
     },
     {
       title: 'Fix it',
       desc: dict.nav.fixItDesc,
       badge: '02 / FIX',
       href: '/products/preflight',
-      icon: '🛡️',
+      icon: ShieldCheck,
     },
     {
       title: 'Print it',
       desc: dict.nav.printItDesc,
       badge: '03 / PRINT',
       href: '/products/print',
-      icon: '🏭',
+      icon: Factory,
     },
   ];
 
@@ -275,7 +276,9 @@ export const Header: React.FC = () => {
                       }}
                       className="nav-dropdown-item"
                     >
-                      <span style={{ fontSize: '1.25rem', lineHeight: 1, marginTop: '0.1rem' }}>{prod.icon}</span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginTop: '0.15rem', color: 'var(--accent-primary)', flexShrink: 0 }}>
+                        <prod.icon size={20} strokeWidth={1.75} />
+                      </span>
                       <div style={{ flex: 1 }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.15rem' }}>
                           <span style={{ fontWeight: 800, fontSize: '0.925rem' }}>{prod.title}</span>
@@ -598,7 +601,10 @@ export const Header: React.FC = () => {
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontWeight: 800, fontSize: '0.95rem' }}>{prod.icon} {prod.title}</span>
+                    <span style={{ fontWeight: 800, fontSize: '0.95rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <prod.icon size={18} strokeWidth={1.75} style={{ color: 'var(--accent-primary)' }} />
+                      {prod.title}
+                    </span>
                     <span style={{ fontSize: '0.625rem', background: 'var(--accent-container)', color: 'var(--accent-primary)', padding: '0.1rem 0.4rem', borderRadius: 'var(--radius-pill)', fontWeight: 800 }}>
                       {prod.badge}
                     </span>
@@ -724,7 +730,7 @@ export const Header: React.FC = () => {
                   lineHeight: 1,
                 }}
               >
-                ✕
+                <X size={20} />
               </button>
             </div>
 
@@ -756,11 +762,10 @@ export const Header: React.FC = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '1.25rem',
                     flexShrink: 0,
                   }}
                 >
-                  €
+                  <Calculator size={22} strokeWidth={1.75} />
                 </div>
                 <div>
                   <div style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.2rem' }}>
@@ -795,11 +800,10 @@ export const Header: React.FC = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '1.25rem',
                     flexShrink: 0,
                   }}
                 >
-                  ⚙️
+                  <Settings size={22} strokeWidth={1.75} />
                 </div>
                 <div>
                   <div style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.2rem' }}>
@@ -851,7 +855,7 @@ export const Header: React.FC = () => {
                   lineHeight: 1,
                 }}
               >
-                ✕
+                <X size={20} />
               </button>
             </div>
 
@@ -879,7 +883,7 @@ export const Header: React.FC = () => {
                     {dict.modals.startAuthorDesc}
                   </div>
                 </div>
-                <span style={{ color: 'var(--accent-primary)', fontWeight: 700 }}>➔</span>
+                <span style={{ color: 'var(--accent-primary)', display: 'inline-flex', alignItems: 'center' }}><ArrowRight size={18} strokeWidth={2} /></span>
               </Link>
 
               <Link
@@ -901,7 +905,7 @@ export const Header: React.FC = () => {
                     {dict.modals.startPublisherDesc}
                   </div>
                 </div>
-                <span style={{ color: 'var(--accent-primary)', fontWeight: 700 }}>➔</span>
+                <span style={{ color: 'var(--accent-primary)', display: 'inline-flex', alignItems: 'center' }}><ArrowRight size={18} strokeWidth={2} /></span>
               </Link>
 
               <a
@@ -922,7 +926,7 @@ export const Header: React.FC = () => {
                     {dict.modals.startPrinterDesc}
                   </div>
                 </div>
-                <span style={{ color: 'var(--accent-primary)', fontWeight: 700 }}>↗</span>
+                <span style={{ color: 'var(--accent-primary)', display: 'inline-flex', alignItems: 'center' }}><ArrowUpRight size={18} strokeWidth={2} /></span>
               </a>
 
               <a
@@ -943,7 +947,7 @@ export const Header: React.FC = () => {
                     {dict.modals.startSupplierDesc}
                   </div>
                 </div>
-                <span style={{ color: 'var(--accent-primary)', fontWeight: 700 }}>↗</span>
+                <span style={{ color: 'var(--accent-primary)', display: 'inline-flex', alignItems: 'center' }}><ArrowUpRight size={18} strokeWidth={2} /></span>
               </a>
             </div>
           </div>

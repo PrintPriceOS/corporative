@@ -6,6 +6,7 @@ import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { HeroPlatform } from '@/components/monolith/HeroPlatform';
 import { useLocale } from '@/lib/i18n';
+import { Calculator, ShieldCheck, Factory, BookOpen, Library, Settings, FileText } from 'lucide-react';
 
 export default function Home() {
   const { dict, locale } = useLocale();
@@ -36,7 +37,7 @@ export default function Home() {
       primaryCtaHref: 'https://budget.printprice.pro/',
       secondaryCtaText: locale === 'es' ? 'Conocer motor Budget' : locale === 'de' ? 'Budget-Engine Details' : 'About Budget Engine',
       secondaryCtaHref: '/products/budget',
-      icon: '💶',
+      icon: Calculator,
       badge: 'PRICE IT',
     },
     {
@@ -57,7 +58,7 @@ export default function Home() {
       primaryCtaHref: 'https://preflight.printprice.pro/',
       secondaryCtaText: locale === 'es' ? 'Ver capacidades y auditoría' : locale === 'de' ? 'Funktionen & Prüfung' : 'View audit features',
       secondaryCtaHref: '/products/preflight',
-      icon: '🛡️',
+      icon: ShieldCheck,
       badge: 'FIX IT',
     },
     {
@@ -78,7 +79,7 @@ export default function Home() {
       primaryCtaHref: 'https://budget.printprice.pro/',
       secondaryCtaText: locale === 'es' ? 'Cómo funciona el marketplace' : locale === 'de' ? 'Marketplace-Ablauf' : 'How the marketplace works',
       secondaryCtaHref: '/products/print',
-      icon: '🏭',
+      icon: Factory,
       badge: 'PRINT IT',
       disclaimer: locale === 'es'
         ? '* La solicitud de producción para compradores se inicia a través de Budget conectando con talleres de la red. Control Plane está reservado a la operativa interna de imprentas.'
@@ -99,7 +100,7 @@ export default function Home() {
       toolsTag: 'PRICE IT · FIX IT · PRINT IT',
       href: '/for-authors',
       ctaText: dict.home.authorsCta,
-      icon: '📖',
+      icon: BookOpen,
     },
     {
       id: 'publishers',
@@ -110,7 +111,7 @@ export default function Home() {
       toolsTag: 'PRICE IT · FIX IT · PRINT IT',
       href: '/for-publishers',
       ctaText: dict.home.publishersCta,
-      icon: '📚',
+      icon: Library,
     },
     {
       id: 'printhouses',
@@ -125,7 +126,7 @@ export default function Home() {
         text: locale === 'es' ? 'Alta de taller ↗' : locale === 'de' ? 'Druckerei-Registrierung ↗' : 'Printhouse signup ↗',
         href: 'https://control.printprice.pro/printhouse/register'
       },
-      icon: '⚙️',
+      icon: Settings,
     },
     {
       id: 'suppliers',
@@ -140,7 +141,7 @@ export default function Home() {
         text: locale === 'es' ? 'Alta de proveedor ↗' : locale === 'de' ? 'Lieferanten-Registrierung ↗' : 'Supplier signup ↗',
         href: 'https://control.printprice.pro/supplier/register'
       },
-      icon: '📄',
+      icon: FileText,
     },
   ];
 
@@ -445,7 +446,9 @@ export default function Home() {
               >
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                    <span style={{ fontSize: '2.25rem' }}>{prod.icon}</span>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <prod.icon size={26} strokeWidth={1.75} />
+                    </div>
                     <span
                       style={{
                         fontSize: '0.675rem',
@@ -529,7 +532,9 @@ export default function Home() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'clamp(0.75rem, 2vw, 1.25rem)', flexWrap: 'wrap', flex: '1 1 260px' }}>
-              <span style={{ fontSize: '2rem', lineHeight: 1 }}>📖</span>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <BookOpen size={26} strokeWidth={1.75} />
+              </div>
               <div style={{ flex: '1 1 200px', minWidth: 0 }}>
                 <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
                   <span style={{ fontWeight: 800, fontSize: '0.975rem', lineHeight: 1.4 }}>
@@ -598,7 +603,9 @@ export default function Home() {
               >
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                    <span style={{ fontSize: '2rem' }}>{card.icon}</span>
+                    <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <card.icon size={24} strokeWidth={1.75} />
+                    </div>
                     <span
                       style={{
                         fontSize: '0.65rem',

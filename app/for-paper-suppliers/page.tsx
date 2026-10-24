@@ -6,6 +6,7 @@ import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { HeroPlatform } from '@/components/monolith/HeroPlatform';
 import { useLocale } from '@/lib/i18n';
+import { FileText, Truck, TrendingUp } from 'lucide-react';
 
 export default function ForPaperSuppliersPage() {
   const { dict, locale } = useLocale();
@@ -188,8 +189,8 @@ export default function ForPaperSuppliersPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
             <div className="rounded-card" style={{ padding: '2rem' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
-                📄
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                <FileText size={24} strokeWidth={1.75} />
               </div>
               <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>{dict.suppliersPage.tool1Title}</h3>
               <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
@@ -198,8 +199,8 @@ export default function ForPaperSuppliersPage() {
             </div>
 
             <div className="rounded-card" style={{ padding: '2rem' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
-                🚚
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                <Truck size={24} strokeWidth={1.75} />
               </div>
               <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>{dict.suppliersPage.tool2Title}</h3>
               <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
@@ -208,8 +209,8 @@ export default function ForPaperSuppliersPage() {
             </div>
 
             <div className="rounded-card" style={{ padding: '2rem' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
-                📈
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                <TrendingUp size={24} strokeWidth={1.75} />
               </div>
               <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>{dict.suppliersPage.tool3Title}</h3>
               <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>

@@ -6,6 +6,7 @@ import { HeroPlatform } from '@/components/monolith/HeroPlatform';
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { useLocale } from '@/lib/i18n';
+import { Calculator, ShieldCheck, Factory, BookOpen, Settings, FileText } from 'lucide-react';
 
 export default function ProductsHubPage() {
   const { locale } = useLocale();
@@ -24,7 +25,7 @@ export default function ProductsHubPage() {
       href: 'https://budget.printprice.pro/',
       internalHref: '/products/budget',
       cta: locale === 'es' ? 'Calcular precio ➔' : locale === 'de' ? 'Preis kalkulieren ➔' : 'Calculate price ➔',
-      icon: '💶',
+      icon: Calculator,
       primary: true
     },
     {
@@ -40,7 +41,7 @@ export default function ProductsHubPage() {
       href: 'https://preflight.printprice.pro/',
       internalHref: '/products/preflight',
       cta: locale === 'es' ? 'Comprobar PDF ➔' : locale === 'de' ? 'PDF prüfen ➔' : 'Check PDF ➔',
-      icon: '✓',
+      icon: ShieldCheck,
       primary: true
     },
     {
@@ -56,7 +57,7 @@ export default function ProductsHubPage() {
       href: '/products/print',
       internalHref: '/products/print',
       cta: locale === 'es' ? 'Explorar Marketplace ➔' : locale === 'de' ? 'Marketplace erkunden ➔' : 'Explore Marketplace ➔',
-      icon: '🏭',
+      icon: Factory,
       primary: true
     }
   ];
@@ -71,7 +72,7 @@ export default function ProductsHubPage() {
         ? 'Interaktive 3D-Browsersimulation zur Prüfung von Buchrücken, Bundsteg und Seitenaufschlag vor Auftragserteilung.'
         : 'Realistic browser 3D book simulation to preview spines, inner gutters, and page flow before commissioning the run.',
       href: '/products/mockup',
-      icon: '📖'
+      icon: BookOpen
     },
     {
       name: 'Control Plane',
@@ -82,7 +83,7 @@ export default function ProductsHubPage() {
         ? 'Technisches Dashboard für Druckereien zur Maschinenmodellierung und Auftragsannahme. Kein Portal für Endkunden.'
         : 'Technical operational dashboard where printing plants configure machines and pull verified job tickets. Not a buyer portal.',
       href: 'https://control.printprice.pro/',
-      icon: '⚙️'
+      icon: Settings
     },
     {
       name: 'Paper Supplier Hub',
@@ -93,7 +94,7 @@ export default function ProductsHubPage() {
         ? 'Schnittstelle für Papierhersteller und -händler zur Einspeisung von Bogen- und Rollenpreisen direkt in die Kalkulation.'
         : 'Ecosystem substrate module enabling paper mills and distributors to publish real-time stock and prices into press cost models.',
       href: 'https://docs.printprice.pro/docs/platform/paper-supplier-hub',
-      icon: '📜'
+      icon: FileText
     }
   ];
 
@@ -154,7 +155,9 @@ export default function ProductsHubPage() {
               >
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                    <span style={{ fontSize: '2.5rem' }}>{p.icon}</span>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <p.icon size={26} strokeWidth={1.75} />
+                    </div>
                     <span
                       className="technical-text"
                       style={{
@@ -242,7 +245,9 @@ export default function ProductsHubPage() {
               >
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                    <span style={{ fontSize: '1.75rem' }}>{tool.icon}</span>
+                    <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <tool.icon size={22} strokeWidth={1.75} />
+                    </div>
                     <div>
                       <h4 style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0 }}>{tool.name}</h4>
                       <span className="technical-text" style={{ fontSize: '0.65rem', color: 'var(--accent-primary)' }}>

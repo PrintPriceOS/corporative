@@ -4,6 +4,7 @@ import React from 'react';
 import { Section } from '../ui/Section';
 import BorderGlow from '../ui/effects/BorderGlow';
 import { Icon } from '../ui/Icon';
+import { X } from 'lucide-react';
 
 export const ProofLayer: React.FC = () => {
   return (
@@ -86,16 +87,16 @@ export const ProofLayer: React.FC = () => {
                 </div>
                 
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '2.5rem', ...({} as any) }}>
-                    <li style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', opacity: 0.85, fontWeight: 400 }}>
-                        <span style={{ color: 'var(--accent-primary)', marginRight: '1rem', opacity: 0.5 }}>✕</span>
+                    <li style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', opacity: 0.85, fontWeight: 400, display: 'flex', alignItems: 'center' }}>
+                        <X size={18} strokeWidth={2} style={{ color: 'var(--accent-primary)', marginRight: '1rem', opacity: 0.7, flexShrink: 0 }} />
                         You don’t know the real cost
                     </li>
-                    <li style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', opacity: 0.85, fontWeight: 400 }}>
-                        <span style={{ color: 'var(--accent-primary)', marginRight: '1rem', opacity: 0.5 }}>✕</span>
+                    <li style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', opacity: 0.85, fontWeight: 400, display: 'flex', alignItems: 'center' }}>
+                        <X size={18} strokeWidth={2} style={{ color: 'var(--accent-primary)', marginRight: '1rem', opacity: 0.7, flexShrink: 0 }} />
                         You fix files manually, again and again
                     </li>
-                    <li style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', opacity: 0.85, fontWeight: 400 }}>
-                        <span style={{ color: 'var(--accent-primary)', marginRight: '1rem', opacity: 0.5 }}>✕</span>
+                    <li style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', opacity: 0.85, fontWeight: 400, display: 'flex', alignItems: 'center' }}>
+                        <X size={18} strokeWidth={2} style={{ color: 'var(--accent-primary)', marginRight: '1rem', opacity: 0.7, flexShrink: 0 }} />
                         You choose printers without real data
                     </li>
                 </ul>
