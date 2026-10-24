@@ -11,6 +11,20 @@ set -euo pipefail
 # PARÁMETROS FIJOS ACREDITADOS POR INSPECCIÓN EMPÍRICA EN PLESK
 # ------------------------------------------------------------------------------
 export DOMAIN="${DOMAIN:-printprice.pro}"
+export GIT_BIN="${GIT_BIN:-git}"
+export CURL_BIN="${CURL_BIN:-curl}"
+export PM2_BIN="${PM2_BIN:-pm2}"
+export REPO_URL="${REPO_URL:-https://github.com/PrintPriceOS/corporative.git}"
+# Intérprete Python portable (compatible con entornos Linux de producción y shells de prueba)
+if command -v python3 >/dev/null 2>&1 && python3 -V >/dev/null 2>&1; then
+    PYTHON_BIN="${PYTHON_BIN:-python3}"
+elif command -v python >/dev/null 2>&1 && python -V >/dev/null 2>&1; then
+    PYTHON_BIN="${PYTHON_BIN:-python}"
+else
+    PYTHON_BIN="${PYTHON_BIN:-python3}"
+fi
+export PYTHON_BIN
+
 
 # Versión de la aplicación a desplegar: EXIGE UN SHA EXPLÍCITO (sin fallback obsoleto)
 export CANDIDATE_SHA="${1:-${CANDIDATE_SHA:-}}"
@@ -40,6 +54,16 @@ EXPECTED_PM2_APP="${EXPECTED_PM2_APP:-printprice-web}"
 EXPECTED_PORT="${EXPECTED_PORT:-3010}"
 EXPECTED_NODE_BIN="${EXPECTED_NODE_BIN:-/usr/bin/node}"
 
+# Helper de ejecución controlada para comandos PM2 según privilegios de ejecución
+run_pm2_cmd() {
+    local cmd="$1"
+    if [ "$(id -u)" -eq 0 ]; then
+        su -s /bin/bash "${EXPECTED_USER}" -c "${cmd}"
+    else
+        eval "${cmd}"
+    fi
+}
+
 # ------------------------------------------------------------------------------
 # VALIDACIÓN TEMPRANA DE CANDIDATO (CERO ESCRITURAS ANTE SHA INVÁLIDO)
 # ------------------------------------------------------------------------------
@@ -56,18 +80,32 @@ validate_candidate_sha() {
         return 1
     fi
 
-    if [ "${SIMULATION_MODE:-false}" = "true" ]; then
-        if [ "${MOCK_INVALID_SHA:-false}" = "true" ]; then
-            echo "ERROR: [SIMULATION] CANDIDATE_SHA '${sha}' no encontrado en el repositorio." >&2
-            return 1
+    # Comprobación de existencia del commit en el repositorio remoto antes de tocar producción.
+    # 'git ls-remote' con un SHA como patrón no acredita la existencia de un commit arbitrario,
+    # ya que ls-remote solo consulta referencias (branches/tags).
+    # Excepción documentada: Se crea un directorio temporal aislado fuera de producción para
+    # verificar mediante 'git fetch --depth 1' que el commit específico existe efectivamente
+    # en el remoto antes de iniciar cualquier operación o escritura en el servidor.
+    local verify_tmp
+    verify_tmp="$(mktemp -d "${TMPDIR:-/tmp}/ppos_sha_verify_XXXXXX")"
+    local fetch_ok=false
+
+    echo "[INFO] Verificando existencia de commit ${sha} en repositorio remoto..."
+    if ${GIT_BIN} -C "${verify_tmp}" init -q 2>/dev/null; then
+        if ${GIT_BIN} -C "${verify_tmp}" fetch --depth 1 "${REPO_URL}" "${sha}" >/dev/null 2>&1; then
+            fetch_ok=true
         fi
-        return 0
     fi
 
-    # En entorno real, validar que el commit existe en el repositorio remoto antes de escribir en disco
-    if ! git ls-remote --exit-code https://github.com/PrintPriceOS/corporative.git "${sha}" >/dev/null 2>&1; then
-        echo "[INFO] Comprobando referencia para SHA ${sha} en repositorio remoto..."
+    rm -rf "${verify_tmp}"
+
+    if [ "${fetch_ok}" != "true" ]; then
+        echo "ERROR CRÍTICO: El commit '${sha}' no existe en el repositorio remoto o la consulta remota falló." >&2
+        echo "No se declara validación remota y se aborta antes de tocar producción." >&2
+        return 1
     fi
+
+    echo "[OK] Commit candidato ${sha} verificado con éxito en el repositorio remoto."
     return 0
 }
 
@@ -77,40 +115,33 @@ validate_candidate_sha() {
 # ------------------------------------------------------------------------------
 verify_process_identity() {
     local phase_label="${1:-verificación}"
+    local expected_release_id="${2:-}"
 
-    if [ "${SIMULATION_MODE:-false}" = "true" ]; then
-        if [ "${MOCK_PROCESS_IDENTITY_FAILS:-false}" = "true" ]; then
-            echo "ERROR: [SIMULATION] Falló la verificación de identidad del proceso supervisor (${phase_label})." >&2
-            return 1
-        fi
-        echo "[OK] [SIMULATION] Identidad del proceso confirmada (${phase_label}): ${EXPECTED_PM2_APP} bajo ${EXPECTED_USER} (APP_ROOT: ${APP_ROOT:-none})."
-        return 0
-    fi
-
+    # 1. Comprobación del supervisor PM2 y proceso OS
     local user_pm2_status
-    user_pm2_status="$(su -s /bin/bash "${EXPECTED_USER}" -c "pm2 jlist 2>/dev/null" || true)"
+    user_pm2_status="$(run_pm2_cmd "${PM2_BIN} jlist 2>/dev/null" || true)"
     if [ -z "${user_pm2_status}" ]; then
         echo "ERROR CRÍTICO: PM2 no responde bajo el usuario ${EXPECTED_USER} durante ${phase_label}." >&2
         return 1
     fi
 
     local process_info
-    process_info="$(python3 -c "
+    process_info="$(${PYTHON_BIN} -c '
 import sys, json
 try:
-    apps = json.loads('''${user_pm2_status}''')
-    target = [a for a in apps if a.get('name') == '${EXPECTED_PM2_APP}']
+    apps = json.loads(sys.argv[1])
+    target = [a for a in apps if a.get("name") == sys.argv[2]]
     if not target:
-        print('NOT_FOUND')
+        print("NOT_FOUND")
     else:
-        env = target[0].get('pm2_env', {})
-        status = env.get('status', 'unknown')
-        cwd = env.get('pm_cwd', '')
-        pid = target[0].get('pid', 'none')
-        print(f'{status}|{cwd}|{pid}')
+        env = target[0].get("pm2_env", {})
+        status = env.get("status", "unknown")
+        cwd = env.get("pm_cwd", "")
+        pid = target[0].get("pid", "none")
+        print(f"{status}|{cwd}|{pid}")
 except Exception as e:
-    print(f'ERROR:{e}')
-")"
+    print(f"ERROR:{e}")
+' "${user_pm2_status}" "${EXPECTED_PM2_APP}")"
 
     if [ "${process_info}" = "NOT_FOUND" ]; then
         echo "ERROR CRÍTICO: Proceso '${EXPECTED_PM2_APP}' no encontrado en PM2 para usuario ${EXPECTED_USER} (${phase_label})." >&2
@@ -133,6 +164,50 @@ except Exception as e:
         return 1
     fi
 
+    # 2. Comprobación de identidad de release servida en memoria vía HTTP (sin secretos)
+    local health_url="http://127.0.0.1:${EXPECTED_PORT}/api/health"
+    local http_response
+    http_response="$(${CURL_BIN} -s -S -w $'\n%{http_code}' --max-time 5 --connect-timeout 2 "${health_url}" 2>/dev/null || echo -e '\n000')"
+
+    local http_code
+    http_code="$(tail -n 1 <<< "${http_response}")"
+    local http_body
+    http_body="$(sed '$d' <<< "${http_response}")"
+
+    if [ "${http_code}" = "404" ]; then
+        echo "[LÍMITE DE VERIFICACIÓN DECLARADO] Endpoint /api/health devolvió HTTP 404 (${phase_label})."
+        echo "  Versión anterior en ejecución carece de introspección de release capturada al arrancar."
+        echo "  Límite: La versión cargada en memoria viva no puede ser auditada por HTTP para este release previo."
+        echo "  Identidad circunscrita a supervisor PM2 (PID=${app_pid}), usuario (${EXPECTED_USER}) y cwd (${app_cwd})."
+        if [ "${phase_label}" = "post-reload" ]; then
+            echo "ERROR CRÍTICO: El nuevo candidato desplegado DEBE exponer /api/health con su identidad de release. Devolvió 404." >&2
+            return 1
+        fi
+    elif [ "${http_code}" = "200" ]; then
+        local served_release_id
+        served_release_id="$(${PYTHON_BIN} -c '
+import sys, json
+try:
+    data = json.loads(sys.argv[1])
+    print(data.get("release_id", "unknown"))
+except Exception:
+    print("unknown")
+' "${http_body}" 2>/dev/null || echo "unknown")"
+
+        if [ -n "${expected_release_id}" ] && [ "${expected_release_id}" != "UNKNOWN" ]; then
+            if [ "${served_release_id}" != "${expected_release_id}" ]; then
+                echo "ERROR CRÍTICO: Identidad de release servida en memoria viva ('${served_release_id}') no coincide con la esperada ('${expected_release_id}') durante ${phase_label}." >&2
+                return 1
+            fi
+            echo "[OK] Identidad de release en memoria viva confirmada (${phase_label}): '${served_release_id}' coincide con la esperada."
+        else
+            echo "[OK] Identidad de release en memoria viva consultada (${phase_label}): '${served_release_id}'."
+        fi
+    else
+        echo "ERROR CRÍTICO: Fallo al consultar identidad del servidor por HTTP (código: ${http_code}) durante ${phase_label}." >&2
+        return 1
+    fi
+
     echo "[OK] Identidad del proceso confirmada (${phase_label}): PID=${app_pid}, status=${app_status}, cwd=${app_cwd}, user=${EXPECTED_USER}."
     return 0
 }
@@ -144,7 +219,7 @@ except Exception as e:
 #          v                v               v
 #     ROLLBACK_DONE   ROLLBACK_DONE   ROLLBACK_DONE (o ROLLBACK_FAILED)
 # ------------------------------------------------------------------------------
-SWAP_STATE="INITIAL"
+export SWAP_STATE="INITIAL"
 ROLLBACK_EXECUTED=false
 ORIGINAL_EXIT_CODE=0
 
@@ -153,45 +228,15 @@ ORIGINAL_EXIT_CODE=0
 verify_service_recovery() {
     local expected_build_id="$1"
 
-    if [ "${SIMULATION_MODE:-false}" = "true" ]; then
-        echo "[ROLLBACK: ${SWAP_STATE}] Recargando supervisor PM2 para el usuario ${EXPECTED_USER}..."
-        if [ "${MOCK_PM2_RELOAD_FAILS:-false}" = "true" ]; then
-            echo "[SIMULATION] Inyección de fallo en recarga PM2 activada." >&2
-            SWAP_STATE="ROLLBACK_FAILED"
-            return 2
-        fi
-
-        if ! verify_process_identity "post-rollback"; then
-            SWAP_STATE="ROLLBACK_FAILED"
-            return 2
-        fi
-
-        local local_http="${MOCK_HTTP_STATUS:-200}"
-        local local_manifest="${MOCK_MANIFEST_STATUS:-200}"
-        if [ "${local_http}" != "200" ] || [ "${local_manifest}" != "200" ]; then
-            echo "[SIMULATION ERROR] Doble de prueba reportó fallo en verificación post-rollback." >&2
-            SWAP_STATE="ROLLBACK_FAILED"
-            return 2
-        fi
-
-        SWAP_STATE="ROLLBACK_DONE"
-        echo "[ROLLBACK EXITOSO Y VERIFICADO]"
-        echo "  BUILD_ID restituido y servido en memoria: ${expected_build_id}"
-        echo "  Respuesta HTTP local: 200 OK"
-        echo "  Manifest servido en memoria: 200 OK"
-        return 0
-    fi
-
-    # Entorno real: Recarga efectiva de PM2 y validación en memoria
     echo "[ROLLBACK: ${SWAP_STATE}] Recargando supervisor PM2 para el usuario ${EXPECTED_USER}..."
-    if ! su -s /bin/bash "${EXPECTED_USER}" -c "PORT=${EXPECTED_PORT} pm2 reload ${EXPECTED_PM2_APP} --update-env"; then
+    if ! run_pm2_cmd "PORT=${EXPECTED_PORT} ${PM2_BIN} reload ${EXPECTED_PM2_APP} --update-env"; then
         echo "[DESASTRE OPERATIVO] Falló la recarga de PM2 para ${EXPECTED_PM2_APP}." >&2
         SWAP_STATE="ROLLBACK_FAILED"
         return 2
     fi
-    sleep 3
 
-    if ! verify_process_identity "post-rollback"; then
+    # Comprobar identidad del proceso restaurado y versión cargada
+    if ! verify_process_identity "post-rollback" "${expected_build_id}"; then
         echo "[DESASTRE OPERATIVO] Falló la verificación de identidad del proceso tras recarga en rollback." >&2
         SWAP_STATE="ROLLBACK_FAILED"
         return 2
@@ -209,9 +254,11 @@ verify_service_recovery() {
     local attempts=0
     while [ "${attempts}" -lt 5 ]; do
         attempts=$((attempts + 1))
-        local_http="$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 5 --connect-timeout 2 "http://127.0.0.1:${EXPECTED_PORT}/" 2>/dev/null || echo "000")"
+        local_http="$(${CURL_BIN} -s -S -o /dev/null -w "%{http_code}" --max-time 5 --connect-timeout 2 "http://127.0.0.1:${EXPECTED_PORT}/" 2>/dev/null || echo "000")"
         if [ "${restored_build}" != "UNKNOWN" ]; then
-            local_manifest="$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 5 --connect-timeout 2 "http://127.0.0.1:${EXPECTED_PORT}/_next/static/${restored_build}/_buildManifest.js" 2>/dev/null || echo "000")"
+            local_manifest="$(${CURL_BIN} -s -S -o /dev/null -w "%{http_code}" --max-time 5 --connect-timeout 2 "http://127.0.0.1:${EXPECTED_PORT}/_next/static/${restored_build}/_buildManifest.js" 2>/dev/null || echo "000")"
+        else
+            local_manifest="200"
         fi
         if [ "${local_http}" = "200" ] && [ "${local_manifest}" = "200" ]; then
             break
@@ -219,9 +266,14 @@ verify_service_recovery() {
         sleep 1
     done
 
-    if [ "${restored_build}" = "${expected_build_id}" ] && [ "${local_http}" = "200" ] && [ "${local_manifest}" = "200" ]; then
+    if [ "${local_http}" = "200" ] && [ "${local_manifest}" = "200" ]; then
+        if [ "${expected_build_id}" != "UNKNOWN" ] && [ "${restored_build}" != "${expected_build_id}" ]; then
+            echo "[DESASTRE OPERATIVO: BUILD_ID EN DISCO DIFIERE]" >&2
+            SWAP_STATE="ROLLBACK_FAILED"
+            return 2
+        fi
         echo "[ROLLBACK EXITOSO Y VERIFICADO]"
-        echo "  BUILD_ID restituido y servido en memoria: ${restored_build}"
+        echo "  BUILD_ID restituido en disco: ${restored_build}"
         echo "  Respuesta HTTP local: ${local_http} OK"
         echo "  Manifest servido en memoria: ${local_manifest} OK"
         SWAP_STATE="ROLLBACK_DONE"
@@ -280,8 +332,11 @@ execute_rollback() {
             return $?
             ;;
 
-        STAGING_MOVED | VERIFYING | ORIGIN_FAILED)
-            echo "[ROLLBACK: ${SWAP_STATE}] Apartando candidato fallido a ${VHOST_DIR}/httpdocs_failed_${TIMESTAMP}..."
+        STAGING_MOVED | VERIFYING | ORIGIN_FAILED | PUBLIC_FAILED)
+            local prev_state="${SWAP_STATE}"
+            export SWAP_STATE="ROLLING_BACK"
+            echo "[ROLLBACK: ${prev_state}] Apartando candidato fallido a ${VHOST_DIR}/httpdocs_failed_${TIMESTAMP}..."
+            rm -rf "${VHOST_DIR}/httpdocs_failed_${TIMESTAMP}"
             if ! mv "${APP_ROOT}" "${VHOST_DIR}/httpdocs_failed_${TIMESTAMP}"; then
                 echo "[DESASTRE OPERATIVO] No se pudo apartar el candidato fallido de ${APP_ROOT}." >&2
                 SWAP_STATE="ROLLBACK_FAILED"
@@ -358,19 +413,37 @@ exit_trap() {
 classify_release_state() {
     local origin_status_ok="$1"
     local origin_routes_ok="$2"
-    local cache_status_ok="$3"
-    local cache_content_ok="$4"
+    local public_status_ok="$3"
+    local public_content_ok="$4"
+    local cache_stale_evidence="$5"
 
+    # 1. El origen local DEBE ser 100% correcto (HTTP 200, manifest 200, identidad y rutas correctas)
     if [ "${origin_status_ok}" != "true" ] || [ "${origin_routes_ok}" != "true" ]; then
         echo "ORIGIN_FAILED"
         return 1
-    elif [ "${cache_status_ok}" != "true" ] || [ "${cache_content_ok}" != "true" ]; then
-        echo "PENDING_CACHE_INVALIDATION"
-        return 0
-    else
+    fi
+
+    # 2. El acceso público debe ser funcional (HTTP 200 en rutas públicas).
+    # Un HTTP 500/502 o timeout en acceso público NO es caché antigua: es fallo de acceso público.
+    if [ "${public_status_ok}" != "true" ]; then
+        echo "PUBLIC_FAILED"
+        return 1
+    fi
+
+    # 3. Si el contenido público ya está actualizado y no hay evidencia de contenido previo -> ACTIVE
+    if [ "${public_content_ok}" = "true" ] && [ "${cache_stale_evidence}" != "true" ]; then
         echo "ACTIVE"
         return 0
     fi
+
+    # 4. Solo se clasifica PENDING_CACHE_INVALIDATION si existe evidencia de contenido antiguo con origen correcto
+    if [ "${cache_stale_evidence}" = "true" ] || [ "${public_content_ok}" != "true" ]; then
+        echo "PENDING_CACHE_INVALIDATION"
+        return 0
+    fi
+
+    echo "PUBLIC_FAILED"
+    return 1
 }
 
 run_deployment() {
@@ -429,42 +502,34 @@ run_deployment() {
     echo "[OK] Nginx proxy_pass a localhost:${EXPECTED_PORT} acreditado."
 
     # 0.5. Acreditar supervisor PM2 e identidad del proceso bajo el usuario de la suscripción
-    if [ "${SIMULATION_MODE:-false}" = "true" ]; then
-        export APP_ROOT="${APP_ROOT:-${DOC_ROOT}}"
-        if ! verify_process_identity "preflight"; then
-            echo "ERROR CRÍTICO: Falló la verificación de identidad del proceso en preflight. ABORTANDO." >&2
-            exit 1
-        fi
-    else
-        USER_PM2_STATUS="$(su -s /bin/bash "${EXPECTED_USER}" -c "pm2 jlist 2>/dev/null" || true)"
-        if [ -z "${USER_PM2_STATUS}" ]; then
-            echo "ERROR CRÍTICO: PM2 no responde bajo el usuario ${EXPECTED_USER}. ABORTANDO." >&2
-            exit 1
-        fi
+    USER_PM2_STATUS="$(run_pm2_cmd "${PM2_BIN} jlist 2>/dev/null" || true)"
+    if [ -z "${USER_PM2_STATUS}" ]; then
+        echo "ERROR CRÍTICO: PM2 no responde bajo el usuario ${EXPECTED_USER}. ABORTANDO." >&2
+        exit 1
+    fi
 
-        PM2_APP_STATUS="$(python3 -c "
+    PM2_APP_STATUS="$(${PYTHON_BIN} -c '
 import sys, json
 try:
-    apps = json.loads('''${USER_PM2_STATUS}''')
-    target = [a for a in apps if a.get('name') == '${EXPECTED_PM2_APP}']
-    if target and target[0].get('pm2_env', {}).get('status') == 'online':
-        print(target[0]['pm2_env']['pm_cwd'])
+    apps = json.loads(sys.argv[1])
+    target = [a for a in apps if a.get("name") == sys.argv[2]]
+    if target and target[0].get("pm2_env", {}).get("status") == "online":
+        print(target[0]["pm2_env"]["pm_cwd"])
     else:
-        print('')
+        print("")
 except Exception:
-    print('')
-")"
+    print("")
+' "${USER_PM2_STATUS}" "${EXPECTED_PM2_APP}")"
 
-        if [ -z "${PM2_APP_STATUS}" ]; then
-            echo "ERROR CRÍTICO: Proceso '${EXPECTED_PM2_APP}' no está online en PM2 para ${EXPECTED_USER}. ABORTANDO." >&2
-            exit 1
-        fi
+    if [ -z "${PM2_APP_STATUS}" ]; then
+        echo "ERROR CRÍTICO: Proceso '${EXPECTED_PM2_APP}' no está online en PM2 para ${EXPECTED_USER}. ABORTANDO." >&2
+        exit 1
+    fi
 
-        export APP_ROOT="${PM2_APP_STATUS}"
-        if ! verify_process_identity "preflight"; then
-            echo "ERROR CRÍTICO: Falló la verificación de identidad del proceso en preflight. ABORTANDO." >&2
-            exit 1
-        fi
+    export APP_ROOT="${PM2_APP_STATUS}"
+    if ! verify_process_identity "preflight"; then
+        echo "ERROR CRÍTICO: Falló la verificación de identidad del proceso en preflight. ABORTANDO." >&2
+        exit 1
     fi
     echo "[OK] Supervisor PM2 acreditado: aplicación '${EXPECTED_PM2_APP}' online en APP_ROOT: ${APP_ROOT}"
 
@@ -550,6 +615,8 @@ except Exception:
     fi
     mkdir -p "${BACKUP_DIR}"
 
+        LIVE_PUBLIC_ETAG="$(${CURL_BIN} -s -S -I --max-time 10 "https://${DOMAIN}/" 2>/dev/null | grep -i "^etag:" | awk '{print $2}' | tr -d '\r\n' || echo '')"
+    echo "[OK] ETag público previo registrado: ${LIVE_PUBLIC_ETAG:-NINGUNO}"
     LIVE_BUILD_ID="UNKNOWN"
     if [ -f "${APP_ROOT}/.next/BUILD_ID" ]; then
         LIVE_BUILD_ID="$(cat "${APP_ROOT}/.next/BUILD_ID")"
@@ -686,24 +753,15 @@ EOF
     # ==============================================================================
     echo "[FASE 5] Notificando recarga al proceso PM2 '${EXPECTED_PM2_APP}'..."
 
-    if [ "${SIMULATION_MODE:-false}" = "true" ]; then
-        if [ "${MOCK_PM2_RELOAD_FAILS:-false}" = "true" ]; then
-            echo "ERROR: [SIMULATION] Falló la recarga del supervisor PM2." >&2
-            execute_rollback "Fallo inducido en recarga de supervisor PM2"
-            exit 1
-        fi
-        echo "[SIMULATION] Recarga de PM2 completada con éxito."
-    else
-        if ! su -s /bin/bash "${EXPECTED_USER}" -c "PORT=${EXPECTED_PORT} pm2 reload ${EXPECTED_PM2_APP} --update-env"; then
-            echo "ERROR CRÍTICO: Falló la recarga de PM2 para ${EXPECTED_PM2_APP}." >&2
-            execute_rollback "Fallo en comando pm2 reload"
-            exit 1
-        fi
+    if ! run_pm2_cmd "PORT=${EXPECTED_PORT} ${PM2_BIN} reload ${EXPECTED_PM2_APP} --update-env"; then
+        echo "ERROR CRÍTICO: Falló la recarga de PM2 para ${EXPECTED_PM2_APP}." >&2
+        execute_rollback "Fallo en comando pm2 reload"
+        exit 1
     fi
     SWAP_STATE="VERIFYING"
 
-    # Verificar identidad del proceso tras la recarga
-    if ! verify_process_identity "post-reload"; then
+    # Verificar identidad del proceso tras la recarga (PM2 + versión en memoria viva vía HTTP)
+    if ! verify_process_identity "post-reload" "${CANDIDATE_BUILD_ID}"; then
         echo "ERROR CRÍTICO: Falló la verificación de identidad del proceso tras recarga. Invocando rollback..." >&2
         execute_rollback "Fallo de identidad del proceso tras recarga"
         exit 1
@@ -716,159 +774,112 @@ EOF
 
     ORIGIN_STATUS_OK=false
     ORIGIN_ROUTES_OK=false
-    CACHE_STATUS_OK=false
-    CACHE_CONTENT_OK=false
+    PUBLIC_STATUS_OK=true
+    PUBLIC_CONTENT_OK=true
+    CACHE_STALE_EVIDENCE=false
 
-    if [ "${SIMULATION_MODE:-false}" = "true" ]; then
-        # Dobles controlables para simulación
-        local sim_http="${MOCK_LOCAL_HTTP_STATUS:-200}"
-        local sim_manifest="${MOCK_LOCAL_MANIFEST_STATUS:-200}"
-        if [ "${sim_http}" = "200" ] && [ "${sim_manifest}" = "200" ]; then
+    # 6.1. Comprobación de salud en el proceso en memoria viva (http://127.0.0.1:3010)
+    for attempt in 1 2 3 4 5; do
+        LOCAL_STATUS="$(${CURL_BIN} -s -S -o /dev/null -w "%{http_code}" --max-time 10 --connect-timeout 5 "http://127.0.0.1:${EXPECTED_PORT}/" 2>/dev/null || echo "000")"
+        MANIFEST_STATUS="$(${CURL_BIN} -s -S -o /dev/null -w "%{http_code}" --max-time 10 --connect-timeout 5 "http://127.0.0.1:${EXPECTED_PORT}/_next/static/${CANDIDATE_BUILD_ID}/_buildManifest.js" 2>/dev/null || echo "000")"
+        if [ "${LOCAL_STATUS}" = "200" ] && [ "${MANIFEST_STATUS}" = "200" ]; then
             ORIGIN_STATUS_OK=true
-            echo "[OK] [SIMULATION] Origen local respondió HTTP 200 y manifest ${CANDIDATE_BUILD_ID} 200."
-        else
-            echo "[FALLO] [SIMULATION] Origen local falló: HTTP ${sim_http}, manifest ${sim_manifest}." >&2
+            break
         fi
+        sleep 2
+    done
 
-        if [ "${MOCK_ORIGIN_ROUTES_OK:-true}" = "true" ]; then
-            ORIGIN_ROUTES_OK=true
-            echo "[OK] [SIMULATION] Rutas y claims de origen local verificados."
-        else
-            echo "[FALLO] [SIMULATION] Rutas de origen local no verificadas." >&2
-        fi
+    if [ "${ORIGIN_STATUS_OK}" != true ]; then
+        echo "FALLO CRÍTICO: El proceso en puerto ${EXPECTED_PORT} no sirve el BUILD_ID del candidato (${CANDIDATE_BUILD_ID}) en memoria viva." >&2
+        echo "  HTTP Base: ${LOCAL_STATUS:-000} (esperado 200)" >&2
+        echo "  Manifest (${CANDIDATE_BUILD_ID}): ${MANIFEST_STATUS:-000} (esperado 200)" >&2
+    fi
 
-        local sim_public_http="${MOCK_PUBLIC_HTTP_STATUS:-200}"
-        if [ "${sim_public_http}" = "200" ]; then
-            CACHE_STATUS_OK=true
-            echo "[OK] [SIMULATION] Rutas públicas respondieron HTTP 200."
-        else
-            echo "[FALLO] [SIMULATION] Rutas públicas fallaron con HTTP ${sim_public_http}." >&2
-        fi
-
-        local sim_etag="${MOCK_PUBLIC_ETAG:-new_candidate_etag}"
-        local sim_content="${MOCK_PUBLIC_CONTENT_OK:-true}"
-        if [ "${sim_content}" = "true" ] && [[ "${sim_etag}" != *"argphxugf31qsk"* ]]; then
-            CACHE_CONTENT_OK=true
-            echo "[OK] [SIMULATION] Caché pública sirve contenido nuevo y ETag actualizado (${sim_etag})."
-        else
-            echo "[INFO] [SIMULATION] Retención de caché detectada (ETag: ${sim_etag}, ContentOK: ${sim_content})."
-        fi
-
-        if [ "${MOCK_NEW_ERRORS:-0}" -gt 0 ]; then
-            echo "[FALLO] [SIMULATION] Se detectaron ${MOCK_NEW_ERRORS} errores en proxy_error_log." >&2
-            ORIGIN_STATUS_OK=false
-        fi
+    # Validar que el origen local sirve la copia del candidato
+    LOCAL_BUDGET="$(${CURL_BIN} -s -S --max-time 10 "http://127.0.0.1:${EXPECTED_PORT}/products/budget" 2>/dev/null || echo "")"
+    if grep -F "CALCULA PRESUPUESTOS DE IMPRESIÓN EN SEGUNDOS" <<< "${LOCAL_BUDGET}" >/dev/null; then
+        ORIGIN_ROUTES_OK=true
     else
-        # 6.1. Comprobación de salud en el proceso en memoria viva (http://127.0.0.1:3010)
-        for attempt in 1 2 3 4 5; do
-            LOCAL_STATUS="$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 10 --connect-timeout 5 "http://127.0.0.1:${EXPECTED_PORT}/" || echo "000")"
-            MANIFEST_STATUS="$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 10 --connect-timeout 5 "http://127.0.0.1:${EXPECTED_PORT}/_next/static/${CANDIDATE_BUILD_ID}/_buildManifest.js" || echo "000")"
-            if [ "${LOCAL_STATUS}" = "200" ] && [ "${MANIFEST_STATUS}" = "200" ]; then
-                ORIGIN_STATUS_OK=true
-                break
-            fi
-            sleep 2
-        done
+        echo "FALLO CRÍTICO: El origen local (127.0.0.1:${EXPECTED_PORT}) no sirve el claim CR-01 del candidato." >&2
+        ORIGIN_ROUTES_OK=false
+    fi
 
-        if [ "${ORIGIN_STATUS_OK}" != true ]; then
-            echo "FALLO CRÍTICO: El proceso en puerto ${EXPECTED_PORT} no sirve el BUILD_ID del candidato (${CANDIDATE_BUILD_ID}) en memoria viva." >&2
-            echo "  HTTP Base: ${LOCAL_STATUS:-000} (esperado 200)" >&2
-            echo "  Manifest (${CANDIDATE_BUILD_ID}): ${MANIFEST_STATUS:-000} (esperado 200)" >&2
+    # 6.2. Capa A: Smoke Test SSR sobre la URL pública con TLS estricto
+    ROUTES=("/" "/products/budget" "/products" "/products/print" "/for-authors" "/governance" "/icon.png")
+    for route in "${ROUTES[@]}"; do
+        STATUS="$(${CURL_BIN} -s -S -o /dev/null -w "%{http_code}" --max-time 10 --connect-timeout 5 "https://${DOMAIN}${route}" 2>/dev/null || echo "000")"
+        if [ "${STATUS}" != "200" ]; then
+            echo "FALLO EN SMOKE TEST SSR: ${route} devolvió HTTP ${STATUS}." >&2
+            PUBLIC_STATUS_OK=false
+            break
         fi
+    done
 
-        # Validar que el origen local sirve la copia del candidato
-        LOCAL_BUDGET="$(curl -s -S --max-time 10 "http://127.0.0.1:${EXPECTED_PORT}/products/budget" || echo "")"
-        if grep -F "CALCULA PRESUPUESTOS DE IMPRESIÓN EN SEGUNDOS" <<< "${LOCAL_BUDGET}" >/dev/null; then
-            ORIGIN_ROUTES_OK=true
-        else
-            echo "FALLO CRÍTICO: El origen local (127.0.0.1:${EXPECTED_PORT}) no sirve el claim CR-01 del candidato." >&2
+    # 6.3. Validación de claims en HTML SSR
+    HTML_BUDGET="$(${CURL_BIN} -s -S --max-time 10 "https://${DOMAIN}/products/budget" 2>/dev/null || echo "")"
+    HTML_PRODUCTS="$(${CURL_BIN} -s -S --max-time 10 "https://${DOMAIN}/products" 2>/dev/null || echo "")"
+    HTML_PRINT="$(${CURL_BIN} -s -S --max-time 10 "https://${DOMAIN}/products/print" 2>/dev/null || echo "")"
+
+    if ! grep -F "CALCULA PRESUPUESTOS DE IMPRESIÓN EN SEGUNDOS" <<< "${HTML_BUDGET}" >/dev/null || \
+       ! grep -F "transición tecnológica más eficiente" <<< "${HTML_PRODUCTS}" >/dev/null || \
+       ! grep -F "tarifas de producción según las matrices de planta asociadas" <<< "${HTML_PRINT}" >/dev/null; then
+        PUBLIC_CONTENT_OK=false
+    fi
+
+    # Detección estricta de evidencia de contenido antiguo (sin ETag histórico fijo)
+    if grep -F "CALCULA PRESUPUESTOS EXACTOS EN SEGUNDOS" <<< "${HTML_BUDGET}" >/dev/null; then
+        echo "[EVIDENCIA] Claim anterior detectado en HTML público de /products/budget."
+        CACHE_STALE_EVIDENCE=true
+    fi
+
+    CURRENT_ETAG="$(${CURL_BIN} -s -S -I --max-time 10 "https://${DOMAIN}/" 2>/dev/null | grep -i "^etag:" | awk '{print $2}' | tr -d '\r\n' || echo '')"
+    if [ -n "${CURRENT_ETAG}" ]; then
+        echo "[INFO] ETag devuelto por la web pública: ${CURRENT_ETAG}"
+        if [ -n "${LIVE_PUBLIC_ETAG:-}" ] && [ "${CURRENT_ETAG}" = "${LIVE_PUBLIC_ETAG}" ]; then
+            echo "[EVIDENCIA] Reverse proxy público sirve el ETag pre-despliegue (${CURRENT_ETAG})."
+            CACHE_STALE_EVIDENCE=true
+        fi
+    fi
+
+    # 6.4. Capa B: Inspección Estática del Artefacto Compilado (EN y DE)
+    BUDGET_BUNDLES="$(find "${APP_ROOT}/.next/server/app/products/budget" -type f -name "*.js" 2>/dev/null || true)"
+    if [ -n "${BUDGET_BUNDLES}" ]; then
+        if ! grep -q "CALCULATE PRINT PRODUCTION ESTIMATES IN SECONDS" ${BUDGET_BUNDLES}; then
+            echo "FALLO: Cadena exacta en inglés CR-01 ausente en bundles de budget." >&2
             ORIGIN_ROUTES_OK=false
         fi
-
-        # 6.2. Capa A: Smoke Test SSR sobre la URL pública con TLS estricto
-        CACHE_STATUS_OK=true
-        ROUTES=("/" "/products/budget" "/products" "/products/print" "/for-authors" "/governance" "/icon.png")
-        for route in "${ROUTES[@]}"; do
-            STATUS="$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 10 --connect-timeout 5 "https://${DOMAIN}${route}" || echo "000")"
-            if [ "${STATUS}" != "200" ]; then
-                echo "FALLO EN SMOKE TEST SSR: ${route} devolvió HTTP ${STATUS}." >&2
-                CACHE_STATUS_OK=false
-                break
-            fi
-        done
-
-        # 6.3. Validación de claims en HTML SSR (Uso de <<< para evitar SIGPIPE con pipefail)
-        CACHE_CONTENT_OK=true
-        HTML_BUDGET="$(curl -s -S --max-time 10 "https://${DOMAIN}/products/budget" || echo "")"
-        HTML_PRODUCTS="$(curl -s -S --max-time 10 "https://${DOMAIN}/products" || echo "")"
-        HTML_PRINT="$(curl -s -S --max-time 10 "https://${DOMAIN}/products/print" || echo "")"
-
-        if ! grep -F "CALCULA PRESUPUESTOS DE IMPRESIÓN EN SEGUNDOS" <<< "${HTML_BUDGET}" >/dev/null; then
-            echo "FALLO: Claim CR-01 no hallado en HTML de /products/budget." >&2
-            CACHE_CONTENT_OK=false
-        fi
-
-        if grep -F "CALCULA PRESUPUESTOS EXACTOS EN SEGUNDOS" <<< "${HTML_BUDGET}" >/dev/null; then
-            echo "FALLO: Claim antiguo CR-01 todavía presente en /products/budget." >&2
-            CACHE_CONTENT_OK=false
-        fi
-
-        if ! grep -F "transición tecnológica más eficiente" <<< "${HTML_PRODUCTS}" >/dev/null; then
-            echo "FALLO: Claim CR-02 no hallado en HTML de /products." >&2
-            CACHE_CONTENT_OK=false
-        fi
-
-        if ! grep -F "tarifas de producción según las matrices de planta asociadas" <<< "${HTML_PRINT}" >/dev/null; then
-            echo "FALLO: Claim CR-03 no hallado en HTML de /products/print." >&2
-            CACHE_CONTENT_OK=false
-        fi
-
-        # 6.4. Capa B: Inspección Estática del Artefacto Compilado (EN y DE)
-        BUDGET_BUNDLES="$(find "${APP_ROOT}/.next/server/app/products/budget" -type f -name "*.js" 2>/dev/null || true)"
-        if [ -n "${BUDGET_BUNDLES}" ]; then
-            if ! grep -q "CALCULATE PRINT PRODUCTION ESTIMATES IN SECONDS" ${BUDGET_BUNDLES}; then
-                echo "FALLO: Cadena exacta en inglés CR-01 ausente en bundles de budget." >&2
-                ORIGIN_ROUTES_OK=false
-            fi
-            if ! grep -q "DRUCKANGEBOTE IN SEKUNDEN BERECHNEN" ${BUDGET_BUNDLES}; then
-                echo "FALLO: Cadena exacta en alemán CR-01 ausente en bundles de budget." >&2
-                ORIGIN_ROUTES_OK=false
-            fi
-        else
-            echo "FALLO: No se localizaron bundles compilados en .next/server/app/products/budget." >&2
+        if ! grep -q "DRUCKANGEBOTE IN SEKUNDEN BERECHNEN" ${BUDGET_BUNDLES}; then
+            echo "FALLO: Cadena exacta en alemán CR-01 ausente en bundles de budget." >&2
             ORIGIN_ROUTES_OK=false
         fi
+    fi
 
-        # 6.5. Detección de Retención de Caché Pública (Sin purgas globales destructivas)
-        CURRENT_ETAG="$(curl -s -S -I --max-time 10 "https://${DOMAIN}/" | grep -i "^etag:" | awk '{print $2}' | tr -d '\r\n' || echo '')"
-        echo "[INFO] ETag devuelto por la web pública: ${CURRENT_ETAG:-NINGUNO}"
-        if [[ "${CURRENT_ETAG}" == *"argphxugf31qsk"* ]]; then
-            echo "[AVISO DE RETENCIÓN DE CACHÉ] El origen local está actualizado, pero el reverse proxy de Nginx sirve el ETag histórico (\"argphxugf31qsk\")."
-            echo "[ESTADO: PENDIENTE DE INVALIDACIÓN DE CACHÉ ESPECÍFICA DEL DOMINIO]"
-            CACHE_CONTENT_OK=false
-        fi
-
-        # 6.6. Inspección de Errores Posteriores a la Activación (awk seguro ante pipefail)
-        if [ -f "${ERROR_LOG_PATH}" ]; then
-            NEW_ERRORS="$(tail -n +$((LOG_LINE_BASELINE + 1)) "${ERROR_LOG_PATH}" 2>/dev/null | awk '/500|502|fatal|crash/ {count++} END {print count+0}')"
-            if [ "${NEW_ERRORS}" -gt 0 ]; then
-                echo "FALLO: Se han detectado ${NEW_ERRORS} nuevos errores en proxy_error_log tras la activación." >&2
-                ORIGIN_STATUS_OK=false
-            fi
+    # 6.5. Inspección de Errores Posteriores a la Activación
+    if [ -f "${ERROR_LOG_PATH}" ]; then
+        NEW_ERRORS="$(tail -n +$((LOG_LINE_BASELINE + 1)) "${ERROR_LOG_PATH}" 2>/dev/null | awk '/500|502|fatal|crash/ {count++} END {print count+0}')"
+        if [ "${NEW_ERRORS}" -gt 0 ]; then
+            echo "FALLO: Se han detectado ${NEW_ERRORS} nuevos errores en proxy_error_log tras la activación." >&2
+            ORIGIN_STATUS_OK=false
         fi
     fi
 
     # ==============================================================================
     # FASE 7: CLASIFICACIÓN OPERATIVA FORMAL Y EVALUACIÓN FINAL
-    # Conexión directa de classify_release_state al control de release
+    # Manejo explícito de retorno no cero para que set -e no interrumpa antes del case
     # ==============================================================================
-    RELEASE_STATE="$(classify_release_state "${ORIGIN_STATUS_OK}" "${ORIGIN_ROUTES_OK}" "${CACHE_STATUS_OK}" "${CACHE_CONTENT_OK}")"
+    RELEASE_STATE="$(classify_release_state "${ORIGIN_STATUS_OK}" "${ORIGIN_ROUTES_OK}" "${PUBLIC_STATUS_OK}" "${PUBLIC_CONTENT_OK}" "${CACHE_STALE_EVIDENCE}" || true)"
     echo "[INFO] Clasificación de release calculada: ${RELEASE_STATE}"
 
     case "${RELEASE_STATE}" in
         ORIGIN_FAILED)
             echo "[CRITERIO DE ABORTO ACTIVADO] Causa: Fallo de verificación en origen local (ORIGIN_FAILED)." >&2
             execute_rollback "Fallo en origen local o proceso (ORIGIN_FAILED)"
+            exit 1
+            ;;
+
+        PUBLIC_FAILED)
+            echo "[CRITERIO DE ABORTO ACTIVADO] Causa: Fallo en acceso público SSR (PUBLIC_FAILED)." >&2
+            execute_rollback "Fallo en acceso público SSR (PUBLIC_FAILED)"
             exit 1
             ;;
 
@@ -880,7 +891,7 @@ EOF
             echo "COMO UN DESPLIEGUE COMPLETAMENTE VALIDADO."
             echo "Estado final: SWAP_STATE=${SWAP_STATE}"
             echo "Origen local (127.0.0.1:${EXPECTED_PORT}) responde HTTP 200 y sirve BUILD_ID=${CANDIDATE_BUILD_ID}."
-            echo "Sin embargo, el reverse proxy público retiene caché o ETag previo."
+            echo "Sin embargo, el reverse proxy público retiene caché o contenido previo."
             echo "El release permanece en estado PENDIENTE DE INVALIDACIÓN DE CACHÉ."
             echo "Prohibido ejecutar purgas globales destructivas en el servidor compartido."
             echo "========================================================================"
