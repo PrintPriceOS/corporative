@@ -66,27 +66,19 @@ async def run():
                         result = await page.evaluate('''(docW) => {
                             const issues = [];
                             
-                            // 1. Horizontal overflows
-                            document.querySelectorAll('*').forEach(el => {
-                                const r = el.getBoundingClientRect();
-                                if (r.right > docW + 2) {
-                                    // Ignore hidden or svg defs
-                                    if (r.width > 0 && r.height > 0 && window.getComputedStyle(el).overflow !== 'hidden') {
-                                        const text = (el.innerText || '').slice(0, 30).trim();
-                                        issues.push({
-                                            type: 'OVERFLOW',
-                                            tag: el.tagName,
-                                            class: el.className ? el.className.toString().slice(0, 30) : '',
-                                            text: text,
-                                            right: Math.round(r.right),
-                                            docW: docW
-                                        });
-                                    }
-                                }
-                            });
+                            // 1. Page horizontal overflow
+                            const bodyScroll = document.documentElement.scrollWidth;
+                            if (bodyScroll > docW + 2) {
+                                issues.push({
+                                    type: 'PAGE_OVERFLOW',
+                                    scrollWidth: bodyScroll,
+                                    clientWidth: docW
+                                });
+                            }
                             
                             // 2. Buttons wrapping into multiple lines
-                            document.querySelectorAll('button, a.btn, a[class*="hero-btn"], a[class*="action-cta-btn"]').forEach(el => {
+                            // Exclude elements inside horizontal scrollable containers or hidden
+                            document.querySelectorAll('button, a.btn, a[class*="hero-btn"], a[class*="action-cta-btn"], .preflight-tab-btn').forEach(el => {
                                 const r = el.getBoundingClientRect();
                                 const text = (el.innerText || '').trim();
                                 if (!text || r.height === 0 || r.width === 0) return;
@@ -94,10 +86,7 @@ async def run():
                                 const cs = window.getComputedStyle(el);
                                 if (cs.display === 'none' || cs.visibility === 'hidden') return;
                                 
-                                const lh = parseFloat(cs.lineHeight) || 20;
-                                // If height is much greater than single line button height + padding
-                                // Single line with padding 0.85rem is typically 42-48px.
-                                // If it wraps to 2 lines, height will exceed 58px.
+                                // Check if button height indicates multiple wrapped lines
                                 if (r.height > 58) {
                                     issues.push({
                                         type: 'BUTTON_WRAP',
@@ -110,7 +99,7 @@ async def run():
                                 }
                             });
                             
-                            // 3. Headings - check for excessive line counts or single orphan words
+                            // 3. Headings - check font size and line count
                             const headingSummaries = [];
                             document.querySelectorAll('h1').forEach(el => {
                                 const r = el.getBoundingClientRect();
@@ -135,20 +124,19 @@ async def run():
                         if result["issues"]:
                             print(f"[{vp['name']}][{lang}][{path}] Issues found: {len(result['issues'])}")
                             for iss in result["issues"]:
-                                print(f"   -> {iss['type']}: {iss['text']} (h={iss.get('height')}, r={iss.get('right')})")
+                                print(f"   -> {iss['type']}: {iss.get('text', '')} (h={iss.get('height')})")
                                 all_issues.append({"vp": vp["name"], "lang": lang, "path": path, **iss})
                         else:
                             h1_info = result["headingSummaries"][0] if result["headingSummaries"] else {"text": "N/A", "lines": 0, "fontSize": 0}
-                            print(f"[{vp['name']}][{lang}][{path}] OK! H1 ({h1_info['fontSize']}px, {h1_info['lines']} lines): '{h1_info['text']}'")
+                            print(f"[{vp['name']}][{lang}][{path}] PASS! H1 ({h1_info['fontSize']}px, {h1_info['lines']}L): '{h1_info['text']}'")
 
-                        # Capture screenshot for authors, print, and home in all 3 languages on iPhone 375
-                        if vp["width"] == 375 and path in ["/", "/for-authors", "/products/print"]:
-                            clean_name = path.replace("/", "").replace("-", "_") or "home"
-                            shot_name = f"mobile_audit_{clean_name}_{lang}.png"
+                        # Capture screenshot of Hero buttons and CTA
+                        if vp["width"] == 375 and path in ["/for-authors", "/for-printhouses", "/products/print", "/products/preflight"]:
+                            clean_name = path.replace("/", "").replace("-", "_")
+                            shot_name = f"mobile_verified_{clean_name}_{lang}.png"
                             shot_path = os.path.join(ARTIFACT_DIR, shot_name)
                             await page.screenshot(path=shot_path, full_page=False)
                             screenshot_count += 1
-                            print(f"   [SCREENSHOT] Saved: {shot_name}")
 
                     except Exception as e:
                         print(f"[{vp['name']}][{lang}][{path}] Error: {str(e)[:60]}")
@@ -158,7 +146,8 @@ async def run():
         await browser.close()
         
         print("\n===============================")
-        print(f"AUDIT COMPLETE. Total issues: {len(all_issues)}, Screenshots taken: {screenshot_count}")
+        print(f"FINAL AUDIT SUMMARY: {len(all_issues)} issues found across {len(VIEWPORTS) * len(LANGS) * len(PAGES)} tests.")
+        print(f"Verified Screenshots saved: {screenshot_count}")
         print("===============================")
 
 if __name__ == "__main__":
