@@ -55,6 +55,49 @@ export CURL_BIN="${TEST_SANDBOX}/bin/curl"
 export PM2_BIN="${TEST_SANDBOX}/bin/pm2"
 export GIT_BIN="${TEST_SANDBOX}/bin/git"
 
+# Reloj y espera simulados para pruebas instantáneas (sin esperas reales de 60s)
+cat << 'EOF' > "${TEST_SANDBOX}/bin/mock_clock"
+#!/usr/bin/env bash
+SANDBOX_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cur=1000
+if [ -f "${SANDBOX_DIR}/simulated_time.txt" ]; then
+    read -r cur < "${SANDBOX_DIR}/simulated_time.txt" || cur=1000
+fi
+echo "${cur}"
+EOF
+chmod +x "${TEST_SANDBOX}/bin/mock_clock"
+
+cat << 'EOF' > "${TEST_SANDBOX}/bin/mock_sleep"
+#!/usr/bin/env bash
+SANDBOX_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+dur="${1:-2}"
+cur=1000
+if [ -f "${SANDBOX_DIR}/simulated_time.txt" ]; then
+    read -r cur < "${SANDBOX_DIR}/simulated_time.txt" || cur=1000
+fi
+echo $((cur + dur)) > "${SANDBOX_DIR}/simulated_time.txt"
+EOF
+chmod +x "${TEST_SANDBOX}/bin/mock_sleep"
+
+mock_clock() {
+    local cur=1000
+    if [ -f "${TEST_SANDBOX}/simulated_time.txt" ]; then
+        read -r cur < "${TEST_SANDBOX}/simulated_time.txt" || cur=1000
+    fi
+    echo "${cur}"
+}
+mock_sleep() {
+    local dur="${1:-2}"
+    local cur=1000
+    if [ -f "${TEST_SANDBOX}/simulated_time.txt" ]; then
+        read -r cur < "${TEST_SANDBOX}/simulated_time.txt" || cur=1000
+    fi
+    echo $((cur + dur)) > "${TEST_SANDBOX}/simulated_time.txt"
+}
+export -f mock_clock mock_sleep
+export MOCK_TIME_FUNCTION=mock_clock
+export MOCK_SLEEP_FUNCTION=mock_sleep
+
 # Instalar mocks de operaciones externas
 cat << 'EOF' > "${TEST_SANDBOX}/bin/pm2"
 #!/usr/bin/env bash
@@ -151,9 +194,50 @@ done
 
 if [[ "${URL}" == */api/health ]]; then
     status="${MOCK_HEALTH_STATUS:-200}"
+    if [ -n "${MOCK_HEALTH_STATUS_SEQUENCE:-}" ]; then
+        seq_file="${SANDBOX_DIR:-${TEST_SANDBOX}}/health_seq.txt"
+        if [ ! -f "${seq_file}" ]; then
+            echo "${MOCK_HEALTH_STATUS_SEQUENCE}" > "${seq_file}"
+        fi
+        current_seq="$(cat "${seq_file}")"
+        if [ -n "${current_seq}" ]; then
+            status="${current_seq%%,*}"
+            rest="${current_seq#*,}"
+            if [ "${rest}" = "${current_seq}" ]; then
+                echo "${status}" > "${seq_file}"
+            else
+                echo "${rest}" > "${seq_file}"
+            fi
+        fi
+    fi
+
+    if [ "${status}" = "000" ]; then
+        echo "curl: (7) Failed to connect to host" >&2
+        exit 7
+    fi
+
     if [ "${status}" = "200" ]; then
         if [[ "${URL}" == "https://${DOMAIN}/"* ]] && [ -n "${MOCK_PUBLIC_SERVED_RELEASE_ID:-}" ]; then
             served_id="${MOCK_PUBLIC_SERVED_RELEASE_ID}"
+        elif [ -n "${MOCK_SERVED_RELEASE_ID_SEQUENCE:-}" ]; then
+            rel_seq_file="${SANDBOX_DIR:-${TEST_SANDBOX}}/served_id_seq.txt"
+            if [ ! -f "${rel_seq_file}" ]; then
+                echo "${MOCK_SERVED_RELEASE_ID_SEQUENCE}" > "${rel_seq_file}"
+            fi
+            current_rel_seq="$(cat "${rel_seq_file}")"
+            if [ -n "${current_rel_seq}" ]; then
+                served_id="${current_rel_seq%%,*}"
+                rel_rest="${current_rel_seq#*,}"
+                if [ "${rel_rest}" = "${current_rel_seq}" ]; then
+                    echo "${served_id}" > "${rel_seq_file}"
+                else
+                    echo "${rel_rest}" > "${rel_seq_file}"
+                fi
+            else
+                served_id="UNKNOWN"
+            fi
+        elif [ "${SWAP_STATE:-}" = "ROLLING_BACK" ] && [ -f "${SANDBOX_DIR:-${TEST_SANDBOX}}/last_pm2_release_id.txt" ]; then
+            served_id="$(cat "${SANDBOX_DIR:-${TEST_SANDBOX}}/last_pm2_release_id.txt")"
         elif [ -n "${MOCK_SERVED_RELEASE_ID:-}" ]; then
             served_id="${MOCK_SERVED_RELEASE_ID}"
         elif [ -f "${SANDBOX_DIR:-${TEST_SANDBOX}}/last_pm2_release_id.txt" ]; then
@@ -182,6 +266,26 @@ fi
 
 if [[ "${URL}" == */_next/static/*/_buildManifest.js ]]; then
     status="${MOCK_LOCAL_MANIFEST_STATUS:-200}"
+    if [ -n "${MOCK_LOCAL_MANIFEST_STATUS_SEQUENCE:-}" ]; then
+        man_seq_file="${SANDBOX_DIR:-${TEST_SANDBOX}}/man_seq.txt"
+        if [ ! -f "${man_seq_file}" ]; then
+            echo "${MOCK_LOCAL_MANIFEST_STATUS_SEQUENCE}" > "${man_seq_file}"
+        fi
+        current_man_seq="$(cat "${man_seq_file}")"
+        if [ -n "${current_man_seq}" ]; then
+            status="${current_man_seq%%,*}"
+            m_rest="${current_man_seq#*,}"
+            if [ "${m_rest}" = "${current_man_seq}" ]; then
+                echo "${status}" > "${man_seq_file}"
+            else
+                echo "${m_rest}" > "${man_seq_file}"
+            fi
+        fi
+    fi
+    if [ "${status}" = "000" ]; then
+        echo "curl: (7) Failed to connect to host" >&2
+        exit 7
+    fi
     if [ "${OUTPUT_FORMAT}" = "%{http_code}" ]; then
         printf "%s" "${status}"
     else
@@ -212,6 +316,26 @@ if [[ "${URL}" == "http://127.0.0.1:"*"/" ]]; then
         exit 0
     fi
     status="${MOCK_LOCAL_HTTP_STATUS:-200}"
+    if [ -n "${MOCK_HOME_STATUS_SEQUENCE:-}" ]; then
+        home_seq_file="${SANDBOX_DIR:-${TEST_SANDBOX}}/home_seq.txt"
+        if [ ! -f "${home_seq_file}" ]; then
+            echo "${MOCK_HOME_STATUS_SEQUENCE}" > "${home_seq_file}"
+        fi
+        current_home_seq="$(cat "${home_seq_file}")"
+        if [ -n "${current_home_seq}" ]; then
+            status="${current_home_seq%%,*}"
+            h_rest="${current_home_seq#*,}"
+            if [ "${h_rest}" = "${current_home_seq}" ]; then
+                echo "${status}" > "${home_seq_file}"
+            else
+                echo "${h_rest}" > "${home_seq_file}"
+            fi
+        fi
+    fi
+    if [ "${status}" = "000" ]; then
+        echo "curl: (7) Failed to connect to host" >&2
+        exit 7
+    fi
     if [ "${OUTPUT_FORMAT}" = "%{http_code}" ]; then
         printf "%s" "${status}"
     else
@@ -313,6 +437,13 @@ EOF
     LIVE_BUILD_ID="OLD_BUILD_ID_111"
 
     # Reset variables mock
+    echo 1000 > "${TEST_SANDBOX}/simulated_time.txt"
+    rm -f "${TEST_SANDBOX}/health_seq.txt" "${TEST_SANDBOX}/served_id_seq.txt" "${TEST_SANDBOX}/home_seq.txt" "${TEST_SANDBOX}/man_seq.txt"
+    export MOCK_HEALTH_STATUS_SEQUENCE=""
+    export MOCK_SERVED_RELEASE_ID_SEQUENCE=""
+    export MOCK_HOME_STATUS_SEQUENCE=""
+    export MOCK_LOCAL_MANIFEST_STATUS_SEQUENCE=""
+    export LEGACY_HEALTH_LIMITATION_REGISTERED=false
     export MOCK_PM2_FAILS=false
     export MOCK_PM2_RELOAD_FAILS=false
     export MOCK_PM2_STATUS="online"
@@ -467,11 +598,13 @@ fi
 # ------------------------------------------------------------------------------
 echo -n "Test 9: verify_process_identity (404 declara límite de verificación en rollback)... "
 setup_dummy_env
+export LEGACY_HEALTH_LIMITATION_REGISTERED=true
 export MOCK_HEALTH_STATUS=404
 LOG_404="${TEST_SANDBOX}/test9_404.log"
 RET_LEGACY=0
 verify_process_identity "post-rollback" "OLD_BUILD_ID_111" > "${LOG_404}" 2>&1 || RET_LEGACY=$?
 export MOCK_HEALTH_STATUS=200
+export LEGACY_HEALTH_LIMITATION_REGISTERED=false
 
 if [ "${RET_LEGACY}" -eq 0 ] && grep -q "LÍMITE DE VERIFICACIÓN DECLARADO" "${LOG_404}"; then
     echo "[PASÓ]"
@@ -1071,6 +1204,157 @@ else
     exit 1
 fi
 
+# ------------------------------------------------------------------------------
+# TEST 38: Respuesta secuencial candidato: 000 -> 000 -> 200 con identidad correcta: éxito
+# ------------------------------------------------------------------------------
+echo -n "Test 38: Secuencia candidato 000 -> 000 -> 200 con identidad correcta (éxito)... "
+setup_dummy_env
+export MOCK_HEALTH_STATUS_SEQUENCE="000,000,200"
+export MOCK_SERVED_RELEASE_ID="NEW_BUILD_ID_999"
+
+TEST_38_RET=0
+verify_process_identity "post-reload" "NEW_BUILD_ID_999" > "${TEST_SANDBOX}/test38.log" 2>&1 || TEST_38_RET=$?
+
+if [ "${TEST_38_RET}" -eq 0 ] && \
+   grep -q "Identidad de release en memoria viva confirmada (post-reload): 'NEW_BUILD_ID_999' coincide con la esperada tras 3 intento(s)" "${TEST_SANDBOX}/test38.log"; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: ret=${TEST_38_RET}]"
+    cat "${TEST_SANDBOX}/test38.log"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 39: Respuesta secuencial candidato: Identidad anterior -> identidad correcta: éxito
+# ------------------------------------------------------------------------------
+echo -n "Test 39: Secuencia candidato identidad anterior -> identidad correcta (éxito)... "
+setup_dummy_env
+export MOCK_HEALTH_STATUS=200
+export MOCK_SERVED_RELEASE_ID_SEQUENCE="OLD_BUILD_ID_111,OLD_BUILD_ID_111,NEW_BUILD_ID_999"
+
+TEST_39_RET=0
+verify_process_identity "post-reload" "NEW_BUILD_ID_999" > "${TEST_SANDBOX}/test39.log" 2>&1 || TEST_39_RET=$?
+
+if [ "${TEST_39_RET}" -eq 0 ] && \
+   grep -q "Identidad de release en memoria viva confirmada (post-reload): 'NEW_BUILD_ID_999' coincide con la esperada tras 3 intento(s)" "${TEST_SANDBOX}/test39.log"; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: ret=${TEST_39_RET}]"
+    cat "${TEST_SANDBOX}/test39.log"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 40: Respuesta secuencial candidato: 000 persistente -> fallo al vencer el plazo
+# ------------------------------------------------------------------------------
+echo -n "Test 40: Candidato con 000 persistente (fallo al vencer plazo de 60s)... "
+setup_dummy_env
+export MOCK_HEALTH_STATUS="000"
+
+TEST_40_RET=0
+verify_process_identity "post-reload" "NEW_BUILD_ID_999" > "${TEST_SANDBOX}/test40.log" 2>&1 || TEST_40_RET=$?
+
+if [ "${TEST_40_RET}" -eq 1 ] && \
+   grep -q "Plazo de disponibilidad agotado (60s) durante post-reload" "${TEST_SANDBOX}/test40.log" && \
+   grep -q "Endpoint /api/health devolvió código HTTP: 000" "${TEST_SANDBOX}/test40.log"; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: ret=${TEST_40_RET}]"
+    cat "${TEST_SANDBOX}/test40.log"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 41: Respuesta secuencial candidato: Identidad incorrecta persistente -> fallo
+# ------------------------------------------------------------------------------
+echo -n "Test 41: Candidato con identidad incorrecta persistente (fallo al vencer plazo)... "
+setup_dummy_env
+export MOCK_HEALTH_STATUS=200
+export MOCK_SERVED_RELEASE_ID="PERSISTENT_WRONG_ID"
+
+TEST_41_RET=0
+verify_process_identity "post-reload" "NEW_BUILD_ID_999" > "${TEST_SANDBOX}/test41.log" 2>&1 || TEST_41_RET=$?
+
+if [ "${TEST_41_RET}" -eq 1 ] && \
+   grep -q "Plazo de disponibilidad agotado (60s) durante post-reload" "${TEST_SANDBOX}/test41.log" && \
+   grep -q "Identidad de release servida en memoria viva ('PERSISTENT_WRONG_ID') no coincide con la esperada" "${TEST_SANDBOX}/test41.log"; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: ret=${TEST_41_RET}]"
+    cat "${TEST_SANDBOX}/test41.log"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 42: Rollback con arranque retrasado: 000 -> 000 -> 200: recuperación verificada
+# ------------------------------------------------------------------------------
+echo -n "Test 42: Rollback con arranque retrasado 000 -> 000 -> 200 (recuperación verificada)... "
+setup_dummy_env
+export MOCK_HEALTH_STATUS_SEQUENCE="000,000,200"
+export MOCK_HOME_STATUS_SEQUENCE="000,000,200"
+export MOCK_LOCAL_MANIFEST_STATUS_SEQUENCE="000,000,200"
+export MOCK_SERVED_RELEASE_ID="OLD_BUILD_ID_111"
+
+TEST_42_RET=0
+verify_service_recovery "OLD_BUILD_ID_111" > "${TEST_SANDBOX}/test42.log" 2>&1 || TEST_42_RET=$?
+
+if [ "${TEST_42_RET}" -eq 0 ] && \
+   [ "${SWAP_STATE}" = "ROLLBACK_DONE" ] && \
+   grep -q "Identidad de release en memoria viva confirmada (post-rollback): 'OLD_BUILD_ID_111'" "${TEST_SANDBOX}/test42.log"; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: ret=${TEST_42_RET}, state=${SWAP_STATE}]"
+    cat "${TEST_SANDBOX}/test42.log"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 43: Rollback con versión heredada con 404 previamente acreditado: recuperación con límite
+# ------------------------------------------------------------------------------
+echo -n "Test 43: Rollback con versión heredada (404 previamente acreditado en preflight)... "
+setup_dummy_env
+export LEGACY_HEALTH_LIMITATION_REGISTERED=true
+export MOCK_HEALTH_STATUS=404
+export MOCK_LOCAL_HTTP_STATUS=200
+export MOCK_LOCAL_MANIFEST_STATUS=200
+
+TEST_43_RET=0
+verify_service_recovery "OLD_BUILD_ID_111" > "${TEST_SANDBOX}/test43.log" 2>&1 || TEST_43_RET=$?
+
+if [ "${TEST_43_RET}" -eq 0 ] && \
+   [ "${SWAP_STATE}" = "ROLLBACK_DONE" ] && \
+   grep -q "LÍMITE DE VERIFICACIÓN DECLARADO" "${TEST_SANDBOX}/test43.log" && \
+   grep -q "limitación previamente acreditada en preflight" "${TEST_SANDBOX}/test43.log"; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: ret=${TEST_43_RET}, state=${SWAP_STATE}]"
+    cat "${TEST_SANDBOX}/test43.log"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 44: Rollback con 404 NO previamente acreditado en preflight: rechazo estricto (ROLLBACK_FAILED exit 2)
+# ------------------------------------------------------------------------------
+echo -n "Test 44: Rollback con 404 no acreditado previamente (rechazo -> ROLLBACK_FAILED exit 2)... "
+setup_dummy_env
+export LEGACY_HEALTH_LIMITATION_REGISTERED=false
+export MOCK_HEALTH_STATUS=404
+export MOCK_LOCAL_HTTP_STATUS=200
+export MOCK_LOCAL_MANIFEST_STATUS=200
+
+TEST_44_RET=0
+verify_service_recovery "OLD_BUILD_ID_111" > "${TEST_SANDBOX}/test44.log" 2>&1 || TEST_44_RET=$?
+
+if [ "${TEST_44_RET}" -eq 2 ] && \
+   [ "${SWAP_STATE}" = "ROLLBACK_FAILED" ] && \
+   grep -q "limitación heredada NO fue registrada en preflight" "${TEST_SANDBOX}/test44.log"; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: ret=${TEST_44_RET}, state=${SWAP_STATE}]"
+    cat "${TEST_SANDBOX}/test44.log"
+    exit 1
+fi
+
 echo "========================================================================"
-echo "TODAS LAS 37 PRUEBAS DE RESILIENCIA Y RECUPERACIÓN COMPLETADAS CON ÉXITO."
+echo "TODAS LAS 44 PRUEBAS DE RESILIENCIA Y RECUPERACIÓN COMPLETADAS CON ÉXITO."
 echo "========================================================================"

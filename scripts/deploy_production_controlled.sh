@@ -223,23 +223,96 @@ sys.exit(0)
 }
 
 # ------------------------------------------------------------------------------
-# VERIFICACIÓN DE IDENTIDAD DEL PROCESO SUPERVISOR
-# Acredita dominio -> proceso -> aplicación -> ruta (sin conteos globales)
+# DISPONIBILIDAD Y VERIFICACIÓN DE IDENTIDAD DEL PROCESO SUPERVISOR
+# Comprobación compartida con plazo máximo (60s), intervalo (2s) y timeouts HTTP
+# acotados al tiempo restante. Tolera transitorios durante recarga de PM2.
 # ------------------------------------------------------------------------------
-verify_process_identity() {
-    local phase_label="${1:-verificación}"
-    local expected_release_id="${2:-}"
+export LEGACY_HEALTH_LIMITATION_REGISTERED=false
 
-    # 1. Comprobación del supervisor PM2 y proceso OS
-    local user_pm2_status
-    user_pm2_status="$(run_pm2_cmd "${PM2_BIN} jlist 2>/dev/null" || true)"
-    if [ -z "${user_pm2_status}" ]; then
-        echo "ERROR CRÍTICO: PM2 no responde bajo el usuario ${EXPECTED_USER} durante ${phase_label}." >&2
+# Reloj y espera sustituibles (permiten pruebas instantáneas sin esperas reales de 60s)
+get_current_time_seconds() {
+    if [ -n "${MOCK_TIME_FUNCTION:-}" ]; then
+        ${MOCK_TIME_FUNCTION}
+    else
+        date +%s
+    fi
+}
+
+poll_sleep() {
+    local duration="${1:-2}"
+    if [ -n "${MOCK_SLEEP_FUNCTION:-}" ]; then
+        ${MOCK_SLEEP_FUNCTION} "${duration}"
+    else
+        sleep "${duration}"
+    fi
+}
+
+_sleep_before_retry() {
+    local interval="$1"
+    local dl="$2"
+    local current
+    current="$(get_current_time_seconds)"
+    local rem=$((dl - current))
+    if [ "${rem}" -le 0 ]; then
         return 1
     fi
+    local to_sleep="${interval}"
+    if [ "${rem}" -lt "${to_sleep}" ]; then
+        to_sleep="${rem}"
+    fi
+    poll_sleep "${to_sleep}"
+    return 0
+}
 
-    local process_info
-    process_info="$(${PYTHON_BIN} -c '
+wait_for_service_availability() {
+    local phase_label="${1:-post-reload}"
+    local expected_release_id="${2:-}"
+    local max_wait_seconds="${3:-${MAX_AVAILABILITY_WAIT_SECONDS:-60}}"
+    local poll_interval="${4:-${AVAILABILITY_POLL_INTERVAL:-2}}"
+
+    local start_time
+    start_time="$(get_current_time_seconds)"
+    local deadline=$((start_time + max_wait_seconds))
+
+    local last_diagnostic="Inicio de comprobación de disponibilidad"
+    local attempt=0
+
+    while true; do
+        attempt=$((attempt + 1))
+        local now
+        now="$(get_current_time_seconds)"
+        local remaining=$((deadline - now))
+        if [ "${remaining}" -le 0 ]; then
+            break
+        fi
+
+        # Timeouts HTTP acotados al tiempo restante en la ventana
+        local connect_timeout=2
+        local max_time=5
+        if [ "${remaining}" -lt "${connect_timeout}" ]; then
+            connect_timeout="${remaining}"
+        fi
+        if [ "${connect_timeout}" -lt 1 ]; then
+            connect_timeout=1
+        fi
+        if [ "${remaining}" -lt "${max_time}" ]; then
+            max_time="${remaining}"
+        fi
+        if [ "${max_time}" -lt 1 ]; then
+            max_time=1
+        fi
+
+        # 1. Comprobación del supervisor PM2 y proceso OS (no basta PM2 online)
+        local user_pm2_status
+        user_pm2_status="$(run_pm2_cmd "${PM2_BIN} jlist 2>/dev/null" || true)"
+        if [ -z "${user_pm2_status}" ]; then
+            last_diagnostic="PM2 no responde bajo el usuario ${EXPECTED_USER}"
+            _sleep_before_retry "${poll_interval}" "${deadline}" || break
+            continue
+        fi
+
+        local process_info
+        process_info="$(${PYTHON_BIN} -c '
 import sys, json
 try:
     apps = json.loads(sys.argv[1])
@@ -254,51 +327,247 @@ try:
         print(f"{status}|{cwd}|{pid}")
 except Exception as e:
     print(f"ERROR:{e}")
-' "${user_pm2_status}" "${EXPECTED_PM2_APP}")"
+' "${user_pm2_status}" "${EXPECTED_PM2_APP}" 2>/dev/null || echo "NOT_FOUND")"
 
-    if [ "${process_info}" = "NOT_FOUND" ]; then
-        echo "ERROR CRÍTICO: Proceso '${EXPECTED_PM2_APP}' no encontrado en PM2 para usuario ${EXPECTED_USER} (${phase_label})." >&2
-        return 1
-    elif [[ "${process_info}" == ERROR:* ]]; then
-        echo "ERROR CRÍTICO: Error procesando estado de PM2 (${process_info}) durante ${phase_label}." >&2
-        return 1
+        if [ "${process_info}" = "NOT_FOUND" ] || [[ "${process_info}" == ERROR:* ]]; then
+            last_diagnostic="Proceso '${EXPECTED_PM2_APP}' no encontrado o error en PM2 (${process_info})"
+            _sleep_before_retry "${poll_interval}" "${deadline}" || break
+            continue
+        fi
+
+        local app_status app_cwd app_pid
+        IFS='|' read -r app_status app_cwd app_pid <<< "${process_info}"
+
+        if [ "${app_status}" != "online" ]; then
+            last_diagnostic="Proceso '${EXPECTED_PM2_APP}' no está online (estado: '${app_status}')"
+            _sleep_before_retry "${poll_interval}" "${deadline}" || break
+            continue
+        fi
+
+        if [ -n "${APP_ROOT:-}" ] && [ "$(realpath "${app_cwd}" 2>/dev/null || echo "${app_cwd}")" != "$(realpath "${APP_ROOT}" 2>/dev/null || echo "${APP_ROOT}")" ]; then
+            last_diagnostic="cwd de '${EXPECTED_PM2_APP}' (${app_cwd}) no coincide con APP_ROOT (${APP_ROOT})"
+            _sleep_before_retry "${poll_interval}" "${deadline}" || break
+            continue
+        fi
+
+        # 2. Comprobación HTTP según fase
+        local health_url="http://127.0.0.1:${EXPECTED_PORT}/api/health"
+        local http_response
+        http_response="$(${CURL_BIN} -s -S -w $'\n%{http_code}' --max-time "${max_time}" --connect-timeout "${connect_timeout}" "${health_url}" 2>/dev/null || echo -e '\n000')"
+
+        local http_code
+        http_code="$(tail -n 1 <<< "${http_response}")"
+        local http_body
+        http_body="$(sed '$d' <<< "${http_response}")"
+
+        if [ "${phase_label}" != "post-rollback" ]; then
+            # Modo Candidato: exige HTTP 200, JSON válido e identidad esperada
+            if [ "${http_code}" != "200" ]; then
+                last_diagnostic="Endpoint /api/health devolvió código HTTP: ${http_code} (esperado 200)"
+                _sleep_before_retry "${poll_interval}" "${deadline}" || break
+                continue
+            fi
+
+            local parsed_json
+            parsed_json="$(${PYTHON_BIN} -c '
+import sys, json
+try:
+    data = json.loads(sys.argv[1])
+    if not isinstance(data, dict):
+        print("INVALID")
+    else:
+        rel = str(data.get("release_id", ""))
+        print(f"VALID|{rel}")
+except Exception:
+    print("INVALID")
+' "${http_body}" 2>/dev/null || echo "INVALID")"
+
+            if [[ "${parsed_json}" != "VALID|"* ]]; then
+                last_diagnostic="Respuesta de /api/health no es JSON válido: ${http_body}"
+                _sleep_before_retry "${poll_interval}" "${deadline}" || break
+                continue
+            fi
+
+            local served_release_id="${parsed_json#VALID|}"
+            if [ -n "${expected_release_id}" ] && [ "${expected_release_id}" != "UNKNOWN" ]; then
+                if [ "${served_release_id}" != "${expected_release_id}" ]; then
+                    last_diagnostic="Identidad de release servida en memoria viva ('${served_release_id}') no coincide con la esperada ('${expected_release_id}')"
+                    _sleep_before_retry "${poll_interval}" "${deadline}" || break
+                    continue
+                fi
+                echo "[OK] Identidad de release en memoria viva confirmada (${phase_label}): '${served_release_id}' coincide con la esperada tras ${attempt} intento(s)."
+            else
+                echo "[OK] Identidad de release en memoria viva consultada (${phase_label}): '${served_release_id}' tras ${attempt} intento(s)."
+            fi
+
+            echo "[OK] Identidad del proceso confirmada (${phase_label}): PID=${app_pid}, status=${app_status}, cwd=${app_cwd}, user=${EXPECTED_USER}."
+            return 0
+        else
+            # Modo Rollback:
+            # 1. Comprobar BUILD_ID restaurado en disco
+            local restored_build="UNKNOWN"
+            if [ -f "${APP_ROOT}/.next/BUILD_ID" ]; then
+                restored_build="$(cat "${APP_ROOT}/.next/BUILD_ID")"
+            fi
+            if [ -n "${expected_release_id}" ] && [ "${expected_release_id}" != "UNKNOWN" ] && [ "${restored_build}" != "${expected_release_id}" ]; then
+                echo "[DESASTRE OPERATIVO: BUILD_ID EN DISCO DIFIERE]" >&2
+                echo "  BUILD_ID en disco: ${restored_build} (esperado: ${expected_release_id})" >&2
+                return 2
+            fi
+
+            # 2. Comprobar respuesta de la página principal
+            local home_code
+            home_code="$(${CURL_BIN} -s -S -o /dev/null -w "%{http_code}" --max-time "${max_time}" --connect-timeout "${connect_timeout}" "http://127.0.0.1:${EXPECTED_PORT}/" 2>/dev/null || echo "000")"
+            if [ "${home_code}" != "200" ]; then
+                last_diagnostic="Página principal HTTP devolvió: ${home_code} (esperado 200)"
+                _sleep_before_retry "${poll_interval}" "${deadline}" || break
+                continue
+            fi
+
+            # 3. Comprobar manifest en memoria si BUILD_ID es conocido
+            if [ "${restored_build}" != "UNKNOWN" ]; then
+                local manifest_code
+                manifest_code="$(${CURL_BIN} -s -S -o /dev/null -w "%{http_code}" --max-time "${max_time}" --connect-timeout "${connect_timeout}" "http://127.0.0.1:${EXPECTED_PORT}/_next/static/${restored_build}/_buildManifest.js" 2>/dev/null || echo "000")"
+                if [ "${manifest_code}" != "200" ]; then
+                    last_diagnostic="Manifest _buildManifest.js devolvió: ${manifest_code} (esperado 200)"
+                    _sleep_before_retry "${poll_interval}" "${deadline}" || break
+                    continue
+                fi
+            fi
+
+            # 4. Comprobación de /api/health según preflight
+            if [ "${http_code}" = "404" ]; then
+                if [ "${LEGACY_HEALTH_LIMITATION_REGISTERED:-false}" = "true" ]; then
+                    echo "[LÍMITE DE VERIFICACIÓN DECLARADO] Endpoint /api/health devolvió HTTP 404 (${phase_label})."
+                    echo "  Versión anterior carece de introspección /api/health (limitación previamente acreditada en preflight)."
+                    echo "  BUILD_ID restituido en disco: ${restored_build}."
+                    echo "  Página principal local: 200 OK."
+                    echo "[OK] Proceso restaurado y verificado (${phase_label}): PID=${app_pid}, status=${app_status}, cwd=${app_cwd}, user=${EXPECTED_USER}."
+                    return 0
+                else
+                    last_diagnostic="Endpoint /api/health devolvió 404 pero la limitación heredada NO fue registrada en preflight"
+                    _sleep_before_retry "${poll_interval}" "${deadline}" || break
+                    continue
+                fi
+            elif [ "${http_code}" = "200" ]; then
+                local parsed_json
+                parsed_json="$(${PYTHON_BIN} -c '
+import sys, json
+try:
+    data = json.loads(sys.argv[1])
+    if not isinstance(data, dict):
+        print("INVALID")
+    else:
+        rel = str(data.get("release_id", ""))
+        print(f"VALID|{rel}")
+except Exception:
+    print("INVALID")
+' "${http_body}" 2>/dev/null || echo "INVALID")"
+
+                if [[ "${parsed_json}" != "VALID|"* ]]; then
+                    last_diagnostic="Cuerpo de /api/health en rollback no es JSON válido: ${http_body}"
+                    _sleep_before_retry "${poll_interval}" "${deadline}" || break
+                    continue
+                fi
+
+                local served_release_id="${parsed_json#VALID|}"
+                if [ -n "${expected_release_id}" ] && [ "${expected_release_id}" != "UNKNOWN" ]; then
+                    if [ "${served_release_id}" != "${expected_release_id}" ]; then
+                        last_diagnostic="Identidad de release servida en memoria viva ('${served_release_id}') difiere de la esperada ('${expected_release_id}')"
+                        _sleep_before_retry "${poll_interval}" "${deadline}" || break
+                        continue
+                    fi
+                fi
+
+                echo "[OK] Identidad de release en memoria viva confirmada (${phase_label}): '${served_release_id}' coincide con la esperada tras ${attempt} intento(s)."
+                echo "[OK] Proceso restaurado y verificado (${phase_label}): PID=${app_pid}, status=${app_status}, cwd=${app_cwd}, user=${EXPECTED_USER}."
+                return 0
+            else
+                last_diagnostic="Código HTTP en /api/health durante rollback: ${http_code}"
+                _sleep_before_retry "${poll_interval}" "${deadline}" || break
+                continue
+            fi
+        fi
+    done
+
+    echo "ERROR CRÍTICO: Plazo de disponibilidad agotado (${max_wait_seconds}s) durante ${phase_label} tras ${attempt} intento(s)." >&2
+    echo "  Último estado observado: ${last_diagnostic}." >&2
+    echo "ERROR CRÍTICO: ${last_diagnostic} durante ${phase_label}." >&2
+    if [ "${phase_label}" = "post-rollback" ]; then
+        return 2
     fi
+    return 1
+}
 
-    local app_status app_cwd app_pid
-    IFS='|' read -r app_status app_cwd app_pid <<< "${process_info}"
+verify_process_identity() {
+    local phase_label="${1:-verificación}"
+    local expected_release_id="${2:-}"
 
-    if [ "${app_status}" != "online" ]; then
-        echo "ERROR CRÍTICO: Proceso '${EXPECTED_PM2_APP}' no está online (estado: '${app_status}') durante ${phase_label}." >&2
-        return 1
-    fi
-
-    if [ -n "${APP_ROOT:-}" ] && [ "$(realpath "${app_cwd}")" != "$(realpath "${APP_ROOT}")" ]; then
-        echo "ERROR CRÍTICO: cwd de '${EXPECTED_PM2_APP}' (${app_cwd}) no coincide con APP_ROOT (${APP_ROOT}) durante ${phase_label}." >&2
-        return 1
-    fi
-
-    # 2. Comprobación de identidad de release servida en memoria vía HTTP (sin secretos)
-    local health_url="http://127.0.0.1:${EXPECTED_PORT}/api/health"
-    local http_response
-    http_response="$(${CURL_BIN} -s -S -w $'\n%{http_code}' --max-time 5 --connect-timeout 2 "${health_url}" 2>/dev/null || echo -e '\n000')"
-
-    local http_code
-    http_code="$(tail -n 1 <<< "${http_response}")"
-    local http_body
-    http_body="$(sed '$d' <<< "${http_response}")"
-
-    if [ "${http_code}" = "404" ]; then
-        echo "[LÍMITE DE VERIFICACIÓN DECLARADO] Endpoint /api/health devolvió HTTP 404 (${phase_label})."
-        echo "  Versión anterior en ejecución carece de introspección de release capturada al arrancar."
-        echo "  Límite: La versión cargada en memoria viva no puede ser auditada por HTTP para este release previo."
-        echo "  Identidad circunscrita a supervisor PM2 (PID=${app_pid}), usuario (${EXPECTED_USER}) y cwd (${app_cwd})."
-        if [ "${phase_label}" = "post-reload" ]; then
-            echo "ERROR CRÍTICO: El nuevo candidato desplegado DEBE exponer /api/health con su identidad de release. Devolvió 404." >&2
+    if [ "${phase_label}" = "preflight" ]; then
+        local user_pm2_status
+        user_pm2_status="$(run_pm2_cmd "${PM2_BIN} jlist 2>/dev/null" || true)"
+        if [ -z "${user_pm2_status}" ]; then
+            echo "ERROR CRÍTICO: PM2 no responde bajo el usuario ${EXPECTED_USER} durante preflight." >&2
             return 1
         fi
-    elif [ "${http_code}" = "200" ]; then
-        local served_release_id
-        served_release_id="$(${PYTHON_BIN} -c '
+
+        local process_info
+        process_info="$(${PYTHON_BIN} -c '
+import sys, json
+try:
+    apps = json.loads(sys.argv[1])
+    target = [a for a in apps if a.get("name") == sys.argv[2]]
+    if not target:
+        print("NOT_FOUND")
+    else:
+        env = target[0].get("pm2_env", {})
+        status = env.get("status", "unknown")
+        cwd = env.get("pm_cwd", "")
+        pid = target[0].get("pid", "none")
+        print(f"{status}|{cwd}|{pid}")
+except Exception as e:
+    print(f"ERROR:{e}")
+' "${user_pm2_status}" "${EXPECTED_PM2_APP}" 2>/dev/null || echo "NOT_FOUND")"
+
+        if [ "${process_info}" = "NOT_FOUND" ] || [[ "${process_info}" == ERROR:* ]]; then
+            echo "ERROR CRÍTICO: Proceso '${EXPECTED_PM2_APP}' no encontrado o error en PM2 durante preflight." >&2
+            return 1
+        fi
+
+        local app_status app_cwd app_pid
+        IFS='|' read -r app_status app_cwd app_pid <<< "${process_info}"
+
+        if [ "${app_status}" != "online" ]; then
+            echo "ERROR CRÍTICO: Proceso '${EXPECTED_PM2_APP}' no está online (estado: '${app_status}') durante preflight." >&2
+            return 1
+        fi
+
+        if [ -n "${APP_ROOT:-}" ] && [ "$(realpath "${app_cwd}" 2>/dev/null || echo "${app_cwd}")" != "$(realpath "${APP_ROOT}" 2>/dev/null || echo "${APP_ROOT}")" ]; then
+            echo "ERROR CRÍTICO: cwd de '${EXPECTED_PM2_APP}' (${app_cwd}) no coincide con APP_ROOT (${APP_ROOT}) durante preflight." >&2
+            return 1
+        fi
+
+        local health_url="http://127.0.0.1:${EXPECTED_PORT}/api/health"
+        local http_response
+        http_response="$(${CURL_BIN} -s -S -w $'\n%{http_code}' --max-time 5 --connect-timeout 2 "${health_url}" 2>/dev/null || echo -e '\n000')"
+
+        local http_code
+        http_code="$(tail -n 1 <<< "${http_response}")"
+        local http_body
+        http_body="$(sed '$d' <<< "${http_response}")"
+
+        if [ "${http_code}" = "404" ]; then
+            export LEGACY_HEALTH_LIMITATION_REGISTERED=true
+            echo "[LÍMITE DE VERIFICACIÓN DECLARADO] Endpoint /api/health devolvió HTTP 404 (preflight)."
+            echo "  Versión anterior en ejecución carece de introspección de release capturada al arrancar."
+            echo "  Límite: La versión cargada en memoria viva no puede ser auditada por HTTP para este release previo."
+            echo "  Identidad circunscrita a supervisor PM2 (PID=${app_pid}), usuario (${EXPECTED_USER}) y cwd (${app_cwd})."
+            echo "[OK] Identidad del proceso confirmada (preflight): PID=${app_pid}, status=${app_status}, cwd=${app_cwd}, user=${EXPECTED_USER}."
+            return 0
+        elif [ "${http_code}" = "200" ]; then
+            export LEGACY_HEALTH_LIMITATION_REGISTERED=false
+            local served_release_id
+            served_release_id="$(${PYTHON_BIN} -c '
 import sys, json
 try:
     data = json.loads(sys.argv[1])
@@ -306,23 +575,17 @@ try:
 except Exception:
     print("unknown")
 ' "${http_body}" 2>/dev/null || echo "unknown")"
-
-        if [ -n "${expected_release_id}" ] && [ "${expected_release_id}" != "UNKNOWN" ]; then
-            if [ "${served_release_id}" != "${expected_release_id}" ]; then
-                echo "ERROR CRÍTICO: Identidad de release servida en memoria viva ('${served_release_id}') no coincide con la esperada ('${expected_release_id}') durante ${phase_label}." >&2
-                return 1
-            fi
-            echo "[OK] Identidad de release en memoria viva confirmada (${phase_label}): '${served_release_id}' coincide con la esperada."
+            echo "[OK] Identidad de release en memoria viva consultada (preflight): '${served_release_id}'."
+            echo "[OK] Identidad del proceso confirmada (preflight): PID=${app_pid}, status=${app_status}, cwd=${app_cwd}, user=${EXPECTED_USER}."
+            return 0
         else
-            echo "[OK] Identidad de release en memoria viva consultada (${phase_label}): '${served_release_id}'."
+            echo "ERROR CRÍTICO: Fallo al consultar endpoint de salud por HTTP (código: ${http_code}) durante preflight." >&2
+            return 1
         fi
-    else
-        echo "ERROR CRÍTICO: Fallo al consultar identidad del servidor por HTTP (código: ${http_code}) durante ${phase_label}." >&2
-        return 1
     fi
 
-    echo "[OK] Identidad del proceso confirmada (${phase_label}): PID=${app_pid}, status=${app_status}, cwd=${app_cwd}, user=${EXPECTED_USER}."
-    return 0
+    # Para fases posteriores (post-reload, post-rollback, o pruebas)
+    wait_for_service_availability "${phase_label}" "${expected_release_id}"
 }
 
 # ------------------------------------------------------------------------------
@@ -336,7 +599,6 @@ export SWAP_STATE="INITIAL"
 ROLLBACK_EXECUTED=false
 ORIGINAL_EXIT_CODE=""
 
-# Registro de la identidad del build previo
 # Función común de verificación de recuperación del servicio (en disco y en memoria viva)
 verify_service_recovery() {
     local expected_build_id="$1"
@@ -348,57 +610,18 @@ verify_service_recovery() {
         return 2
     fi
 
-    # Comprobar identidad del proceso restaurado y versión cargada
-    if ! verify_process_identity "post-rollback" "${expected_build_id}"; then
+    # Comprobar disponibilidad e identidad del proceso restaurado con ventana de tolerancia
+    if ! wait_for_service_availability "post-rollback" "${expected_build_id}"; then
         echo "[DESASTRE OPERATIVO] Falló la verificación de identidad del proceso tras recarga en rollback." >&2
         SWAP_STATE="ROLLBACK_FAILED"
         return 2
     fi
 
-    # Verificación en disco
-    local restored_build="UNKNOWN"
-    if [ -f "${APP_ROOT}/.next/BUILD_ID" ]; then
-        restored_build="$(cat "${APP_ROOT}/.next/BUILD_ID")"
-    fi
-
-    # Verificación en memoria (HTTP local y manifest vivo)
-    local local_http="000"
-    local local_manifest="000"
-    local attempts=0
-    while [ "${attempts}" -lt 5 ]; do
-        attempts=$((attempts + 1))
-        local_http="$(${CURL_BIN} -s -S -o /dev/null -w "%{http_code}" --max-time 5 --connect-timeout 2 "http://127.0.0.1:${EXPECTED_PORT}/" 2>/dev/null || echo "000")"
-        if [ "${restored_build}" != "UNKNOWN" ]; then
-            local_manifest="$(${CURL_BIN} -s -S -o /dev/null -w "%{http_code}" --max-time 5 --connect-timeout 2 "http://127.0.0.1:${EXPECTED_PORT}/_next/static/${restored_build}/_buildManifest.js" 2>/dev/null || echo "000")"
-        else
-            local_manifest="200"
-        fi
-        if [ "${local_http}" = "200" ] && [ "${local_manifest}" = "200" ]; then
-            break
-        fi
-        sleep 1
-    done
-
-    if [ "${local_http}" = "200" ] && [ "${local_manifest}" = "200" ]; then
-        if [ "${expected_build_id}" != "UNKNOWN" ] && [ "${restored_build}" != "${expected_build_id}" ]; then
-            echo "[DESASTRE OPERATIVO: BUILD_ID EN DISCO DIFIERE]" >&2
-            SWAP_STATE="ROLLBACK_FAILED"
-            return 2
-        fi
-        echo "[ROLLBACK EXITOSO Y VERIFICADO]"
-        echo "  BUILD_ID restituido en disco: ${restored_build}"
-        echo "  Respuesta HTTP local: ${local_http} OK"
-        echo "  Manifest servido en memoria: ${local_manifest} OK"
-        SWAP_STATE="ROLLBACK_DONE"
-        return 0
-    else
-        echo "[DESASTRE OPERATIVO: ROLLBACK INCONCLUSO]" >&2
-        echo "  BUILD_ID: ${restored_build} (esperado ${expected_build_id})" >&2
-        echo "  HTTP Local: ${local_http} (esperado 200)" >&2
-        echo "  Manifest Local: ${local_manifest} (esperado 200)" >&2
-        SWAP_STATE="ROLLBACK_FAILED"
-        return 2
-    fi
+    echo "[ROLLBACK EXITOSO Y VERIFICADO]"
+    echo "  BUILD_ID restituido en disco: ${expected_build_id}"
+    echo "  Servicio recuperado y operativo en memoria viva."
+    SWAP_STATE="ROLLBACK_DONE"
+    return 0
 }
 
 execute_rollback() {
@@ -942,7 +1165,7 @@ EOF
             ORIGIN_STATUS_OK=true
             break
         fi
-        sleep 2
+        poll_sleep 2
     done
 
     if [ "${ORIGIN_STATUS_OK}" != true ]; then
