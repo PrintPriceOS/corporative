@@ -523,6 +523,42 @@ input, select, textarea {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+/* Preflight comparison tab buttons responsive level */
+.preflight-tabs-selector {
+  display: inline-flex;
+  gap: 0.5rem;
+  background: var(--bg-secondary);
+  padding: 0.35rem;
+  border-radius: 12px;
+  margin-top: 1.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.preflight-tab-btn {
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .preflight-tabs-selector {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .preflight-tab-btn {
+    width: 100% !important;
+    text-align: center !important;
+    font-size: 0.85rem !important;
+    padding: 0.75rem 0.5rem !important;
+    white-space: normal !important;
+  }
 }
 
 

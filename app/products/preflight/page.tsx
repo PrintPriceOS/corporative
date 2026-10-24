@@ -848,45 +848,25 @@ export default function PreflightProductPage() {
             </p>
 
             {/* Selector de Pestañas */}
-            <div
-              style={{
-                display: 'inline-flex',
-                gap: '0.5rem',
-                background: 'var(--bg-secondary)',
-                padding: '0.35rem',
-                borderRadius: '12px',
-                marginTop: '1.5rem',
-                border: '1px solid var(--border-color)'
-              }}
-            >
+            <div className="preflight-tabs-selector">
               <button
+                type="button"
+                className="preflight-tab-btn"
                 onClick={() => setActiveTab('individual')}
                 style={{
-                  padding: '0.65rem 1.25rem',
-                  borderRadius: '8px',
                   background: activeTab === 'individual' ? 'var(--accent-primary)' : 'transparent',
-                  color: activeTab === 'individual' ? '#fff' : 'var(--text-secondary)',
-                  fontWeight: 700,
-                  fontSize: '0.9rem',
-                  border: 'none',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease'
+                  color: activeTab === 'individual' ? '#fff' : 'var(--text-secondary)'
                 }}
               >
                 A. Particulares y Editoriales
               </button>
               <button
+                type="button"
+                className="preflight-tab-btn"
                 onClick={() => setActiveTab('pro')}
                 style={{
-                  padding: '0.65rem 1.25rem',
-                  borderRadius: '8px',
                   background: activeTab === 'pro' ? 'var(--accent-primary)' : 'transparent',
-                  color: activeTab === 'pro' ? '#fff' : 'var(--text-secondary)',
-                  fontWeight: 700,
-                  fontSize: '0.9rem',
-                  border: 'none',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease'
+                  color: activeTab === 'pro' ? '#fff' : 'var(--text-secondary)'
                 }}
               >
                 B. Flujos Profesionales e Imprentas
