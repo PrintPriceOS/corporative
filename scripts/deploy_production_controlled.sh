@@ -10,25 +10,28 @@ set -euo pipefail
 # ------------------------------------------------------------------------------
 # PARÁMETROS FIJOS ACREDITADOS POR INSPECCIÓN EMPÍRICA EN PLESK
 # ------------------------------------------------------------------------------
-export DOMAIN="printprice.pro"
-export CANDIDATE_SHA="9105225e22bb82f42302060d5bf1ef2d6216916b"
-export TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
+export DOMAIN="${DOMAIN:-printprice.pro}"
+# Versión de la aplicación a desplegar (permite override por primer argumento o variable de entorno)
+export CANDIDATE_SHA="${1:-${CANDIDATE_SHA:-0ff1d8a71d49b96928d35fe01674c156a9f68ff8}}"
+# Versión del script de despliegue (commit del repositorio donde reside el runbook)
+export SCRIPT_VERSION="${SCRIPT_VERSION:-$(git rev-parse HEAD 2>/dev/null || echo "0ff1d8a")}"
+export TIMESTAMP="${TIMESTAMP:-$(date +%Y%m%d_%H%M%S)}"
 
 # Variables de entorno operativo
-export VHOST_DIR="/var/www/vhosts/${DOMAIN}"
-export RELEASES_DIR="${VHOST_DIR}/releases"
-export STAGING_DIR="${RELEASES_DIR}/${CANDIDATE_SHA}_${TIMESTAMP}"
-export BACKUP_DIR="${VHOST_DIR}/backups/live_backup_${TIMESTAMP}"
-export BACKUP_META_DIR="${VHOST_DIR}/backups"
-export TEMP_SWAP_DIR="${VHOST_DIR}/httpdocs_prev_${TIMESTAMP}"
-export ERROR_LOG_PATH="/var/www/vhosts/system/${DOMAIN}/logs/proxy_error_log"
+export VHOST_DIR="${VHOST_DIR:-/var/www/vhosts/${DOMAIN}}"
+export RELEASES_DIR="${RELEASES_DIR:-${VHOST_DIR}/releases}"
+export STAGING_DIR="${STAGING_DIR:-${RELEASES_DIR}/${CANDIDATE_SHA}_${TIMESTAMP}}"
+export BACKUP_DIR="${BACKUP_DIR:-${VHOST_DIR}/backups/live_backup_${TIMESTAMP}}"
+export BACKUP_META_DIR="${BACKUP_META_DIR:-${VHOST_DIR}/backups}"
+export TEMP_SWAP_DIR="${TEMP_SWAP_DIR:-${VHOST_DIR}/httpdocs_prev_${TIMESTAMP}}"
+export ERROR_LOG_PATH="${ERROR_LOG_PATH:-/var/www/vhosts/system/${DOMAIN}/logs/proxy_error_log}"
 
 # Parámetros acreditados del supervisor en producción (PM2 bajo usuario del dominio)
-EXPECTED_USER="printprice.pro_a2w0fsu9yw9"
-EXPECTED_GROUP="psacln"
-EXPECTED_PM2_APP="printprice-web"
-EXPECTED_PORT="3010"
-EXPECTED_NODE_BIN="/usr/bin/node"
+EXPECTED_USER="${EXPECTED_USER:-printprice.pro_a2w0fsu9yw9}"
+EXPECTED_GROUP="${EXPECTED_GROUP:-psacln}"
+EXPECTED_PM2_APP="${EXPECTED_PM2_APP:-printprice-web}"
+EXPECTED_PORT="${EXPECTED_PORT:-3010}"
+EXPECTED_NODE_BIN="${EXPECTED_NODE_BIN:-/usr/bin/node}"
 
 # ------------------------------------------------------------------------------
 # MÁQUINA DE ESTADOS Y CONTROL DE ROLLBACK
@@ -100,21 +103,32 @@ execute_rollback() {
             fi
 
             # Restaurar propiedad de archivos
-            chown -R "${EXPECTED_USER}:${EXPECTED_GROUP}" "${APP_ROOT}"
+            chown -R "${EXPECTED_USER}:${EXPECTED_GROUP}" "${APP_ROOT}" 2>/dev/null || true
 
-            # Recargar supervisor acreditado
+            # Recargar supervisor acreditado (omitido en modo simulación de pruebas)
             echo "[ROLLBACK: ${SWAP_STATE}] Recargando supervisor PM2 para el usuario ${EXPECTED_USER}..."
-            su -s /bin/bash "${EXPECTED_USER}" -c "PORT=${EXPECTED_PORT} pm2 reload ${EXPECTED_PM2_APP} --update-env" || true
+            if [ "${SIMULATION_MODE:-false}" != "true" ]; then
+                su -s /bin/bash "${EXPECTED_USER}" -c "PORT=${EXPECTED_PORT} pm2 reload ${EXPECTED_PM2_APP} --update-env" || true
+                sleep 3
+            fi
 
             # Verificación de salud post-rollback
-            sleep 3
             local restored_build="UNKNOWN"
             if [ -f "${APP_ROOT}/.next/BUILD_ID" ]; then
                 restored_build="$(cat "${APP_ROOT}/.next/BUILD_ID")"
             fi
 
             local local_http="000"
-            local_http="$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 10 --connect-timeout 5 "http://127.0.0.1:${EXPECTED_PORT}/" || echo "000")"
+            if [ "${SIMULATION_MODE:-false}" = "true" ]; then
+                local_http="200"
+            else
+                if local_http="$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 10 --connect-timeout 5 "http://127.0.0.1:${EXPECTED_PORT}/" 2>/dev/null)"; then
+                    :
+                else
+                    local_http="000"
+                fi
+                local_http="${local_http:-000}"
+            fi
 
             if [ "${restored_build}" = "${LIVE_BUILD_ID}" ] && [ "${local_http}" = "200" ]; then
                 echo "[ROLLBACK EXITOSO Y VERIFICADO]"
@@ -174,15 +188,11 @@ exit_trap() {
     fi
 }
 
-trap 'signal_trap SIGINT $LINENO' INT
-trap 'signal_trap SIGTERM $LINENO' TERM
-trap 'err_trap $? $LINENO' ERR
-trap 'exit_trap $?' EXIT
-
-# ==============================================================================
-# FASE 0: PREFLIGHT Y ACREDITACIÓN EMPÍRICA DE RUTAS Y SUPERVISOR
-# ==============================================================================
-echo "[FASE 0] Verificando precondiciones y configuración observada en Plesk..."
+run_deployment() {
+    # ==============================================================================
+    # FASE 0: PREFLIGHT Y ACREDITACIÓN EMPÍRICA DE RUTAS Y SUPERVISOR
+    # ==============================================================================
+    echo "[FASE 0] Verificando precondiciones y configuración observada en Plesk..."
 
 # 0.1. Verificar que el script se ejecute con privilegios administrativos
 if [ "$(id -u)" -ne 0 ]; then
@@ -383,12 +393,14 @@ if [ ! -f "${STAGING_DIR}/.next/BUILD_ID" ]; then
     exit 1
 fi
 CANDIDATE_BUILD_ID="$(cat "${STAGING_DIR}/.next/BUILD_ID")"
+PARENT_SHA="$(git rev-parse HEAD^)"
 
-# Generar manifiesto formal del release candidato
+# Generar manifiesto formal del release candidato vinculando versión de app y del script
 cat <<EOF > "${STAGING_DIR}/RELEASE_MANIFEST.json"
 {
-  "commit_sha": "${CANDIDATE_SHA}",
-  "parent_sha": "4b0d4344106aa063f4269f962b49eda0ff9f6876",
+  "application_candidate_sha": "${CURRENT_CHECKOUT}",
+  "application_parent_sha": "${PARENT_SHA}",
+  "deployment_script_sha": "${SCRIPT_VERSION}",
   "build_id": "${CANDIDATE_BUILD_ID}",
   "generated_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
   "package_lock_sha256": "$(sha256sum package-lock.json | awk '{print $1}')",
@@ -446,11 +458,13 @@ echo "[FASE 6] Ejecutando validación multicapa post-activación..."
 TRIGGER_ROLLBACK=false
 ROLLBACK_REASON=""
 
-# 6.1. Comprobación de salud en el origen local (http://127.0.0.1:3010) con reintentos
+# 6.1. Comprobación de salud en el proceso en memoria viva (http://127.0.0.1:3010)
+# Acredita que el proceso vivo en puerto 3010 sirve el candidato y no solo HTTP 200 genérico.
 LOCAL_ORIGIN_OK=false
 for attempt in 1 2 3 4 5; do
     LOCAL_STATUS="$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 10 --connect-timeout 5 "http://127.0.0.1:${EXPECTED_PORT}/" || echo "000")"
-    if [ "${LOCAL_STATUS}" = "200" ]; then
+    MANIFEST_STATUS="$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 10 --connect-timeout 5 "http://127.0.0.1:${EXPECTED_PORT}/_next/static/${CANDIDATE_BUILD_ID}/_buildManifest.js" || echo "000")"
+    if [ "${LOCAL_STATUS}" = "200" ] && [ "${MANIFEST_STATUS}" = "200" ]; then
         LOCAL_ORIGIN_OK=true
         break
     fi
@@ -458,9 +472,19 @@ for attempt in 1 2 3 4 5; do
 done
 
 if [ "${LOCAL_ORIGIN_OK}" != true ]; then
-    echo "FALLO: Origen local (127.0.0.1:${EXPECTED_PORT}) devolvió HTTP ${LOCAL_STATUS} (se esperaba 200)." >&2
+    echo "FALLO CRÍTICO: El proceso en puerto ${EXPECTED_PORT} no sirve el BUILD_ID del candidato (${CANDIDATE_BUILD_ID}) en memoria viva." >&2
+    echo "  HTTP Base: ${LOCAL_STATUS:-000} (esperado 200)" >&2
+    echo "  Manifest (${CANDIDATE_BUILD_ID}): ${MANIFEST_STATUS:-000} (esperado 200)" >&2
     TRIGGER_ROLLBACK=true
-    ROLLBACK_REASON="Origen local devolvió HTTP ${LOCAL_STATUS}"
+    ROLLBACK_REASON="Proceso en memoria no sirve BUILD_ID ${CANDIDATE_BUILD_ID}"
+fi
+
+# Validar que el origen local sirve la copia del candidato
+LOCAL_BUDGET="$(curl -s -S --max-time 10 "http://127.0.0.1:${EXPECTED_PORT}/products/budget" || echo "")"
+if ! grep -F "CALCULA PRESUPUESTOS DE IMPRESIÓN EN SEGUNDOS" <<< "${LOCAL_BUDGET}" >/dev/null; then
+    echo "FALLO CRÍTICO: El origen local (127.0.0.1:${EXPECTED_PORT}) no sirve el claim CR-01 del candidato." >&2
+    TRIGGER_ROLLBACK=true
+    ROLLBACK_REASON="Origen local no sirve copia del candidato"
 fi
 
 # 6.2. Capa A: Smoke Test SSR sobre la URL pública con TLS estricto
@@ -559,12 +583,14 @@ if [ "${TRIGGER_ROLLBACK}" = true ]; then
 elif [ "${CACHE_PENDING}" = true ]; then
     SWAP_STATE="PENDING_CACHE_INVALIDATION"
     echo "========================================================================"
-    echo "[DESPLIEGUE EN ORIGEN EXITOSO / CACHÉ PÚBLICA PENDIENTE]"
+    echo "[ESTADO: PENDING_CACHE_INVALIDATION — NO VALIDADO COMO DESPLIEGUE COMPLETO]"
+    echo "ADVERTENCIA CRÍTICA: PENDING_CACHE_INVALIDATION NUNCA DEBE INTERPRETARSE"
+    echo "COMO UN DESPLIEGUE COMPLETAMENTE VALIDADO."
     echo "Estado final: SWAP_STATE=${SWAP_STATE}"
-    echo "Origen local (127.0.0.1:${EXPECTED_PORT}) responde HTTP 200 con el nuevo artefacto."
-    echo "El proxy Nginx retiene la caché anterior ('argphxugf31qsk')."
-    echo "Prohibido ejecutar purgas globales en el servidor compartido."
-    echo "Acción: Aguardar la expiración del TTL de Nginx o invalidar de forma acotada."
+    echo "Origen local (127.0.0.1:${EXPECTED_PORT}) responde HTTP 200 y sirve BUILD_ID=${CANDIDATE_BUILD_ID}."
+    echo "Sin embargo, el reverse proxy público retiene el ETag histórico ('argphxugf31qsk')."
+    echo "El release permanece en estado PENDIENTE DE INVALIDACIÓN DE CACHÉ."
+    echo "Prohibido ejecutar purgas globales destructivas en el servidor compartido."
     echo "========================================================================"
     exit 0
 else
@@ -575,4 +601,14 @@ else
     echo "Artefacto activo verificado: BUILD_ID=${CANDIDATE_BUILD_ID}"
     echo "El directorio de resguardo ${TEMP_SWAP_DIR} se conserva para observación."
     echo "========================================================================"
+fi
+}
+
+# Entrada principal: solo ejecuta si no está siendo sourced por la suite de pruebas
+if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
+    trap 'signal_trap SIGINT $LINENO' INT
+    trap 'signal_trap SIGTERM $LINENO' TERM
+    trap 'err_trap $? $LINENO' ERR
+    trap 'exit_trap $?' EXIT
+    run_deployment "$@"
 fi
