@@ -102,6 +102,14 @@ export MOCK_SLEEP_FUNCTION=mock_sleep
 cat << 'EOF' > "${TEST_SANDBOX}/bin/pm2"
 #!/usr/bin/env bash
 SANDBOX_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+if [ -n "${MOCK_PM2_LATENCY:-}" ]; then
+    dur="${MOCK_PM2_LATENCY}"
+    cur=1000
+    if [ -f "${SANDBOX_DIR}/simulated_time.txt" ]; then
+        read -r cur < "${SANDBOX_DIR}/simulated_time.txt" || cur=1000
+    fi
+    echo $((cur + dur)) > "${SANDBOX_DIR}/simulated_time.txt"
+fi
 if [ "${MOCK_PM2_FAILS:-false}" = "true" ]; then
     exit 1
 fi
@@ -191,6 +199,35 @@ while [ $# -gt 0 ]; do
             ;;
     esac
 done
+
+if [ -n "${MOCK_CURL_LATENCY_SEQUENCE:-}" ]; then
+    clat_seq_file="${SANDBOX_DIR:-${TEST_SANDBOX}}/curl_lat_seq.txt"
+    if [ ! -f "${clat_seq_file}" ]; then
+        echo "${MOCK_CURL_LATENCY_SEQUENCE}" > "${clat_seq_file}"
+    fi
+    read -r current_clat_seq < "${clat_seq_file}" || current_clat_seq=""
+    if [ -n "${current_clat_seq}" ]; then
+        c_lat="${current_clat_seq%%,*}"
+        c_lrest="${current_clat_seq#*,}"
+        if [ "${c_lrest}" = "${current_clat_seq}" ]; then
+            echo "${c_lat}" > "${clat_seq_file}"
+        else
+            echo "${c_lrest}" > "${clat_seq_file}"
+        fi
+        cur=1000
+        if [ -f "${SANDBOX_DIR:-${TEST_SANDBOX}}/simulated_time.txt" ]; then
+            read -r cur < "${SANDBOX_DIR:-${TEST_SANDBOX}}/simulated_time.txt" || cur=1000
+        fi
+        echo $((cur + c_lat)) > "${SANDBOX_DIR:-${TEST_SANDBOX}}/simulated_time.txt"
+    fi
+elif [ -n "${MOCK_CURL_LATENCY:-}" ]; then
+    dur="${MOCK_CURL_LATENCY}"
+    cur=1000
+    if [ -f "${SANDBOX_DIR:-${TEST_SANDBOX}}/simulated_time.txt" ]; then
+        read -r cur < "${SANDBOX_DIR:-${TEST_SANDBOX}}/simulated_time.txt" || cur=1000
+    fi
+    echo $((cur + dur)) > "${SANDBOX_DIR:-${TEST_SANDBOX}}/simulated_time.txt"
+fi
 
 if [[ "${URL}" == */api/health ]]; then
     status="${MOCK_HEALTH_STATUS:-200}"
@@ -438,11 +475,14 @@ EOF
 
     # Reset variables mock
     echo 1000 > "${TEST_SANDBOX}/simulated_time.txt"
-    rm -f "${TEST_SANDBOX}/health_seq.txt" "${TEST_SANDBOX}/served_id_seq.txt" "${TEST_SANDBOX}/home_seq.txt" "${TEST_SANDBOX}/man_seq.txt"
+    rm -f "${TEST_SANDBOX}/health_seq.txt" "${TEST_SANDBOX}/served_id_seq.txt" "${TEST_SANDBOX}/home_seq.txt" "${TEST_SANDBOX}/man_seq.txt" "${TEST_SANDBOX}/curl_lat_seq.txt"
     export MOCK_HEALTH_STATUS_SEQUENCE=""
     export MOCK_SERVED_RELEASE_ID_SEQUENCE=""
     export MOCK_HOME_STATUS_SEQUENCE=""
     export MOCK_LOCAL_MANIFEST_STATUS_SEQUENCE=""
+    export MOCK_PM2_LATENCY=""
+    export MOCK_CURL_LATENCY=""
+    export MOCK_CURL_LATENCY_SEQUENCE=""
     export LEGACY_HEALTH_LIMITATION_REGISTERED=false
     export MOCK_PM2_FAILS=false
     export MOCK_PM2_RELOAD_FAILS=false
@@ -1355,6 +1395,58 @@ else
     exit 1
 fi
 
+# ------------------------------------------------------------------------------
+# TEST 45: Presupuesto compartido de 60s: PM2 y varias peticiones consumen tiempo acumulado dentro del plazo
+# ------------------------------------------------------------------------------
+echo -n "Test 45: PM2 y varias peticiones consumen tiempo dentro del presupuesto compartido de 60s... "
+setup_dummy_env
+export MOCK_PM2_LATENCY=10
+export MOCK_HEALTH_STATUS_SEQUENCE="000,000,200"
+export MOCK_CURL_LATENCY_SEQUENCE="10,10,5"
+export MOCK_SERVED_RELEASE_ID="NEW_BUILD_ID_999"
+
+TEST_45_RET=0
+verify_process_identity "post-reload" "NEW_BUILD_ID_999" > "${TEST_SANDBOX}/test45.log" 2>&1 || TEST_45_RET=$?
+
+FINAL_TIME_45="$(mock_clock)"
+if [ "${TEST_45_RET}" -eq 0 ] && \
+   [ "${FINAL_TIME_45}" -eq 1059 ] && \
+   grep -q "Identidad de release en memoria viva confirmada (post-reload): 'NEW_BUILD_ID_999' coincide con la esperada tras 3 intento(s)" "${TEST_SANDBOX}/test45.log"; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: ret=${TEST_45_RET}, final_time=${FINAL_TIME_45}]"
+    cat "${TEST_SANDBOX}/test45.log"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 46: Presupuesto compartido de 60s: PM2 y peticiones exceden plazo -> aborta sin iniciar otra petición ni declarar éxito
+# ------------------------------------------------------------------------------
+echo -n "Test 46: PM2 y peticiones exceden presupuesto compartido -> aborta sin iniciar petición ni declarar éxito... "
+setup_dummy_env
+export MOCK_PM2_LATENCY=15
+export MOCK_HEALTH_STATUS_SEQUENCE="000,000,200"
+export MOCK_CURL_LATENCY_SEQUENCE="15,15,5"
+export MOCK_SERVED_RELEASE_ID="NEW_BUILD_ID_999"
+
+TEST_46_RET=0
+verify_process_identity "post-reload" "NEW_BUILD_ID_999" > "${TEST_SANDBOX}/test46.log" 2>&1 || TEST_46_RET=$?
+
+FINAL_TIME_46="$(mock_clock)"
+UNCONSUMED_SEQ="$(cat "${TEST_SANDBOX}/health_seq.txt" 2>/dev/null || echo "")"
+
+if [ "${TEST_46_RET}" -eq 1 ] && \
+   [ "${FINAL_TIME_46}" -eq 1062 ] && \
+   [ "${UNCONSUMED_SEQ}" = "200" ] && \
+   grep -q "Plazo de disponibilidad agotado (60s) durante post-reload tras 2 intento(s)" "${TEST_SANDBOX}/test46.log" && \
+   ! grep -q "Identidad de release en memoria viva confirmada" "${TEST_SANDBOX}/test46.log"; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: ret=${TEST_46_RET}, final_time=${FINAL_TIME_46}, unconsumed=${UNCONSUMED_SEQ}]"
+    cat "${TEST_SANDBOX}/test46.log"
+    exit 1
+fi
+
 echo "========================================================================"
-echo "TODAS LAS 44 PRUEBAS DE RESILIENCIA Y RECUPERACIÓN COMPLETADAS CON ÉXITO."
+echo "TODAS LAS 46 PRUEBAS DE RESILIENCIA Y RECUPERACIÓN COMPLETADAS CON ÉXITO."
 echo "========================================================================"

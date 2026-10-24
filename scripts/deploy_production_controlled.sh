@@ -58,10 +58,17 @@ export PM2_HOME="${PM2_HOME:-/var/www/vhosts/${DOMAIN}/.pm2}"
 # Helper de ejecución controlada para comandos PM2: siempre bajo EXPECTED_USER y con PM2_HOME explícito
 run_pm2_cmd() {
     local cmd="$1"
+    local timeout_secs="${2:-}"
+    local prefix=""
+    if [ -n "${timeout_secs}" ] && [ "${timeout_secs}" -gt 0 ]; then
+        if command -v timeout >/dev/null 2>&1; then
+            prefix="timeout ${timeout_secs} "
+        fi
+    fi
     if [ "$(id -u)" -eq 0 ]; then
-        su -s /bin/bash "${EXPECTED_USER}" -c "export PM2_HOME='${PM2_HOME}'; ${cmd}"
+        su -s /bin/bash "${EXPECTED_USER}" -c "export PM2_HOME='${PM2_HOME}'; ${prefix}${cmd}"
     else
-        PM2_HOME="${PM2_HOME}" eval "${cmd}"
+        PM2_HOME="${PM2_HOME}" eval "${prefix}${cmd}"
     fi
 }
 
@@ -286,25 +293,23 @@ wait_for_service_availability() {
             break
         fi
 
-        # Timeouts HTTP acotados al tiempo restante en la ventana
-        local connect_timeout=2
-        local max_time=5
-        if [ "${remaining}" -lt "${connect_timeout}" ]; then
-            connect_timeout="${remaining}"
-        fi
-        if [ "${connect_timeout}" -lt 1 ]; then
-            connect_timeout=1
-        fi
-        if [ "${remaining}" -lt "${max_time}" ]; then
-            max_time="${remaining}"
-        fi
-        if [ "${max_time}" -lt 1 ]; then
-            max_time=1
+        # 1. Comprobación del supervisor PM2 y proceso OS (limitado al tiempo restante)
+        now="$(get_current_time_seconds)"
+        remaining=$((deadline - now))
+        if [ "${remaining}" -le 0 ]; then
+            break
         fi
 
-        # 1. Comprobación del supervisor PM2 y proceso OS (no basta PM2 online)
+        local pm2_timeout=5
+        if [ "${remaining}" -lt "${pm2_timeout}" ]; then
+            pm2_timeout="${remaining}"
+        fi
+        if [ "${pm2_timeout}" -lt 1 ]; then
+            pm2_timeout=1
+        fi
+
         local user_pm2_status
-        user_pm2_status="$(run_pm2_cmd "${PM2_BIN} jlist 2>/dev/null" || true)"
+        user_pm2_status="$(run_pm2_cmd "${PM2_BIN} jlist 2>/dev/null" "${pm2_timeout}" || true)"
         if [ -z "${user_pm2_status}" ]; then
             last_diagnostic="PM2 no responde bajo el usuario ${EXPECTED_USER}"
             _sleep_before_retry "${poll_interval}" "${deadline}" || break
@@ -350,7 +355,28 @@ except Exception as e:
             continue
         fi
 
-        # 2. Comprobación HTTP según fase
+        # 2. Comprobación HTTP /api/health (recalculando tiempo restante inmediatamente antes)
+        now="$(get_current_time_seconds)"
+        remaining=$((deadline - now))
+        if [ "${remaining}" -le 0 ]; then
+            break
+        fi
+
+        local connect_timeout=2
+        local max_time=5
+        if [ "${remaining}" -lt "${connect_timeout}" ]; then
+            connect_timeout="${remaining}"
+        fi
+        if [ "${connect_timeout}" -lt 1 ]; then
+            connect_timeout=1
+        fi
+        if [ "${remaining}" -lt "${max_time}" ]; then
+            max_time="${remaining}"
+        fi
+        if [ "${max_time}" -lt 1 ]; then
+            max_time=1
+        fi
+
         local health_url="http://127.0.0.1:${EXPECTED_PORT}/api/health"
         local http_response
         http_response="$(${CURL_BIN} -s -S -w $'\n%{http_code}' --max-time "${max_time}" --connect-timeout "${connect_timeout}" "${health_url}" 2>/dev/null || echo -e '\n000')"
@@ -395,6 +421,15 @@ except Exception:
                     _sleep_before_retry "${poll_interval}" "${deadline}" || break
                     continue
                 fi
+            fi
+
+            # No declarar éxito si el plazo venció durante las consultas
+            now="$(get_current_time_seconds)"
+            if [ "${now}" -gt "${deadline}" ]; then
+                break
+            fi
+
+            if [ -n "${expected_release_id}" ] && [ "${expected_release_id}" != "UNKNOWN" ]; then
                 echo "[OK] Identidad de release en memoria viva confirmada (${phase_label}): '${served_release_id}' coincide con la esperada tras ${attempt} intento(s)."
             else
                 echo "[OK] Identidad de release en memoria viva consultada (${phase_label}): '${served_release_id}' tras ${attempt} intento(s)."
@@ -415,7 +450,28 @@ except Exception:
                 return 2
             fi
 
-            # 2. Comprobar respuesta de la página principal
+            # 2. Comprobar respuesta de la página principal (recalculando tiempo restante inmediatamente antes)
+            now="$(get_current_time_seconds)"
+            remaining=$((deadline - now))
+            if [ "${remaining}" -le 0 ]; then
+                break
+            fi
+
+            connect_timeout=2
+            max_time=5
+            if [ "${remaining}" -lt "${connect_timeout}" ]; then
+                connect_timeout="${remaining}"
+            fi
+            if [ "${connect_timeout}" -lt 1 ]; then
+                connect_timeout=1
+            fi
+            if [ "${remaining}" -lt "${max_time}" ]; then
+                max_time="${remaining}"
+            fi
+            if [ "${max_time}" -lt 1 ]; then
+                max_time=1
+            fi
+
             local home_code
             home_code="$(${CURL_BIN} -s -S -o /dev/null -w "%{http_code}" --max-time "${max_time}" --connect-timeout "${connect_timeout}" "http://127.0.0.1:${EXPECTED_PORT}/" 2>/dev/null || echo "000")"
             if [ "${home_code}" != "200" ]; then
@@ -424,8 +480,29 @@ except Exception:
                 continue
             fi
 
-            # 3. Comprobar manifest en memoria si BUILD_ID es conocido
+            # 3. Comprobar manifest en memoria si BUILD_ID es conocido (recalculando tiempo restante inmediatamente antes)
             if [ "${restored_build}" != "UNKNOWN" ]; then
+                now="$(get_current_time_seconds)"
+                remaining=$((deadline - now))
+                if [ "${remaining}" -le 0 ]; then
+                    break
+                fi
+
+                connect_timeout=2
+                max_time=5
+                if [ "${remaining}" -lt "${connect_timeout}" ]; then
+                    connect_timeout="${remaining}"
+                fi
+                if [ "${connect_timeout}" -lt 1 ]; then
+                    connect_timeout=1
+                fi
+                if [ "${remaining}" -lt "${max_time}" ]; then
+                    max_time="${remaining}"
+                fi
+                if [ "${max_time}" -lt 1 ]; then
+                    max_time=1
+                fi
+
                 local manifest_code
                 manifest_code="$(${CURL_BIN} -s -S -o /dev/null -w "%{http_code}" --max-time "${max_time}" --connect-timeout "${connect_timeout}" "http://127.0.0.1:${EXPECTED_PORT}/_next/static/${restored_build}/_buildManifest.js" 2>/dev/null || echo "000")"
                 if [ "${manifest_code}" != "200" ]; then
@@ -438,6 +515,12 @@ except Exception:
             # 4. Comprobación de /api/health según preflight
             if [ "${http_code}" = "404" ]; then
                 if [ "${LEGACY_HEALTH_LIMITATION_REGISTERED:-false}" = "true" ]; then
+                    # No declarar éxito si el plazo venció durante las consultas
+                    now="$(get_current_time_seconds)"
+                    if [ "${now}" -gt "${deadline}" ]; then
+                        break
+                    fi
+
                     echo "[LÍMITE DE VERIFICACIÓN DECLARADO] Endpoint /api/health devolvió HTTP 404 (${phase_label})."
                     echo "  Versión anterior carece de introspección /api/health (limitación previamente acreditada en preflight)."
                     echo "  BUILD_ID restituido en disco: ${restored_build}."
@@ -477,6 +560,12 @@ except Exception:
                         _sleep_before_retry "${poll_interval}" "${deadline}" || break
                         continue
                     fi
+                fi
+
+                # No declarar éxito si el plazo venció durante las consultas
+                now="$(get_current_time_seconds)"
+                if [ "${now}" -gt "${deadline}" ]; then
+                    break
                 fi
 
                 echo "[OK] Identidad de release en memoria viva confirmada (${phase_label}): '${served_release_id}' coincide con la esperada tras ${attempt} intento(s)."
