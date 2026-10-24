@@ -25,8 +25,8 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 FIXTURE_REL_PATH = "scripts/fixtures/audit_signatures.json"
 FIXTURE_FULL_PATH = REPO_ROOT / FIXTURE_REL_PATH
 
-EXCLUDE_DIRS = {".git", "node_modules", ".next"}
-BINARY_EXTENSIONS = {".png", ".ico", ".jpg", ".jpeg", ".woff", ".woff2", ".ttf", ".webp", ".pdf", ".zip"}
+EXCLUDE_DIRS = {".git", "node_modules", ".next", "__pycache__"}
+BINARY_EXTENSIONS = {".png", ".ico", ".jpg", ".jpeg", ".woff", ".woff2", ".ttf", ".webp", ".pdf", ".zip", ".pyc", ".pyo"}
 
 def load_signatures():
     if not FIXTURE_FULL_PATH.is_file():
