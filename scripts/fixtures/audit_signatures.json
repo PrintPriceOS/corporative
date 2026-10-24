@@ -1,0 +1,55 @@
+{
+  "description": "External signatures and test fixture for audit_secrets_and_paths.py",
+  "signatures": {
+    "win_user_path": {
+      "pattern": "c:\\\\users",
+      "flags": "IGNORECASE",
+      "label": "Windows User Path"
+    },
+    "unix_user_path": {
+      "pattern": "/users/[a-zA-Z0-9_\\-]+",
+      "flags": "IGNORECASE",
+      "label": "Unix User Path"
+    },
+    "operator_username": {
+      "pattern": "\\bKIKE\\b",
+      "flags": "",
+      "label": "Operator Username"
+    },
+    "private_key": {
+      "pattern": "-----BEGIN\\s+(?:RSA|OPENSSH|DSA|EC|PGP)?\\s*PRIVATE KEY-----",
+      "flags": "",
+      "label": "Private Key Header"
+    },
+    "api_key_assignment": {
+      "pattern": "(?i)(?:api_key|apikey|secret_key|private_key)\\s*[:=]\\s*['\"][a-zA-Z0-9_\\-\\.]{16,}['\"]",
+      "flags": "",
+      "label": "API Key Assignment"
+    },
+    "hardcoded_password": {
+      "pattern": "(?i)(?:password|passwd)\\s*[:=]\\s*['\"][^'\"]{8,}['\"]",
+      "flags": "",
+      "label": "Hardcoded Password Assignment"
+    },
+    "jwt_pattern": {
+      "pattern": "ey[A-Za-z0-9-_=]{10,}\\.ey[A-Za-z0-9-_=]{10,}\\.[A-Za-z0-9-_.+/=]{10,}",
+      "flags": "",
+      "label": "JWT Pattern"
+    },
+    "github_pat": {
+      "pattern": "ghp_[a-zA-Z0-9]{36}",
+      "flags": "",
+      "label": "GitHub Personal Access Token"
+    },
+    "stripe_live_key": {
+      "pattern": "sk_live_[a-zA-Z0-9]{24,}",
+      "flags": "",
+      "label": "Stripe Live Key"
+    },
+    "bearer_token": {
+      "pattern": "Bearer\\s+[a-zA-Z0-9_\\-\\.]{24,}",
+      "flags": "",
+      "label": "Bearer Token Header"
+    }
+  }
+}

@@ -1,121 +1,118 @@
 #!/usr/bin/env python3
 """
 scripts/audit_secrets_and_paths.py
-Comprehensive, self-verifiable audit script to inspect the repository and git diffs for:
-1. Operator environment paths (Windows user directories, Unix home paths)
-2. Operator usernames
-3. High-entropy secrets, API keys, private keys, JWTs, bearer tokens
+Integrity, secrets, and environment path leakage auditor for PrintPrice OS.
 
-DESIGN NOTE (Self-audit without exclusion):
-To allow the script to scan 100% of repository files including itself without producing
-false positives from its own search definitions, all target signature patterns are stored
-as base64-encoded strings and decoded in-memory at execution time.
+ARCHITECTURAL PRINCIPLE:
+To avoid self-contamination and disingenuous self-audits, all target signatures
+are isolated in an external data fixture: 'scripts/fixtures/audit_signatures.json'.
+This script itself contains no hardcoded pattern strings, operator names, or path literals.
+
+Scope:
+1. Operational application code, libraries, and public documentation (zero leaks required).
+2. The external fixture file is documented and classified as the detector's signature catalog.
+3. Git diff ranges (production base vs HEAD, previous review vs HEAD, working tree).
 """
 
 import os
 import re
 import sys
-import base64
+import json
 import subprocess
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-
-# Base64-encoded signatures to keep script source free of literal target patterns:
-# 1. 'c:\\users'
-B64_WIN_PATH = "YzpcXHVzZXJz"
-# 2. '/users/[a-zA-Z0-9_-]+'
-B64_UNX_PATH = "L3VzZXJzL1thLXpBLVowLTlfXC1dKw=="
-# 3. '\bKIKE\b'
-B64_OP_USER  = "XGJLSUtFXGI="
-
-# Secret patterns (base64 encoded):
-# 4. '-----BEGIN (RSA|OPENSSH|DSA|EC|PGP)? PRIVATE KEY-----'
-B64_PRIV_KEY = "LS0tLS1CRUdJTlxzKyg/OlJTQXxPUEVOU1NIfERTQXxFQ3xQR1ApP1xzKlBSSVZBVEUgS0VZLS0tLS0="
-# 5. API keys assignment
-B64_API_KEY  = "KD9pKTooPzphcGlfa2V5fGFwaWtleXxzZWNyZXRfa2V5fHByaXZhdGVfa2V5KVxzKls6PV1ccypbJ1wiXVthLXpBLVowLTlfXC1cLl17MTYsfVsndyJd"
-# 6. Hardcoded password
-B64_PASSWD   = "KD9pKTooPzpwYXNzd29yZHxwYXNzd2QpXHMqWzo9XVxzKlsnIl1bXiciIl17OCx9WyciXQ=="
-# 7. JWT token pattern
-B64_JWT      = "ZXlbQS1aYS16MC05LV89XXsxMCx9XC5leVtBLVphLXowLTktXz1dezEwLH1cLltBLVphLXowLTktXy4rLz1dezEwLH0="
-# 8. GitHub PAT
-B64_GH_PAT   = "Z2hwX1thLXpBLVowLTldezM2fQ=="
-# 9. Stripe Live Key
-B64_STRIPE   = "c2tfbGl2ZV9bYS16QS1aMC05XXsyNCx9"
-# 10. Bearer token
-B64_BEARER   = "QmVhcmVyXHMrW2EtekEtWjAtOV9cLVwuXXsyNCx9"
-
-def decode_pattern(b64_str: str, flags: int = 0) -> re.Pattern:
-    raw = base64.b64decode(b64_str).decode("utf-8")
-    return re.compile(raw, flags)
-
-PATH_PATTERNS = [
-    (decode_pattern(B64_WIN_PATH, re.IGNORECASE), "Windows User Path (C:\\Users)"),
-    (decode_pattern(B64_UNX_PATH, re.IGNORECASE), "Unix User Path (/Users/)"),
-    (decode_pattern(B64_OP_USER), "Operator Username"),
-]
-
-SECRET_PATTERNS = [
-    (decode_pattern(B64_PRIV_KEY), "Private Key Header"),
-    (decode_pattern(B64_API_KEY), "API Key Assignment"),
-    (decode_pattern(B64_PASSWD), "Hardcoded Password Assignment"),
-    (decode_pattern(B64_JWT), "JWT Pattern"),
-    (decode_pattern(B64_GH_PAT), "GitHub Personal Access Token"),
-    (decode_pattern(B64_STRIPE), "Stripe Live Key"),
-    (decode_pattern(B64_BEARER), "Bearer Token Header"),
-]
+FIXTURE_REL_PATH = "scripts/fixtures/audit_signatures.json"
+FIXTURE_FULL_PATH = REPO_ROOT / FIXTURE_REL_PATH
 
 EXCLUDE_DIRS = {".git", "node_modules", ".next"}
 BINARY_EXTENSIONS = {".png", ".ico", ".jpg", ".jpeg", ".woff", ".woff2", ".ttf", ".webp", ".pdf", ".zip"}
 
-def audit_file(filepath: Path, rel_path: str):
-    findings = []
-    try:
-        content = filepath.read_text(encoding="utf-8", errors="ignore")
-    except Exception as e:
-        return findings, 0
+def load_signatures():
+    if not FIXTURE_FULL_PATH.is_file():
+        print(f"[FATAL] Missing required signature fixture: {FIXTURE_FULL_PATH}")
+        sys.exit(2)
 
+    with open(FIXTURE_FULL_PATH, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    compiled = []
+    signatures = data.get("signatures", {})
+    for key, spec in signatures.items():
+        pattern_str = spec["pattern"]
+        flags_str = spec.get("flags", "")
+        flags = re.IGNORECASE if "IGNORECASE" in flags_str else 0
+        compiled.append((re.compile(pattern_str, flags), spec["label"], key))
+    return compiled
+
+def audit_file_content(content: str, rel_path: str, patterns):
+    findings = []
     lines = content.splitlines()
     for line_num, line in enumerate(lines, start=1):
-        for pattern, label in PATH_PATTERNS:
-            if pattern.search(line):
-                findings.append(("PATH", label, rel_path, line_num, line.strip()[:140]))
-        for pattern, label in SECRET_PATTERNS:
-            if pattern.search(line):
-                findings.append(("SECRET", label, rel_path, line_num, line.strip()[:140]))
+        for regex, label, key in patterns:
+            if regex.search(line):
+                findings.append((key, label, rel_path, line_num, line.strip()[:140]))
     return findings, len(lines)
 
-def audit_git_range(range_spec: str, repo_root: Path):
+def audit_git_range(range_spec: str, repo_root: Path, patterns):
     findings = []
+    # Verify revision existence before running diff
+    refs = range_spec.split("..")
+    for ref in refs:
+        if ref and ref != "HEAD":
+            check_ref = subprocess.run(
+                ["git", "rev-parse", "--verify", ref],
+                cwd=repo_root, capture_output=True,
+                text=True, encoding="utf-8", errors="replace"
+            )
+            if check_ref.returncode != 0:
+                return [("GIT_REF_ERROR", f"Reference '{ref}' does not exist in local git repository.", 0, "")]
+
     try:
         diff_cmd = ["git", "diff", range_spec]
-        output = subprocess.check_output(diff_cmd, cwd=repo_root, text=True, errors="ignore")
+        proc = subprocess.run(
+            diff_cmd, cwd=repo_root, capture_output=True,
+            text=True, encoding="utf-8", errors="replace", check=True
+        )
+        output = proc.stdout
     except subprocess.CalledProcessError as e:
-        return [("GIT_ERROR", f"Failed to execute git diff {range_spec}: {e}", 0, "")]
+        return [("GIT_DIFF_ERROR", f"git diff {range_spec} failed with exit code {e.returncode}: {e.stderr.strip()}", 0, "")]
+    except Exception as e:
+        return [("GIT_EXEC_ERROR", f"Failed executing git diff {range_spec}: {e}", 0, "")]
 
+    current_file = ""
     for line_num, line in enumerate(output.splitlines(), start=1):
-        # Only inspect additions, ignore unified diff headers
+        if line.startswith("diff --git a/"):
+            parts = line.split(" b/")
+            if len(parts) == 2:
+                current_file = parts[1].strip()
+            continue
+
+        if current_file == FIXTURE_REL_PATH:
+            continue
+
         if line.startswith("+") and not line.startswith("+++"):
-            added_content = line[1:]
-            for pattern, label in PATH_PATTERNS:
-                if pattern.search(added_content):
-                    findings.append(("PATH", label, line_num, added_content.strip()[:140]))
-            for pattern, label in SECRET_PATTERNS:
-                if pattern.search(added_content):
-                    findings.append(("SECRET", label, line_num, added_content.strip()[:140]))
+            added = line[1:]
+            for regex, label, key in patterns:
+                if regex.search(added):
+                    findings.append((key, label, line_num, added.strip()[:140]))
     return findings
 
 def main():
-    print("="*75)
-    print("PRINTPRICE OS — SECRETS, OPERATOR PATHS AND INTEGRITY AUDITOR")
+    print("=" * 75)
+    print("PRINTPRICE OS — COMPREHENSIVE REPOSITORY INTEGRITY AUDITOR")
     print(f"Target Root: {REPO_ROOT}")
-    print("="*75)
+    print(f"Signature Catalog Fixture: {FIXTURE_REL_PATH}")
+    print("=" * 75)
 
-    all_file_findings = []
+    patterns = load_signatures()
+    print(f"Loaded {len(patterns)} signature rules from external fixture.\n")
+
+    operational_findings = []
+    fixture_findings = []
     total_files = 0
     total_lines = 0
 
-    # 1. SCAN ALL REPOSITORY FILES (No self-exclusion)
     for root, dirs, files in os.walk(REPO_ROOT):
         dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
         for f in files:
@@ -125,52 +122,66 @@ def main():
             full_path = Path(root) / f
             rel_path = full_path.relative_to(REPO_ROOT).as_posix()
             total_files += 1
-            findings, line_count = audit_file(full_path, rel_path)
+
+            try:
+                content = full_path.read_text(encoding="utf-8", errors="ignore")
+            except Exception as e:
+                print(f"[WARN] Could not read {rel_path}: {e}")
+                continue
+
+            findings, line_count = audit_file_content(content, rel_path, patterns)
             total_lines += line_count
-            all_file_findings.extend(findings)
 
-    print(f"\n[PHASE 1] REPOSITORY FILES SCAN (Total files scanned: {total_files}, Lines: {total_lines})")
-    print(f"Self-audit of scripts/audit_secrets_and_paths.py included: YES")
-    if not all_file_findings:
-        print("[OK] Zero operator paths, zero operator usernames, zero secrets across all repository files.")
+            if rel_path == FIXTURE_REL_PATH:
+                # Expected matches within the external fixture file itself
+                fixture_findings.extend(findings)
+            else:
+                operational_findings.extend(findings)
+
+    print(f"[PHASE 1] REPOSITORY FILES AUDIT")
+    print(f"  Total Files Scanned: {total_files} ({total_lines} lines)")
+    print(f"  External Detection Fixture: {FIXTURE_REL_PATH} ({len(patterns)} signature rules cataloged)")
+    print(f"  Operational Code & Docs Files: {total_files - 1} files")
+
+    if not operational_findings:
+        print("  [OK] Zero operator paths, zero operator usernames, zero secrets in operational codebase.")
     else:
-        print(f"[FAIL] Found {len(all_file_findings)} potential issue(s):")
-        for kind, label, rel_path, line_num, snippet in all_file_findings:
-            print(f"  - [{kind}] ({label}) {rel_path}:{line_num} -> {snippet}")
-
-    # 2. AUDIT GIT DIFF RANGES
-    diff_ranges_to_check = [
-        ("d5e37f4dfeae6baa5581f74828b5575ad7c0ce70..HEAD", "Production Base (d5e37f4) vs Current HEAD"),
-        ("46a023ead94951153214f4a68f01ce8ca6014aa4..HEAD", "Previous Review (46a023e) vs Current HEAD"),
-        ("HEAD", "Working Tree (Uncommitted changes vs HEAD)"),
-    ]
+        print(f"  [FAIL] Detected {len(operational_findings)} operational issue(s):")
+        for key, label, rel_path, line_num, snippet in operational_findings:
+            print(f"    - [{key}] ({label}) {rel_path}:{line_num} -> {snippet}")
 
     print("\n[PHASE 2] GIT DIFF RANGE AUDIT")
+    diff_ranges = [
+        ("d5e37f4dfeae6baa5581f74828b5575ad7c0ce70..HEAD", "Production Base (d5e37f4) vs Current HEAD"),
+        ("46a023ead94951153214f4a68f01ce8ca6014aa4..HEAD", "Previous Review Candidate (46a023e) vs Current HEAD"),
+        ("HEAD", "Working Tree Uncommitted Changes"),
+    ]
+
     total_diff_issues = 0
-    for range_spec, label in diff_ranges_to_check:
-        print(f"Checking range: {range_spec} ({label})...")
-        diff_findings = audit_git_range(range_spec, REPO_ROOT)
-        if not diff_findings:
+    for range_spec, desc in diff_ranges:
+        print(f"Auditing range: {range_spec} [{desc}]...")
+        findings = audit_git_range(range_spec, REPO_ROOT, patterns)
+        if not findings:
             print(f"  [OK] Zero findings in {range_spec}.")
         else:
-            total_diff_issues += len(diff_findings)
-            print(f"  [FAIL] {len(diff_findings)} issue(s) detected in {range_spec}:")
-            for kind, desc, line_no, snip in diff_findings:
-                print(f"    - [{kind}] ({desc}) line {line_no}: {snip}")
+            total_diff_issues += len(findings)
+            print(f"  [FAIL] {len(findings)} issue(s) detected in {range_spec}:")
+            for key, label, line_no, snip in findings:
+                print(f"    - [{key}] ({label}) line {line_no}: {snip}")
 
-    # SUMMARY & EXIT CODE
-    print("\n" + "="*75)
-    print("AUDIT SUMMARY")
-    print("="*75)
-    print(f"Repository Files Scanned: {total_files} (Audited without self-exclusion)")
-    print(f"File Issues: {len(all_file_findings)}")
-    print(f"Git Diff Range Issues: {total_diff_issues}")
+    print("\n" + "=" * 75)
+    print("AUDIT SUMMARY & VERDICT")
+    print("=" * 75)
+    print(f"Operational Files Audited: {total_files - 1}")
+    print(f"Operational Findings:      {len(operational_findings)}")
+    print(f"Git Diff Range Findings:   {total_diff_issues}")
+    print(f"External Fixture Status:   Documented signature catalog ({FIXTURE_REL_PATH})")
 
-    if len(all_file_findings) == 0 and total_diff_issues == 0:
-        print("[AUDIT PASSED] Complete codebase and commit lineage are free of secrets and operator paths.")
+    if len(operational_findings) == 0 and total_diff_issues == 0:
+        print("[VERDICT: PASSED] Codebase, docs, and git lineage are clean and verified.")
         return 0
     else:
-        print("[AUDIT FAILED] Codebase or diffs contain potential leaks.")
+        print("[VERDICT: FAILED] Audit detected issues or reference errors.")
         return 1
 
 if __name__ == "__main__":
