@@ -90,7 +90,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
                         fontWeight: 800,
                         ...({} as any)
                     }}>{label}</h4>
-                    <h2 style={{ fontSize: 'clamp(2.5rem, 8vw, 3.5rem)', letterSpacing: '-0.04em', lineHeight: 1.1, marginBottom: '1.5rem', color: 'var(--text-primary)', ...({} as any) }}>
+                    <h2 style={{ fontSize: 'clamp(1.85rem, 6.5vw, 3.5rem)', letterSpacing: '-0.04em', lineHeight: 1.15, marginBottom: '1.25rem', color: 'var(--text-primary)', textWrap: 'balance', overflowWrap: 'break-word', ...({} as any) }}>
                         {title}
                     </h2>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', maxWidth: '500px', marginInline: 'auto' }}>

@@ -18,8 +18,8 @@ export default function PreflightProductPage() {
       label: 'PRINTPRICE PREFLIGHT / MOTOR FORENSE DE ARTES FINALES',
       title: 'Comprueba tu PDF antes de imprimir.',
       subheadline: 'Identifica problemas técnicos, entiende qué debes revisar y prepara tu archivo para el siguiente paso.',
-      ctaPrimary: 'Comprobar mi PDF →',
-      ctaSecondary: 'Ver informe de ejemplo',
+      ctaPrimary: 'Comprobar mi PDF ➔',
+      ctaSecondary: 'Informe de ejemplo ➔',
       slogan: ['PRICE IT.', 'FIX IT.', 'PRINT IT.'],
       badge: 'PROCESAMIENTO DETERMINISTA EN LA NUBE',
 
@@ -144,8 +144,8 @@ export default function PreflightProductPage() {
       label: 'PRINTPRICE PREFLIGHT / FORENSIC PREPRESS ENGINE',
       title: 'Check your PDF before printing.',
       subheadline: 'Identify technical issues, understand what needs review, and prepare your file for the next step.',
-      ctaPrimary: 'Check my PDF →',
-      ctaSecondary: 'View sample report',
+      ctaPrimary: 'Check my PDF ➔',
+      ctaSecondary: 'Sample report ➔',
       slogan: ['PRICE IT.', 'FIX IT.', 'PRINT IT.'],
       badge: 'DETERMINISTIC CLOUD PROCESSING',
 
@@ -264,8 +264,8 @@ export default function PreflightProductPage() {
       label: 'PRINTPRICE PREFLIGHT / FORENSISCHE DRUCKDATENPRÜFUNG',
       title: 'Prüfen Sie Ihr PDF vor dem Druck.',
       subheadline: 'Erkennen Sie technische Mängel, verstehen Sie erforderliche Korrekturen und bereiten Sie Ihre Datei optimal vor.',
-      ctaPrimary: 'Mein PDF prüfen →',
-      ctaSecondary: 'Beispielbericht ansehen',
+      ctaPrimary: 'Mein PDF prüfen ➔',
+      ctaSecondary: 'Beispielbericht ➔',
       slogan: ['PRICE IT.', 'FIX IT.', 'PRINT IT.'],
       badge: 'DETERMINISTISCHE CLOUD-ANALYSE',
 

@@ -16,8 +16,8 @@ export default function PrintProductPage() {
       label: 'PRINT IT / MARKETPLACE DE FABRICACIÓN GRÁFICA',
       title: 'Encuentra la imprenta adecuada y encarga tu producción.',
       subheadline: 'Enrutamiento algorítmico hacia talleres de la red según maquinaria real, pliegos técnicos y especificaciones verificadas.',
-      ctaPrimary: 'Configurar y encargar en Budget →',
-      ctaSecondary: 'Cómo funciona el Matchmaker',
+      ctaPrimary: 'Configurar proyecto ➔',
+      ctaSecondary: 'Cómo funciona ➔',
       slogan: ['PRICE IT.', 'FIX IT.', 'PRINT IT.'],
 
       howItWorksTitle: 'El flujo de contratación en el Marketplace',
@@ -92,8 +92,8 @@ export default function PrintProductPage() {
       label: 'PRINT IT / PRODUCTION MANUFACTURING MARKETPLACE',
       title: 'Find the right printhouse and commission your production.',
       subheadline: 'Algorithmic routing to certified industrial printing plants based on real machine profiles, sheet sizes, and audited specifications.',
-      ctaPrimary: 'Configure and order on Budget →',
-      ctaSecondary: 'How Matchmaker works',
+      ctaPrimary: 'Configure project ➔',
+      ctaSecondary: 'How it works ➔',
       slogan: ['PRICE IT.', 'FIX IT.', 'PRINT IT.'],
 
       howItWorksTitle: 'How the Marketplace works',
@@ -168,8 +168,8 @@ export default function PrintProductPage() {
       label: 'PRINT IT / DRUCKAUFTRAGS-MARKETPLACE',
       title: 'Finden Sie die passende Druckerei und starten Sie die Produktion.',
       subheadline: 'Algorithmische Vermittlung an zertifizierte Druckbetriebe basierend auf realen Maschinenprofilen, Bogenformaten und verifizierten Vorgaben.',
-      ctaPrimary: 'Projekt in Budget konfigurieren →',
-      ctaSecondary: 'Wie Matchmaker funktioniert',
+      ctaPrimary: 'Projekt konfigurieren ➔',
+      ctaSecondary: 'So funktioniert\'s ➔',
       slogan: ['PRICE IT.', 'FIX IT.', 'PRINT IT.'],
 
       howItWorksTitle: 'Auftragsabwicklung im Marketplace',

@@ -68,8 +68,8 @@ export const ProductSurfaceGrid: React.FC<ProductSurfaceGridProps> = ({
         }
       `}</style>
       <div className="product-grid-header">
-        <h2 style={{ fontSize: 'clamp(2.5rem, 6vw, 3.5rem)', letterSpacing: '-0.05em', marginBottom: '1.5rem', ...({} as any) }}>{title}</h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: 'clamp(1rem, 2.8vw, 1.3rem)', maxWidth: '800px', lineHeight: 1.5, ...({} as any) }}>
+        <h2 style={{ fontSize: 'clamp(2rem, 5.5vw, 3.5rem)', letterSpacing: '-0.04em', lineHeight: 1.15, marginBottom: '1.25rem', textWrap: 'balance', overflowWrap: 'break-word', ...({} as any) }}>{title}</h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 'clamp(0.95rem, 2.5vw, 1.25rem)', maxWidth: '800px', lineHeight: 1.55, textWrap: 'pretty', ...({} as any) }}>
           {subtitle || "Coordinated surfaces engineered for unified orchestration and intent-driven activation."}
         </p>
       </div>

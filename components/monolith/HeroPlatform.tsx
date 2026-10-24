@@ -91,6 +91,59 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
         }}
       >
         <style>{`
+          .hero-label {
+            color: #dc0000;
+            font-size: clamp(0.7rem, 2vw, 0.8rem);
+            text-transform: uppercase;
+            letter-spacing: 0.15rem;
+            margin-bottom: clamp(1.25rem, 3.5vw, 2rem);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            line-height: 1.4;
+          }
+          .hero-title {
+            font-size: clamp(2.4rem, 6.5vw, 4.5rem);
+            line-height: 1.08;
+            letter-spacing: -0.04em;
+            margin-bottom: clamp(1rem, 3vw, 1.5rem);
+            color: #e5e2e3;
+            text-wrap: balance;
+            overflow-wrap: break-word;
+            word-break: normal;
+            hyphens: auto;
+          }
+          .hero-slogan-headline {
+            font-size: clamp(2.5rem, 9.5vw, 5.5rem);
+            line-height: 0.95;
+            letter-spacing: -0.06em;
+            margin-bottom: clamp(1rem, 3vw, 1.5rem);
+            color: #e5e2e3;
+            display: flex;
+            flex-direction: column;
+          }
+          .hero-subheadline {
+            font-size: clamp(1.05rem, 3.5vw, 1.4rem);
+            color: #8d8d91;
+            line-height: 1.5;
+            margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+            max-width: 650px;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            text-wrap: pretty;
+            overflow-wrap: break-word;
+          }
+          .hero-slogan-inline {
+            display: flex;
+            gap: 1.25rem;
+            margin-bottom: clamp(2rem, 5vw, 3.5rem);
+            font-size: clamp(0.8rem, 2.5vw, 1.15rem);
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            color: #8d8d91;
+            flex-wrap: wrap;
+          }
           .hero-actions {
             display: flex;
             flex-direction: column;
@@ -104,15 +157,74 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
             align-items: center;
             flex-wrap: wrap;
           }
+          .hero-btn {
+            white-space: nowrap;
+            padding: 0.95rem 1.75rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            box-sizing: border-box;
+          }
           @media (max-width: 768px) {
+            .hero-label {
+              letter-spacing: 0.08rem !important;
+              font-size: 0.68rem !important;
+              flex-wrap: wrap;
+              gap: 0.5rem;
+            }
+            .hero-title {
+              font-size: clamp(1.75rem, 7vw, 2.4rem) !important;
+              line-height: 1.18 !important;
+              letter-spacing: -0.025em !important;
+              margin-bottom: 1.25rem !important;
+            }
+            .hero-slogan-headline {
+              font-size: clamp(2.2rem, 9vw, 3.5rem) !important;
+              line-height: 0.98 !important;
+              letter-spacing: -0.04em !important;
+            }
+            .hero-subheadline {
+              font-size: clamp(0.95rem, 3.8vw, 1.15rem) !important;
+              line-height: 1.55 !important;
+              margin-bottom: 2rem !important;
+            }
+            .hero-slogan-inline {
+              gap: 0.75rem 1.25rem !important;
+              margin-bottom: 2rem !important;
+            }
             .hero-actions {
               width: 100%;
             }
             .hero-buttons-row {
               flex-direction: column;
               width: 100%;
+              gap: 0.75rem;
             }
-            .hero-buttons-row > * { width: 100%; }
+            .hero-buttons-row > * {
+              width: 100%;
+            }
+            .hero-btn {
+              width: 100% !important;
+              padding: 0.85rem 1.25rem !important;
+              font-size: clamp(0.85rem, 3.8vw, 0.95rem) !important;
+              white-space: nowrap !important;
+              text-align: center !important;
+              justify-content: center !important;
+              min-height: 46px !important;
+            }
+          }
+          @media (max-width: 480px) {
+            .hero-title {
+              font-size: clamp(1.55rem, 7.5vw, 2rem) !important;
+              line-height: 1.2 !important;
+              letter-spacing: -0.02em !important;
+            }
+            .hero-slogan-headline {
+              font-size: clamp(1.95rem, 9vw, 2.6rem) !important;
+              line-height: 1 !important;
+              letter-spacing: -0.03em !important;
+            }
           }
         `}</style>
         
@@ -127,44 +239,17 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
           ...({} as any) 
         }}>
           <div>
-            <span className="technical-text" style={{ 
-            color: '#dc0000', // Hardcoded Red Accent
-            fontSize: 'clamp(0.7rem, 2vw, 0.8rem)', 
-            textTransform: 'uppercase', 
-            letterSpacing: '0.2rem',
-            marginBottom: 'clamp(1.5rem, 4vw, 2rem)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.75rem',
-            fontWeight: 700,
-            ...({} as any)
-          }}>
-            <Logo size={24} />
-            {label}
-          </span>
+            <span className="hero-label technical-text">
+              <Logo size={24} />
+              {label}
+            </span>
 
           {title ? (
-            <h1 style={{ 
-              fontSize: 'clamp(2.5rem, 10vw, 5.5rem)', 
-              lineHeight: 0.95, 
-              letterSpacing: '-0.06em',
-              marginBottom: 'clamp(1rem, 3vw, 1.5rem)',
-              color: '#e5e2e3',
-              ...({} as any)
-            }}>
+            <h1 className="hero-title">
               {title}
             </h1>
           ) : slogan && isHeadlineSlogan && (
-            <h1 style={{ 
-              fontSize: 'clamp(2.5rem, 10vw, 5.5rem)', 
-              lineHeight: 0.95, 
-              letterSpacing: '-0.06em',
-              marginBottom: 'clamp(1rem, 3vw, 1.5rem)',
-              color: '#e5e2e3',
-              display: 'flex',
-              flexDirection: 'column',
-              ...({} as any)
-            }}>
+            <h1 className="hero-slogan-headline">
               {slogan.map((line, i) => (
                 <span 
                   key={i} 
@@ -182,15 +267,7 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
           )}
 
           {slogan && !isHeadlineSlogan && (
-            <div className="technical-text" style={{ 
-                display: 'flex', 
-                gap: '1.5rem', 
-                marginBottom: 'clamp(2.5rem, 6vw, 4rem)',
-                fontSize: 'clamp(0.8rem, 2.5vw, 1.2rem)',
-                fontWeight: 900,
-                letterSpacing: '0.1em',
-                color: '#8d8d91'
-            }}>
+            <div className="hero-slogan-inline technical-text">
                 {slogan.map((line, i) => (
                     <span key={i} style={{ color: line.includes('FIX') ? '#dc0000' : 'inherit' }}>{line}</span>
                 ))}
@@ -198,18 +275,7 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
           )}
 
           {subheadline && (
-            <div style={{ 
-              fontSize: 'clamp(1.1rem, 4vw, 1.5rem)', 
-              color: '#8d8d91', // Hardcoded Gray
-              lineHeight: 1.4, 
-              marginBottom: 'clamp(3rem, 8vw, 5rem)', 
-              maxWidth: '650px',
-              fontWeight: 500,
-              letterSpacing: '-0.01em',
-              opacity: 1,
-              transition: 'opacity 1s ease',
-              ...({} as any)
-            }}>
+            <div className="hero-subheadline">
               {subheadline}
             </div>
           )}
@@ -234,14 +300,7 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
                 >
                   <Button 
                     size="lg" 
-                    style={{ 
-                      whiteSpace: 'nowrap',
-                      padding: '0.95rem 1.75rem',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      minHeight: '48px',
-                    }}
+                    className="hero-btn"
                   >
                     {primaryAction.label}
                   </Button>
@@ -260,15 +319,10 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
                   <Button 
                     variant="secondary" 
                     size="lg" 
+                    className="hero-btn"
                     style={{ 
-                      whiteSpace: 'nowrap', 
                       color: '#e5e2e3', 
                       borderColor: 'rgba(255,255,255,0.15)',
-                      padding: '0.95rem 1.75rem',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      minHeight: '48px',
                     }}
                   >
                     {secondaryAction.label}

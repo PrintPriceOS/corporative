@@ -83,6 +83,52 @@ export const ActionCTA: React.FC<ActionCTAProps> = ({
 
       {/* 3. CONTENT LAYER (Centered Technical Hub) */}
       <div style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: '800px', textAlign: 'center', pointerEvents: 'none' }}>
+        <style>{`
+          .action-cta-title {
+            font-size: clamp(2.2rem, 7vw, 4.5rem);
+            letter-spacing: -0.04em;
+            margin-bottom: 1.5rem;
+            color: #e5e2e3;
+            font-family: var(--font-display);
+            line-height: 1.1;
+            text-wrap: balance;
+            overflow-wrap: break-word;
+          }
+          .action-cta-buttons {
+            display: flex;
+            gap: 1.25rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+          }
+          .action-cta-btn {
+            min-width: 240px;
+            white-space: nowrap;
+          }
+          @media (max-width: 768px) {
+            .action-cta-title {
+              font-size: clamp(1.75rem, 6.5vw, 2.4rem) !important;
+              line-height: 1.2 !important;
+            }
+            .action-cta-buttons {
+              flex-direction: column !important;
+              align-items: stretch !important;
+              gap: 0.75rem !important;
+            }
+            .action-cta-buttons > * {
+              width: 100% !important;
+            }
+            .action-cta-btn {
+              width: 100% !important;
+              min-width: 0 !important;
+              padding: 0.85rem 1.25rem !important;
+              font-size: clamp(0.85rem, 3.8vw, 0.95rem) !important;
+              white-space: nowrap !important;
+              justify-content: center !important;
+            }
+          }
+        `}</style>
+
         <Container>
           <div
             className="technical-text"
@@ -90,7 +136,7 @@ export const ActionCTA: React.FC<ActionCTAProps> = ({
               color: '#dc0000',
               fontSize: '0.75rem',
               letterSpacing: '0.3em',
-              marginBottom: '2.5rem',
+              marginBottom: '2rem',
               fontWeight: 800,
               textTransform: 'uppercase'
             }}
@@ -98,43 +144,38 @@ export const ActionCTA: React.FC<ActionCTAProps> = ({
             {slogan}
           </div>
 
-          <h2 style={{
-            fontSize: 'clamp(2.5rem, 8vw, 4.5rem)',
-            letterSpacing: '-0.05em',
-            marginBottom: '1.5rem',
-            color: '#e5e2e3',
-            fontFamily: 'var(--font-display)',
-            lineHeight: 1.05
-          }}>
+          <h2 className="action-cta-title">
             {title}
           </h2>
 
           <p style={{
             color: '#8d8d91',
-            fontSize: 'clamp(1rem, 3vw, 1.4rem)',
-            marginBottom: '4.5rem',
+            fontSize: 'clamp(1rem, 3vw, 1.3rem)',
+            marginBottom: '3.5rem',
             maxWidth: '750px',
             marginInline: 'auto',
-            lineHeight: 1.5,
-            fontWeight: 400
+            lineHeight: 1.55,
+            fontWeight: 400,
+            textWrap: 'pretty'
           }}>
             {description}
           </p>
 
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem', pointerEvents: 'auto' }}>
-            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem', pointerEvents: 'auto', width: '100%' }}>
+            <div className="action-cta-buttons">
               <Link
                 href={buttonHref}
+                style={{ textDecoration: 'none' }}
                 onClick={() => trackEvent(events.DECISION_MADE, { action: trackingAction })}
               >
-                <Button size="lg" style={{ minWidth: '280px' }}>
+                <Button size="lg" className="action-cta-btn">
                   {buttonLabel}
                 </Button>
               </Link>
 
               {secondaryButtonLabel && secondaryButtonHref && (
-                <Link href={secondaryButtonHref}>
-                  <Button variant="ghost" size="lg" style={{ minWidth: '220px', borderColor: 'rgba(255,255,255,0.1)' }}>
+                <Link href={secondaryButtonHref} style={{ textDecoration: 'none' }}>
+                  <Button variant="ghost" size="lg" className="action-cta-btn" style={{ borderColor: 'rgba(255,255,255,0.15)' }}>
                     {secondaryButtonLabel}
                   </Button>
                 </Link>

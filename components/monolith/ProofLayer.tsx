@@ -41,7 +41,7 @@ export const ProofLayer: React.FC = () => {
             letterSpacing: '0.2em',
             ...({} as any)
         }}>MANUAL VS AUTOMATED</h4>
-        <h2 style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)', letterSpacing: '-0.05em', fontWeight: 800, ...({} as any) }}>From manual guesswork <br/> to production certainty</h2>
+        <h2 style={{ fontSize: 'clamp(1.85rem, 6.5vw, 3.75rem)', letterSpacing: '-0.04em', lineHeight: 1.15, fontWeight: 800, textWrap: 'balance', overflowWrap: 'break-word', ...({} as any) }}>From manual guesswork <br/> to production certainty</h2>
       </div>
 
       <div style={{ 

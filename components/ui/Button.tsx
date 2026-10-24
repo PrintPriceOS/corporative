@@ -14,23 +14,10 @@ export const Button: React.FC<ButtonProps> = ({
   style = {},
   ...props 
 }) => {
-  const getPadding = () => {
-    switch(size) {
-      case 'sm': return '0.5rem 1rem';
-      case 'lg': return '1.25rem 3rem';
-      case 'md':
-      default: return '0.85rem 2rem';
-    }
-  };
-
   return (
     <button 
-      className={`btn btn-${variant} ${className}`}
-      style={{
-        padding: getPadding(),
-        ...style,
-        ...({} as any)
-      }}
+      className={`btn btn-${variant} btn-${size} ${className}`}
+      style={style}
       {...props}
     >
       {children}

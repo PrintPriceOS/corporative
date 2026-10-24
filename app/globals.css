@@ -101,6 +101,11 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;
   letter-spacing: -0.025em;
   overflow-wrap: break-word;
+  word-break: normal;
+  text-wrap: balance;
+  -webkit-text-wrap: balance;
+  hyphens: auto;
+  -webkit-hyphens: auto;
 }
 
 p, a, span, button, td, th {
@@ -109,6 +114,7 @@ p, a, span, button, td, th {
 
 p {
   color: var(--text-secondary);
+  text-wrap: pretty;
 }
 
 a {
@@ -150,20 +156,46 @@ input, select, textarea {
   box-shadow: var(--shadow-card-hover);
 }
 
-/* Buttons */
-.btn-primary {
+/* Buttons Base & Sizing System */
+.btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  border-radius: var(--radius-btn);
+  font-family: var(--font-display);
+  cursor: pointer;
+  box-sizing: border-box;
+  text-decoration: none;
+  line-height: 1.3;
+  max-width: 100%;
+  transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.825rem;
+  font-weight: 600;
+}
+
+.btn-md {
+  padding: 0.85rem 1.85rem;
+  font-size: 0.925rem;
+  font-weight: 600;
+}
+
+.btn-lg {
+  padding: 1.15rem 2.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  min-height: 48px;
+}
+
+.btn-primary {
   background-color: var(--accent-primary);
   color: #ffffff !important;
   font-weight: 700;
-  font-size: 0.925rem;
-  padding: 0.75rem 1.4rem;
-  border-radius: var(--radius-btn);
   border: none;
-  transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
   box-shadow: 0 2px 8px rgba(220, 0, 0, 0.25);
 }
 
@@ -174,24 +206,75 @@ input, select, textarea {
 }
 
 .btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
   background-color: var(--bg-surface);
   color: var(--text-primary) !important;
   font-weight: 600;
-  font-size: 0.925rem;
-  padding: 0.75rem 1.4rem;
-  border-radius: var(--radius-btn);
   border: 1px solid var(--border-color);
-  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
 
 .btn-secondary:hover {
   border-color: var(--accent-primary);
   color: var(--accent-primary) !important;
   transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--text-primary) !important;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary) !important;
+  transform: translateY(-1px);
+}
+
+/* Responsive typography & button adjustments for mobile */
+@media (max-width: 768px) {
+  h1 {
+    font-size: clamp(1.75rem, 7vw, 2.5rem);
+    line-height: 1.18;
+    letter-spacing: -0.025em;
+  }
+  h2 {
+    font-size: clamp(1.45rem, 5.5vw, 2rem);
+    line-height: 1.22;
+    letter-spacing: -0.02em;
+  }
+  h3 {
+    font-size: clamp(1.2rem, 4.5vw, 1.45rem);
+    line-height: 1.25;
+  }
+  .btn-lg {
+    padding: 0.85rem 1.35rem;
+    font-size: clamp(0.85rem, 3.6vw, 0.95rem);
+    min-height: 46px;
+  }
+  .btn-md {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+  }
+  .btn {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: clamp(1.6rem, 7.5vw, 2.1rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  h2 {
+    font-size: clamp(1.35rem, 6vw, 1.75rem);
+    line-height: 1.24;
+  }
+  .btn-lg {
+    padding: 0.8rem 1.15rem;
+    font-size: clamp(0.825rem, 3.8vw, 0.925rem);
+  }
 }
 
 /* Badges & Pills */
