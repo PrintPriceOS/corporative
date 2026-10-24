@@ -3,6 +3,13 @@ import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import { SystemCardHover } from "@/components/ui/effects/SystemCardHover";
+import { constructMetadata } from "@/lib/seo";
+
+export const metadata = constructMetadata({
+  title: 'Sobre PrintPrice Pro | Misión y Principios de Ingeniería',
+  description: 'Conoce los principios de ingeniería detrás de PrintPrice OS: determinación de costes, evidencias inmutables y conectividad industrial.',
+  canonical: '/company',
+});
 
 export default function CompanyPage() {
   return (

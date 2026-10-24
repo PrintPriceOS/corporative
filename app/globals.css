@@ -84,17 +84,27 @@ html, body {
 body {
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
   line-height: 1.6;
 }
 
-/* Typography Hierarchy */
+/* Responsive media defaults */
+img, svg, video, canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Typography Hierarchy & German/Long-word Overflow Protection */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-weight: 800;
   color: var(--text-primary);
   line-height: 1.2;
   letter-spacing: -0.025em;
+  overflow-wrap: break-word;
+}
+
+p, a, span, button, td, th {
+  overflow-wrap: break-word;
 }
 
 p {
@@ -115,7 +125,16 @@ button {
 
 input, select, textarea {
   font-family: var(--font-display);
+  max-width: 100%;
+  box-sizing: border-box;
 }
+
+/* Prevent nested container horizontal padding blowout */
+.container .container {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
 
 /* Modern Card Component */
 .rounded-card {
@@ -202,8 +221,9 @@ input, select, textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: clamp(0.75rem, 3vw, 1.5rem);
   animation: fadeIn 0.2s ease-out;
+  box-sizing: border-box;
 }
 
 .modal-content {
@@ -213,12 +233,14 @@ input, select, textarea {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-card-lg);
   box-shadow: var(--shadow-dropdown);
-  padding: 2rem;
+  padding: clamp(1.25rem, 4vw, 2rem);
   position: relative;
-  max-height: 90vh;
+  max-height: 90dvh;
   overflow-y: auto;
   animation: modalScale 0.2s ease-out;
+  box-sizing: border-box;
 }
+
 
 @keyframes fadeIn {
   from { opacity: 0; }
@@ -267,6 +289,8 @@ input, select, textarea {
 /* Comparison Tables */
 .comparison-table-wrapper {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   overflow-x: auto;
   border-radius: var(--radius-card);
   border: 1px solid var(--border-color);
@@ -353,4 +377,69 @@ input, select, textarea {
   color: var(--text-muted);
   border: 1px solid var(--border-color);
 }
+
+/* Responsive visibility utilities */
+@media (max-width: 1023px) {
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+/* Hide text in theme toggle on mobile for compact touch target */
+@media (max-width: 640px) {
+  .mobile-hide-text {
+    display: none !important;
+  }
+  .theme-toggle {
+    padding: 0.45rem 0.6rem !important;
+    gap: 0 !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    justify-content: center !important;
+  }
+}
+
+/* In ultra-compact mobile (< 480px), language selector moves inside drawer to prevent header bar collision */
+@media (max-width: 480px) {
+  .header-lang-wrapper {
+    display: none !important;
+  }
+}
+
+/* Accessible horizontal scroll hint for data tables on mobile */
+.table-scroll-hint {
+  display: none;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  text-align: right;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .table-scroll-hint {
+    display: flex;
+  }
+}
+
+/* Accessibility: respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 

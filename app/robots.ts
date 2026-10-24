@@ -1,19 +1,20 @@
 import { MetadataRoute } from 'next';
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://printprice.pro';
+import { BASE_URL } from '@/lib/seo';
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: [
-        '/_next/',
-        '/api/',
-        '/debug/',
-        '/admin/',
-      ],
-    },
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: [
+          '/api/',
+          '/debug/',
+          '/admin/',
+          '/_not-found',
+        ],
+      },
+    ],
     sitemap: `${BASE_URL}/sitemap.xml`,
   };
 }

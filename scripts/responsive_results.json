@@ -1,0 +1,1082 @@
+[
+  {
+    "viewport": "320x568",
+    "viewport_name": "320x568 (Ultra-compact mobile)",
+    "page": "Home",
+    "path": "/",
+    "status": "PASS",
+    "docWidth": 320,
+    "maxScroll": 320,
+    "offenders": []
+  },
+  {
+    "viewport": "320x568",
+    "viewport_name": "320x568 (Ultra-compact mobile)",
+    "page": "For Authors",
+    "path": "/for-authors",
+    "status": "PASS",
+    "docWidth": 320,
+    "maxScroll": 320,
+    "offenders": []
+  },
+  {
+    "viewport": "320x568",
+    "viewport_name": "320x568 (Ultra-compact mobile)",
+    "page": "For Publishers",
+    "path": "/for-publishers",
+    "status": "PASS",
+    "docWidth": 320,
+    "maxScroll": 320,
+    "offenders": []
+  },
+  {
+    "viewport": "320x568",
+    "viewport_name": "320x568 (Ultra-compact mobile)",
+    "page": "For Printhouses",
+    "path": "/for-printhouses",
+    "status": "PASS",
+    "docWidth": 320,
+    "maxScroll": 320,
+    "offenders": []
+  },
+  {
+    "viewport": "320x568",
+    "viewport_name": "320x568 (Ultra-compact mobile)",
+    "page": "For Paper Suppliers",
+    "path": "/for-paper-suppliers",
+    "status": "PASS",
+    "docWidth": 320,
+    "maxScroll": 320,
+    "offenders": []
+  },
+  {
+    "viewport": "320x568",
+    "viewport_name": "320x568 (Ultra-compact mobile)",
+    "page": "Contact",
+    "path": "/contact",
+    "status": "PASS",
+    "docWidth": 320,
+    "maxScroll": 320,
+    "offenders": []
+  },
+  {
+    "viewport": "320x568",
+    "viewport_name": "320x568 (Ultra-compact mobile)",
+    "page": "Contact Partner",
+    "path": "/contact/partner",
+    "status": "PASS",
+    "docWidth": 320,
+    "maxScroll": 320,
+    "offenders": []
+  },
+  {
+    "viewport": "320x568",
+    "viewport_name": "320x568 (Ultra-compact mobile)",
+    "page": "Platform",
+    "path": "/platform",
+    "status": "PASS",
+    "docWidth": 320,
+    "maxScroll": 320,
+    "offenders": []
+  },
+  {
+    "viewport": "320x568",
+    "viewport_name": "320x568 (Ultra-compact mobile)",
+    "page": "Solutions",
+    "path": "/solutions",
+    "status": "PASS",
+    "docWidth": 320,
+    "maxScroll": 320,
+    "offenders": []
+  },
+  {
+    "viewport": "320x568",
+    "viewport_name": "320x568 (Ultra-compact mobile)",
+    "page": "Terms of Service",
+    "path": "/legal/terms-of-service",
+    "status": "PASS",
+    "docWidth": 320,
+    "maxScroll": 320,
+    "offenders": []
+  },
+  {
+    "viewport": "320x568",
+    "viewport_name": "320x568 (Ultra-compact mobile)",
+    "page": "Privacy Policy",
+    "path": "/legal/privacy-policy",
+    "status": "PASS",
+    "docWidth": 320,
+    "maxScroll": 320,
+    "offenders": []
+  },
+  {
+    "viewport": "320x568",
+    "viewport_name": "320x568 (Ultra-compact mobile)",
+    "page": "Legal Notice",
+    "path": "/legal/legal-notice",
+    "status": "PASS",
+    "docWidth": 320,
+    "maxScroll": 320,
+    "offenders": []
+  },
+  {
+    "viewport": "375x812",
+    "viewport_name": "375x812 (Compact mobile)",
+    "page": "Home",
+    "path": "/",
+    "status": "PASS",
+    "docWidth": 375,
+    "maxScroll": 375,
+    "offenders": []
+  },
+  {
+    "viewport": "375x812",
+    "viewport_name": "375x812 (Compact mobile)",
+    "page": "For Authors",
+    "path": "/for-authors",
+    "status": "PASS",
+    "docWidth": 375,
+    "maxScroll": 375,
+    "offenders": []
+  },
+  {
+    "viewport": "375x812",
+    "viewport_name": "375x812 (Compact mobile)",
+    "page": "For Publishers",
+    "path": "/for-publishers",
+    "status": "PASS",
+    "docWidth": 375,
+    "maxScroll": 375,
+    "offenders": []
+  },
+  {
+    "viewport": "375x812",
+    "viewport_name": "375x812 (Compact mobile)",
+    "page": "For Printhouses",
+    "path": "/for-printhouses",
+    "status": "PASS",
+    "docWidth": 375,
+    "maxScroll": 375,
+    "offenders": []
+  },
+  {
+    "viewport": "375x812",
+    "viewport_name": "375x812 (Compact mobile)",
+    "page": "For Paper Suppliers",
+    "path": "/for-paper-suppliers",
+    "status": "PASS",
+    "docWidth": 375,
+    "maxScroll": 375,
+    "offenders": []
+  },
+  {
+    "viewport": "375x812",
+    "viewport_name": "375x812 (Compact mobile)",
+    "page": "Contact",
+    "path": "/contact",
+    "status": "PASS",
+    "docWidth": 375,
+    "maxScroll": 375,
+    "offenders": []
+  },
+  {
+    "viewport": "375x812",
+    "viewport_name": "375x812 (Compact mobile)",
+    "page": "Contact Partner",
+    "path": "/contact/partner",
+    "status": "PASS",
+    "docWidth": 375,
+    "maxScroll": 375,
+    "offenders": []
+  },
+  {
+    "viewport": "375x812",
+    "viewport_name": "375x812 (Compact mobile)",
+    "page": "Platform",
+    "path": "/platform",
+    "status": "PASS",
+    "docWidth": 375,
+    "maxScroll": 375,
+    "offenders": []
+  },
+  {
+    "viewport": "375x812",
+    "viewport_name": "375x812 (Compact mobile)",
+    "page": "Solutions",
+    "path": "/solutions",
+    "status": "PASS",
+    "docWidth": 375,
+    "maxScroll": 375,
+    "offenders": []
+  },
+  {
+    "viewport": "375x812",
+    "viewport_name": "375x812 (Compact mobile)",
+    "page": "Terms of Service",
+    "path": "/legal/terms-of-service",
+    "status": "PASS",
+    "docWidth": 375,
+    "maxScroll": 375,
+    "offenders": []
+  },
+  {
+    "viewport": "375x812",
+    "viewport_name": "375x812 (Compact mobile)",
+    "page": "Privacy Policy",
+    "path": "/legal/privacy-policy",
+    "status": "PASS",
+    "docWidth": 375,
+    "maxScroll": 375,
+    "offenders": []
+  },
+  {
+    "viewport": "375x812",
+    "viewport_name": "375x812 (Compact mobile)",
+    "page": "Legal Notice",
+    "path": "/legal/legal-notice",
+    "status": "PASS",
+    "docWidth": 375,
+    "maxScroll": 375,
+    "offenders": []
+  },
+  {
+    "viewport": "390x844",
+    "viewport_name": "390x844 (Standard mobile)",
+    "page": "Home",
+    "path": "/",
+    "status": "PASS",
+    "docWidth": 390,
+    "maxScroll": 390,
+    "offenders": []
+  },
+  {
+    "viewport": "390x844",
+    "viewport_name": "390x844 (Standard mobile)",
+    "page": "For Authors",
+    "path": "/for-authors",
+    "status": "PASS",
+    "docWidth": 390,
+    "maxScroll": 390,
+    "offenders": []
+  },
+  {
+    "viewport": "390x844",
+    "viewport_name": "390x844 (Standard mobile)",
+    "page": "For Publishers",
+    "path": "/for-publishers",
+    "status": "PASS",
+    "docWidth": 390,
+    "maxScroll": 390,
+    "offenders": []
+  },
+  {
+    "viewport": "390x844",
+    "viewport_name": "390x844 (Standard mobile)",
+    "page": "For Printhouses",
+    "path": "/for-printhouses",
+    "status": "PASS",
+    "docWidth": 390,
+    "maxScroll": 390,
+    "offenders": []
+  },
+  {
+    "viewport": "390x844",
+    "viewport_name": "390x844 (Standard mobile)",
+    "page": "For Paper Suppliers",
+    "path": "/for-paper-suppliers",
+    "status": "PASS",
+    "docWidth": 390,
+    "maxScroll": 390,
+    "offenders": []
+  },
+  {
+    "viewport": "390x844",
+    "viewport_name": "390x844 (Standard mobile)",
+    "page": "Contact",
+    "path": "/contact",
+    "status": "PASS",
+    "docWidth": 390,
+    "maxScroll": 390,
+    "offenders": []
+  },
+  {
+    "viewport": "390x844",
+    "viewport_name": "390x844 (Standard mobile)",
+    "page": "Contact Partner",
+    "path": "/contact/partner",
+    "status": "PASS",
+    "docWidth": 390,
+    "maxScroll": 390,
+    "offenders": []
+  },
+  {
+    "viewport": "390x844",
+    "viewport_name": "390x844 (Standard mobile)",
+    "page": "Platform",
+    "path": "/platform",
+    "status": "PASS",
+    "docWidth": 390,
+    "maxScroll": 390,
+    "offenders": []
+  },
+  {
+    "viewport": "390x844",
+    "viewport_name": "390x844 (Standard mobile)",
+    "page": "Solutions",
+    "path": "/solutions",
+    "status": "PASS",
+    "docWidth": 390,
+    "maxScroll": 390,
+    "offenders": []
+  },
+  {
+    "viewport": "390x844",
+    "viewport_name": "390x844 (Standard mobile)",
+    "page": "Terms of Service",
+    "path": "/legal/terms-of-service",
+    "status": "PASS",
+    "docWidth": 390,
+    "maxScroll": 390,
+    "offenders": []
+  },
+  {
+    "viewport": "390x844",
+    "viewport_name": "390x844 (Standard mobile)",
+    "page": "Privacy Policy",
+    "path": "/legal/privacy-policy",
+    "status": "PASS",
+    "docWidth": 390,
+    "maxScroll": 390,
+    "offenders": []
+  },
+  {
+    "viewport": "390x844",
+    "viewport_name": "390x844 (Standard mobile)",
+    "page": "Legal Notice",
+    "path": "/legal/legal-notice",
+    "status": "PASS",
+    "docWidth": 390,
+    "maxScroll": 390,
+    "offenders": []
+  },
+  {
+    "viewport": "430x932",
+    "viewport_name": "430x932 (Large mobile)",
+    "page": "Home",
+    "path": "/",
+    "status": "PASS",
+    "docWidth": 430,
+    "maxScroll": 430,
+    "offenders": []
+  },
+  {
+    "viewport": "430x932",
+    "viewport_name": "430x932 (Large mobile)",
+    "page": "For Authors",
+    "path": "/for-authors",
+    "status": "PASS",
+    "docWidth": 430,
+    "maxScroll": 430,
+    "offenders": []
+  },
+  {
+    "viewport": "430x932",
+    "viewport_name": "430x932 (Large mobile)",
+    "page": "For Publishers",
+    "path": "/for-publishers",
+    "status": "PASS",
+    "docWidth": 430,
+    "maxScroll": 430,
+    "offenders": []
+  },
+  {
+    "viewport": "430x932",
+    "viewport_name": "430x932 (Large mobile)",
+    "page": "For Printhouses",
+    "path": "/for-printhouses",
+    "status": "PASS",
+    "docWidth": 430,
+    "maxScroll": 430,
+    "offenders": []
+  },
+  {
+    "viewport": "430x932",
+    "viewport_name": "430x932 (Large mobile)",
+    "page": "For Paper Suppliers",
+    "path": "/for-paper-suppliers",
+    "status": "PASS",
+    "docWidth": 430,
+    "maxScroll": 430,
+    "offenders": []
+  },
+  {
+    "viewport": "430x932",
+    "viewport_name": "430x932 (Large mobile)",
+    "page": "Contact",
+    "path": "/contact",
+    "status": "PASS",
+    "docWidth": 430,
+    "maxScroll": 430,
+    "offenders": []
+  },
+  {
+    "viewport": "430x932",
+    "viewport_name": "430x932 (Large mobile)",
+    "page": "Contact Partner",
+    "path": "/contact/partner",
+    "status": "PASS",
+    "docWidth": 430,
+    "maxScroll": 430,
+    "offenders": []
+  },
+  {
+    "viewport": "430x932",
+    "viewport_name": "430x932 (Large mobile)",
+    "page": "Platform",
+    "path": "/platform",
+    "status": "PASS",
+    "docWidth": 430,
+    "maxScroll": 430,
+    "offenders": []
+  },
+  {
+    "viewport": "430x932",
+    "viewport_name": "430x932 (Large mobile)",
+    "page": "Solutions",
+    "path": "/solutions",
+    "status": "PASS",
+    "docWidth": 430,
+    "maxScroll": 430,
+    "offenders": []
+  },
+  {
+    "viewport": "430x932",
+    "viewport_name": "430x932 (Large mobile)",
+    "page": "Terms of Service",
+    "path": "/legal/terms-of-service",
+    "status": "PASS",
+    "docWidth": 430,
+    "maxScroll": 430,
+    "offenders": []
+  },
+  {
+    "viewport": "430x932",
+    "viewport_name": "430x932 (Large mobile)",
+    "page": "Privacy Policy",
+    "path": "/legal/privacy-policy",
+    "status": "PASS",
+    "docWidth": 430,
+    "maxScroll": 430,
+    "offenders": []
+  },
+  {
+    "viewport": "430x932",
+    "viewport_name": "430x932 (Large mobile)",
+    "page": "Legal Notice",
+    "path": "/legal/legal-notice",
+    "status": "PASS",
+    "docWidth": 430,
+    "maxScroll": 430,
+    "offenders": []
+  },
+  {
+    "viewport": "768x1024",
+    "viewport_name": "768x1024 (Tablet portrait)",
+    "page": "Home",
+    "path": "/",
+    "status": "PASS",
+    "docWidth": 768,
+    "maxScroll": 768,
+    "offenders": []
+  },
+  {
+    "viewport": "768x1024",
+    "viewport_name": "768x1024 (Tablet portrait)",
+    "page": "For Authors",
+    "path": "/for-authors",
+    "status": "PASS",
+    "docWidth": 768,
+    "maxScroll": 768,
+    "offenders": []
+  },
+  {
+    "viewport": "768x1024",
+    "viewport_name": "768x1024 (Tablet portrait)",
+    "page": "For Publishers",
+    "path": "/for-publishers",
+    "status": "PASS",
+    "docWidth": 768,
+    "maxScroll": 768,
+    "offenders": []
+  },
+  {
+    "viewport": "768x1024",
+    "viewport_name": "768x1024 (Tablet portrait)",
+    "page": "For Printhouses",
+    "path": "/for-printhouses",
+    "status": "PASS",
+    "docWidth": 768,
+    "maxScroll": 768,
+    "offenders": []
+  },
+  {
+    "viewport": "768x1024",
+    "viewport_name": "768x1024 (Tablet portrait)",
+    "page": "For Paper Suppliers",
+    "path": "/for-paper-suppliers",
+    "status": "PASS",
+    "docWidth": 768,
+    "maxScroll": 768,
+    "offenders": []
+  },
+  {
+    "viewport": "768x1024",
+    "viewport_name": "768x1024 (Tablet portrait)",
+    "page": "Contact",
+    "path": "/contact",
+    "status": "PASS",
+    "docWidth": 768,
+    "maxScroll": 768,
+    "offenders": []
+  },
+  {
+    "viewport": "768x1024",
+    "viewport_name": "768x1024 (Tablet portrait)",
+    "page": "Contact Partner",
+    "path": "/contact/partner",
+    "status": "PASS",
+    "docWidth": 768,
+    "maxScroll": 768,
+    "offenders": []
+  },
+  {
+    "viewport": "768x1024",
+    "viewport_name": "768x1024 (Tablet portrait)",
+    "page": "Platform",
+    "path": "/platform",
+    "status": "PASS",
+    "docWidth": 768,
+    "maxScroll": 768,
+    "offenders": []
+  },
+  {
+    "viewport": "768x1024",
+    "viewport_name": "768x1024 (Tablet portrait)",
+    "page": "Solutions",
+    "path": "/solutions",
+    "status": "PASS",
+    "docWidth": 768,
+    "maxScroll": 768,
+    "offenders": []
+  },
+  {
+    "viewport": "768x1024",
+    "viewport_name": "768x1024 (Tablet portrait)",
+    "page": "Terms of Service",
+    "path": "/legal/terms-of-service",
+    "status": "PASS",
+    "docWidth": 768,
+    "maxScroll": 768,
+    "offenders": []
+  },
+  {
+    "viewport": "768x1024",
+    "viewport_name": "768x1024 (Tablet portrait)",
+    "page": "Privacy Policy",
+    "path": "/legal/privacy-policy",
+    "status": "PASS",
+    "docWidth": 768,
+    "maxScroll": 768,
+    "offenders": []
+  },
+  {
+    "viewport": "768x1024",
+    "viewport_name": "768x1024 (Tablet portrait)",
+    "page": "Legal Notice",
+    "path": "/legal/legal-notice",
+    "status": "PASS",
+    "docWidth": 768,
+    "maxScroll": 768,
+    "offenders": []
+  },
+  {
+    "viewport": "1024x768",
+    "viewport_name": "1024x768 (Tablet landscape / netbook)",
+    "page": "Home",
+    "path": "/",
+    "status": "PASS",
+    "docWidth": 1024,
+    "maxScroll": 1024,
+    "offenders": []
+  },
+  {
+    "viewport": "1024x768",
+    "viewport_name": "1024x768 (Tablet landscape / netbook)",
+    "page": "For Authors",
+    "path": "/for-authors",
+    "status": "PASS",
+    "docWidth": 1024,
+    "maxScroll": 1024,
+    "offenders": []
+  },
+  {
+    "viewport": "1024x768",
+    "viewport_name": "1024x768 (Tablet landscape / netbook)",
+    "page": "For Publishers",
+    "path": "/for-publishers",
+    "status": "PASS",
+    "docWidth": 1024,
+    "maxScroll": 1024,
+    "offenders": []
+  },
+  {
+    "viewport": "1024x768",
+    "viewport_name": "1024x768 (Tablet landscape / netbook)",
+    "page": "For Printhouses",
+    "path": "/for-printhouses",
+    "status": "PASS",
+    "docWidth": 1024,
+    "maxScroll": 1024,
+    "offenders": []
+  },
+  {
+    "viewport": "1024x768",
+    "viewport_name": "1024x768 (Tablet landscape / netbook)",
+    "page": "For Paper Suppliers",
+    "path": "/for-paper-suppliers",
+    "status": "PASS",
+    "docWidth": 1024,
+    "maxScroll": 1024,
+    "offenders": []
+  },
+  {
+    "viewport": "1024x768",
+    "viewport_name": "1024x768 (Tablet landscape / netbook)",
+    "page": "Contact",
+    "path": "/contact",
+    "status": "PASS",
+    "docWidth": 1024,
+    "maxScroll": 1024,
+    "offenders": []
+  },
+  {
+    "viewport": "1024x768",
+    "viewport_name": "1024x768 (Tablet landscape / netbook)",
+    "page": "Contact Partner",
+    "path": "/contact/partner",
+    "status": "PASS",
+    "docWidth": 1024,
+    "maxScroll": 1024,
+    "offenders": []
+  },
+  {
+    "viewport": "1024x768",
+    "viewport_name": "1024x768 (Tablet landscape / netbook)",
+    "page": "Platform",
+    "path": "/platform",
+    "status": "PASS",
+    "docWidth": 1024,
+    "maxScroll": 1024,
+    "offenders": []
+  },
+  {
+    "viewport": "1024x768",
+    "viewport_name": "1024x768 (Tablet landscape / netbook)",
+    "page": "Solutions",
+    "path": "/solutions",
+    "status": "PASS",
+    "docWidth": 1024,
+    "maxScroll": 1024,
+    "offenders": []
+  },
+  {
+    "viewport": "1024x768",
+    "viewport_name": "1024x768 (Tablet landscape / netbook)",
+    "page": "Terms of Service",
+    "path": "/legal/terms-of-service",
+    "status": "PASS",
+    "docWidth": 1024,
+    "maxScroll": 1024,
+    "offenders": []
+  },
+  {
+    "viewport": "1024x768",
+    "viewport_name": "1024x768 (Tablet landscape / netbook)",
+    "page": "Privacy Policy",
+    "path": "/legal/privacy-policy",
+    "status": "PASS",
+    "docWidth": 1024,
+    "maxScroll": 1024,
+    "offenders": []
+  },
+  {
+    "viewport": "1024x768",
+    "viewport_name": "1024x768 (Tablet landscape / netbook)",
+    "page": "Legal Notice",
+    "path": "/legal/legal-notice",
+    "status": "PASS",
+    "docWidth": 1024,
+    "maxScroll": 1024,
+    "offenders": []
+  },
+  {
+    "viewport": "1280x800",
+    "viewport_name": "1280x800 (Laptop WXGA)",
+    "page": "Home",
+    "path": "/",
+    "status": "PASS",
+    "docWidth": 1280,
+    "maxScroll": 1280,
+    "offenders": []
+  },
+  {
+    "viewport": "1280x800",
+    "viewport_name": "1280x800 (Laptop WXGA)",
+    "page": "For Authors",
+    "path": "/for-authors",
+    "status": "PASS",
+    "docWidth": 1280,
+    "maxScroll": 1280,
+    "offenders": []
+  },
+  {
+    "viewport": "1280x800",
+    "viewport_name": "1280x800 (Laptop WXGA)",
+    "page": "For Publishers",
+    "path": "/for-publishers",
+    "status": "PASS",
+    "docWidth": 1280,
+    "maxScroll": 1280,
+    "offenders": []
+  },
+  {
+    "viewport": "1280x800",
+    "viewport_name": "1280x800 (Laptop WXGA)",
+    "page": "For Printhouses",
+    "path": "/for-printhouses",
+    "status": "PASS",
+    "docWidth": 1280,
+    "maxScroll": 1280,
+    "offenders": []
+  },
+  {
+    "viewport": "1280x800",
+    "viewport_name": "1280x800 (Laptop WXGA)",
+    "page": "For Paper Suppliers",
+    "path": "/for-paper-suppliers",
+    "status": "PASS",
+    "docWidth": 1280,
+    "maxScroll": 1280,
+    "offenders": []
+  },
+  {
+    "viewport": "1280x800",
+    "viewport_name": "1280x800 (Laptop WXGA)",
+    "page": "Contact",
+    "path": "/contact",
+    "status": "PASS",
+    "docWidth": 1280,
+    "maxScroll": 1280,
+    "offenders": []
+  },
+  {
+    "viewport": "1280x800",
+    "viewport_name": "1280x800 (Laptop WXGA)",
+    "page": "Contact Partner",
+    "path": "/contact/partner",
+    "status": "PASS",
+    "docWidth": 1280,
+    "maxScroll": 1280,
+    "offenders": []
+  },
+  {
+    "viewport": "1280x800",
+    "viewport_name": "1280x800 (Laptop WXGA)",
+    "page": "Platform",
+    "path": "/platform",
+    "status": "PASS",
+    "docWidth": 1280,
+    "maxScroll": 1280,
+    "offenders": []
+  },
+  {
+    "viewport": "1280x800",
+    "viewport_name": "1280x800 (Laptop WXGA)",
+    "page": "Solutions",
+    "path": "/solutions",
+    "status": "PASS",
+    "docWidth": 1280,
+    "maxScroll": 1280,
+    "offenders": []
+  },
+  {
+    "viewport": "1280x800",
+    "viewport_name": "1280x800 (Laptop WXGA)",
+    "page": "Terms of Service",
+    "path": "/legal/terms-of-service",
+    "status": "PASS",
+    "docWidth": 1280,
+    "maxScroll": 1280,
+    "offenders": []
+  },
+  {
+    "viewport": "1280x800",
+    "viewport_name": "1280x800 (Laptop WXGA)",
+    "page": "Privacy Policy",
+    "path": "/legal/privacy-policy",
+    "status": "PASS",
+    "docWidth": 1280,
+    "maxScroll": 1280,
+    "offenders": []
+  },
+  {
+    "viewport": "1280x800",
+    "viewport_name": "1280x800 (Laptop WXGA)",
+    "page": "Legal Notice",
+    "path": "/legal/legal-notice",
+    "status": "PASS",
+    "docWidth": 1280,
+    "maxScroll": 1280,
+    "offenders": []
+  },
+  {
+    "viewport": "1440x900",
+    "viewport_name": "1440x900 (Desktop Standard)",
+    "page": "Home",
+    "path": "/",
+    "status": "PASS",
+    "docWidth": 1440,
+    "maxScroll": 1440,
+    "offenders": []
+  },
+  {
+    "viewport": "1440x900",
+    "viewport_name": "1440x900 (Desktop Standard)",
+    "page": "For Authors",
+    "path": "/for-authors",
+    "status": "PASS",
+    "docWidth": 1440,
+    "maxScroll": 1440,
+    "offenders": []
+  },
+  {
+    "viewport": "1440x900",
+    "viewport_name": "1440x900 (Desktop Standard)",
+    "page": "For Publishers",
+    "path": "/for-publishers",
+    "status": "PASS",
+    "docWidth": 1440,
+    "maxScroll": 1440,
+    "offenders": []
+  },
+  {
+    "viewport": "1440x900",
+    "viewport_name": "1440x900 (Desktop Standard)",
+    "page": "For Printhouses",
+    "path": "/for-printhouses",
+    "status": "PASS",
+    "docWidth": 1440,
+    "maxScroll": 1440,
+    "offenders": []
+  },
+  {
+    "viewport": "1440x900",
+    "viewport_name": "1440x900 (Desktop Standard)",
+    "page": "For Paper Suppliers",
+    "path": "/for-paper-suppliers",
+    "status": "PASS",
+    "docWidth": 1440,
+    "maxScroll": 1440,
+    "offenders": []
+  },
+  {
+    "viewport": "1440x900",
+    "viewport_name": "1440x900 (Desktop Standard)",
+    "page": "Contact",
+    "path": "/contact",
+    "status": "PASS",
+    "docWidth": 1440,
+    "maxScroll": 1440,
+    "offenders": []
+  },
+  {
+    "viewport": "1440x900",
+    "viewport_name": "1440x900 (Desktop Standard)",
+    "page": "Contact Partner",
+    "path": "/contact/partner",
+    "status": "PASS",
+    "docWidth": 1440,
+    "maxScroll": 1440,
+    "offenders": []
+  },
+  {
+    "viewport": "1440x900",
+    "viewport_name": "1440x900 (Desktop Standard)",
+    "page": "Platform",
+    "path": "/platform",
+    "status": "PASS",
+    "docWidth": 1440,
+    "maxScroll": 1440,
+    "offenders": []
+  },
+  {
+    "viewport": "1440x900",
+    "viewport_name": "1440x900 (Desktop Standard)",
+    "page": "Solutions",
+    "path": "/solutions",
+    "status": "PASS",
+    "docWidth": 1440,
+    "maxScroll": 1440,
+    "offenders": []
+  },
+  {
+    "viewport": "1440x900",
+    "viewport_name": "1440x900 (Desktop Standard)",
+    "page": "Terms of Service",
+    "path": "/legal/terms-of-service",
+    "status": "PASS",
+    "docWidth": 1440,
+    "maxScroll": 1440,
+    "offenders": []
+  },
+  {
+    "viewport": "1440x900",
+    "viewport_name": "1440x900 (Desktop Standard)",
+    "page": "Privacy Policy",
+    "path": "/legal/privacy-policy",
+    "status": "PASS",
+    "docWidth": 1440,
+    "maxScroll": 1440,
+    "offenders": []
+  },
+  {
+    "viewport": "1440x900",
+    "viewport_name": "1440x900 (Desktop Standard)",
+    "page": "Legal Notice",
+    "path": "/legal/legal-notice",
+    "status": "PASS",
+    "docWidth": 1440,
+    "maxScroll": 1440,
+    "offenders": []
+  },
+  {
+    "viewport": "1920x1080",
+    "viewport_name": "1920x1080 (Desktop FHD)",
+    "page": "Home",
+    "path": "/",
+    "status": "PASS",
+    "docWidth": 1920,
+    "maxScroll": 1920,
+    "offenders": []
+  },
+  {
+    "viewport": "1920x1080",
+    "viewport_name": "1920x1080 (Desktop FHD)",
+    "page": "For Authors",
+    "path": "/for-authors",
+    "status": "PASS",
+    "docWidth": 1920,
+    "maxScroll": 1920,
+    "offenders": []
+  },
+  {
+    "viewport": "1920x1080",
+    "viewport_name": "1920x1080 (Desktop FHD)",
+    "page": "For Publishers",
+    "path": "/for-publishers",
+    "status": "PASS",
+    "docWidth": 1920,
+    "maxScroll": 1920,
+    "offenders": []
+  },
+  {
+    "viewport": "1920x1080",
+    "viewport_name": "1920x1080 (Desktop FHD)",
+    "page": "For Printhouses",
+    "path": "/for-printhouses",
+    "status": "PASS",
+    "docWidth": 1920,
+    "maxScroll": 1920,
+    "offenders": []
+  },
+  {
+    "viewport": "1920x1080",
+    "viewport_name": "1920x1080 (Desktop FHD)",
+    "page": "For Paper Suppliers",
+    "path": "/for-paper-suppliers",
+    "status": "PASS",
+    "docWidth": 1920,
+    "maxScroll": 1920,
+    "offenders": []
+  },
+  {
+    "viewport": "1920x1080",
+    "viewport_name": "1920x1080 (Desktop FHD)",
+    "page": "Contact",
+    "path": "/contact",
+    "status": "PASS",
+    "docWidth": 1920,
+    "maxScroll": 1920,
+    "offenders": []
+  },
+  {
+    "viewport": "1920x1080",
+    "viewport_name": "1920x1080 (Desktop FHD)",
+    "page": "Contact Partner",
+    "path": "/contact/partner",
+    "status": "PASS",
+    "docWidth": 1920,
+    "maxScroll": 1920,
+    "offenders": []
+  },
+  {
+    "viewport": "1920x1080",
+    "viewport_name": "1920x1080 (Desktop FHD)",
+    "page": "Platform",
+    "path": "/platform",
+    "status": "PASS",
+    "docWidth": 1920,
+    "maxScroll": 1920,
+    "offenders": []
+  },
+  {
+    "viewport": "1920x1080",
+    "viewport_name": "1920x1080 (Desktop FHD)",
+    "page": "Solutions",
+    "path": "/solutions",
+    "status": "PASS",
+    "docWidth": 1920,
+    "maxScroll": 1920,
+    "offenders": []
+  },
+  {
+    "viewport": "1920x1080",
+    "viewport_name": "1920x1080 (Desktop FHD)",
+    "page": "Terms of Service",
+    "path": "/legal/terms-of-service",
+    "status": "PASS",
+    "docWidth": 1920,
+    "maxScroll": 1920,
+    "offenders": []
+  },
+  {
+    "viewport": "1920x1080",
+    "viewport_name": "1920x1080 (Desktop FHD)",
+    "page": "Privacy Policy",
+    "path": "/legal/privacy-policy",
+    "status": "PASS",
+    "docWidth": 1920,
+    "maxScroll": 1920,
+    "offenders": []
+  },
+  {
+    "viewport": "1920x1080",
+    "viewport_name": "1920x1080 (Desktop FHD)",
+    "page": "Legal Notice",
+    "path": "/legal/legal-notice",
+    "status": "PASS",
+    "docWidth": 1920,
+    "maxScroll": 1920,
+    "offenders": []
+  }
+]

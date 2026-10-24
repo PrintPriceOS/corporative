@@ -1,0 +1,262 @@
+{
+  "robots_status": 200,
+  "sitemap_status": 200,
+  "sitemap_url_count": 16,
+  "all_titles_unique": true,
+  "all_descriptions_unique": true,
+  "routes": [
+    {
+      "path": "/",
+      "name": "Home",
+      "intent": "General Platform Overview & Slogan",
+      "http_status": 200,
+      "title": "PrintPrice Pro — Plataforma de Inteligencia y Cotización de Impresión Editorial",
+      "description": "Calcula costes reales de imprenta, preflight automático de PDF y enrutamiento con imprentas industriales mediante PrintPrice OS.",
+      "canonical": "https://printprice.pro",
+      "canonical_valid": true,
+      "h1": "PRICE IT. FIX IT. PRINT IT.",
+      "json_ld_types": [
+        "Organization",
+        "WebSite"
+      ],
+      "indexable": true
+    },
+    {
+      "path": "/for-authors",
+      "name": "For Authors",
+      "intent": "Book printing for indie authors & individuals",
+      "http_status": 200,
+      "title": "Impresión de Libros para Autores y Particulares | PrintPrice Pro",
+      "description": "Calcula el presupuesto exacto de tu libro en segundos: valida sangrías en tu PDF, comprueba el grosor de lomo en 3D e imprime sin intermediarios con PrintPrice OS.",
+      "canonical": "https://printprice.pro/for-authors",
+      "canonical_valid": true,
+      "h1": "Imprime tu libro, comprueba tus archivos y visualiza cómo qu...",
+      "json_ld_types": [
+        "Organization",
+        "WebSite",
+        "BreadcrumbList"
+      ],
+      "indexable": true
+    },
+    {
+      "path": "/for-publishers",
+      "name": "For Publishers",
+      "intent": "Multi-tier pricing matrices for book publishers",
+      "http_status": 200,
+      "title": "Software de Cotización y Gestión Editorial | PrintPrice Pro",
+      "description": "Optimiza presupuestos de novedades y reediciones con matrices multi-cantidad, curvas de coste offset/digital y auditoría técnica de archivos.",
+      "canonical": "https://printprice.pro/for-publishers",
+      "canonical_valid": true,
+      "h1": "Prepara presupuestos y organiza tus proyectos de impresión.",
+      "json_ld_types": [
+        "Organization",
+        "WebSite",
+        "BreadcrumbList"
+      ],
+      "indexable": true
+    },
+    {
+      "path": "/for-printhouses",
+      "name": "For Printhouses",
+      "intent": "Press profiling, verified jobs, matchmaker for printers",
+      "http_status": 200,
+      "title": "Motor de Captación y Modelado para Imprentas | PrintPrice Pro",
+      "description": "Recibe órdenes de trabajo verificadas con evidencia inmutable (evidenceId), modelado técnico de maquinaria gráfica y cero incidencias de preflight.",
+      "canonical": "https://printprice.pro/for-printhouses",
+      "canonical_valid": true,
+      "h1": "Configura tu imprenta y conecta capacidades, maquinaria y ap...",
+      "json_ld_types": [
+        "Organization",
+        "WebSite",
+        "BreadcrumbList"
+      ],
+      "indexable": true
+    },
+    {
+      "path": "/for-paper-suppliers",
+      "name": "For Paper Suppliers",
+      "intent": "Master paper catalog federation & real-time inventory",
+      "http_status": 200,
+      "title": "Federación de Catálogo y Sustratos para Papeleras | PrintPrice Pro",
+      "description": "Conecta tu catálogo maestro de bobinas y resmas directamente con el motor de cálculo editorial. Visibilidad en millones de presupuestos gráficos.",
+      "canonical": "https://printprice.pro/for-paper-suppliers",
+      "canonical_valid": true,
+      "h1": "Publica tu catálogo y conecta tus ofertas con las imprentas.",
+      "json_ld_types": [
+        "Organization",
+        "WebSite",
+        "BreadcrumbList"
+      ],
+      "indexable": true
+    },
+    {
+      "path": "/platform",
+      "name": "Platform",
+      "intent": "Technical architecture, calculation engines, and preflight",
+      "http_status": 200,
+      "title": "Arquitectura de PrintPrice OS | Infraestructura Gráfica",
+      "description": "Descubre los motores técnicos que componen PrintPrice OS: cálculo de imposición, validación preflight y enrutamiento algorítmico de producción.",
+      "canonical": "https://printprice.pro/platform",
+      "canonical_valid": true,
+      "h1": "FROM COST TO PRODUCTION IN ONE PLATFORM",
+      "json_ld_types": [
+        "Organization",
+        "WebSite",
+        "BreadcrumbList",
+        "SoftwareApplication"
+      ],
+      "indexable": true
+    },
+    {
+      "path": "/solutions",
+      "name": "Solutions",
+      "intent": "Print manufacturing solutions across industry verticals",
+      "http_status": 200,
+      "title": "Soluciones de Fabricación Gráfica Editorial y Comercial | PrintPrice Pro",
+      "description": "Flujos de automatización técnica para libros, packaging, folletos comerciales y gran formato industrial con trazabilidad garantizada.",
+      "canonical": "https://printprice.pro/solutions",
+      "canonical_valid": true,
+      "h1": "BUILT FOR EVERY PRINT PRODUCTION",
+      "json_ld_types": [
+        "Organization",
+        "WebSite",
+        "BreadcrumbList"
+      ],
+      "indexable": true
+    },
+    {
+      "path": "/developers",
+      "name": "Developers",
+      "intent": "REST APIs, webhooks, and integration contracts",
+      "http_status": 200,
+      "title": "API for Print Manufacturing &amp; Automation | PrintPrice Pro",
+      "description": "Integrate budgeting, PDF preflight, and production routing directly into your app. Explore the PrintPrice OS API for automated manufacturing workflows.",
+      "canonical": "https://printprice.pro/developers",
+      "canonical_valid": true,
+      "h1": "BUILD ON THE PRINT API",
+      "json_ld_types": [
+        "Organization",
+        "WebSite"
+      ],
+      "indexable": true
+    },
+    {
+      "path": "/company",
+      "name": "Company",
+      "intent": "Engineering philosophy, deterministic principles, and team",
+      "http_status": 200,
+      "title": "Sobre PrintPrice Pro | Misión y Principios de Ingeniería",
+      "description": "Conoce los principios de ingeniería detrás de PrintPrice OS: determinación de costes, evidencias inmutables y conectividad industrial.",
+      "canonical": "https://printprice.pro/company",
+      "canonical_valid": true,
+      "h1": "ENGINEERING PRODUCTION CERTAINTY",
+      "json_ld_types": [
+        "Organization",
+        "WebSite"
+      ],
+      "indexable": true
+    },
+    {
+      "path": "/contact",
+      "name": "Contact",
+      "intent": "General inquiries and customer support",
+      "http_status": 200,
+      "title": "Contacto y Soporte Técnico | PrintPrice Pro",
+      "description": "Ponte en contacto con nuestro equipo técnico de ingeniería gráfica y operaciones. Asistencia en cotizaciones e integración de imprentas.",
+      "canonical": "https://printprice.pro/contact",
+      "canonical_valid": true,
+      "h1": "START WITH THE RIGHT WORKFLOW",
+      "json_ld_types": [
+        "Organization",
+        "WebSite"
+      ],
+      "indexable": true
+    },
+    {
+      "path": "/contact/partner",
+      "name": "Contact Partner",
+      "intent": "Commercial onboarding for printhouses and paper mills",
+      "http_status": 200,
+      "title": "Únete a la Red de Partners de Impresión | PrintPrice Pro",
+      "description": "Forma parte de la red homologada de talleres gráficos y distribuidores de papel en Europa. Recibe trabajos verificados y listos para producción con PrintPrice OS.",
+      "canonical": "https://printprice.pro/contact/partner",
+      "canonical_valid": true,
+      "h1": "Conecta tu taller a la red de producción de PrintPrice OS.",
+      "json_ld_types": [
+        "Organization",
+        "WebSite",
+        "BreadcrumbList"
+      ],
+      "indexable": true
+    },
+    {
+      "path": "/legal/terms-of-service",
+      "name": "Terms of Service",
+      "intent": "Platform service terms and manufacturing boundaries",
+      "http_status": 200,
+      "title": "Términos de Servicio | PrintPrice Pro",
+      "description": "Condiciones de contratación, uso de la plataforma, delimitación de responsabilidades y términos de fabricación.",
+      "canonical": "https://printprice.pro/legal/terms-of-service",
+      "canonical_valid": true,
+      "h1": "Terms of Service",
+      "json_ld_types": [
+        "Organization",
+        "WebSite",
+        "BreadcrumbList"
+      ],
+      "indexable": true
+    },
+    {
+      "path": "/legal/privacy-policy",
+      "name": "Privacy Policy",
+      "intent": "GDPR compliance, data handling, and cookies",
+      "http_status": 200,
+      "title": "Política de Privacidad y Protección de Datos (RGPD) | PrintPrice Pro",
+      "description": "Tratamiento de datos personales, bases jurídicas, derechos de los usuarios y política de cookies de Print Price Pro SIA.",
+      "canonical": "https://printprice.pro/legal/privacy-policy",
+      "canonical_valid": true,
+      "h1": "Privacy Policy (GDPR)",
+      "json_ld_types": [
+        "Organization",
+        "WebSite",
+        "BreadcrumbList"
+      ],
+      "indexable": true
+    },
+    {
+      "path": "/legal/legal-notice",
+      "name": "Legal Notice",
+      "intent": "Statutory corporate imprint and fiscal identification",
+      "http_status": 200,
+      "title": "Aviso Legal e Identidad Mercantil (Imprint) | PrintPrice Pro",
+      "description": "Datos registrales, CIF/NIF intracomunitario, domicilio social y responsabilidad editorial de Print Price Pro SIA.",
+      "canonical": "https://printprice.pro/legal/legal-notice",
+      "canonical_valid": true,
+      "h1": "Legal Notice (Imprint)",
+      "json_ld_types": [
+        "Organization",
+        "WebSite",
+        "BreadcrumbList"
+      ],
+      "indexable": true
+    },
+    {
+      "path": "/legal/partner-terms",
+      "name": "Partner Terms",
+      "intent": "Production partner SLAs and evidenceId protocol",
+      "http_status": 200,
+      "title": "Condiciones para Partners de Producción | PrintPrice Pro",
+      "description": "Estándares de calidad de fabricación, SLAs de entrega y protocolo de resolución técnica con hash de evidencia.",
+      "canonical": "https://printprice.pro/legal/partner-terms",
+      "canonical_valid": true,
+      "h1": "Partner Terms",
+      "json_ld_types": [
+        "Organization",
+        "WebSite",
+        "BreadcrumbList"
+      ],
+      "indexable": true
+    }
+  ],
+  "not_found_status": 404
+}

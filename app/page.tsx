@@ -588,86 +588,96 @@ export default function Home() {
 
           {/* Tabla Bloque A */}
           {activeTab === 'authors' && (
-            <div className="comparison-table-wrapper">
-              <table className="comparison-table">
-                <thead>
-                  <tr>
-                    <th style={{ width: '32%' }}>{dict.home.compFeature}</th>
-                    <th style={{ width: '18%', color: 'var(--accent-primary)' }}>PrintPrice Pro</th>
-                    <th style={{ width: '18%' }}>Lulu</th>
-                    <th style={{ width: '18%' }}>GelatoConnect</th>
-                    <th style={{ width: '14%' }}>{dict.home.compScope}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {COMPARISON_AUTHORS.map((row, idx) => (
-                    <tr key={idx}>
-                      <td style={{ fontWeight: 600 }}>{row.feature}</td>
-                      <td>
-                        <span className="badge-available">{row.printprice}</span>
-                      </td>
-                      <td>
-                        <span className={row.lulu.includes('Disponible') || row.lulu.includes('Available') || row.lulu.includes('Verfügbar') ? 'badge-available' : 'badge-module'}>
-                          {row.lulu}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={row.gelato.includes('Disponible') || row.gelato.includes('Available') || row.gelato.includes('Verfügbar') ? 'badge-available' : 'badge-integration'}>
-                          {row.gelato}
-                        </span>
-                      </td>
-                      <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{row.notes}</td>
+            <>
+              <div className="comparison-table-wrapper">
+                <table className="comparison-table">
+                  <thead>
+                    <tr>
+                      <th style={{ width: '32%' }}>{dict.home.compFeature}</th>
+                      <th style={{ width: '18%', color: 'var(--accent-primary)' }}>PrintPrice Pro</th>
+                      <th style={{ width: '18%' }}>Lulu</th>
+                      <th style={{ width: '18%' }}>GelatoConnect</th>
+                      <th style={{ width: '14%' }}>{dict.home.compScope}</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {COMPARISON_AUTHORS.map((row, idx) => (
+                      <tr key={idx}>
+                        <td style={{ fontWeight: 600 }}>{row.feature}</td>
+                        <td>
+                          <span className="badge-available">{row.printprice}</span>
+                        </td>
+                        <td>
+                          <span className={row.lulu.includes('Disponible') || row.lulu.includes('Available') || row.lulu.includes('Verfügbar') ? 'badge-available' : 'badge-module'}>
+                            {row.lulu}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={row.gelato.includes('Disponible') || row.gelato.includes('Available') || row.gelato.includes('Verfügbar') ? 'badge-available' : 'badge-integration'}>
+                            {row.gelato}
+                          </span>
+                        </td>
+                        <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{row.notes}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="table-scroll-hint" role="note" aria-label="Desplazamiento horizontal disponible">
+                <span>⇄ {locale === 'es' ? 'Desliza horizontalmente para ver todas las columnas' : locale === 'de' ? 'Horizontal wischen für alle Spalten' : 'Scroll horizontally to view all columns'}</span>
+              </div>
+            </>
           )}
 
           {/* Tabla Bloque B */}
           {activeTab === 'printers' && (
-            <div className="comparison-table-wrapper">
-              <table className="comparison-table">
-                <thead>
-                  <tr>
-                    <th style={{ width: '28%' }}>{dict.home.compFeature}</th>
-                    <th style={{ width: '16%', color: 'var(--accent-primary)' }}>PrintPrice Pro</th>
-                    <th style={{ width: '15%' }}>printIQ</th>
-                    <th style={{ width: '15%' }}>PrintVis</th>
-                    <th style={{ width: '14%' }}>Tharstern</th>
-                    <th style={{ width: '12%' }}>{dict.home.compScope}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {COMPARISON_PRINTERS.map((row, idx) => (
-                    <tr key={idx}>
-                      <td style={{ fontWeight: 600 }}>{row.feature}</td>
-                      <td>
-                        <span className={row.printprice.includes('Disponible') || row.printprice.includes('Available') || row.printprice.includes('Verfügbar') ? 'badge-available' : 'badge-integration'}>
-                          {row.printprice}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={row.printiq.includes('Disponible') || row.printiq.includes('Available') || row.printiq.includes('Verfügbar') ? 'badge-available' : 'badge-module'}>
-                          {row.printiq}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={row.printvis.includes('Disponible') || row.printvis.includes('Available') || row.printvis.includes('Verfügbar') ? 'badge-available' : 'badge-integration'}>
-                          {row.printvis}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={row.tharstern.includes('Disponible') || row.tharstern.includes('Available') || row.tharstern.includes('Verfügbar') ? 'badge-available' : 'badge-integration'}>
-                          {row.tharstern}
-                        </span>
-                      </td>
-                      <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{row.notes}</td>
+            <>
+              <div className="comparison-table-wrapper">
+                <table className="comparison-table">
+                  <thead>
+                    <tr>
+                      <th style={{ width: '28%' }}>{dict.home.compFeature}</th>
+                      <th style={{ width: '16%', color: 'var(--accent-primary)' }}>PrintPrice Pro</th>
+                      <th style={{ width: '15%' }}>printIQ</th>
+                      <th style={{ width: '15%' }}>PrintVis</th>
+                      <th style={{ width: '14%' }}>Tharstern</th>
+                      <th style={{ width: '12%' }}>{dict.home.compScope}</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {COMPARISON_PRINTERS.map((row, idx) => (
+                      <tr key={idx}>
+                        <td style={{ fontWeight: 600 }}>{row.feature}</td>
+                        <td>
+                          <span className={row.printprice.includes('Disponible') || row.printprice.includes('Available') || row.printprice.includes('Verfügbar') ? 'badge-available' : 'badge-integration'}>
+                            {row.printprice}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={row.printiq.includes('Disponible') || row.printiq.includes('Available') || row.printiq.includes('Verfügbar') ? 'badge-available' : 'badge-module'}>
+                            {row.printiq}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={row.printvis.includes('Disponible') || row.printvis.includes('Available') || row.printvis.includes('Verfügbar') ? 'badge-available' : 'badge-integration'}>
+                            {row.printvis}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={row.tharstern.includes('Disponible') || row.tharstern.includes('Available') || row.tharstern.includes('Verfügbar') ? 'badge-available' : 'badge-integration'}>
+                            {row.tharstern}
+                          </span>
+                        </td>
+                        <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{row.notes}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="table-scroll-hint" role="note" aria-label="Desplazamiento horizontal disponible">
+                <span>⇄ {locale === 'es' ? 'Desliza horizontalmente para ver todas las columnas' : locale === 'de' ? 'Horizontal wischen für alle Spalten' : 'Scroll horizontally to view all columns'}</span>
+              </div>
+            </>
           )}
 
           <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-muted)' }}>

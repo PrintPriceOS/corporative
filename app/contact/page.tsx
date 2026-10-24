@@ -7,6 +7,7 @@ import { Icon } from "@/components/ui/Icon";
 import { HeroPlatform } from "@/components/monolith/HeroPlatform";
 import { trackEvent, events } from "@/lib/telemetry";
 import Link from "next/link";
+import { getBreadcrumbJsonLd } from "@/lib/seo";
 
 type UserType = "print_house" | "publisher" | "author" | "developer";
 
@@ -121,13 +122,19 @@ export default function ContactPage() {
     }, 400);
   };
 
-  if (!mounted) return null;
-
   const recommendedRoute = inferredType ? ROUTES.find(r => r.id === inferredType) : null;
-  const showRecommendation = inferredType && confidence > 0.6 && !showAll;
+  const showRecommendation = Boolean(mounted && inferredType && confidence > 0.6 && !showAll);
+  const contactBreadcrumbs = getBreadcrumbJsonLd([
+    { name: 'Inicio', path: '/' },
+    { name: 'Contacto', path: '/contact' },
+  ]);
 
   return (
     <div className={`contact-page ${isTransitioning ? 'opacity-50 pointer-events-none' : ''}`}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactBreadcrumbs) }}
+      />
       <HeroPlatform 
         label="ROUTING LAYER / v2.5"
         title={<>START WITH THE <br/> <span style={{ color: 'var(--accent-primary)' }}>RIGHT WORKFLOW</span></>}

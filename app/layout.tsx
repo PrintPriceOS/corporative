@@ -25,7 +25,7 @@ const inter = Inter({
   weight: ["400"],
 });
 
-import { constructMetadata, JSON_LD_ORGANIZATION } from "@/lib/seo";
+import { constructMetadata, JSON_LD_ORGANIZATION, JSON_LD_WEBSITE } from "@/lib/seo";
 
 export const metadata: Metadata = constructMetadata();
 
@@ -43,6 +43,10 @@ export default function RootLayout({
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD_ORGANIZATION) }}
+          />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD_WEBSITE) }}
           />
       </head>
       <body>

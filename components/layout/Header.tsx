@@ -64,6 +64,17 @@ export const Header: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
 
+  // Lock body scroll when mobile menu or modal is open
+  useEffect(() => {
+    if (isMobileMenuOpen || isLoginModalOpen || isStartModalOpen) {
+      const originalStyle = window.getComputedStyle(document.body).overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalStyle;
+      };
+    }
+  }, [isMobileMenuOpen, isLoginModalOpen, isStartModalOpen]);
+
   // Click outside listener for dropdowns
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -77,6 +88,7 @@ export const Header: React.FC = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
 
   return (
     <>
@@ -104,21 +116,24 @@ export const Header: React.FC = () => {
           <Link
             href="/"
             style={{
-              fontSize: '1.2rem',
+              fontSize: 'clamp(1rem, 3.8vw, 1.25rem)',
               fontWeight: 800,
               display: 'flex',
               alignItems: 'center',
-              gap: '0.65rem',
+              gap: 'clamp(0.4rem, 1.5vw, 0.65rem)',
               color: 'var(--text-primary)',
               textDecoration: 'none',
               letterSpacing: '-0.02em',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
             }}
           >
-            <Logo size={32} />
+            <Logo size={28} />
             <span>
               <span style={{ color: 'var(--accent-primary)' }}>PrintPrice</span> Pro
             </span>
           </Link>
+
 
           {/* Desktop Navigation */}
           <nav
@@ -126,8 +141,8 @@ export const Header: React.FC = () => {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '1.75rem',
-              fontSize: '0.9rem',
+              gap: 'clamp(0.5rem, 1vw, 1.35rem)',
+              fontSize: '0.875rem',
               fontWeight: 600,
               color: 'var(--text-secondary)',
             }}
@@ -365,7 +380,7 @@ export const Header: React.FC = () => {
           </nav>
 
           {/* Action CTAs, Language Selector & Theme Toggle */}
-          <div className="desktop-only" style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+          <div className="desktop-only" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.4rem, 0.8vw, 0.75rem)', flexShrink: 0 }}>
             <LanguageSelector />
             <ThemeToggle />
 
@@ -378,10 +393,11 @@ export const Header: React.FC = () => {
                 border: 'none',
                 color: 'var(--text-primary)',
                 fontWeight: 600,
-                fontSize: '0.9rem',
+                fontSize: '0.875rem',
                 cursor: 'pointer',
-                padding: '0.5rem 0.75rem',
+                padding: '0.45rem clamp(0.5rem, 0.8vw, 0.75rem)',
                 borderRadius: 'var(--radius-btn)',
+                whiteSpace: 'nowrap',
               }}
             >
               {dict.nav.login}
@@ -392,15 +408,17 @@ export const Header: React.FC = () => {
               type="button"
               onClick={() => setIsStartModalOpen(true)}
               className="btn-primary"
-              style={{ padding: '0.6rem 1.25rem', fontSize: '0.9rem' }}
+              style={{ padding: '0.5rem clamp(0.75rem, 1vw, 1.25rem)', fontSize: '0.875rem', whiteSpace: 'nowrap' }}
             >
               {dict.nav.start}
             </button>
           </div>
 
           {/* Mobile Menu Trigger */}
-          <div className="mobile-only" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <LanguageSelector />
+          <div className="mobile-only" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.25rem, 1.5vw, 0.5rem)', flexShrink: 0 }}>
+            <div className="header-lang-wrapper">
+              <LanguageSelector />
+            </div>
             <ThemeToggle />
             <button
               type="button"
@@ -412,7 +430,9 @@ export const Header: React.FC = () => {
                 border: 'none',
                 color: 'var(--text-primary)',
                 cursor: 'pointer',
-                padding: '0.5rem',
+                padding: '0.35rem',
+                minWidth: '40px',
+                minHeight: '40px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -434,14 +454,31 @@ export const Header: React.FC = () => {
             position: 'fixed',
             inset: 0,
             background: 'var(--bg-primary)',
-            zIndex: 1400,
-            padding: '5rem 1.5rem 3rem',
+            zIndex: 1800,
+            padding: 'clamp(4.5rem, 12vh, 6rem) clamp(1rem, 4vw, 2rem) 3rem',
             overflowY: 'auto',
             display: 'flex',
             flexDirection: 'column',
-            gap: '2rem',
+            gap: '1.75rem',
+            boxSizing: 'border-box',
           }}
         >
+          {/* Mobile Drawer Language & Theme Switcher Bar */}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              paddingBottom: '1.25rem',
+              borderBottom: '1px solid var(--border-color)',
+            }}
+          >
+            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-secondary)' }}>
+              {locale === 'es' ? 'Idioma' : locale === 'de' ? 'Sprache' : 'Language'}
+            </span>
+            <LanguageSelector />
+          </div>
+
           <div>
             <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.05em', marginBottom: '1rem', textTransform: 'uppercase' }}>
               {dict.nav.forWhom}
