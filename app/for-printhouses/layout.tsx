@@ -3,7 +3,7 @@ import { constructMetadata, getBreadcrumbJsonLd } from '@/lib/seo';
 
 export const metadata: Metadata = constructMetadata({
   title: 'Motor de Captación y Modelado para Imprentas | PrintPrice Pro',
-  description: 'Recibe órdenes de trabajo verificadas con evidencia inmutable (evidenceId), modelado técnico de maquinaria gráfica y cero incidencias de preflight.',
+  description: 'Recibe órdenes de trabajo verificadas con trazabilidad técnica garantizada, modelado de maquinaria gráfica y preflight determinista.',
   canonical: '/for-printhouses',
 });
 

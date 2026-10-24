@@ -46,7 +46,7 @@ export default function ForAuthorsPage() {
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem' }}>
               <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.1em' }}>
-                {locale === 'es' ? 'ESTIMACIÓN INDEPENDIENTE' : locale === 'de' ? 'AUTOREN-KALKULATION' : 'INDEPENDENT AUTHOR ESTIMATE'}
+                {locale === 'es' ? 'CASO DE EJEMPLO · DEMOSTRACIÓN' : locale === 'de' ? 'BEISPIEL · DEMONSTRATION' : 'SAMPLE CASE · DEMONSTRATION'}
               </span>
               <span style={{ fontSize: '0.65rem', background: 'var(--accent-container)', color: 'var(--accent-primary)', padding: '0.15rem 0.5rem', borderRadius: 'var(--radius-pill)', fontWeight: 700 }}>
                 {locale === 'es' ? 'SIN MÍNIMO' : locale === 'de' ? 'KEIN MINIMUM' : 'NO MINIMUM'}
@@ -72,7 +72,9 @@ export default function ForAuthorsPage() {
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ color: 'var(--text-secondary)' }}>Preflight Status:</span>
-                <span style={{ fontWeight: 700, color: '#22c55e' }}>✓ 3mm Bleed Passed</span>
+                <span style={{ fontWeight: 700, color: '#22c55e' }}>
+                  {locale === 'es' ? '✓ Sangrado validado según perfil' : locale === 'de' ? '✓ Beschnitt nach Profil geprüft' : '✓ Bleed validated for profile'}
+                </span>
               </div>
             </div>
 
@@ -174,7 +176,7 @@ export default function ForAuthorsPage() {
         </Container>
       </section>
 
-      {/* Capacidades & Herramientas */}
+      {/* Capacidades & Herramientas: The 3 Core Pillars for Authors */}
       <Section showGrid={false}>
         <Container>
           <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 3.5rem' }}>
@@ -186,36 +188,41 @@ export default function ForAuthorsPage() {
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
-            <div className="rounded-card" style={{ padding: '2rem' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
-                €
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2.5rem' }}>
+            {/* Tool 1: Price it */}
+            <div className="rounded-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
+                  💶
+                </div>
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>{dict.authorsPage.tool1Title}</h3>
+                <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                  {dict.authorsPage.tool1Desc}
+                </p>
               </div>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>{dict.authorsPage.tool1Title}</h3>
-              <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                {dict.authorsPage.tool1Desc}
-              </p>
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '1.25rem' }}>
+                <a href="https://budget.printprice.pro/" className="btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>
+                  {locale === 'es' ? 'Calcular precio ➔' : locale === 'de' ? 'Preis kalkulieren ➔' : 'Calculate price ➔'}
+                </a>
+              </div>
             </div>
 
+            {/* Tool 2: Fix it */}
             <div className="rounded-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>
                 <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
                   ✓
                 </div>
                 <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>
-                  {locale === 'es' ? 'Preflight: Comprueba tu archivo' : locale === 'de' ? 'Preflight: Datei prüfen' : 'Preflight: Check your file'}
+                  {dict.authorsPage.tool2Title}
                 </h3>
                 <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
-                  {locale === 'es'
-                    ? 'Comprueba tu archivo sin tener que interpretar un informe técnico complejo. Detecta sangrados insuficientes, márgenes de corte y fotos de baja resolución con explicaciones comprensibles.'
-                    : locale === 'de'
-                    ? 'Prüfen Sie Ihre Datei ohne komplizierte Fachberichte. Erkennt fehlenden Beschnitt, Sicherheitsabstände und Bilder unter 300 DPI mit leicht verständlichen Hinweisen.'
-                    : 'Check your file without deciphering complex technical reports. Catch missing bleed, trim margins, and low-res images with clear, actionable guidance.'}
+                  {dict.authorsPage.tool2Desc}
                 </p>
               </div>
               <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '1rem' }}>
                 <a href="https://preflight.printprice.pro/" className="btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>
-                  {locale === 'es' ? 'Comprobar PDF ➔' : locale === 'de' ? 'PDF prüfen ➔' : 'Check PDF ➔'}
+                  {locale === 'es' ? 'Comprobar mi PDF ➔' : locale === 'de' ? 'Mein PDF prüfen ➔' : 'Check my PDF ➔'}
                 </a>
                 <Link href="/products/preflight" className="btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>
                   {locale === 'es' ? 'Ver detalles' : locale === 'de' ? 'Details' : 'Details'}
@@ -223,15 +230,70 @@ export default function ForAuthorsPage() {
               </div>
             </div>
 
-            <div className="rounded-card" style={{ padding: '2rem' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
-                📖
+            {/* Tool 3: Print it */}
+            <div className="rounded-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
+                  🏭
+                </div>
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>{dict.authorsPage.tool3Title}</h3>
+                <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                  {dict.authorsPage.tool3Desc}
+                </p>
               </div>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>{dict.authorsPage.tool3Title}</h3>
-              <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                {dict.authorsPage.tool3Desc}
-              </p>
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '1.25rem' }}>
+                <a href="https://budget.printprice.pro/" className="btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>
+                  {locale === 'es' ? 'Encargar producción ➔' : locale === 'de' ? 'Druckauftrag erteilen ➔' : 'Commission printing ➔'}
+                </a>
+                <Link href="/products/print" className="btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>
+                  {locale === 'es' ? 'Cómo funciona' : locale === 'de' ? 'Ablauf' : 'How it works'}
+                </Link>
+              </div>
             </div>
+          </div>
+
+          {/* Complementary Tool: Maqueta 3D */}
+          <div
+            className="rounded-card"
+            style={{
+              padding: 'clamp(1.25rem, 3vw, 1.75rem)',
+              background: 'linear-gradient(135deg, rgba(220, 0, 0, 0.04) 0%, var(--bg-secondary) 100%)',
+              border: '1px solid var(--border-color)',
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '1.25rem',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'clamp(0.75rem, 2vw, 1.25rem)', flexWrap: 'wrap', flex: '1 1 260px' }}>
+              <span style={{ fontSize: '2rem', lineHeight: 1 }}>📖</span>
+              <div style={{ flex: '1 1 200px', minWidth: 0 }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                  <span style={{ fontWeight: 800, fontSize: '0.975rem', lineHeight: 1.4 }}>
+                    {locale === 'es' ? 'Herramienta complementaria de visualización: Maqueta 3D Interactiva' : locale === 'de' ? 'Ergänzende 3D-Vorschau: Interaktives Buch-Mockup' : 'Complementary visualization tool: Interactive 3D Mockup'}
+                  </span>
+                  <span style={{ fontSize: '0.625rem', background: 'var(--accent-container)', color: 'var(--accent-primary)', padding: '0.1rem 0.45rem', borderRadius: 'var(--radius-pill)', fontWeight: 800 }}>
+                    COMPLEMENTARIA
+                  </span>
+                </div>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>
+                  {locale === 'es'
+                    ? 'Visualiza la cubierta, contraportada y grosor de lomo calculado en tu navegador antes de encargar la tirada física.'
+                    : locale === 'de'
+                    ? 'Prüfen Sie Umschlag, Rückenstärke und Aufschlagverhalten direkt im Browser vor Auftragserteilung.'
+                    : 'Preview cover, back, and computed spine thickness in your browser before ordering the physical run.'}
+                </p>
+              </div>
+            </div>
+
+            <Link
+              href="/products/mockup"
+              className="btn-secondary"
+              style={{ padding: '0.65rem 1.25rem', fontSize: '0.875rem', whiteSpace: 'nowrap' }}
+            >
+              {locale === 'es' ? 'Ver Maqueta 3D ➔' : locale === 'de' ? '3D-Mockup ansehen ➔' : 'View 3D Mockup ➔'}
+            </Link>
           </div>
         </Container>
       </Section>

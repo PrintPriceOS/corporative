@@ -49,10 +49,10 @@ export default function ProductsHubPage() {
       slogan: 'PRINT IT.',
       badge: locale === 'es' ? 'MATCHMAKER INDUSTRIAL' : locale === 'de' ? 'INDUSTRIELLES MATCHING' : 'INDUSTRIAL MATCHING',
       description: locale === 'es'
-        ? 'Encuentra la imprenta industrial homologada para tu proyecto. Enrutamiento algorítmico según maquinaria real, pliegos y trazabilidad inmutable mediante evidenceId.'
+        ? 'Encuentra la imprenta industrial homologada para tu proyecto. Enrutamiento algorítmico según maquinaria real, pliegos y trazabilidad técnica garantizada.'
         : locale === 'de'
-        ? 'Finden Sie den optimalen Druckbetrieb für Ihr Projekt. Algorithmische Zuweisung nach realen Maschinenprofilen und Bogenformaten mit evidenceId.'
-        : 'Find the optimal vetted printing plant for your job. Algorithmic routing based on real press machinery, sheet sizes, and immutable evidenceId tracking.',
+        ? 'Finden Sie den optimalen Druckbetrieb für Ihr Projekt. Algorithmische Zuweisung nach realen Maschinenprofilen, Bogenformaten und auditierter Freigabe.'
+        : 'Find the optimal vetted printing plant for your job. Algorithmic routing based on real press machinery, sheet sizes, and verified job specifications.',
       href: '/products/print',
       internalHref: '/products/print',
       cta: locale === 'es' ? 'Explorar Marketplace ➔' : locale === 'de' ? 'Marketplace erkunden ➔' : 'Explore Marketplace ➔',

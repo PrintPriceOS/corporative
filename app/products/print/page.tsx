@@ -14,13 +14,13 @@ export default function PrintProductPage() {
     es: {
       label: 'PRINT IT / MARKETPLACE DE FABRICACIÓN GRÁFICA',
       title: 'Encuentra la imprenta adecuada y encarga tu producción.',
-      subheadline: 'Enrutamiento algorítmico hacia talleres homologados según maquinaria real, pliegos técnicos y evidencias inmutables.',
+      subheadline: 'Enrutamiento algorítmico hacia talleres homologados según maquinaria real, pliegos técnicos y especificaciones verificadas.',
       ctaPrimary: 'Configurar y encargar en Budget →',
       ctaSecondary: 'Cómo funciona el Matchmaker',
       slogan: ['PRICE IT.', 'FIX IT.', 'PRINT IT.'],
 
       howItWorksTitle: 'El flujo de contratación en el Marketplace',
-      howItWorksSubtitle: 'Cero intermediación opaca: cada pedido se asigna al taller con la máquina y capacidad óptima para tu libro.',
+      howItWorksSubtitle: 'Modelo directo y transparente: cada pedido se asigna al taller con la máquina y pliego idóneo para tu libro.',
       steps: [
         {
           step: '01',
@@ -30,7 +30,7 @@ export default function PrintProductPage() {
         {
           step: '02',
           title: 'Audita tu archivo (Fix it)',
-          desc: 'Valida sangrados, tipografías y perfiles de color en Preflight. Se genera un identificador inmutable (evidenceId) que sella el archivo.'
+          desc: 'Valida sangrados, tipografías y perfiles de color en Preflight. El archivo queda sellado con su ficha técnica para producción.'
         },
         {
           step: '03',
@@ -48,17 +48,17 @@ export default function PrintProductPage() {
       pillars: [
         {
           title: 'Red Homologada de Talleres',
-          desc: 'Trabajamos exclusivamente con imprentas industriales y especializadas en artes gráficas con maquinaria offset y digital auditada.',
+          desc: 'Trabajamos con imprentas industriales y especializadas en artes gráficas con maquinaria offset y digital auditada.',
           icon: '🏭'
         },
         {
-          title: 'Trazabilidad con evidenceId',
-          desc: 'Cada encargo viaja respaldado por un hash SHA-256 del archivo auditado. La imprenta produce exactamente la versión validada, sin discrepancias.',
+          title: 'Trazabilidad Técnica Garantizada',
+          desc: 'Cada encargo viaja respaldado por especificaciones auditadas. La imprenta produce exactamente la versión aprobada, sin discrepancias.',
           icon: '🔒'
         },
         {
           title: 'Costes Transparentes',
-          desc: 'Precios desglosados entre fabricación gráfica y papel. Sin recargos ocultos de intermediación ni tarifas opacas.',
+          desc: 'Precios desglosados entre fabricación gráfica y papel. Sin recargos añadidos ni tarifas ocultas.',
           icon: '💶'
         },
         {
@@ -69,7 +69,7 @@ export default function PrintProductPage() {
       ],
 
       noticeTitle: 'Acceso para Compradores vs. Control Plane',
-      noticeText: 'Si eres un autor, editorial o empresa que desea encargar producción impresa, tu punto de entrada es el configurador de proyectos en Budget. El espacio Control Plane está reservado exclusivamente para la operativa interna de imprentas asociadas y proveedores de papel.',
+      noticeText: 'Si eres un autor, particular o editorial que desea encargar producción impresa, tu punto de entrada es el configurador de proyectos en Budget. El espacio Control Plane está reservado exclusivamente para la operativa interna de imprentas asociadas y proveedores de papel.',
 
       faqTitle: 'Preguntas Frecuentes sobre el Marketplace',
       faqs: [
@@ -79,7 +79,7 @@ export default function PrintProductPage() {
         },
         {
           q: '¿Qué garantía tengo de que el archivo no sufrirá alteraciones en el taller?',
-          a: 'El flujo genera un identificador de evidencia (evidenceId) criptográfico inmutable. La imprenta solo puede descargar y procesar el documento con el hash validado que aprobaste en el paso de Preflight.'
+          a: 'El flujo genera una orden técnica verificada. La imprenta únicamente recibe y procesa el documento exactamente en la versión auditada que aprobaste en el paso de Preflight.'
         },
         {
           q: '¿Puedo encargar desde un único ejemplar o solo grandes tiradas?',
@@ -90,13 +90,13 @@ export default function PrintProductPage() {
     en: {
       label: 'PRINT IT / PRODUCTION MANUFACTURING MARKETPLACE',
       title: 'Find the right printhouse and commission your production.',
-      subheadline: 'Algorithmic routing to certified industrial printing plants based on real machine profiles, sheet sizes, and immutable evidence.',
+      subheadline: 'Algorithmic routing to certified industrial printing plants based on real machine profiles, sheet sizes, and audited specifications.',
       ctaPrimary: 'Configure and order on Budget →',
       ctaSecondary: 'How Matchmaker works',
       slogan: ['PRICE IT.', 'FIX IT.', 'PRINT IT.'],
 
       howItWorksTitle: 'How the Marketplace works',
-      howItWorksSubtitle: 'Zero opaque brokering: every job is routed to the exact plant with the optimal machine setup for your book.',
+      howItWorksSubtitle: 'Direct, transparent model: every job is routed to the exact plant with the optimal machine setup for your book.',
       steps: [
         {
           step: '01',
@@ -106,7 +106,7 @@ export default function PrintProductPage() {
         {
           step: '02',
           title: 'Audit your PDF (Fix it)',
-          desc: 'Verify bleeds, fonts, and color spaces in Preflight. An immutable evidenceId hash seals the file for production.'
+          desc: 'Verify bleeds, fonts, and color spaces in Preflight. The file is sealed with its verified job ticket for production.'
         },
         {
           step: '03',
@@ -124,28 +124,28 @@ export default function PrintProductPage() {
       pillars: [
         {
           title: 'Vetted Partner Network',
-          desc: 'We work strictly with audited industrial printing plants equipped with state-of-the-art offset and digital presses.',
+          desc: 'We work with audited industrial printing plants equipped with state-of-the-art offset and digital presses.',
           icon: '🏭'
         },
         {
-          title: 'evidenceId Traceability',
-          desc: 'Every work order is backed by an immutable SHA-256 hash. The plant produces the exact verified file with zero prepress surprises.',
+          title: 'Guaranteed Technical Traceability',
+          desc: 'Every work order is backed by audited specifications. The plant produces the exact verified file with zero prepress surprises.',
           icon: '🔒'
         },
         {
           title: 'Transparent Cost Resolution',
-          desc: 'De-coupled material and press costs. No hidden broker markups or inflated fees.',
+          desc: 'De-coupled material and press costs with clear itemization and no hidden fees.',
           icon: '💶'
         },
         {
           title: 'Zero Prepress Friction',
-          desc: 'Files arrive at the press pre-validated against the machine physical constraints and gripper tolerances.',
+          desc: 'Files arrive at the press pre-validated against machine physical constraints and gripper tolerances.',
           icon: '⚡'
         }
       ],
 
       noticeTitle: 'Buyer Portal vs. Printhouse Control Plane',
-      noticeText: 'If you are an author, publisher, or business commissioning print production, your gateway is the project configurator on Budget. Control Plane is exclusively the operational dashboard for onboarded printers and paper suppliers.',
+      noticeText: 'If you are an author, individual creator, or publishing house commissioning print production, your gateway is the project configurator on Budget. Control Plane is exclusively the operational dashboard for onboarded printers and paper suppliers.',
 
       faqTitle: 'Frequently Asked Questions about the Marketplace',
       faqs: [
@@ -155,7 +155,7 @@ export default function PrintProductPage() {
         },
         {
           q: 'How do I know the file will not be altered on press?',
-          a: 'The workflow attaches an immutable cryptographic evidenceId. The printhouse can only pull and image the exact file hash approved during the Preflight verification step.'
+          a: 'The workflow attaches an audited technical job order. The printhouse can only pull and image the exact validated file approved during the Preflight step.'
         },
         {
           q: 'Can I order short runs or only large commercial print runs?',
@@ -166,13 +166,13 @@ export default function PrintProductPage() {
     de: {
       label: 'PRINT IT / DRUCKAUFTRAGS-MARKETPLACE',
       title: 'Finden Sie die passende Druckerei und starten Sie die Produktion.',
-      subheadline: 'Algorithmische Vermittlung an zertifizierte Druckbetriebe basierend auf realen Maschinenprofilen, Bogenformaten und unveränderlicher Evidenz.',
+      subheadline: 'Algorithmische Vermittlung an zertifizierte Druckbetriebe basierend auf realen Maschinenprofilen, Bogenformaten und verifizierten Vorgaben.',
       ctaPrimary: 'Projekt in Budget konfigurieren →',
       ctaSecondary: 'Wie Matchmaker funktioniert',
       slogan: ['PRICE IT.', 'FIX IT.', 'PRINT IT.'],
 
       howItWorksTitle: 'Auftragsabwicklung im Marketplace',
-      howItWorksSubtitle: 'Keine undurchsichtigen Zwischenhändler: Jeder Auftrag wird der Druckerei mit den optimalen Maschinen zugewiesen.',
+      howItWorksSubtitle: 'Direktes, transparentes Modell: Jeder Auftrag wird der Druckerei mit den optimalen Maschinen zugewiesen.',
       steps: [
         {
           step: '01',
@@ -182,7 +182,7 @@ export default function PrintProductPage() {
         {
           step: '02',
           title: 'Druckdaten prüfen (Fix it)',
-          desc: 'Prüfen Sie Beschnitt, Schriften und Farbräume im Preflight. Ein unveränderlicher Hash (evidenceId) versiegelt die Datei.'
+          desc: 'Prüfen Sie Beschnitt, Schriften und Farbräume im Preflight. Die Datei wird mit den geprüften Spezifikationen versiegelt.'
         },
         {
           step: '03',
@@ -204,13 +204,13 @@ export default function PrintProductPage() {
           icon: '🏭'
         },
         {
-          title: 'evidenceId-Rückverfolgbarkeit',
-          desc: 'Jeder Auftrag wird durch einen SHA-256-Hash abgesichert. Die Druckerei produziert exakt die freigegebene Version.',
+          title: 'Verlässliche technische Rückverfolgung',
+          desc: 'Jeder Auftrag wird durch auditierte Spezifikationen abgesichert. Die Druckerei produziert exakt die freigegebene Version.',
           icon: '🔒'
         },
         {
           title: 'Transparente Kostenaufstellung',
-          desc: 'Strikte Trennung von Fertigungs- und Papierkosten ohne versteckte Zwischenhändlermargen.',
+          desc: 'Strikte Trennung von Fertigungs- und Papierkosten ohne versteckte Aufschläge.',
           icon: '💶'
         },
         {
@@ -221,7 +221,7 @@ export default function PrintProductPage() {
       ],
 
       noticeTitle: 'Auftraggeber-Zugang vs. Control Plane',
-      noticeText: 'Für Autoren und Verlage erfolgt die Auftragserteilung direkt über den Kalkulator in Budget. Das Control Plane ist die interne Arbeitsumgebung für Druckereien und Papierlieferanten.',
+      noticeText: 'Für Autoren, Privatpersonen und Verlage erfolgt die Auftragserteilung direkt über den Kalkulator in Budget. Das Control Plane ist die interne Arbeitsumgebung für Druckereien und Papierlieferanten.',
 
       faqTitle: 'Häufig gestellte Fragen zum Marketplace',
       faqs: [
@@ -231,7 +231,7 @@ export default function PrintProductPage() {
         },
         {
           q: 'Wie wird sichergestellt, dass die Datei unverändert bleibt?',
-          a: 'Durch die kryptografische evidenceId wird sichergestellt, dass die Druckerei ausschließlich die im Preflight freigegebene Datei belichtet.'
+          a: 'Durch die verifizierte technische Arbeitsorder wird sichergestellt, dass die Druckerei ausschließlich die im Preflight freigegebene Datei belichtet.'
         },
         {
           q: 'Sind auch Kleinauflagen ab einem Einzelexemplar möglich?',

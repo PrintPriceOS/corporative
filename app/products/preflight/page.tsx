@@ -41,7 +41,7 @@ export default function PreflightProductPage() {
         {
           title: 'Imprentas y Talleres',
           badge: 'RECEPCIÓN DE ARCHIVOS',
-          desc: 'Automatiza el filtro de entrada de artes finales. Recibe trabajos con evidencias inmutables (evidenceId) y elimina horas de revisión manual en preimpresión.',
+          desc: 'Automatiza el filtro de entrada de artes finales. Recibe trabajos con fichas técnicas auditadas y elimina horas de revisión manual en preimpresión.',
           icon: '🏭'
         },
         {
@@ -54,13 +54,13 @@ export default function PreflightProductPage() {
 
       // What it checks
       checksTitle: 'Qué comprueba el motor de PrintPrice Preflight',
-      checksSubtitle: 'Evaluación determinista basada en estándares ISO y políticas reales de fabricación.',
+      checksSubtitle: 'Evaluación determinista basada en estándares ISO y políticas reales de fabricación según perfil.',
       checks: [
         { name: 'Cajas de Página (Geometry)', desc: 'Normalización de MediaBox, TrimBox y BleedBox para asegurar dimensiones exactas de corte.' },
-        { name: 'Sangrado Perimetral (Bleed)', desc: 'Detección de ausencia de sangre perimetral (3 mm estándar) para evitar filos blancos al guillotinar.' },
-        { name: 'Resolución de Imágenes (DPI)', desc: 'Cálculo de la resolución efectiva real de cada imagen en página frente al umbral requerido (300 DPI).' },
+        { name: 'Sangrado Perimetral (Bleed)', desc: 'Detección de sangrado según el perfil de producción (por ejemplo, 3 mm habituales en libros estándar) para evitar filos blancos al guillotinar.' },
+        { name: 'Resolución de Imágenes (DPI)', desc: 'Cálculo de la resolución efectiva según el tipo de tirada (por ejemplo, 300 DPI recomendados en color comercial o 150-200 DPI en gran formato).' },
         { name: 'Fuentes Tipográficas', desc: 'Verificación de fuentes no incrustadas, subconjuntos parciales y fuentes sintéticas susceptibles de sustitución.' },
-        { name: 'Espacios de Color y Tintas', desc: 'Detección precisa de elementos en modo RGB, perfiles ICC incompatibles y tintas directas no deseadas.' },
+        { name: 'Espacios de Color y Tintas', desc: 'Verificación del espacio cromático adecuado según perfil de máquina (CMYK, escala de grises o tintas directas según especificación técnica).' },
         { name: 'Límite de Tinta (TAC / TIC)', desc: 'Medición de la cobertura total de tinta para evitar manchas, repintados y retrasos de secado en máquina.' },
         { name: 'Transparencias y Capas', desc: 'Identificación de modos de fusión, máscaras suaves y transparencias complejas que requieran acoplamiento.' },
         { name: 'Estándares PDF/X', desc: 'Comprobación de conformidad con normas ISO (PDF/X-1a, PDF/X-4) para compatibilidad con RIPs industriales.' }
@@ -135,7 +135,7 @@ export default function PreflightProductPage() {
         },
         {
           q: '¿Cómo se conecta Preflight con el presupuesto (Budget) y la producción?',
-          a: 'Las características técnicas que defines al presupuestar en Budget (tamaño de corte, número de páginas, tipo de papel) configuran automáticamente las reglas del Preflight. Al aprobar el archivo, se genera un identificador de evidencia (evidenceId) criptográfico que garantiza que la imprenta reciba exactamente la versión verificada.'
+          a: 'Las características técnicas que defines al presupuestar en Budget (tamaño de corte, número de páginas, tipo de papel) configuran automáticamente las reglas del Preflight. Al aprobar el archivo, se genera una orden técnica verificada que garantiza que la imprenta reciba exactamente la versión validada.'
         }
       ]
     },
@@ -166,7 +166,7 @@ export default function PreflightProductPage() {
         {
           title: 'Printhouses & Factories',
           badge: 'FILE INTAKE',
-          desc: 'Automate print file validation. Receive production-ready jobs with cryptographic evidence (evidenceId) and eliminate prepress labor.',
+          desc: 'Automate print file validation. Receive production-ready jobs with audited technical specifications and eliminate prepress labor.',
           icon: '🏭'
         },
         {
@@ -178,13 +178,13 @@ export default function PreflightProductPage() {
       ],
 
       checksTitle: 'What PrintPrice Preflight checks',
-      checksSubtitle: 'Deterministic evaluation based on ISO standards and real manufacturing constraints.',
+      checksSubtitle: 'Deterministic evaluation based on ISO standards and real manufacturing constraints by profile.',
       checks: [
         { name: 'Page Boxes (Geometry)', desc: 'Normalized verification of MediaBox, TrimBox, and BleedBox to ensure exact trim sizes.' },
-        { name: 'Perimeter Bleed', desc: 'Checks for standard 3mm bleed to prevent unprinted white edges during trimming.' },
-        { name: 'Effective Image DPI', desc: 'Calculates the real effective resolution of each embedded image against the 300 DPI threshold.' },
+        { name: 'Perimeter Bleed', desc: 'Checks bleed according to selected profile (e.g. standard 3mm bleed in commercial book printing) to prevent unprinted white slivers.' },
+        { name: 'Effective Image DPI', desc: 'Calculates the real effective resolution based on press profile (e.g. 300 DPI recommended for commercial color or 150-200 DPI in large format).' },
         { name: 'Font Embedding', desc: 'Detects non-embedded fonts, partial subsets, and Type 3 fonts prone to press substitution.' },
-        { name: 'Color Spaces & Inks', desc: 'Pinpoint detection of RGB elements, uncalibrated ICC profiles, and unintended spot colors.' },
+        { name: 'Color Spaces & Inks', desc: 'Verifies appropriate color gamut based on machine profile (CMYK, grayscale, or specific spot inks).' },
         { name: 'Total Ink Coverage (TAC)', desc: 'Measures total ink limit to prevent ink smudging, set-off, and drying issues on press.' },
         { name: 'Transparencies & Layers', desc: 'Identifies blend modes, soft masks, and complex transparency groups requiring flattening.' },
         { name: 'PDF/X Standards', desc: 'Verifies conformance with ISO standards (PDF/X-1a, PDF/X-4) for industrial RIP compatibility.' }
@@ -254,7 +254,7 @@ export default function PreflightProductPage() {
         },
         {
           q: 'How does Preflight connect with Budget and manufacturing?',
-          a: 'The physical specifications selected in Budget (trim size, page count, paper stock) automatically configure Preflight policies. Once approved, an immutable cryptographic evidenceId is attached to the work order, ensuring the plant receives the exact audited file.'
+          a: 'The physical specifications selected in Budget (trim size, page count, paper stock) automatically configure Preflight policies. Once approved, an audited technical work order is attached, ensuring the plant receives the exact validated file.'
         }
       ]
     },
@@ -262,7 +262,7 @@ export default function PreflightProductPage() {
       label: 'PRINTPRICE PREFLIGHT / FORENSISCHE DRUCKDATENPRÜFUNG',
       title: 'Prüfen Sie Ihr PDF vor dem Druck.',
       subheadline: 'Erkennen Sie technische Mängel, verstehen Sie erforderliche Korrekturen und bereiten Sie Ihre Datei optimal vor.',
-      ctaPrimary: 'PDF jetzt prüfen →',
+      ctaPrimary: 'Mein PDF prüfen →',
       ctaSecondary: 'Beispielbericht ansehen',
       slogan: ['PRICE IT.', 'FIX IT.', 'PRINT IT.'],
       badge: 'DETERMINISTISCHE CLOUD-ANALYSE',
@@ -285,7 +285,7 @@ export default function PreflightProductPage() {
         {
           title: 'Druckereien & Buchbindereien',
           badge: 'DATEIEINGANGSKONTROLLE',
-          desc: 'Automatisieren Sie den Druckdateneingang. Erhalten Sie verifizierte Aufträge mit kryptografischer Evidenz (evidenceId) ohne manuellen Aufwand.',
+          desc: 'Automatisieren Sie den Druckdateneingang. Erhalten Sie verifizierte Aufträge mit auditierter technischer Freigabe ohne manuellen Aufwand.',
           icon: '🏭'
         },
         {
@@ -297,13 +297,13 @@ export default function PreflightProductPage() {
       ],
 
       checksTitle: 'Was PrintPrice Preflight prüft',
-      checksSubtitle: 'Deterministische Prüfung basierend auf ISO-Standards und realen Fertigungsbedingungen.',
+      checksSubtitle: 'Deterministische Prüfung basierend auf ISO-Standards und profilabhängigen Fertigungsregeln.',
       checks: [
         { name: 'Seitenboxen (Geometrie)', desc: 'Normalisierte Prüfung von MediaBox, TrimBox und BleedBox für exakte Endformate.' },
-        { name: 'Umlaufender Beschnitt (Bleed)', desc: 'Erkennung von fehlendem 3-mm-Beschnitt zur Vermeidung von Blitzern beim Schneiden.' },
-        { name: 'Effektive Bildauflösung (DPI)', desc: 'Ermittlung der tatsächlichen Auflösung jedes eingebetteten Bildes im Verhältnis zum 300-DPI-Standard.' },
+        { name: 'Umlaufender Beschnitt (Bleed)', desc: 'Prüfung des Beschnitts nach Produktionsprofil (z. B. übliche 3 mm im Buchdruck) zur Vermeidung von Blitzern beim Schneiden.' },
+        { name: 'Effektive Bildauflösung (DPI)', desc: 'Ermittlung der tatsächlichen Auflösung im Verhältnis zum Profilrichtwert (z. B. 300 DPI im Farbdruck oder 150-200 DPI im Großformat).' },
         { name: 'Schrifteinbettung', desc: 'Prüfung auf nicht eingebettete Schriftarten, unvollständige Subsets und ersetzungsgefährdete Schriften.' },
-        { name: 'Farbräume & Sonderfarben', desc: 'Präzise Erkennung von RGB-Objekten, inkompatiblen ICC-Profilen und unbeabsichtigten Schmuckfarben.' },
+        { name: 'Farbräume & Sonderfarben', desc: 'Prüfung des Farbraums passend zum Maschinenprofil (CMYK, Graustufen oder definierte Schmuckfarben).' },
         { name: 'Gesamtfarbauftrag (TAC / TIC)', desc: 'Messung des maximalen Farbauftrags zur Vermeidung von Ablegen, Verwischen und Trocknungsverzögerungen.' },
         { name: 'Transparenzen & Ebenen', desc: 'Identifikation von Füllmethoden, Soft-Masks und Transparenzgruppen, die Verflachung erfordern.' },
         { name: 'PDF/X-Standards', desc: 'Konformitätsprüfung nach ISO-Normen (PDF/X-1a, PDF/X-4) für maximale RIP-Kompatibilität.' }
@@ -373,7 +373,7 @@ export default function PreflightProductPage() {
         },
         {
           q: 'Wie ist Preflight mit der Preiskalkulation (Budget) verbunden?',
-          a: 'Die im Kalkulator gewählten Parameter (Endformat, Seitenzahl, Papiersorte) steuern direkt die Prüfregeln von Preflight. Bei Freigabe wird ein kryptografischer Hash (evidenceId) generiert, der sicherstellt, dass die Druckerei exakt diese Datei erhält.'
+          a: 'Die im Kalkulator gewählten Parameter (Endformat, Seitenzahl, Papiersorte) steuern direkt die Prüfregeln von Preflight. Bei Freigabe wird ein auditierter technischer Auftrag generiert, der sicherstellt, dass die Druckerei exakt diese Datei erhält.'
         }
       ]
     }
@@ -621,7 +621,7 @@ export default function PreflightProductPage() {
                     </span>
                   </div>
                   <div className="technical-text" style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>
-                    evidenceId: sha256:7f83b1a2c94d0e82... • Perfil: OFFSET_STANDARD_F51 • 64 págs.
+                    Caso de ejemplo demostrativo • Perfil: OFFSET_STANDARD_F51 • 64 págs.
                   </div>
                 </div>
 
@@ -658,7 +658,7 @@ export default function PreflightProductPage() {
                     </span>
                   </div>
                   <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.5, marginBottom: '0.75rem' }}>
-                    La caja TrimBox está definida a 148×210 mm, pero no existe sangrado de 3 mm en los bordes superior y exterior.
+                    La caja TrimBox está definida a 148×210 mm, pero no existe el sangrado perimetral establecido para este perfil de edición (3 mm en los bordes superior y exterior).
                   </p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
                     <span
@@ -698,7 +698,7 @@ export default function PreflightProductPage() {
                     </span>
                   </div>
                   <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.5, marginBottom: '0.75rem' }}>
-                    La imagen se imprimirá pixelada o con pérdida de detalle fino (estándar requerido: 300 DPI efectivos).
+                    La imagen se imprimirá con pérdida de nitidez frente al umbral recomendado para este perfil editorial (300 DPI efectivos en cuatricromía).
                   </p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
                     <span
@@ -1068,7 +1068,7 @@ export default function PreflightProductPage() {
                     <tr>
                       <td style={{ padding: '1rem', fontWeight: 700 }}>Trazabilidad y original</td>
                       <td style={{ padding: '1rem', color: 'var(--accent-primary)' }}>
-                        <strong>Disponible</strong><br />Preservación estricta del original y generación de hash SHA-256 (evidenceId) inmutable.
+                        <strong>Disponible</strong><br />Preservación estricta del original y hash SHA-256 de auditoría técnica.
                       </td>
                       <td style={{ padding: '1rem' }}>
                         <strong>Disponible</strong><br />El archivo original se mueve a la carpeta de archivo; el reparado se crea aparte.

@@ -28,10 +28,10 @@ export default function Home() {
         ? 'Preiskalkulator für den Buchdruck'
         : 'Print book pricing calculator',
       description: locale === 'es'
-        ? 'Calcula el coste de producción en segundos. Compara tecnología digital vs offset según tirada, estima el grosor de lomo exacto y vincula precios de papel actualizados sin registro obligatorio ni suscripciones.'
+        ? 'Calcula el coste de producción en segundos. Optimiza el presupuesto aplicando tecnología digital o tecnología offset según el volumen configurado, estima el grosor de lomo exacto y desglosa tarifas de sustratos catalogados y actualizados por talleres y proveedores sin registro obligatorio ni suscripciones.'
         : locale === 'de'
-        ? 'Berechnen Sie reale Produktionskosten in Sekundenschnelle. Vergleichen Sie Digital- und Offsetdruck, berechnen Sie die exakte Rückendicke und binden Sie aktuelle Papierpreise ein.'
-        : 'Calculate production costs in seconds. Compare digital vs offset press runs, compute exact spine thickness, and integrate live paper rates with no compulsory sign-up or subscriptions.',
+        ? 'Berechnen Sie reale Produktionskosten in Sekundenschnelle. Optimiert nach Digital- oder Offsetdruck je nach Auflage, berechnet die exakte Rückendicke und schlüsselt katalogisierte Papierpreise ohne Registrierungspflicht auf.'
+        : 'Calculate production costs in seconds. Optimizes costs across digital or offset press runs based on volume, computes exact spine thickness, and itemizes cataloged substrate rates with no compulsory sign-up or subscriptions.',
       primaryCtaText: locale === 'es' ? 'Calcular precio ahora ➔' : locale === 'de' ? 'Preis jetzt kalkulieren ➔' : 'Calculate price now ➔',
       primaryCtaHref: 'https://budget.printprice.pro/',
       secondaryCtaText: locale === 'es' ? 'Conocer motor Budget' : locale === 'de' ? 'Budget-Engine Details' : 'About Budget Engine',
@@ -49,11 +49,11 @@ export default function Home() {
         ? 'Technisches PDF-Preflight'
         : 'Technical PDF preflight inspection',
       description: locale === 'es'
-        ? 'Comprueba y prepara tu archivo antes de entrar a máquina. Detecta sangres perimetrales de 3 mm, resolución efectiva a 300 DPI, espacios de color CMYK y tipografías incrustadas con explicaciones claras y directas.'
+        ? 'Comprueba y prepara tu archivo antes de entrar a máquina. Evalúa sangrados, resolución efectiva, espacios de color y tipografías según el perfil de producción configurado (por ejemplo: sangrado de 3 mm en libros estándar, 300 DPI recomendados en color comercial o perfiles CMYK/escala de grises), con diagnósticos claros y directos.'
         : locale === 'de'
-        ? 'Prüfen und bereiten Sie Ihre Datei vor dem Druck auf. Erkennt 3 mm Randbeschnitt, 300 DPI Bildauflösung, CMYK-Farbräume und Schrifteinbettung mit verständlichen Hinweisen.'
-        : 'Inspect and prepare your artwork file before it reaches the press. Detects 3mm bleeds, 300 DPI effective resolution, CMYK gamuts, and font glyphs with clear, actionable diagnostics.',
-      primaryCtaText: locale === 'es' ? 'Comprobar PDF gratis ➔' : locale === 'de' ? 'PDF kostenlos prüfen ➔' : 'Check PDF for free ➔',
+        ? 'Prüfen und bereiten Sie Ihre Datei vor dem Druck auf. Erkennt Beschnitt, Bildauflösung, Farbräume und Schriften passend zum gewählten Produktionsprofil (z. B. 3 mm Beschnitt im Buchdruck oder 300 DPI im Farbdruck) mit verständlichen Hinweisen.'
+        : 'Inspect and prepare your artwork file before it reaches the press. Detects bleeds, effective resolution, color spaces, and fonts based on your production profile (for example: standard 3mm bleed, 300 DPI recommended for color, or CMYK/grayscale profiles) with clear, actionable diagnostics.',
+      primaryCtaText: locale === 'es' ? 'Comprobar mi PDF ➔' : locale === 'de' ? 'Mein PDF prüfen ➔' : 'Check my PDF ➔',
       primaryCtaHref: 'https://preflight.printprice.pro/',
       secondaryCtaText: locale === 'es' ? 'Ver capacidades y auditoría' : locale === 'de' ? 'Funktionen & Prüfung' : 'View audit features',
       secondaryCtaHref: '/products/preflight',
@@ -70,10 +70,10 @@ export default function Home() {
         ? 'Produktions-Marketplace mit Partnerdruckereien'
         : 'Production marketplace with vetted plants',
       description: locale === 'es'
-        ? 'Encuentra la imprenta adecuada y encarga la producción. Conecta las especificaciones presupuestadas y tu archivo validado con talleres acreditados mediante trazabilidad inmutable (evidenceId).'
+        ? 'Encuentra la imprenta adecuada y encarga la producción. Conecta las especificaciones presupuestadas y tu archivo validado con talleres adscritos a la red de producción de PrintPrice OS, garantizando que el taller reciba exactamente la versión aprobada.'
         : locale === 'de'
-        ? 'Finden Sie den passenden Betrieb und beauftragen Sie die Fertigung. Verbindet kalkulierte Spezifikationen und geprüfte Daten mit zertifizierten Druckereien über evidenceId.'
-        : 'Find the right printer and commission production. Connects budgeted specifications and validated files directly with accredited plants backed by immutable evidenceId traceability.',
+        ? 'Finden Sie den passenden Betrieb und beauftragen Sie die Fertigung. Verbindet kalkulierte Spezifikationen und geprüfte Daten mit Partnerdruckereien im Netzwerk für eine exakte Umsetzung.'
+        : 'Find the right printer and commission production. Connects budgeted specifications and validated files directly with partner plants in the PrintPrice OS network, ensuring the shop prints the exact approved version.',
       primaryCtaText: locale === 'es' ? 'Configurar y encargar ➔' : locale === 'de' ? 'Projekt konfigurieren ➔' : 'Configure & order ➔',
       primaryCtaHref: 'https://budget.printprice.pro/',
       secondaryCtaText: locale === 'es' ? 'Cómo funciona el marketplace' : locale === 'de' ? 'Marketplace-Ablauf' : 'How the marketplace works',
@@ -81,10 +81,10 @@ export default function Home() {
       icon: '🏭',
       badge: 'PRINT IT',
       disclaimer: locale === 'es'
-        ? '* El encargo para compradores se activa a través de Budget conectando con talleres homologados. Control Plane está reservado a la operativa interna de imprentas.'
+        ? '* La solicitud de producción para compradores se inicia a través de Budget conectando con talleres homologados de la red. Control Plane está reservado a la operativa interna de imprentas.'
         : locale === 'de'
-        ? '* Auftragserteilung erfolgt über das Budget-Modul an Partnerbetriebe. Control Plane ist Druckereien vorbehalten.'
-        : '* Buyer ordering is initiated via Budget connecting with vetted partner plants. Control Plane is strictly the printer operational backend.',
+        ? '* Auftragserteilung erfolgt über das Budget-Modul an Partnerbetriebe im Netzwerk. Control Plane ist der internen Druckerei-Betriebsführung vorbehalten.'
+        : '* Buyer production requests are initiated via Budget connecting with vetted partner plants in the network. Control Plane is strictly the printer operational backend.',
     },
   ];
 
@@ -96,7 +96,7 @@ export default function Home() {
       tagline: dict.home.authorsTagline,
       description: dict.home.authorsDesc,
       badge: dict.home.authorsBadge,
-      toolsTag: 'PRICE IT · FIX IT · MAQUETA 3D',
+      toolsTag: 'PRICE IT · FIX IT · PRINT IT',
       href: '/for-authors',
       ctaText: dict.home.authorsCta,
       icon: '📖',
@@ -158,29 +158,29 @@ export default function Home() {
     {
       feature: locale === 'es' ? 'Desglose transparente entre impresión y papel' : locale === 'de' ? 'Transparente Aufteilung von Druck und Papier' : 'Transparent separation between printing and paper',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      traditional: locale === 'es' ? 'Opaco / Global' : locale === 'de' ? 'Intransparent / Global' : 'Opaque / Bundled',
+      traditional: locale === 'es' ? 'Presupuesto conjunto' : locale === 'de' ? 'Pauschalangebot' : 'Bundled quote',
       lulu: locale === 'es' ? 'No disponible' : locale === 'de' ? 'Nicht verfügbar' : 'Not available',
       gelato: locale === 'es' ? 'No disponible' : locale === 'de' ? 'Nicht verfügbar' : 'Not available',
-      notes: locale === 'es' ? 'Paper Supplier Hub desglosa el coste de sustrato y el porte logístico.' : locale === 'de' ? 'Paper Supplier Hub trennt Materialpreis und Frachtkosten namentlich.' : 'Paper Supplier Hub strictly decouples substrate cost from freight.',
+      notes: locale === 'es' ? 'Desglosa el coste de fabricación gráfica y el sustrato catalogado.' : locale === 'de' ? 'Trennt Fertigungsaufwand und katalogisierten Materialpreis.' : 'Separates printing production costs from cataloged substrate costs.',
     },
     {
-      feature: locale === 'es' ? 'Punto de cruce automático entre digital y offset' : locale === 'de' ? 'Automatische Break-Even-Berechnung Digital vs. Offset' : 'Automatic crossover calculation between digital and offset',
+      feature: locale === 'es' ? 'Optimización de tecnología digital vs offset según volumen' : locale === 'de' ? 'Auflagenoptimierung Digital vs. Offset' : 'Run volume optimization (digital vs offset)',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      traditional: locale === 'es' ? 'Depende de cotizador' : locale === 'de' ? 'Abhängig von Sachbearbeiter' : 'Estimator dependent',
+      traditional: locale === 'es' ? 'Criterio de cotizador' : locale === 'de' ? 'Nach Sachbearbeiter' : 'Estimator discretion',
       lulu: locale === 'es' ? 'Solo digital / POD' : locale === 'de' ? 'Nur Digital / POD' : 'Digital / POD only',
       gelato: locale === 'es' ? 'Solo digital / POD' : locale === 'de' ? 'Nur Digital / POD' : 'Digital / POD only',
-      notes: locale === 'es' ? 'Determina en qué volumen exacto de ejemplares conviene cambiar de tecnología.' : locale === 'de' ? 'Bestimmt exakt die Auflagenschwelle für den Technologiewechsel.' : 'Pinpoints the exact copy threshold to transition from digital to offset press.',
+      notes: locale === 'es' ? 'Calcula automáticamente el coste más eficiente aplicando tecnología digital para tiradas cortas u offset para tiradas medias y altas.' : locale === 'de' ? 'Ermittelt automatisch die wirtschaftlichste Technologie (Digital für Kleinauflagen, Offset für mittlere/große Auflagen).' : 'Calculates the optimal cost path applying digital for short runs or offset for volume runs.',
     },
     {
-      feature: locale === 'es' ? 'Matrices reales calibradas por talleres homologados' : locale === 'de' ? 'Reale Maschinenkosten hinterlegt von Partnerbetrieben' : 'Real machine rates calibrated by accredited plants',
+      feature: locale === 'es' ? 'Tarifas y capacidades calibradas por talleres adscritos' : locale === 'de' ? 'Maschinenkosten hinterlegt von Partnerbetrieben' : 'Machine rates calibrated by partner plants',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
       traditional: locale === 'es' ? 'Presupuesto individual' : locale === 'de' ? 'Einzelangebot' : 'Single quote',
       lulu: locale === 'es' ? 'Tarifa fija cerrada' : locale === 'de' ? 'Feste Einheitstarife' : 'Fixed closed pricing',
       gelato: locale === 'es' ? 'Tarifa fija cerrada' : locale === 'de' ? 'Feste Einheitstarife' : 'Fixed closed pricing',
-      notes: locale === 'es' ? 'Costes horarios, mermas de arranque y pliegos modelados en Control Plane.' : locale === 'de' ? 'Stundensätze, Rüstzeiten und Bogenformate aus dem Control Plane.' : 'Hourly rates, makeready waste, and imposition sheets from Control Plane.',
+      notes: locale === 'es' ? 'Costes horarios, mermas de arranque y pliegos modelados en la plataforma.' : locale === 'de' ? 'Stundensätze, Rüstzeiten und Bogenformate aus der Plattform.' : 'Hourly rates, makeready waste, and imposition sheets from the platform.',
     },
     {
-      feature: locale === 'es' ? 'Ficha técnica inmutable con identificador único (evidenceId)' : locale === 'de' ? 'Unveränderlicher Prüf- und Kalkulations-Hash (evidenceId)' : 'Immutable technical ticket with hash (evidenceId)',
+      feature: locale === 'es' ? 'Ficha técnica verificada y vinculada a la orden' : locale === 'de' ? 'Verifizierte technische Spezifikation für den Auftrag' : 'Verified technical spec sheet tied to order',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
       traditional: locale === 'es' ? 'Albarán / Email' : locale === 'de' ? 'Lieferschein / E-Mail' : 'Email / Packing slip',
       lulu: locale === 'es' ? 'Número de pedido' : locale === 'de' ? 'Bestellnummer' : 'Order number',
@@ -200,20 +200,20 @@ export default function Home() {
       notes: locale === 'es' ? 'Preflight se ejecuta directamente en navegador sin licencias de escritorio pesadas.' : locale === 'de' ? 'Preflight läuft browserbasiert ohne Desktop-Lizenzen.' : 'Preflight executes in browser with no heavy desktop licenses required.',
     },
     {
-      feature: locale === 'es' ? 'Detección perimetral de sangres (TrimBox y BleedBox)' : locale === 'de' ? 'Beschnittprüfung (TrimBox und BleedBox)' : 'Perimeter bleed audit (TrimBox and BleedBox)',
+      feature: locale === 'es' ? 'Detección perimetral de sangres según perfil de producción' : locale === 'de' ? 'Beschnittprüfung nach Produktionsprofil' : 'Perimeter bleed audit according to production profile',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
       acrobat: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
       pitstop: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
       pdftoolbox: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      notes: locale === 'es' ? 'Comprueba los 3 mm obligatorios en los 4 bordes para evitar filos blancos de guillotina.' : locale === 'de' ? 'Prüft 3 mm Randbeschnitt an allen vier Kanten gegen weiße Blitzer.' : 'Verifies mandatory 3mm margins across all 4 edges to prevent trim slivers.',
+      notes: locale === 'es' ? 'Verifica el margen configurado (por ejemplo, 3 mm estándar en libros) para evitar filos blancos.' : locale === 'de' ? 'Prüft den definierten Randbeschnitt (z. B. 3 mm im Buchdruck) gegen weiße Blitzer.' : 'Verifies configured bleed margins (e.g. 3mm book standard) to prevent slivers.',
     },
     {
-      feature: locale === 'es' ? 'Auditoría de resolución efectiva con localización por página (<300 DPI)' : locale === 'de' ? 'Effektive Bildauflösung seitengenau (<300 DPI)' : 'Effective image DPI audit with page localization (<300 DPI)',
+      feature: locale === 'es' ? 'Auditoría de resolución efectiva con localización por página' : locale === 'de' ? 'Effektive Bildauflösung seitengenau' : 'Effective image DPI audit with page localization',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
       acrobat: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
       pitstop: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
       pdftoolbox: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      notes: locale === 'es' ? 'Señala imágenes por debajo de 300 DPI indicando la página exacta donde se ubican.' : locale === 'de' ? 'Lokalisiert Bilder unter 300 DPI seitengenau im Prüfbericht.' : 'Pinpoints images below 300 DPI with exact page coordinates.',
+      notes: locale === 'es' ? 'Señala imágenes por debajo del umbral recomendado (por ejemplo, 300 DPI en color comercial) indicando la página.' : locale === 'de' ? 'Lokalisiert Bilder unterhalb des Richtwerts (z. B. 300 DPI im Farbdruck) seitengenau.' : 'Pinpoints images below recommended threshold (e.g. 300 DPI in color) with page numbers.',
     },
     {
       feature: locale === 'es' ? 'Diagnóstico accesible sin tecnicismos complejos' : locale === 'de' ? 'Verständlicher Prüfbericht ohne Fachchinesisch' : 'Clear actionable diagnostics without esoteric jargon',
@@ -232,51 +232,58 @@ export default function Home() {
       notes: locale === 'es' ? 'Ajusta cajas PDF cuando el arte incluye fondo suficiente pero falta caja de sangrado.' : locale === 'de' ? 'Passt PDF-Boxen an, wenn Hintergrundfläche vorhanden ist.' : 'Expands PDF page boxes when background art exceeds trim bounds.',
     },
     {
-      feature: locale === 'es' ? 'Firma criptográfica del informe vinculada a producción (evidenceId)' : locale === 'de' ? 'Kryptografische Berichtssignatur für Druckauftrag (evidenceId)' : 'Cryptographic audit signature linked to order (evidenceId)',
+      feature: locale === 'es' ? 'Firma técnica del informe vinculada a producción' : locale === 'de' ? 'Technische Freigabe signiert für Druckauftrag' : 'Technical audit verification linked to order',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
       acrobat: locale === 'es' ? 'No aplica' : locale === 'de' ? 'Nicht anwendbar' : 'Not applicable',
       pitstop: locale === 'es' ? 'Mediante integración' : locale === 'de' ? 'Über Integration' : 'Via integration',
       pdftoolbox: locale === 'es' ? 'Mediante integración' : locale === 'de' ? 'Über Integration' : 'Via integration',
-      notes: locale === 'es' ? 'Hash SHA-256 inmutable que garantiza que el impresor recibe el archivo auditado.' : locale === 'de' ? 'SHA-256-Hash stellt sicher, dass der Drucker die geprüfte Datei erhält.' : 'SHA-256 hash ensuring plant prints the exact preflighted asset.',
+      notes: locale === 'es' ? 'Verificación técnica que garantiza que el impresor recibe exactamente el archivo auditado.' : locale === 'de' ? 'Stellt sicher, dass die Druckerei exakt die geprüfte Datei erhält.' : 'Technical check ensuring plant prints the exact preflighted asset.',
     },
   ];
 
-  // Tab 3: PRINT IT (Búsqueda, Contratación y Seguimiento)
+  // Tab 3: PRINT IT (Búsqueda, Contratación y Seguimiento) — Neutral, verifiable dimensions
   const COMPARISON_PRINT = [
     {
-      feature: locale === 'es' ? 'Enrutamiento con talleres homologados independientes' : locale === 'de' ? 'Vermittlung an unabhängige zertifizierte Druckereien' : 'Routing to independent vetted industrial plants',
-      printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      closedNetworks: locale === 'es' ? 'Red cautiva cerrada' : locale === 'de' ? 'Geschlossenes Netzwerk' : 'Closed captive network',
-      traditionalBrokers: locale === 'es' ? 'Taller discrecional' : locale === 'de' ? 'Intransparente Vergabe' : 'Discretionary broker plant',
-      notes: locale === 'es' ? 'El algoritmo Matchmaker selecciona talleres según el formato de máquina idóneo.' : locale === 'de' ? 'Matchmaker-Algorithmus wählt Betriebe nach optimalem Maschinenformat.' : 'Matchmaker assigns plants according to ideal imposition sheet formats.',
+      feature: locale === 'es' ? 'Modelo de servicio' : locale === 'de' ? 'Servicemodell' : 'Service model',
+      printprice: locale === 'es' ? 'Directo con talleres' : locale === 'de' ? 'Direkt mit Partnerbetrieben' : 'Direct with partner plants',
+      podPlatforms: locale === 'es' ? 'Plataforma POD integrada' : locale === 'de' ? 'Integrierte POD-Plattform' : 'Integrated POD platform',
+      traditionalBrokers: locale === 'es' ? 'Gestión comercial / Bróker' : locale === 'de' ? 'Handelsvermittlung / Broker' : 'Commercial brokering',
+      notes: locale === 'es' ? 'PrintPrice conecta con plantas industriales adscritas; plataformas POD operan centros de distribución; brókeres subcontratan talleres.' : locale === 'de' ? 'PrintPrice bindet Partnerbetriebe an; POD-Plattformen nutzen Verteilzentren; Broker vergeben Aufträge extern.' : 'PrintPrice coordinates partner plants; POD platforms operate fulfillment networks; brokers subcontract plants.',
     },
     {
-      feature: locale === 'es' ? 'Trazabilidad inmutable de especificaciones (evidenceId)' : locale === 'de' ? 'Unveränderliche Vorgaben-Rückverfolgung (evidenceId)' : 'Immutable job specifications trace (evidenceId)',
-      printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      closedNetworks: locale === 'es' ? 'No confirmado' : locale === 'de' ? 'Nicht bestätigt' : 'Not confirmed',
-      traditionalBrokers: locale === 'es' ? 'Albarán / Email' : locale === 'de' ? 'Lieferschein / E-Mail' : 'Email paper trail',
-      notes: locale === 'es' ? 'El identificador vincula presupuesto, archivo validado y orden física de impresión.' : locale === 'de' ? 'Kryptografische ID verbindet Angebot, geprüfte Datei und Auftrag.' : 'Binds quote, validated artwork, and physical job ticket cryptographically.',
+      feature: locale === 'es' ? 'Selección de imprenta' : locale === 'de' ? 'Druckereiauswahl' : 'Printer selection',
+      printprice: locale === 'es' ? 'Enrutamiento técnico' : locale === 'de' ? 'Technische Zuweisung' : 'Technical routing',
+      podPlatforms: locale === 'es' ? 'Asignación interna POD' : locale === 'de' ? 'Interne POD-Zuweisung' : 'Internal POD assignment',
+      traditionalBrokers: locale === 'es' ? 'Selección manual' : locale === 'de' ? 'Manuelle Vergabe' : 'Manual selection',
+      notes: locale === 'es' ? 'El algoritmo Matchmaker evalúa formato de pliego y máquina idónea; POD asigna por logística; la gestión tradicional asigna por acuerdos comerciales.' : locale === 'de' ? 'Matchmaker wählt nach Bogenformat und Maschineneinsatz; POD nach Versandregion; Broker nach Handelsabkommen.' : 'Matchmaker evaluates sheet format and press fit; POD routes by shipping region; brokers assign via trade agreements.',
     },
     {
-      feature: locale === 'es' ? 'Preflight técnico obligatorio antes de entrar a máquina' : locale === 'de' ? 'Verpflichtendes technisches Preflight vor Maschinengang' : 'Mandatory technical preflight before press run',
-      printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      closedNetworks: locale === 'es' ? 'Filtro automático básico' : locale === 'de' ? 'Einfacher Basisfilter' : 'Basic automated filter',
-      traditionalBrokers: locale === 'es' ? 'Revisión manual / Extra' : locale === 'de' ? 'Manuelle Prüfung / Aufpreis' : 'Manual review / Surcharge',
-      notes: locale === 'es' ? 'Evita paradas de prensa costosas por archivos con sangrado ausente o fuentes no incrustadas.' : locale === 'de' ? 'Verhindert Maschinenstillstand durch fehlenden Beschnitt oder Schriften.' : 'Prevents costly plant stop-press due to missing bleeds or raster flaws.',
+      feature: locale === 'es' ? 'Presupuestación' : locale === 'de' ? 'Kalkulation & Preis' : 'Pricing & budgeting',
+      printprice: locale === 'es' ? 'Inmediata en servidor' : locale === 'de' ? 'Sofortige Server-Kalkulation' : 'Instant server calculation',
+      podPlatforms: locale === 'es' ? 'Tarifa fija unitaria' : locale === 'de' ? 'Einheitstarife' : 'Fixed unit catalog pricing',
+      traditionalBrokers: locale === 'es' ? 'Bajo cotización (24-72h)' : locale === 'de' ? 'Auf Anfrage (24-72 Std.)' : 'On request (24-72h)',
+      notes: locale === 'es' ? 'Budget calcula al instante con costes desglosados de fabricación y papel; POD aplica tarifas unitarias cerradas; la gestión tradicional requiere solicitud manual.' : locale === 'de' ? 'Budget schlüsselt Fertigung und Papier sofort auf; POD nutzt Einheitspreise; Broker benötigen manuelle Angebotserstellung.' : 'Budget itemizes manufacturing and substrate instantly; POD uses unit catalog rates; brokers require manual quoting.',
     },
     {
-      feature: locale === 'es' ? 'Espacio operativo independiente para el taller (Control Plane)' : locale === 'de' ? 'Unabhängige Betriebskonsole für Druckereien (Control Plane)' : 'Independent operations console for printers (Control Plane)',
-      printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      closedNetworks: locale === 'es' ? 'Portal de proveedor cautivo' : locale === 'de' ? 'Geschlossenes Portal' : 'Captive vendor portal',
-      traditionalBrokers: locale === 'es' ? 'No disponible' : locale === 'de' ? 'Nicht verfügbar' : 'Not available',
-      notes: locale === 'es' ? 'Los talleres modelan sus máquinas y gestionan órdenes con estricto aislamiento de datos.' : locale === 'de' ? 'Druckereien verwalten Maschinen und Aufträge mit strengem Datenschutz.' : 'Plants configure presses and manage jobs under strict tenant data isolation.',
+      feature: locale === 'es' ? 'Preparación de archivos' : locale === 'de' ? 'Dateivorbereitung & Preflight' : 'File preparation & preflight',
+      printprice: locale === 'es' ? 'Preflight determinista' : locale === 'de' ? 'Deterministisches Preflight' : 'Deterministic preflight',
+      podPlatforms: locale === 'es' ? 'Comprobación de medidas' : locale === 'de' ? 'Maßprüfung im Uploader' : 'Format dimensional check',
+      traditionalBrokers: locale === 'es' ? 'Revisión en preimpresión' : locale === 'de' ? 'Manuelle Vorstufenprüfung' : 'Manual prepress check',
+      notes: locale === 'es' ? 'Fix it audita sangrados, resolución y perfiles en navegador; POD valida dimensiones básicas; la imprenta tradicional revisa artes finales en taller.' : locale === 'de' ? 'Fix it prüft Beschnitt, Auflösung und Profile im Browser; POD prüft Maße; Druckereien prüfen manuell in der Vorstufe.' : 'Fix it checks bleeds, DPI, and profiles in-browser; POD checks dimensions; traditional shops review in prepress.',
     },
     {
-      feature: locale === 'es' ? 'Desacoplamiento estricto de coste de fabricación vs. transporte' : locale === 'de' ? 'Strikte Trennung von Fertigungs- und Frachtkosten' : 'Strict decoupling of manufacturing cost vs. freight logistics',
-      printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      closedNetworks: locale === 'es' ? 'Porte empaquetado opaco' : locale === 'de' ? 'In Mischkalkulation verdeckt' : 'Bundled opaque shipping',
-      traditionalBrokers: locale === 'es' ? 'Variable discrecional' : locale === 'de' ? 'Intransparenter Zuschlag' : 'Discretionary freight markup',
-      notes: locale === 'es' ? 'Desglose nítido para saber exactamente cuánto cuesta imprimir y cuánto transportar.' : locale === 'de' ? 'Klare Aufschlüsselung: Was kostet der Druck, was die Logistik?' : 'Crisp transparency on actual printing production versus shipping freight.',
+      feature: locale === 'es' ? 'Pedido y seguimiento' : locale === 'de' ? 'Bestellung & Tracking' : 'Ordering & tracking',
+      printprice: locale === 'es' ? 'Orden técnica verificada' : locale === 'de' ? 'Verifizierte Arbeitsorder' : 'Verified technical order',
+      podPlatforms: locale === 'es' ? 'Panel de pedidos web' : locale === 'de' ? 'Web-Bestellübersicht' : 'Web dashboard orders',
+      traditionalBrokers: locale === 'es' ? 'Albarán y correo' : locale === 'de' ? 'Lieferschein & E-Mail' : 'Packing slip & email',
+      notes: locale === 'es' ? 'La orden viaja vinculada a las especificaciones y archivo auditado; POD ofrece seguimiento de paquetería; la gestión tradicional comunica por albarán y correo.' : locale === 'de' ? 'Auftrag verbindet geprüfte Datei mit Fertigung; POD bietet Paket-Tracking; Broker kommunizieren per E-Mail und Lieferschein.' : 'Order binds validated file to plant production; POD provides shipment tracking; brokers track via email and delivery slips.',
+    },
+    {
+      feature: locale === 'es' ? 'Integraciones' : locale === 'de' ? 'Schnittstellen & Integration' : 'Integrations',
+      printprice: locale === 'es' ? 'API REST y Control Plane' : locale === 'de' ? 'REST-API & Control Plane' : 'REST API & Control Plane',
+      podPlatforms: locale === 'es' ? 'Plugins e-commerce' : locale === 'de' ? 'E-Commerce-Plugins' : 'E-commerce plugins',
+      traditionalBrokers: locale === 'es' ? 'Gestión documental directa' : locale === 'de' ? 'Direkter Dokumentenaustausch' : 'Direct document exchange',
+      notes: locale === 'es' ? 'Control Plane para plantas y API de análisis para flujos editoriales; POD conecta con Shopify/WooCommerce; la gestión tradicional usa FTP o correo.' : locale === 'de' ? 'Control Plane für Druckereien und Preflight-API; POD integriert Shopify/WooCommerce; Broker nutzen FTP oder E-Mail.' : 'Control Plane for plants and Preflight API; POD integrates with Shopify/WooCommerce; brokers exchange via FTP/email.',
     },
   ];
 
@@ -321,8 +328,8 @@ export default function Home() {
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.1em' }}>
-                TECHNICAL BOOK PROFILE
+              <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.08em' }}>
+                {locale === 'es' ? 'CASO DE MUESTRA · FICHA TÉCNICA' : locale === 'de' ? 'BEISPIELPROFIL · TECHNISCHE DEMO' : 'SAMPLE PROFILE · DEMO SPECS'}
               </span>
               <span style={{ fontSize: '0.65rem', background: 'rgba(34, 197, 94, 0.15)', color: '#22c55e', padding: '0.15rem 0.5rem', borderRadius: 'var(--radius-pill)', fontWeight: 700 }}>
                 PREFLIGHT READY
@@ -353,7 +360,9 @@ export default function Home() {
             </div>
 
             <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>evidenceId: sha256:7f8e...4b</span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                {locale === 'es' ? 'Cálculo de lomo y perfil auditado' : locale === 'de' ? 'Auditiertes Profil & Bundstegdicke' : 'Audited profile & spine calculation'}
+              </span>
               <a href="https://budget.printprice.pro/" className="btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }}>
                 {dict.nav.start} ➔
               </a>
@@ -927,11 +936,15 @@ export default function Home() {
                 <table className="comparison-table">
                   <thead>
                     <tr>
-                      <th style={{ width: '30%' }}>{dict.home.compFeature}</th>
+                      <th style={{ width: '28%' }}>{dict.home.compFeature}</th>
                       <th style={{ width: '20%', color: 'var(--accent-primary)' }}>PrintPrice Marketplace</th>
-                      <th style={{ width: '18%' }}>Redes Cautivas (Lulu / Gelato)</th>
-                      <th style={{ width: '18%' }}>Intermediarios Tradicionales</th>
-                      <th style={{ width: '14%' }}>{dict.home.compScope}</th>
+                      <th style={{ width: '20%' }}>
+                        {locale === 'es' ? 'Plataformas POD (Lulu, Gelato)' : locale === 'de' ? 'Integrierte POD-Plattformen' : 'Integrated POD Platforms (Lulu, Gelato)'}
+                      </th>
+                      <th style={{ width: '20%' }}>
+                        {locale === 'es' ? 'Gestión gráfica tradicional / Brókeres' : locale === 'de' ? 'Traditionelle Druckvermittlung' : 'Traditional Graphic Brokering'}
+                      </th>
+                      <th style={{ width: '12%' }}>{dict.home.compScope}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -942,7 +955,7 @@ export default function Home() {
                           <span className="badge-available">{row.printprice}</span>
                         </td>
                         <td>
-                          <span className="badge-module">{row.closedNetworks}</span>
+                          <span className="badge-module">{row.podPlatforms}</span>
                         </td>
                         <td>
                           <span className="badge-integration">{row.traditionalBrokers}</span>

@@ -224,12 +224,16 @@ const Particles: React.FC<ParticlesProps> = ({
 
     const particles = new Mesh(gl, { mode: gl.POINTS, geometry, program });
 
+    const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     let animationFrameId: number;
     let lastTime = performance.now();
     let elapsed = 0;
 
     const update = (t: number) => {
-      animationFrameId = requestAnimationFrame(update);
+      if (!prefersReducedMotion) {
+        animationFrameId = requestAnimationFrame(update);
+      }
       const delta = t - lastTime;
       lastTime = t;
       elapsed += delta * speed;
@@ -239,7 +243,7 @@ const Particles: React.FC<ParticlesProps> = ({
         program.uniforms.uMouse.value = [mouseRef.current.x, mouseRef.current.y];
       }
       
-      if (moveParticlesOnHover) {
+      if (moveParticlesOnHover && !prefersReducedMotion) {
         particles.position.x = -mouseRef.current.x * particleHoverFactor;
         particles.position.y = -mouseRef.current.y * particleHoverFactor;
       } else {
@@ -247,7 +251,7 @@ const Particles: React.FC<ParticlesProps> = ({
         particles.position.y = 0;
       }
 
-      if (!disableRotation) {
+      if (!disableRotation && !prefersReducedMotion) {
         particles.rotation.x = Math.sin(elapsed * 0.0002) * 0.1;
         particles.rotation.y = Math.cos(elapsed * 0.0005) * 0.15;
         particles.rotation.z += 0.01 * speed;
@@ -256,7 +260,12 @@ const Particles: React.FC<ParticlesProps> = ({
       renderer.render({ scene: particles, camera });
     };
 
-    animationFrameId = requestAnimationFrame(update);
+    if (prefersReducedMotion) {
+      // Render single static frame for reduced motion users
+      renderer.render({ scene: particles, camera });
+    } else {
+      animationFrameId = requestAnimationFrame(update);
+    }
 
     return () => {
       resizeObserver.disconnect();

@@ -61,7 +61,7 @@
       "intent": "Press profiling, verified jobs, matchmaker for printers",
       "http_status": 200,
       "title": "Motor de Captación y Modelado para Imprentas | PrintPrice Pro",
-      "description": "Recibe órdenes de trabajo verificadas con evidencia inmutable (evidenceId), modelado técnico de maquinaria gráfica y cero incidencias de preflight.",
+      "description": "Recibe órdenes de trabajo verificadas con trazabilidad técnica garantizada, modelado de maquinaria gráfica y preflight determinista.",
       "canonical": "https://printprice.pro/for-printhouses",
       "canonical_valid": true,
       "h1": "Configura tu imprenta y conecta capacidades, maquinaria y ap...",

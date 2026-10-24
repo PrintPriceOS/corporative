@@ -207,10 +207,10 @@ export default function ForPrinthousesPage() {
                 </h3>
                 <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
                   {locale === 'es'
-                    ? 'Controles técnicos de entrada y automatización disponibles mediante API o Control Plane. Validación de cajas de página, sangrado de 3 mm y perfiles ISO con trazabilidad inmutable mediante evidenceId.'
+                    ? 'Controles técnicos de entrada y automatización disponibles mediante API o Control Plane. Validación de cajas de página, sangrado según perfil de producción y perfiles ISO con especificaciones técnicas verificadas.'
                     : locale === 'de'
-                    ? 'Automatisierte Dateieingangskontrolle über API oder Control Plane. Prüfung von Seitenboxen, 3-mm-Beschnitt und ISO-Farbprofilen mit unveränderlicher evidenceId-Nachverfolgung.'
-                    : 'Automated file intake inspection via API or Control Plane. Page boxes, 3mm bleed, and ISO color compliance tracked with immutable evidenceId hashes.'}
+                    ? 'Automatisierte Dateieingangskontrolle über API oder Control Plane. Prüfung von Seitenboxen, produktionsspezifischem Beschnitt und ISO-Farbprofilen mit verifizierten technischen Spezifikationen.'
+                    : 'Automated file intake inspection via API or Control Plane. Page boxes, profile-dependent bleed verification, and ISO color compliance tracked with verified technical specifications.'}
                 </p>
               </div>
               <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '1rem' }}>
