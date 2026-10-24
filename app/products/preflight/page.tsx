@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { HeroPlatform } from '@/components/monolith/HeroPlatform';
+import { ActionCTA } from '@/components/monolith/ActionCTA';
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { useLocale } from '@/lib/i18n';
@@ -1145,62 +1146,48 @@ export default function PreflightProductPage() {
         </Container>
       </Section>
 
-      {/* 10. Disclaimers & Final Action CTA */}
-      <Section variant="secondary" style={{ borderTop: '1px solid var(--border-color)' }}>
+      {/* Mandatory Disclaimer */}
+      <Section variant="secondary" style={{ borderTop: '1px solid var(--border-color)', padding: '3.5rem 0' }}>
         <Container>
-          <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
-            <h2 style={{ fontSize: 'clamp(2.25rem, 5vw, 3.25rem)', marginBottom: '1.25rem' }}>
-              {t.title}
-            </h2>
-            <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', marginBottom: '2.5rem', lineHeight: 1.6 }}>
-              {t.subheadline}
+          <div
+            style={{
+              maxWidth: '800px',
+              margin: '0 auto',
+              padding: '1.5rem',
+              borderRadius: '12px',
+              background: 'var(--bg-primary)',
+              border: '1px solid var(--border-color)',
+              textAlign: 'left'
+            }}
+          >
+            <span className="technical-text" style={{ fontSize: '0.65rem', color: 'var(--accent-primary)', fontWeight: 800, display: 'block', marginBottom: '0.5rem' }}>
+              LIMITACIÓN DE RESPONSABILIDAD TÉCNICA
+            </span>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>
+              PrintPrice Preflight evalúa la conformidad técnica de documentos PDF según las especificaciones del perfil seleccionado. 
+              Los resultados no constituyen una certificación universal de imprenta ni sustituyen la corrección editorial, la prueba de color de contrato ni la aprobación final de producción por parte del taller gráfico.
             </p>
-
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap', marginBottom: '3rem' }}>
-              <a
-                href="https://preflight.printprice.pro/"
-                className="btn-primary"
-                style={{ padding: '1rem 2.5rem', fontSize: '1.05rem', fontWeight: 700 }}
-              >
-                {t.ctaPrimary}
-              </a>
-              <Link
-                href="/for-authors"
-                className="btn-secondary"
-                style={{ padding: '1rem 2rem', fontSize: '1rem' }}
-              >
-                Ver flujo para autores
-              </Link>
-            </div>
-
-            {/* Mandatory Disclaimer */}
-            <div
-              style={{
-                padding: '1.5rem',
-                borderRadius: '12px',
-                background: 'var(--bg-primary)',
-                border: '1px solid var(--border-color)',
-                textAlign: 'left'
-              }}
-            >
-              <span className="technical-text" style={{ fontSize: '0.65rem', color: 'var(--accent-primary)', fontWeight: 800, display: 'block', marginBottom: '0.5rem' }}>
-                LIMITACIÓN DE RESPONSABILIDAD TÉCNICA
-              </span>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>
-                PrintPrice Preflight evalúa la conformidad técnica de documentos PDF según las especificaciones del perfil seleccionado. 
-                Los resultados no constituyen una certificación universal de imprenta ni sustituyen la corrección editorial, la prueba de color de contrato ni la aprobación final de producción por parte del taller gráfico.
-              </p>
-            </div>
           </div>
         </Container>
       </Section>
 
-      {/* Permanent Brand Slogan */}
-      <div style={{ textAlign: 'center', padding: '3rem 0 5rem', opacity: 0.5 }}>
-        <p className="technical-text" style={{ fontSize: '0.85rem', letterSpacing: '0.25em' }}>
-          PRICE IT. FIX IT. PRINT IT.
-        </p>
-      </div>
+      {/* Final Action CTA with animated grid background */}
+      <ActionCTA
+        slogan={t.label}
+        title={t.title}
+        description={t.subheadline}
+        buttonLabel={t.ctaPrimary}
+        buttonHref="https://preflight.printprice.pro/"
+        secondaryButtonLabel={
+          locale === 'es'
+            ? 'Ver flujo para autores ➔'
+            : locale === 'de'
+            ? 'Autoren-Workflow ➔'
+            : 'Author workflow ➔'
+        }
+        secondaryButtonHref="/for-authors"
+        trackingAction="preflight_final_cta"
+      />
     </div>
   );
 }

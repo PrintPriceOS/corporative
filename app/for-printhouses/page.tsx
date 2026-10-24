@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { HeroPlatform } from '@/components/monolith/HeroPlatform';
+import { ActionCTA } from '@/components/monolith/ActionCTA';
 import { useLocale } from '@/lib/i18n';
 import { Settings, Scissors, Package } from 'lucide-react';
 
@@ -12,7 +13,7 @@ export default function ForPrinthousesPage() {
   const { dict, locale } = useLocale();
 
   return (
-    <main style={{ minHeight: '100vh', paddingBottom: '5rem' }}>
+    <main style={{ minHeight: '100vh' }}>
       {/* 
         Hero Banner with Floating Red Particles & Slogan
       */}
@@ -269,29 +270,21 @@ export default function ForPrinthousesPage() {
                 </p>
               </div>
             </div>
-
-            {/* Final CTA */}
-            <div style={{ marginTop: '3.5rem', textAlign: 'center', padding: '2.5rem', background: 'var(--bg-secondary)', borderRadius: 'var(--radius-card)', border: '1px solid var(--border-color)' }}>
-              <div style={{ color: 'var(--accent-primary)', fontWeight: 800, fontSize: '0.8rem', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>
-                PRICE IT. FIX IT. PRINT IT.
-              </div>
-              <h3 style={{ fontSize: '1.35rem', marginBottom: '0.5rem' }}>
-                {dict.printhousesPage.finalCtaHeading}
-              </h3>
-              <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem', fontSize: '0.95rem' }}>
-                {dict.printhousesPage.finalCtaSub}
-              </p>
-              <a
-                href="https://control.printprice.pro/printhouse/register"
-                className="btn-primary"
-                style={{ padding: '0.875rem 2rem', fontSize: '1rem' }}
-              >
-                {dict.printhousesPage.finalCtaBtn}
-              </a>
-            </div>
           </div>
         </Container>
       </Section>
+
+      {/* Final Action CTA with animated grid background */}
+      <ActionCTA
+        slogan="PRICE IT. FIX IT. PRINT IT."
+        title={dict.printhousesPage.finalCtaHeading}
+        description={dict.printhousesPage.finalCtaSub}
+        buttonLabel={dict.printhousesPage.finalCtaBtn}
+        buttonHref="https://control.printprice.pro/printhouse/register"
+        secondaryButtonLabel={locale === 'es' ? 'Portal de partners ➔' : locale === 'de' ? 'Partner-Portal ➔' : 'Partner portal ➔'}
+        secondaryButtonHref="/contact/partner"
+        trackingAction="printhouses_final_cta"
+      />
     </main>
   );
 }

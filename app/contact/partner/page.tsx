@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
+import { ActionCTA } from '@/components/monolith/ActionCTA';
 import { useLocale } from '@/lib/i18n';
 
 export default function PartnerContactPage() {
@@ -169,34 +170,21 @@ export default function PartnerContactPage() {
                 </div>
               ))}
             </div>
-
-            <div style={{ marginTop: '3.5rem', textAlign: 'center', padding: '2.5rem', background: 'var(--bg-secondary)', borderRadius: 'var(--radius-card)', border: '1px solid var(--border-color)' }}>
-              <h3 style={{ fontSize: '1.3rem', marginBottom: '0.5rem' }}>
-                {t.calloutTitle}
-              </h3>
-              <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem', fontSize: '0.925rem' }}>
-                {t.calloutSub}
-              </p>
-              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-                <a
-                  href="https://control.printprice.pro/printhouse/register"
-                  className="btn-primary"
-                  style={{ padding: '0.75rem 1.75rem' }}
-                >
-                  {t.calloutRegister}
-                </a>
-                <Link
-                  href="/contact"
-                  className="btn-secondary"
-                  style={{ padding: '0.75rem 1.5rem' }}
-                >
-                  {t.calloutContact}
-                </Link>
-              </div>
-            </div>
           </div>
         </Container>
       </Section>
+
+      {/* Final Action CTA with animated grid background */}
+      <ActionCTA
+        slogan="PARTNER NETWORK / ONBOARDING"
+        title={t.calloutTitle}
+        description={t.calloutSub}
+        buttonLabel={t.calloutRegister}
+        buttonHref="https://control.printprice.pro/printhouse/register"
+        secondaryButtonLabel={t.calloutContact}
+        secondaryButtonHref="/contact"
+        trackingAction="partner_contact_final_cta"
+      />
     </main>
   );
 }

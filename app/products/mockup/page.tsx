@@ -344,13 +344,8 @@ export default function MockupPage() {
         buttonLabel={t.ctaBtn}
         buttonHref="https://mockup.printprice.pro/"
         trackingAction="mockup_cta_final_v1"
+        footerNote={t.footerNote}
       />
-      
-      <div style={{ textAlign: 'center', paddingBottom: '4rem', opacity: 0.6 }}>
-        <span className="technical-text" style={{ fontSize: '0.7rem', letterSpacing: '0.1em' }}>
-          {t.footerNote}
-        </span>
-      </div>
     </div>
   );
 }

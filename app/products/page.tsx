@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { HeroPlatform } from '@/components/monolith/HeroPlatform';
+import { ActionCTA } from '@/components/monolith/ActionCTA';
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { useLocale } from '@/lib/i18n';
@@ -285,6 +286,42 @@ export default function ProductsHubPage() {
           </div>
         </Container>
       </Section>
+
+      {/* Final Action CTA with animated grid background */}
+      <ActionCTA
+        slogan="PRICE IT. FIX IT. PRINT IT."
+        title={
+          locale === 'es'
+            ? 'Comienza con la plataforma de producción gráfica'
+            : locale === 'de'
+            ? 'Starten Sie mit der Druckproduktions-Plattform'
+            : 'Start with the print production platform'
+        }
+        description={
+          locale === 'es'
+            ? 'Calcula costes, valida tus artes finales y encarga la producción en un ecosistema integrado.'
+            : locale === 'de'
+            ? 'Kalkulieren Sie Kosten, validieren Sie Druckdaten und steuern Sie die Produktion in einem integrierten Ökosystem.'
+            : 'Calculate costs, validate print files, and commission production across an integrated ecosystem.'
+        }
+        buttonLabel={
+          locale === 'es'
+            ? 'Calcular presupuesto ➔'
+            : locale === 'de'
+            ? 'Budget kalkulieren ➔'
+            : 'Calculate budget ➔'
+        }
+        buttonHref="https://budget.printprice.pro/"
+        secondaryButtonLabel={
+          locale === 'es'
+            ? 'Validar PDF ➔'
+            : locale === 'de'
+            ? 'PDF prüfen ➔'
+            : 'Check PDF ➔'
+        }
+        secondaryButtonHref="https://preflight.printprice.pro/"
+        trackingAction="products_hub_final_cta"
+      />
     </div>
   );
 }

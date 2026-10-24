@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { HeroPlatform } from '@/components/monolith/HeroPlatform';
+import { ActionCTA } from '@/components/monolith/ActionCTA';
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { useLocale } from '@/lib/i18n';
@@ -430,36 +431,23 @@ export default function PrintProductPage() {
         </Container>
       </Section>
 
-      {/* Final Action CTA */}
-      <Section variant="secondary" style={{ borderTop: '1px solid var(--border-color)' }}>
-        <Container>
-          <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
-            <h2 style={{ fontSize: 'clamp(2.25rem, 5vw, 3.25rem)', marginBottom: '1.25rem' }}>
-              {t.title}
-            </h2>
-            <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', marginBottom: '2.5rem', lineHeight: 1.6 }}>
-              {t.subheadline}
-            </p>
-
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-              <a
-                href="https://budget.printprice.pro/"
-                className="btn-primary"
-                style={{ padding: '1rem 2.5rem', fontSize: '1.05rem', fontWeight: 700 }}
-              >
-                {t.ctaPrimary}
-              </a>
-              <Link
-                href="/products/preflight"
-                className="btn-secondary"
-                style={{ padding: '1rem 2rem', fontSize: '1rem' }}
-              >
-                Comprobar archivos en Preflight
-              </Link>
-            </div>
-          </div>
-        </Container>
-      </Section>
+      {/* Final Action CTA with animated grid background */}
+      <ActionCTA
+        slogan={t.label}
+        title={t.title}
+        description={t.subheadline}
+        buttonLabel={t.ctaPrimary}
+        buttonHref="https://budget.printprice.pro/"
+        secondaryButtonLabel={
+          locale === 'es'
+            ? 'Comprobar en Preflight ➔'
+            : locale === 'de'
+            ? 'In Preflight prüfen ➔'
+            : 'Check in Preflight ➔'
+        }
+        secondaryButtonHref="/products/preflight"
+        trackingAction="print_marketplace_final_cta"
+      />
     </div>
   );
 }

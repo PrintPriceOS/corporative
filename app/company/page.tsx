@@ -3,6 +3,7 @@
 import React from 'react';
 import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
+import { ActionCTA } from "@/components/monolith/ActionCTA";
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import { SystemCardHover } from "@/components/ui/effects/SystemCardHover";
@@ -307,41 +308,18 @@ export default function CompanyPage() {
         </div>
       </Section>
 
-      {/* Final Action CTA */}
-      <Section variant="primary" style={{ paddingBlock: '8rem' }}>
-        <div style={{ 
-          padding: 'clamp(3rem, 8vw, 6rem)', 
-          background: 'var(--bg-secondary)', 
-          border: '1px solid var(--border-color)',
-          textAlign: 'center'
-        }}>
-          <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.25rem)', letterSpacing: '-0.04em', marginBottom: '1.25rem' }}>
-            {t.ctaHeading}
-          </h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', marginBottom: '3rem', maxWidth: '600px', marginInline: 'auto', lineHeight: 1.6 }}>
-            {t.ctaSub}
-          </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', alignItems: 'center' }}>
-            <div style={{ display: 'flex', gap: '1.25rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <a href="https://budget.printprice.pro" className="btn-primary" style={{ padding: '0.85rem 1.75rem', fontSize: '1rem' }}>
-                {t.ctaPrimary}
-              </a>
-              <Link href="/contact" className="btn-secondary" style={{ padding: '0.85rem 1.75rem', fontSize: '1rem' }}>
-                {t.ctaSecondary}
-              </Link>
-            </div>
-            <span className="technical-text" style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 800, letterSpacing: '0.1em' }}>
-              {t.noSetup}
-            </span>
-          </div>
-        </div>
-        
-        <div style={{ textAlign: 'center', marginTop: '6rem', opacity: 0.6 }}>
-          <p className="technical-text" style={{ fontSize: '0.75rem', fontWeight: 900, maxWidth: '650px', marginInline: 'auto', lineHeight: 1.6, letterSpacing: '0.05em' }}>
-            {t.footerNote}
-          </p>
-        </div>
-      </Section>
+      {/* Final Action CTA with animated grid background */}
+      <ActionCTA
+        slogan="PRINT COMPUTATION PLATFORM"
+        title={t.ctaHeading}
+        description={t.ctaSub}
+        buttonLabel={t.ctaPrimary}
+        buttonHref="https://budget.printprice.pro"
+        secondaryButtonLabel={t.ctaSecondary}
+        secondaryButtonHref="/contact"
+        trackingAction="company_final_cta"
+        footerNote={t.footerNote}
+      />
     </div>
   );
 }

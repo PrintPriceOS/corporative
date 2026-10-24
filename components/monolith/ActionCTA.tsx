@@ -23,6 +23,8 @@ interface ActionCTAProps {
   secondaryButtonHref?: string;
   slogan?: string;
   trackingAction?: string;
+  footerNote?: string;
+  children?: React.ReactNode;
 }
 
 export const ActionCTA: React.FC<ActionCTAProps> = ({
@@ -33,7 +35,9 @@ export const ActionCTA: React.FC<ActionCTAProps> = ({
   secondaryButtonLabel,
   secondaryButtonHref,
   slogan = "START YOUR PRINT CALCULATION",
-  trackingAction = "final_cta_calculation"
+  trackingAction = "final_cta_calculation",
+  footerNote,
+  children
 }) => {
   return (
     <div
@@ -48,7 +52,8 @@ export const ActionCTA: React.FC<ActionCTAProps> = ({
         justifyContent: 'center',
         background: '#0e0e0f', // DEEP MONOLITH BLACK
         color: '#e5e2e3',
-        padding: '0 2rem'
+        padding: '5rem 2rem',
+        borderTop: '1px solid var(--border-color)'
       }}
       data-monolith-section="action-cta"
     >
@@ -130,19 +135,41 @@ export const ActionCTA: React.FC<ActionCTAProps> = ({
         `}</style>
 
         <Container>
-          <div
-            className="technical-text"
-            style={{
-              color: '#dc0000',
-              fontSize: '0.75rem',
-              letterSpacing: '0.3em',
-              marginBottom: '2rem',
-              fontWeight: 800,
-              textTransform: 'uppercase'
-            }}
-          >
-            {slogan}
-          </div>
+          {slogan === 'PRICE IT. FIX IT. PRINT IT.' ? (
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                fontSize: '0.8rem',
+                fontWeight: 900,
+                letterSpacing: '0.1em',
+                marginBottom: '2rem',
+                padding: '0.4rem 1.1rem',
+                borderRadius: '9999px',
+                background: 'rgba(220, 0, 0, 0.08)',
+                border: '1px solid rgba(220, 0, 0, 0.3)',
+              }}
+            >
+              <span>PRICE IT.</span>
+              <span style={{ color: '#dc0000' }}>FIX IT.</span>
+              <span>PRINT IT.</span>
+            </div>
+          ) : (
+            <div
+              className="technical-text"
+              style={{
+                color: '#dc0000',
+                fontSize: '0.75rem',
+                letterSpacing: '0.3em',
+                marginBottom: '2rem',
+                fontWeight: 800,
+                textTransform: 'uppercase'
+              }}
+            >
+              {slogan}
+            </div>
+          )}
 
           <h2 className="action-cta-title">
             {title}
@@ -187,6 +214,14 @@ export const ActionCTA: React.FC<ActionCTAProps> = ({
               <span style={{ width: '4px', height: '4px', background: 'currentColor', borderRadius: '50%' }}></span>
               <span style={{ fontSize: '0.7rem' }}>REGION: GLOBAL EDGE</span>
             </div>
+
+            {footerNote && (
+              <p className="technical-text" style={{ fontSize: '0.75rem', opacity: 0.6, maxWidth: '650px', marginInline: 'auto', lineHeight: 1.6, letterSpacing: '0.05em', marginTop: '0.5rem' }}>
+                {footerNote}
+              </p>
+            )}
+
+            {children}
           </div>
         </Container>
       </div>

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
 import { HeroPlatform } from '@/components/monolith/HeroPlatform';
+import { ActionCTA } from '@/components/monolith/ActionCTA';
 import { useLocale } from '@/lib/i18n';
 import { Calculator, ShieldCheck, Factory, BookOpen, Library, Settings, FileText } from 'lucide-react';
 
@@ -1126,63 +1127,18 @@ export default function Home() {
       </Section>
 
       {/* 
-        CTA FINAL DE CIERRE CON SLOGAN INVARIABLE
+        CTA FINAL DE CIERRE CON SLOGAN INVARIABLE Y CUADROS GRID ANIMADOS
       */}
-      <section
-        style={{
-          padding: 'clamp(4.5rem, 8vw, 6.5rem) 0',
-          background: 'var(--bg-secondary)',
-          borderTop: '1px solid var(--border-color)',
-          textAlign: 'center',
-        }}
-      >
-        <Container>
-          <div style={{ maxWidth: '680px', margin: '0 auto' }}>
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                fontSize: '0.85rem',
-                fontWeight: 900,
-                letterSpacing: '0.1em',
-                marginBottom: '1.25rem',
-                padding: '0.4rem 1rem',
-                borderRadius: 'var(--radius-pill)',
-                background: 'rgba(220, 0, 0, 0.08)',
-                border: '1px solid var(--accent-border)',
-              }}
-            >
-              <span>PRICE IT.</span>
-              <span style={{ color: 'var(--accent-primary)' }}>FIX IT.</span>
-              <span>PRINT IT.</span>
-            </div>
-
-            <h2 style={{ fontSize: 'clamp(2rem, 5vw, 2.75rem)', marginBottom: '1rem', fontWeight: 800 }}>
-              {dict.home.ctaCloseHeading}
-            </h2>
-            <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', marginBottom: '2.5rem', lineHeight: 1.6 }}>
-              {dict.home.ctaCloseSubtitle}
-            </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center' }}>
-              <a
-                href="https://budget.printprice.pro/"
-                className="btn-primary"
-                style={{ padding: '0.9rem 2rem', fontSize: '1rem' }}
-              >
-                {dict.home.ctaClosePrimary}
-              </a>
-              <Link
-                href="/contact"
-                className="btn-secondary"
-                style={{ padding: '0.9rem 1.75rem', fontSize: '1rem' }}
-              >
-                {dict.home.ctaCloseSecondary}
-              </Link>
-            </div>
-          </div>
-        </Container>
-      </section>
+      <ActionCTA
+        slogan="PRICE IT. FIX IT. PRINT IT."
+        title={dict.home.ctaCloseHeading}
+        description={dict.home.ctaCloseSubtitle}
+        buttonLabel={dict.home.ctaClosePrimary}
+        buttonHref="https://budget.printprice.pro/"
+        secondaryButtonLabel={dict.home.ctaCloseSecondary}
+        secondaryButtonHref="/contact"
+        trackingAction="home_final_cta"
+      />
     </main>
   );
 }
