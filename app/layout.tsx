@@ -30,6 +30,7 @@ import { constructMetadata, JSON_LD_ORGANIZATION } from "@/lib/seo";
 export const metadata: Metadata = constructMetadata();
 
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { LocaleProvider } from "@/lib/i18n";
 
 export default function RootLayout({
   children,
@@ -37,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${manrope.variable} ${spaceGrotesk.variable} ${inter.variable}`} suppressHydrationWarning>
+    <html lang="es" className={`${manrope.variable} ${spaceGrotesk.variable} ${inter.variable}`} suppressHydrationWarning>
       <head>
           <script
             type="application/ld+json"
@@ -46,16 +47,19 @@ export default function RootLayout({
       </head>
       <body>
         <ThemeProvider>
-          <TelemetryProvider>
-            <Header />
-            <main style={{ flex: 1 }}>
-              {children}
-            </main>
-            <Footer />
-            <CookieBanner />
-          </TelemetryProvider>
+          <LocaleProvider>
+            <TelemetryProvider>
+              <Header />
+              <main style={{ flex: 1 }}>
+                {children}
+              </main>
+              <Footer />
+              <CookieBanner />
+            </TelemetryProvider>
+          </LocaleProvider>
         </ThemeProvider>
       </body>
     </html>
   );
 }
+

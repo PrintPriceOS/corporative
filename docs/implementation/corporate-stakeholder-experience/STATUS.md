@@ -4,7 +4,7 @@
 **Rama:** `feat/corporate-stakeholder-experience`  
 **Repositorio GitHub:** `https://github.com/PrintPriceOS/corporative`  
 **Servidor Hosting:** Plesk Obsidian Debian (`212.227.79.67`) en `/var/www/vhosts/printprice.pro/httpdocs/`  
-**Estado General:** COMPLETADO CON ÉXITO — Todas las iteraciones C0 a C5 ejecutadas, compiladas y validadas visualmente.
+**Estado General:** COMPLETADO CON ÉXITO — Todas las iteraciones C0 a C5 ejecutadas, compiladas y validadas visualmente con soporte trilingüe (ES / EN / DE), Hero banners de partículas rojas y eslogan corporativo.
 
 ---
 
@@ -14,24 +14,23 @@
 |---|---|:---:|---|
 | **C0** | **Inventario y Referencia Visual** | **COMPLETADO** | Repositorio real `PrintPriceOS/corporative` clonado y analizado. Tokens del onboarding canónico de Control Plane extraídos e integrados. Documentación en `docs/implementation/corporate-stakeholder-experience/` generada. |
 | **C1** | **Arquitectura para 4 Stakeholders** | **COMPLETADO** | Creadas las 4 páginas de perfil: `/for-authors`, `/for-publishers`, `/for-printhouses`, `/for-paper-suppliers`. Header actualizado con menú desplegable "Para quién", enlaces directos, modal accesible "Iniciar sesión" (Budget vs Control Plane) y modal "Empezar". Footer renovado con enlaces canónicos y 4 columnas temáticas. |
-| **C2** | **Rediseño de Portada y Sistema Visual** | **COMPLETADO** | Rediseño completo de `app/page.tsx` con propuesta de valor "Tu libro, del archivo al papel", 4 tarjetas de perfil redondeadas (`--radius-card: 16px`, `--radius-card-lg: 24px`), flujo "Cómo funciona", eliminación de brutalismo forzado (0px obligatorio), supresión de telemetría decorativa y tipografía legible en `globals.css`. |
-| **C3** | **Contenido Confiable y Comparativas** | **COMPLETADO** | Depuración rigurosa de claims en `CLAIMS_AND_COMPARISONS.md` y `app/contact/partner/page.tsx` (retirados: 12-18% fees, 15-day payouts, 21-day trial, chargeback immunity, 1,280 nodes, zero lead time errors). Tablas comparativas objetivas estructuradas con selector interactivo: Autores/Editoriales (vs Lulu, GelatoConnect) e Imprentas/Proveedores (vs printIQ, PrintVis, Tharstern). |
-| **C4** | **Registros, Recursos y Dominios** | **COMPLETADO** | Validación de todos los destinos: Budget (`https://budget.printprice.pro/`), Registro de Imprenta en Control Plane (`https://control.printprice.pro/printhouse/register`), Registro de Proveedores (`https://control.printprice.pro/supplier/register`), Documentación (`https://docs.printprice.pro/`). Sin duplicidad de formularios ficticios. |
-| **C5** | **Accesibilidad, SEO y Verificación Visual** | **COMPLETADO** | Compilación con `npm run build` exitosa (0 errores TypeScript, 43 rutas estáticas generadas). Verificación E2E en navegador real en escritorio (1920x1080) y móvil (390x844): modales accesibles (Escape y ✕), cambio interactivo de comparativas, drawer móvil responsivo sin desbordamiento horizontal. `sitemap.ts` actualizado. |
+| **C2** | **Rediseño de Portada y Hero Banners con Partículas Rojas** | **COMPLETADO** | Integrado `HeroPlatform` con `variant="particles"` (partículas rojas flotantes WebGL) en la portada y en cada una de las 4 subsecciones. Animación de marca con el eslogan `PRICE IT. FIX IT. PRINT IT.` (con `FIX IT.` en rojo corporativo `#dc0000`). Tarjetas redondeadas (`--radius-card: 16px`, `--radius-card-lg: 24px`), tipografía legible y eliminación de brutalismo forzado. |
+| **C3** | **Contenido Confiable, Comparativas y Slogan Corporativo** | **COMPLETADO** | Depuración rigurosa de claims en `CLAIMS_AND_COMPARISONS.md` y `app/contact/partner/page.tsx` (retirados: 12-18% fees, 15-day payouts, 21-day trial, chargeback immunity, 1,280 nodes, zero lead time errors). Eslogan invariable `PRICE IT. FIX IT. PRINT IT.` integrado permanentemente en el footer, hero banners y llamadas a la acción. Tablas comparativas objetivas estructuradas con selector interactivo: Autores/Editoriales (vs Lulu, GelatoConnect) e Imprentas/Proveedores (vs printIQ, PrintVis, Tharstern). |
+| **C4** | **Subsecciones con Flujo "How It Works" & Registros** | **COMPLETADO** | En cada subsección (`/for-authors`, `/for-publishers`, `/for-printhouses`, `/for-paper-suppliers`) se implementa el Hero banner con partículas rojas y su CTA principal, seguido de su sección "How it works" (Cómo funciona) en 4 pasos adaptados al perfil. Validación de todos los destinos: Budget (`https://budget.printprice.pro/`), Registro de Imprenta en Control Plane (`https://control.printprice.pro/printhouse/register`), Registro de Proveedores (`https://control.printprice.pro/supplier/register`), Documentación (`https://docs.printprice.pro/`). Sin duplicidad de formularios ficticios. |
+| **C5** | **Soporte Trilingüe (ES / EN / DE), Accesibilidad y QA Visual** | **COMPLETADO** | Implementado sistema reactivo de internacionalización (`lib/i18n.tsx`) con selector accesible `ES | EN | DE` en el Header (`components/ui/LanguageSelector.tsx`). Diccionarios completos en `lib/translations/` (`es.ts`, `en.ts`, `de.ts`). Compilación con `npm run build` exitosa (0 errores TypeScript, 43 rutas estáticas generadas). Verificación E2E en navegador real en escritorio (1920x1080) y móvil (390x844). `sitemap.ts` actualizado. |
 
 ---
 
 ## 2. Evidencias de Verificación en Navegador Real
 
 La verificación se ejecutó mediante un subagente de navegación automatizado sobre `http://localhost:3010/`:
-1. **Desktop Landing**: Captura de pantalla de la portada con jerarquía clara y tarjetas redondeadas (`desktop_homepage_1792799795863.png`).
-2. **Menú "Para quién"**: Menú desplegable interactivo mostrando los 4 perfiles con badges y descripciones (`para_quien_dropdown_1792799808906.png`).
-3. **Modal "Iniciar sesión"**: Ventana modal centrada respecto al viewport con selección transparente entre Budget y Control Plane, con tecla Escape y botón de cierre (`login_modal`).
-4. **Modal "Empezar"**: Asistente de selección de trayectoria hacia los 4 perfiles (`journey_modal_1792799834771.png`).
-5. **Selector de Comparativas**: Conmutación de pestaña entre *Autores & Editoriales* e *Imprentas & Proveedores* (`comparativa_table_switched_1792799918176.png`).
-6. **Páginas de Perfil**: Renderizado verificado de `/for-authors`, `/for-publishers`, `/for-printhouses` y `/for-paper-suppliers`.
-7. **Diseño Móvil (390x844)**: Menú hamburguesa interactivo (`mobile_menu_open_1792799979142.png`) y ausencia total de desplazamiento horizontal (`mobile_homepage_1792799970312.png`).
-8. **Grabación de Sesión E2E**: Archivo WebP generado en `corp_ux_audit_1792799788138.webp`.
+1. **Hero Banner de Portada con Partículas Rojas**: Partículas flotantes en 3D (`#c70000`) y animación secuencial del eslogan `PRICE IT. FIX IT. PRINT IT.` (`homepage_hero_1792800602441.png`).
+2. **Conmutación Reactiva de Idioma a Inglés (EN)**: Cambio instantáneo a textos en inglés sin recarga de página (`en_language_page_1792800679814.png`).
+3. **Conmutación Reactiva de Idioma a Alemán (DE)**: Cambio instantáneo a textos en alemán (`de_language_page_1792800697422.png`).
+4. **Conmutación Reactiva de Idioma a Español (ES)**: Cambio instantáneo a textos en español (`es_language_page_1792800716055.png`).
+5. **Subsección de Autores (`/for-authors`)**: Hero banner con partículas rojas, CTA principal y bloque de 4 pasos "Cómo funciona" (`for_authors_page_1792800659381.png`).
+6. **Presencia Permanente del Eslogan en Footer**: Presencia destacada de `PRICE IT. FIX IT. PRINT IT.` en el pie de página (`footer_slogan_1792800642232.png`).
+7. **Grabación de Sesión E2E**: Archivo WebP generado en `hero_i18n_audit_1792800592965.webp`.
 
 ---
 

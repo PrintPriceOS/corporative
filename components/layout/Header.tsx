@@ -5,48 +5,13 @@ import Link from 'next/link';
 import { Container } from '../ui/Container';
 import { Icon } from '../ui/Icon';
 import { ThemeToggle } from '../ui/ThemeToggle';
+import { LanguageSelector } from '../ui/LanguageSelector';
 import { Logo } from '../brand/Logo';
-
-interface StakeholderOption {
-  title: string;
-  desc: string;
-  badge: string;
-  href: string;
-  icon: string;
-}
-
-const STAKEHOLDERS: StakeholderOption[] = [
-  {
-    title: 'Autores y Particulares',
-    desc: 'Imprime tu libro sin mínimos, valida tu PDF y calcula costes.',
-    badge: 'PARTICULARES',
-    href: '/for-authors',
-    icon: 'book',
-  },
-  {
-    title: 'Editoriales & Publishers',
-    desc: 'Organiza catálogos, compara offset vs digital y controla costes.',
-    badge: 'EDITORIAL',
-    href: '/for-publishers',
-    icon: 'layers',
-  },
-  {
-    title: 'Imprentas & Talleres',
-    desc: 'Configura maquinaria, calibra encuadernación y recibe archivos validados.',
-    badge: 'TALLER',
-    href: '/for-printhouses',
-    icon: 'factory',
-  },
-  {
-    title: 'Proveedores de Papel',
-    desc: 'Publica tu catálogo maestro de sustratos y conecta tarifas con imprentas.',
-    badge: 'SUMINISTROS',
-    href: '/for-paper-suppliers',
-    icon: 'specs',
-  },
-];
+import { useLocale } from '@/lib/i18n';
 
 export const Header: React.FC = () => {
+  const { dict, locale } = useLocale();
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isWhoOpen, setIsWhoOpen] = useState(false);
   const [isResourcesOpen, setIsResourcesOpen] = useState(false);
@@ -55,6 +20,33 @@ export const Header: React.FC = () => {
 
   const whoDropdownRef = useRef<HTMLDivElement>(null);
   const resourcesDropdownRef = useRef<HTMLDivElement>(null);
+
+  const STAKEHOLDERS = [
+    {
+      title: dict.nav.authors,
+      desc: dict.nav.authorsDesc,
+      badge: '01',
+      href: '/for-authors',
+    },
+    {
+      title: dict.nav.publishers,
+      desc: dict.nav.publishersDesc,
+      badge: '02',
+      href: '/for-publishers',
+    },
+    {
+      title: dict.nav.printhouses,
+      desc: dict.nav.printhousesDesc,
+      badge: '03',
+      href: '/for-printhouses',
+    },
+    {
+      title: dict.nav.suppliers,
+      desc: dict.nav.suppliersDesc,
+      badge: '04',
+      href: '/for-paper-suppliers',
+    },
+  ];
 
   // Close modals on Escape key
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -134,7 +126,7 @@ export const Header: React.FC = () => {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '2rem',
+              gap: '1.75rem',
               fontSize: '0.9rem',
               fontWeight: 600,
               color: 'var(--text-secondary)',
@@ -164,7 +156,7 @@ export const Header: React.FC = () => {
                   padding: '0.4rem 0.25rem',
                 }}
               >
-                <span>Para quién</span>
+                <span>{dict.nav.forWhom}</span>
                 <span
                   style={{
                     fontSize: '0.7rem',
@@ -238,11 +230,11 @@ export const Header: React.FC = () => {
             </div>
 
             <Link href="/#how-it-works" style={{ color: 'inherit', textDecoration: 'none' }}>
-              Cómo funciona
+              {dict.nav.howItWorks}
             </Link>
 
             <Link href="/#comparativas" style={{ color: 'inherit', textDecoration: 'none' }}>
-              Comparativas
+              {dict.nav.comparisons}
             </Link>
 
             {/* Recursos Dropdown */}
@@ -268,7 +260,7 @@ export const Header: React.FC = () => {
                   padding: '0.4rem 0.25rem',
                 }}
               >
-                <span>Recursos</span>
+                <span>{dict.nav.resources}</span>
                 <span
                   style={{
                     fontSize: '0.7rem',
@@ -316,9 +308,9 @@ export const Header: React.FC = () => {
                     }}
                     className="nav-dropdown-item"
                   >
-                    <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>Documentación Oficial ↗</span>
+                    <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>{dict.nav.docs} ↗</span>
                     <span style={{ fontSize: '0.775rem', color: 'var(--text-secondary)' }}>
-                      Manuales técnicos y guías de plataforma
+                      {dict.nav.docsDesc}
                     </span>
                   </a>
 
@@ -336,9 +328,9 @@ export const Header: React.FC = () => {
                     }}
                     className="nav-dropdown-item"
                   >
-                    <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>Desarrolladores &amp; API</span>
+                    <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>{dict.nav.developers}</span>
                     <span style={{ fontSize: '0.775rem', color: 'var(--text-secondary)' }}>
-                      Especificaciones OpenAPI y webhooks
+                      {dict.nav.developersDesc}
                     </span>
                   </Link>
 
@@ -358,9 +350,9 @@ export const Header: React.FC = () => {
                     }}
                     className="nav-dropdown-item"
                   >
-                    <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>Paper Supplier Hub ↗</span>
+                    <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>{dict.nav.paperHub} ↗</span>
                     <span style={{ fontSize: '0.775rem', color: 'var(--text-secondary)' }}>
-                      Catálogo maestro y federación de sustratos
+                      {dict.nav.paperHubDesc}
                     </span>
                   </a>
                 </div>
@@ -368,12 +360,13 @@ export const Header: React.FC = () => {
             </div>
 
             <Link href="/contact" style={{ color: 'inherit', textDecoration: 'none' }}>
-              Contacto
+              {dict.nav.contact}
             </Link>
           </nav>
 
-          {/* Action CTAs & Theme Toggle */}
-          <div className="desktop-only" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          {/* Action CTAs, Language Selector & Theme Toggle */}
+          <div className="desktop-only" style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+            <LanguageSelector />
             <ThemeToggle />
 
             {/* Iniciar sesión Trigger */}
@@ -391,7 +384,7 @@ export const Header: React.FC = () => {
                 borderRadius: 'var(--radius-btn)',
               }}
             >
-              Iniciar sesión
+              {dict.nav.login}
             </button>
 
             {/* Empezar Trigger */}
@@ -401,12 +394,13 @@ export const Header: React.FC = () => {
               className="btn-primary"
               style={{ padding: '0.6rem 1.25rem', fontSize: '0.9rem' }}
             >
-              Empezar
+              {dict.nav.start}
             </button>
           </div>
 
           {/* Mobile Menu Trigger */}
-          <div className="mobile-only" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div className="mobile-only" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <LanguageSelector />
             <ThemeToggle />
             <button
               type="button"
@@ -450,7 +444,7 @@ export const Header: React.FC = () => {
         >
           <div>
             <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.05em', marginBottom: '1rem', textTransform: 'uppercase' }}>
-              Para quién
+              {dict.nav.forWhom}
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {STAKEHOLDERS.map((stk) => (
@@ -483,19 +477,19 @@ export const Header: React.FC = () => {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '1.05rem', fontWeight: 600 }}>
             <Link href="/#how-it-works" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
-              Cómo funciona
+              {dict.nav.howItWorks}
             </Link>
             <Link href="/#comparativas" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
-              Comparativas
+              {dict.nav.comparisons}
             </Link>
             <a href="https://docs.printprice.pro/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
-              Documentación ↗
+              {dict.nav.docs} ↗
             </a>
             <Link href="/developers" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
-              Desarrolladores &amp; API
+              {dict.nav.developers}
             </Link>
             <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
-              Contacto
+              {dict.nav.contact}
             </Link>
           </div>
 
@@ -509,7 +503,7 @@ export const Header: React.FC = () => {
               className="btn-secondary"
               style={{ width: '100%', padding: '0.875rem' }}
             >
-              Iniciar sesión
+              {dict.nav.login}
             </button>
             <button
               type="button"
@@ -520,7 +514,7 @@ export const Header: React.FC = () => {
               className="btn-primary"
               style={{ width: '100%', padding: '0.875rem' }}
             >
-              Empezar
+              {dict.nav.start}
             </button>
           </div>
         </div>
@@ -542,12 +536,12 @@ export const Header: React.FC = () => {
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
               <h3 id="login-modal-title" style={{ fontSize: '1.35rem', margin: 0 }}>
-                Elige tu espacio de acceso
+                {dict.modals.loginTitle}
               </h3>
               <button
                 type="button"
                 onClick={() => setIsLoginModalOpen(false)}
-                aria-label="Cerrar modal"
+                aria-label={dict.modals.close}
                 style={{
                   background: 'none',
                   border: 'none',
@@ -563,7 +557,7 @@ export const Header: React.FC = () => {
             </div>
 
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.925rem', marginBottom: '1.75rem', lineHeight: 1.5 }}>
-              PrintPrice Pro cuenta con dos accesos especializados según tu función en la cadena de impresión:
+              {dict.modals.loginSub}
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -598,10 +592,10 @@ export const Header: React.FC = () => {
                 </div>
                 <div>
                   <div style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.2rem' }}>
-                    Espacio de Presupuestación (Budget)
+                    {dict.modals.loginBudgetTitle}
                   </div>
                   <div style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
-                    Para autores, editoriales y clientes que calculan presupuestos y gestionan libros.
+                    {dict.modals.loginBudgetDesc}
                   </div>
                 </div>
               </a>
@@ -637,17 +631,17 @@ export const Header: React.FC = () => {
                 </div>
                 <div>
                   <div style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.2rem' }}>
-                    Control Plane
+                    {dict.modals.loginControlTitle}
                   </div>
                   <div style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
-                    Para directores de taller gráfico, operarios de imprenta y proveedores de papel.
+                    {dict.modals.loginControlDesc}
                   </div>
                 </div>
               </a>
             </div>
 
             <div style={{ marginTop: '1.75rem', textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-              ¿Primera vez en PrintPrice? Selecciona arriba tu espacio o consulta las guías de inicio.
+              {dict.modals.loginNote}
             </div>
           </div>
         </div>
@@ -669,12 +663,12 @@ export const Header: React.FC = () => {
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
               <h3 id="start-modal-title" style={{ fontSize: '1.35rem', margin: 0 }}>
-                ¿Cómo deseas empezar?
+                {dict.modals.startTitle}
               </h3>
               <button
                 type="button"
                 onClick={() => setIsStartModalOpen(false)}
-                aria-label="Cerrar modal"
+                aria-label={dict.modals.close}
                 style={{
                   background: 'none',
                   border: 'none',
@@ -690,7 +684,7 @@ export const Header: React.FC = () => {
             </div>
 
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.925rem', marginBottom: '1.5rem', lineHeight: 1.5 }}>
-              Selecciona el recorrido que mejor se adapte a tu necesidad técnica:
+              {dict.modals.startSub}
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
@@ -708,9 +702,9 @@ export const Header: React.FC = () => {
                 }}
               >
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>Autor o Particular</div>
+                  <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{dict.modals.startAuthorTitle}</div>
                   <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                    Imprime tu libro personal sin CIF ni volumen mínimo
+                    {dict.modals.startAuthorDesc}
                   </div>
                 </div>
                 <span style={{ color: 'var(--accent-primary)', fontWeight: 700 }}>➔</span>
@@ -730,9 +724,9 @@ export const Header: React.FC = () => {
                 }}
               >
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>Sello Editorial</div>
+                  <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{dict.modals.startPublisherTitle}</div>
                   <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                    Presupuesta tiradas escalonadas y gestiona catálogos
+                    {dict.modals.startPublisherDesc}
                   </div>
                 </div>
                 <span style={{ color: 'var(--accent-primary)', fontWeight: 700 }}>➔</span>
@@ -751,9 +745,9 @@ export const Header: React.FC = () => {
                 }}
               >
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>Taller Gráfico o Imprenta</div>
+                  <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{dict.modals.startPrinterTitle}</div>
                   <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                    Configura tu parque de maquinaria y recibe artes finales preflight
+                    {dict.modals.startPrinterDesc}
                   </div>
                 </div>
                 <span style={{ color: 'var(--accent-primary)', fontWeight: 700 }}>↗</span>
@@ -772,9 +766,9 @@ export const Header: React.FC = () => {
                 }}
               >
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>Proveedor de Papel</div>
+                  <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{dict.modals.startSupplierTitle}</div>
                   <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                    Publica catálogo maestro y conecta tus ofertas comerciales
+                    {dict.modals.startSupplierDesc}
                   </div>
                 </div>
                 <span style={{ color: 'var(--accent-primary)', fontWeight: 700 }}>↗</span>

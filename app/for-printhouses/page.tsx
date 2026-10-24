@@ -1,72 +1,188 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Para Imprentas y Talleres Gráficos | PrintPrice Pro Control Plane',
-  description: 'Configura tu imprenta, perfila tu maquinaria offset y digital, calibra matrices de encuadernación y conecta aprovisionamiento de papel.',
-};
+import { HeroPlatform } from '@/components/monolith/HeroPlatform';
+import { useLocale } from '@/lib/i18n';
 
 export default function ForPrinthousesPage() {
+  const { dict, locale } = useLocale();
+
   return (
     <main style={{ minHeight: '100vh', paddingBottom: '5rem' }}>
-      {/* Hero Section */}
-      <section style={{ padding: 'clamp(4rem, 8vw, 6rem) 0 3rem', background: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)' }}>
-        <Container>
-          <div style={{ maxWidth: '820px' }}>
-            <span className="pill-badge" style={{ marginBottom: '1.25rem' }}>
-              Imprentas &amp; Talleres Gráficos
-            </span>
-            <h1 style={{ fontSize: 'clamp(2.25rem, 5vw, 3.5rem)', marginBottom: '1.25rem' }}>
-              Configura tu imprenta y conecta capacidades, materiales y aprovisionamiento.
-            </h1>
-            <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', marginBottom: '2rem', lineHeight: 1.6 }}>
-              Diseñado para directores de producción y talleres de artes gráficas. Perfila tu parque de maquinaria 
-              (offset, digital e inkjet), define matrices de preparación y merma, y recibe trabajos con artes finales 
-              ya comprobadas técnicamente.
-            </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
-              <a
-                href="https://control.printprice.pro/printhouse/register"
-                className="btn-primary"
-                style={{ padding: '0.875rem 1.75rem', fontSize: '1rem' }}
-              >
-                Registrar mi imprenta ➔
-              </a>
-              <a
-                href="https://control.printprice.pro/"
-                className="btn-secondary"
-                style={{ padding: '0.875rem 1.5rem', fontSize: '0.95rem' }}
-              >
-                Acceso a Control Plane
-              </a>
-              <a
-                href="https://docs.printprice.pro/docs/repositories/ppos-control-plane"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', textDecoration: 'underline', marginLeft: '0.5rem' }}
-              >
-                Guía de arquitectura y onboarding ↗
+      {/* 
+        Hero Banner with Floating Red Particles & Slogan
+      */}
+      <HeroPlatform
+        variant="particles"
+        label="PRINTPRICE FOR PRINTHOUSES"
+        title={dict.printhousesPage.heroTitle}
+        slogan={["PRICE IT.", "FIX IT.", "PRINT IT."]}
+        isHeadlineSlogan={false}
+        subheadline={dict.printhousesPage.heroSubtitle}
+        primaryAction={{
+          label: dict.printhousesPage.ctaPrimary,
+          href: "https://control.printprice.pro/printhouse/register",
+          sublabel: dict.printhousesPage.badgeNote,
+        }}
+        secondaryAction={{
+          label: dict.printhousesPage.ctaSecondary,
+          href: "#how-it-works",
+        }}
+        rightContent={
+          <div
+            className="rounded-card"
+            style={{
+              background: 'rgba(24, 24, 27, 0.85)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              padding: '2rem',
+              backdropFilter: 'blur(12px)',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+              maxWidth: '440px',
+              marginLeft: 'auto',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.1em' }}>
+                {locale === 'es' ? 'PERFIL DE TALLER' : locale === 'de' ? 'BETRIEBSPROFIL' : 'PLANT PROFILE'}
+              </span>
+              <span style={{ fontSize: '0.65rem', background: 'rgba(34, 197, 94, 0.15)', color: '#22c55e', padding: '0.15rem 0.5rem', borderRadius: 'var(--radius-pill)', fontWeight: 700 }}>
+                CONTROL PLANE
+              </span>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.85rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--text-secondary)' }}>Presses:</span>
+                <span style={{ fontWeight: 600 }}>Heidelberg Speedmaster XL 106</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--text-secondary)' }}>Digital Line:</span>
+                <span style={{ fontWeight: 600 }}>HP Indigo 12000 HD</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--text-secondary)' }}>Sheet format:</span>
+                <span style={{ fontWeight: 600 }}>Max 750 × 1060 mm</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--text-secondary)' }}>Bindery:</span>
+                <span style={{ fontWeight: 600 }}>Muller Martini Alegro PUR</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--text-secondary)' }}>Tenant Isolation:</span>
+                <span style={{ fontWeight: 700, color: '#22c55e' }}>✓ Multi-Tenant RBAC Active</span>
+              </div>
+            </div>
+
+            <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--border-color)', textAlign: 'center' }}>
+              <a href="https://control.printprice.pro/printhouse/register" className="btn-primary" style={{ width: '100%', padding: '0.65rem', fontSize: '0.85rem' }}>
+                {dict.printhousesPage.ctaPrimary}
               </a>
             </div>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.85rem' }}>
-              ✓ Alta por correo y CIF de taller · Configuración guiada en Control Plane · Aislamiento estricto de datos de producción
+          </div>
+        }
+      />
+
+      {/* 
+        HOW IT WORKS SECTION FOR PRINTHOUSES
+      */}
+      <section
+        id="how-it-works"
+        style={{
+          padding: 'clamp(4rem, 8vw, 6rem) 0',
+          background: 'var(--bg-secondary)',
+          borderTop: '1px solid var(--border-color)',
+          borderBottom: '1px solid var(--border-color)',
+        }}
+      >
+        <Container>
+          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 3.5rem' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+              <span className="pill-badge">
+                PRICE IT. FIX IT. PRINT IT.
+              </span>
+            </div>
+            <h2 style={{ fontSize: 'clamp(1.85rem, 4vw, 2.5rem)', marginBottom: '0.75rem' }}>
+              {dict.printhousesPage.howHeading}
+            </h2>
+            <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)' }}>
+              {dict.printhousesPage.howSubtitle}
             </p>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+              gap: '1.5rem',
+            }}
+          >
+            <div className="rounded-card" style={{ padding: '2rem', position: 'relative' }}>
+              <div style={{ fontSize: '3rem', fontWeight: 900, color: 'var(--accent-primary)', opacity: 0.2, lineHeight: 1, marginBottom: '1rem' }}>
+                01
+              </div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.05em', marginBottom: '0.35rem' }}>
+                ONBOARDING
+              </div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{dict.printhousesPage.step1Title}</h3>
+              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                {dict.printhousesPage.step1Desc}
+              </p>
+            </div>
+
+            <div className="rounded-card" style={{ padding: '2rem', position: 'relative' }}>
+              <div style={{ fontSize: '3rem', fontWeight: 900, color: 'var(--accent-primary)', opacity: 0.2, lineHeight: 1, marginBottom: '1rem' }}>
+                02
+              </div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.05em', marginBottom: '0.35rem' }}>
+                PRESSES
+              </div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{dict.printhousesPage.step2Title}</h3>
+              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                {dict.printhousesPage.step2Desc}
+              </p>
+            </div>
+
+            <div className="rounded-card" style={{ padding: '2rem', position: 'relative' }}>
+              <div style={{ fontSize: '3rem', fontWeight: 900, color: 'var(--accent-primary)', opacity: 0.2, lineHeight: 1, marginBottom: '1rem' }}>
+                03
+              </div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.05em', marginBottom: '0.35rem' }}>
+                BINDERY &amp; PAPER
+              </div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{dict.printhousesPage.step3Title}</h3>
+              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                {dict.printhousesPage.step3Desc}
+              </p>
+            </div>
+
+            <div className="rounded-card" style={{ padding: '2rem', position: 'relative' }}>
+              <div style={{ fontSize: '3rem', fontWeight: 900, color: 'var(--accent-primary)', opacity: 0.2, lineHeight: 1, marginBottom: '1rem' }}>
+                04
+              </div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.05em', marginBottom: '0.35rem' }}>
+                PRINT IT.
+              </div>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{dict.printhousesPage.step4Title}</h3>
+              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                {dict.printhousesPage.step4Desc}
+              </p>
+            </div>
           </div>
         </Container>
       </section>
 
-      {/* Capacidades reales de Control Plane */}
+      {/* Capacidades & Herramientas */}
       <Section showGrid={false}>
         <Container>
-          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 3.5rem' }}>
+          <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 3.5rem' }}>
             <h2 style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>
-              Control técnico total sobre tus costes y flujos de taller
+              {dict.printhousesPage.toolsHeading}
             </h2>
             <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)' }}>
-              PrintPrice OS calcula costes en base a tus capacidades reales de fabricación, no con aproximaciones genéricas.
+              {dict.printhousesPage.toolsSubtitle}
             </p>
           </div>
 
@@ -75,10 +191,9 @@ export default function ForPrinthousesPage() {
               <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
                 ⚙️
               </div>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>Perfilado de Maquinaria</h3>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>{dict.printhousesPage.tool1Title}</h3>
               <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                Modela prensas digitales de hoja o bobina, cuerpos offset planos (B1, B2, B3) y rotativas. 
-                Configura tiempos de puesta a punto (makeready), velocidad de tirada por hora, mermas de arranque y costes por pasada.
+                {dict.printhousesPage.tool1Desc}
               </p>
             </div>
 
@@ -86,10 +201,9 @@ export default function ForPrinthousesPage() {
               <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
                 ✂️
               </div>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>Matrices de Postimpresión</h3>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>{dict.printhousesPage.tool2Title}</h3>
               <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                Establece costes exactos para plegado de pliegos, alzado, cosido con hilo vegetal, fresado PUR, 
-                confección de tapas duras, plastificados (mate, brillo, soft-touch) y acabados especiales.
+                {dict.printhousesPage.tool2Desc}
               </p>
             </div>
 
@@ -97,128 +211,68 @@ export default function ForPrinthousesPage() {
               <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
                 📦
               </div>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>Aprovisionamiento de Papel</h3>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>{dict.printhousesPage.tool3Title}</h3>
               <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                Vincula las referencias comerciales de tus proveedores de papel al cálculo de coste. 
-                Los costes de fabricación y los costes de transporte de materia prima se calculan por separado con transparencia auditable.
+                {dict.printhousesPage.tool3Desc}
               </p>
             </div>
           </div>
         </Container>
       </Section>
 
-      {/* Flujo de Configuración en 4 pasos */}
-      <section style={{ padding: '4rem 0', background: 'var(--bg-secondary)', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
-        <Container>
-          <div style={{ textAlign: 'center', maxWidth: '650px', margin: '0 auto 3rem' }}>
-            <h2 style={{ fontSize: '1.85rem', marginBottom: '0.5rem' }}>
-              Cómo comenzar con tu imprenta en 4 pasos
-            </h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>
-              El onboarding guiado de Control Plane te acompaña en cada etapa de configuración.
-            </p>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
-            <div className="rounded-card" style={{ padding: '1.75rem', position: 'relative' }}>
-              <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--accent-primary)', opacity: 0.25, lineHeight: 1, marginBottom: '0.5rem' }}>01</div>
-              <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Registro de Taller</h4>
-              <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                Crea tu cuenta con correo profesional y datos fiscales en Control Plane.
-              </p>
-            </div>
-
-            <div className="rounded-card" style={{ padding: '1.75rem', position: 'relative' }}>
-              <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--accent-primary)', opacity: 0.25, lineHeight: 1, marginBottom: '0.5rem' }}>02</div>
-              <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Parque de Maquinaria</h4>
-              <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                Registra tus máquinas de imprimir: formatos mínimos/máximos de pliego, pinzas y costes horarios.
-              </p>
-            </div>
-
-            <div className="rounded-card" style={{ padding: '1.75rem', position: 'relative' }}>
-              <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--accent-primary)', opacity: 0.25, lineHeight: 1, marginBottom: '0.5rem' }}>03</div>
-              <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Encuadernación y Papel</h4>
-              <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                Configura los tipos de encuadernación disponibles y activa sustratos de papel homologados.
-              </p>
-            </div>
-
-            <div className="rounded-card" style={{ padding: '1.75rem', position: 'relative' }}>
-              <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--accent-primary)', opacity: 0.25, lineHeight: 1, marginBottom: '0.5rem' }}>04</div>
-              <h4 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Producción y Pedidos</h4>
-              <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                Recibe presupuestos resueltos por servidor y archivos preflight validados con identificador de evidencia.
-              </p>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* FAQ específica */}
+      {/* FAQ Específica */}
       <Section showGrid={false}>
         <Container>
           <div style={{ maxWidth: '780px', margin: '0 auto' }}>
             <h2 style={{ fontSize: '1.85rem', marginBottom: '2rem', textAlign: 'center' }}>
-              Preguntas frecuentes de talleres e imprentas
+              {dict.printhousesPage.faqHeading}
             </h2>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div className="rounded-card" style={{ padding: '1.5rem' }}>
                 <h3 style={{ fontSize: '1.05rem', fontWeight: 600, marginBottom: '0.5rem' }}>
-                  ¿Quién calcula los costes y con qué fórmulas?
+                  {locale === 'es' ? '¿Quién calcula los costes y con qué fórmulas?' : locale === 'de' ? 'Wer berechnet die Kosten und nach welchen Formeln?' : 'Who calculates the costs and with what formulas?'}
                 </h3>
                 <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                  Los cálculos son resueltos exclusivamente por el motor de cálculo del servidor de PrintPrice OS. 
-                  Se aplican tus matrices de imposición de pliegos, horas de máquina, consumo de papel con mermas y procesos de taller.
-                  No hay intermediarios ni algoritmos opacos.
+                  {locale === 'es'
+                    ? 'Los cálculos son resueltos exclusivamente por el motor del servidor de PrintPrice OS aplicando tus matrices de imposición, horas de máquina, mermas calibradas y consumo exacto de papel.'
+                    : locale === 'de'
+                    ? 'Die Berechnungen werden exklusiv vom Server-Rechenkern anhand Ihrer hinterlegten Ausschieß- und Maschinenmatrizen gelöst.'
+                    : 'Calculations are resolved exclusively by the PrintPrice OS server engine applying your machine imposition matrices, calibrated makeready and exact paper consumption.'}
                 </p>
               </div>
 
               <div className="rounded-card" style={{ padding: '1.5rem' }}>
                 <h3 style={{ fontSize: '1.05rem', fontWeight: 600, marginBottom: '0.5rem' }}>
-                  ¿Mis tarifas y márgenes son públicos para otros talleres?
+                  {locale === 'es' ? '¿Mis tarifas son públicas para otros talleres?' : locale === 'de' ? 'Sind meine Tarife für andere Druckereien sichtbar?' : 'Are my rates visible to other printhouses?'}
                 </h3>
                 <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                  No. PrintPrice OS mantiene un aislamiento estricto de tenants (multi-tenant con RBAC estricto). 
-                  Tus datos de máquinas, costes horarios, márgenes y acuerdos comerciales son completamente confidenciales y privados para tu organización.
-                </p>
-              </div>
-
-              <div className="rounded-card" style={{ padding: '1.5rem' }}>
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 600, marginBottom: '0.5rem' }}>
-                  ¿Cómo recibo los archivos listos para imprimir?
-                </h3>
-                <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                  Los trabajos recibidos cuentan con un informe técnico de Preflight asociado a un identificador único (evidenceId). 
-                  Esto certifica que el archivo cumple las dimensiones de corte, sangres, resolución y perfiles de color requeridos por tus máquinas.
-                </p>
-              </div>
-
-              <div className="rounded-card" style={{ padding: '1.5rem' }}>
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 600, marginBottom: '0.5rem' }}>
-                  ¿Tengo que dar de baja mi sistema MIS/ERP actual?
-                </h3>
-                <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                  No. PrintPrice OS puede convivir como motor de tarificación inteligente y canal de captación técnica o integrarse con tu flujo de preprensa y gestión a través de API y especificaciones OpenAPI estándar.
+                  {locale === 'es'
+                    ? 'No. PrintPrice OS mantiene un aislamiento estricto de tenants (multi-tenant con RBAC estricto). Tus costes, márgenes y acuerdos son confidenciales y privados para tu organización.'
+                    : locale === 'de'
+                    ? 'Nein. PrintPrice OS erzwingt strikte Mandantentrennung (Multi-Tenant mit RBAC). Ihre Kosten und Margen bleiben absolut vertraulich.'
+                    : 'No. PrintPrice OS enforces strict tenant isolation (multi-tenant with RBAC). Your machine costs, markups and commercial terms are strictly confidential to your organization.'}
                 </p>
               </div>
             </div>
 
-            {/* CTA Final */}
+            {/* Final CTA */}
             <div style={{ marginTop: '3.5rem', textAlign: 'center', padding: '2.5rem', background: 'var(--bg-secondary)', borderRadius: 'var(--radius-card)', border: '1px solid var(--border-color)' }}>
+              <div style={{ color: 'var(--accent-primary)', fontWeight: 800, fontSize: '0.8rem', letterSpacing: '0.1em', marginBottom: '0.5rem' }}>
+                PRICE IT. FIX IT. PRINT IT.
+              </div>
               <h3 style={{ fontSize: '1.35rem', marginBottom: '0.5rem' }}>
-                ¿Listo para integrar la potencia de PrintPrice OS en tu taller?
+                {dict.printhousesPage.finalCtaHeading}
               </h3>
               <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem', fontSize: '0.95rem' }}>
-                Completa el registro canónico de imprenta y accede a la consola de Control Plane.
+                {dict.printhousesPage.finalCtaSub}
               </p>
               <a
                 href="https://control.printprice.pro/printhouse/register"
                 className="btn-primary"
                 style={{ padding: '0.875rem 2rem', fontSize: '1rem' }}
               >
-                Registrar mi imprenta ahora ➔
+                {dict.printhousesPage.finalCtaBtn}
               </a>
             </div>
           </div>
