@@ -197,14 +197,30 @@ export default function ForAuthorsPage() {
               </p>
             </div>
 
-            <div className="rounded-card" style={{ padding: '2rem' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
-                ✓
+            <div className="rounded-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
+                  ✓
+                </div>
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>
+                  {locale === 'es' ? 'Preflight: Comprueba tu archivo' : locale === 'de' ? 'Preflight: Datei prüfen' : 'Preflight: Check your file'}
+                </h3>
+                <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
+                  {locale === 'es'
+                    ? 'Comprueba tu archivo sin tener que interpretar un informe técnico complejo. Detecta sangrados insuficientes, márgenes de corte y fotos de baja resolución con explicaciones comprensibles.'
+                    : locale === 'de'
+                    ? 'Prüfen Sie Ihre Datei ohne komplizierte Fachberichte. Erkennt fehlenden Beschnitt, Sicherheitsabstände und Bilder unter 300 DPI mit leicht verständlichen Hinweisen.'
+                    : 'Check your file without deciphering complex technical reports. Catch missing bleed, trim margins, and low-res images with clear, actionable guidance.'}
+                </p>
               </div>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>{dict.authorsPage.tool2Title}</h3>
-              <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                {dict.authorsPage.tool2Desc}
-              </p>
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+                <a href="https://preflight.printprice.pro/" className="btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>
+                  {locale === 'es' ? 'Comprobar PDF ➔' : locale === 'de' ? 'PDF prüfen ➔' : 'Check PDF ➔'}
+                </a>
+                <Link href="/products/preflight" className="btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>
+                  {locale === 'es' ? 'Ver detalles' : locale === 'de' ? 'Details' : 'Details'}
+                </Link>
+              </div>
             </div>
 
             <div className="rounded-card" style={{ padding: '2rem' }}>

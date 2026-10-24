@@ -25,6 +25,7 @@ PAGES = [
     {"path": "/for-publishers", "name": "For Publishers"},
     {"path": "/for-printhouses", "name": "For Printhouses"},
     {"path": "/for-paper-suppliers", "name": "For Paper Suppliers"},
+    {"path": "/products/preflight", "name": "Preflight"},
     {"path": "/contact", "name": "Contact"},
     {"path": "/contact/partner", "name": "Contact Partner"},
     {"path": "/platform", "name": "Platform"},

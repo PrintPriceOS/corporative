@@ -20,9 +20,9 @@ export default function MockupPage() {
     <div className="product-page">
       {/* Product Hero - High Authority Activation */}
       <HeroPlatform 
-        label="SYSTEM ENGINE / VISUALIZATION LAYER"
+        label="HERRAMIENTA COMPLEMENTARIA / VISUALIZACIÓN 3D"
         title={<>RETAIL-READY <br/> BOOK <br/> <span style={{ color: 'var(--accent-primary)' }}>MOCKUPS</span></>}
-        slogan={["UPLOAD.", "RENDER.", "SELL."]}
+        slogan={["PRICE IT.", "FIX IT.", "PRINT IT."]}
         isHeadlineSlogan={false}
         subheadline="Create realistic book visuals from a single cover image. Our AI-driven workstation provides total control over binding, texture, and perspective for production-grade visualization."
         primaryAction={{ label: "Launch Workstation →", href: "https://mockup.printprice.pro/" }}

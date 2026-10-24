@@ -1,241 +1,1220 @@
-import { HeroPlatform } from "@/components/monolith/HeroPlatform";
-import { Section } from "@/components/ui/Section";
-import { Button } from "@/components/ui/Button";
-import Link from "next/link";
-import { ActionCTA } from "@/components/monolith/ActionCTA";
-import { Icon } from "@/components/ui/Icon";
-import { SystemCardHover } from "@/components/ui/effects/SystemCardHover";
-import { WorkflowRail } from "@/components/monolith/WorkflowRail";
-import { PreflightDiagnosticPipeline } from "@/components/monolith/PreflightDiagnosticPipeline";
-import { constructMetadata } from "@/lib/seo";
+'use client';
 
-export const metadata = constructMetadata({
-  title: "PDF Preflight & File Fixing Tool",
-  description: "Detect and fix print file issues automatically. Ensure your files are production-ready with automated PDF validation and correction.",
-  image: "/og/preflight.png",
-  canonical: "/products/preflight"
-});
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { HeroPlatform } from '@/components/monolith/HeroPlatform';
+import { Container } from '@/components/ui/Container';
+import { Section } from '@/components/ui/Section';
+import { useLocale } from '@/lib/i18n';
 
-export default function PreflightPage() {
+export default function PreflightProductPage() {
+  const { locale } = useLocale();
+  const [activeTab, setActiveTab] = useState<'individual' | 'pro'>('individual');
+  const [showDemoModal, setShowDemoModal] = useState(false);
+
+  const texts = {
+    es: {
+      label: 'PRINTPRICE PREFLIGHT / MOTOR FORENSE DE ARTES FINALES',
+      title: 'Comprueba tu PDF antes de imprimir.',
+      subheadline: 'Identifica problemas técnicos, entiende qué debes revisar y prepara tu archivo para el siguiente paso.',
+      ctaPrimary: 'Comprobar mi PDF →',
+      ctaSecondary: 'Ver informe de ejemplo',
+      slogan: ['PRICE IT.', 'FIX IT.', 'PRINT IT.'],
+      badge: 'PROCESAMIENTO DETERMINISTA EN LA NUBE',
+
+      // Who it's for
+      audienceTitle: 'Diseñado para cada etapa de la producción gráfica',
+      audienceSubtitle: 'Sin tecnicismos oscuros para creadores independientes; con rigor forense para plantas de impresión.',
+      audiences: [
+        {
+          title: 'Autores y Particulares',
+          badge: 'FACILIDAD DE USO',
+          desc: 'Comprueba sangrados, márgenes de seguridad y resolución de portada e interior sin necesidad de interpretar códigos de error complejos.',
+          icon: '✍️'
+        },
+        {
+          title: 'Editoriales y Diseñadores',
+          badge: 'CONTROL DE CALIDAD',
+          desc: 'Audita colecciones y reediciones completas antes de enviar a imprenta. Detecta fuentes problemáticas, colores RGB y desajustes de lomo.',
+          icon: '📚'
+        },
+        {
+          title: 'Imprentas y Talleres',
+          badge: 'RECEPCIÓN DE ARCHIVOS',
+          desc: 'Automatiza el filtro de entrada de artes finales. Recibe trabajos con evidencias inmutables (evidenceId) y elimina horas de revisión manual en preimpresión.',
+          icon: '🏭'
+        },
+        {
+          title: 'Desarrolladores y Plataformas',
+          badge: 'API & WORKFLOWS',
+          desc: 'Integra el motor de análisis y corrección automática directamente en tu software editorial, ERP o tienda online mediante API REST.',
+          icon: '⚡'
+        }
+      ],
+
+      // What it checks
+      checksTitle: 'Qué comprueba el motor de PrintPrice Preflight',
+      checksSubtitle: 'Evaluación determinista basada en estándares ISO y políticas reales de fabricación.',
+      checks: [
+        { name: 'Cajas de Página (Geometry)', desc: 'Normalización de MediaBox, TrimBox y BleedBox para asegurar dimensiones exactas de corte.' },
+        { name: 'Sangrado Perimetral (Bleed)', desc: 'Detección de ausencia de sangre perimetral (3 mm estándar) para evitar filos blancos al guillotinar.' },
+        { name: 'Resolución de Imágenes (DPI)', desc: 'Cálculo de la resolución efectiva real de cada imagen en página frente al umbral requerido (300 DPI).' },
+        { name: 'Fuentes Tipográficas', desc: 'Verificación de fuentes no incrustadas, subconjuntos parciales y fuentes sintéticas susceptibles de sustitución.' },
+        { name: 'Espacios de Color y Tintas', desc: 'Detección precisa de elementos en modo RGB, perfiles ICC incompatibles y tintas directas no deseadas.' },
+        { name: 'Límite de Tinta (TAC / TIC)', desc: 'Medición de la cobertura total de tinta para evitar manchas, repintados y retrasos de secado en máquina.' },
+        { name: 'Transparencias y Capas', desc: 'Identificación de modos de fusión, máscaras suaves y transparencias complejas que requieran acoplamiento.' },
+        { name: 'Estándares PDF/X', desc: 'Comprobación de conformidad con normas ISO (PDF/X-1a, PDF/X-4) para compatibilidad con RIPs industriales.' }
+      ],
+
+      // How it works
+      workflowTitle: 'Cómo funciona el análisis',
+      workflowSteps: [
+        { step: '01', title: 'Sube tu archivo PDF', desc: 'Carga tu documento directamente en el navegador o envíalo a través de la API REST sin instalar aplicaciones locales.' },
+        { step: '02', title: 'Inspección forense', desc: 'El motor analiza de forma determinista la geometría, vectores, imágenes, tipografías y metadatos del archivo.' },
+        { step: '03', title: 'Informe comprensible', desc: 'Recibes un desglose interactivo clasificado por páginas afectadas, nivel de riesgo y recomendaciones claras.' },
+        { step: '04', title: 'Corrección y entrega', desc: 'Aplica correcciones automáticas compatibles o descarga el diagnóstico para ajustar tu documento en tu programa de maquetación.' }
+      ],
+
+      // Corrections & limits
+      limitsTitle: 'Correcciones disponibles y sus límites técnicos',
+      limitsSubtitle: 'Transparencia absoluta: qué puede resolver el software y qué requiere intervención en el archivo original.',
+      limits: [
+        {
+          feature: 'Expansión de BleedBox',
+          action: 'Ajuste geométrico automático',
+          limit: 'El motor amplía los límites de la caja de sangrado en el PDF, pero no sintetiza ni estira la ilustración si el fondo no desborda físicamente el corte.',
+          type: 'safe'
+        },
+        {
+          feature: 'Imágenes de Baja Resolución',
+          action: 'Detección y señalización exacta',
+          limit: 'El software nunca reescala artificialmente imágenes de baja calidad, ya que inventaría píxeles falsos. Requiere sustitución en el archivo original.',
+          type: 'warning'
+        },
+        {
+          feature: 'Conversión de Color a CMYK',
+          action: 'Conversión técnica estandarizada',
+          limit: 'Aplica perfiles de color ISO (Fogra51 / PSO Coated). Los colores muy vivos fuera de la gama CMYK pueden experimentar ligeros cambios tonales.',
+          type: 'warning'
+        },
+        {
+          feature: 'Fuentes no incrustadas',
+          action: 'Diagnóstico e indicación de glifos',
+          limit: 'Si una fuente no está incrustada en el PDF original, el motor no puede inventar los glifos. Es necesario volver a exportar con fuentes incrustadas.',
+          type: 'warning'
+        }
+      ],
+
+      // Demo Report
+      demoTitle: 'Informe de ejemplo (Demostración interactiva)',
+      demoNotice: 'Datos extraídos de un archivo de prueba sintético interno (64 páginas, papel estucado semi-mate 135g). Identificado exclusivamente como demostración.',
+
+      // Privacy
+      privacyTitle: 'Privacidad y tratamiento seguro de archivos',
+      privacyPoints: [
+        'Los archivos subidos se procesan en infraestructura cifrada exclusivamente para generar el informe y aplicar correcciones.',
+        'Eliminación periódica y automática de los ficheros temporales tras completar el procesado o caducar el enlace de descarga.',
+        'Ningún documento se comparte con terceros ni se utiliza para entrenamiento de modelos de inteligencia artificial.',
+        'Conexión segura SSL/TLS de extremo a extremo durante la subida, análisis y descarga.'
+      ],
+
+      // FAQ
+      faqTitle: 'Preguntas Frecuentes',
+      faqs: [
+        {
+          q: '¿PrintPrice Preflight garantiza que mi libro se imprimirá sin ningún error?',
+          a: 'No. Ningún software puede garantizar un "archivo perfecto" de forma absoluta. El resultado depende del perfil técnico seleccionado y de los requisitos específicos de la imprenta. Preflight no sustituye la corrección ortotipográfica editorial, la prueba de color certificada ni el visado final del impresor.'
+        },
+        {
+          q: '¿Por qué no aumentan automáticamente la resolución de las fotos de mi PDF?',
+          a: 'Porque la interpolación o reescalado por software inventa información visual y puede provocar imágenes borrosas en papel. La única forma rigurosa de asegurar nitidez profesional en imprenta es sustituir la imagen por el archivo original de alta resolución en la maqueta.'
+        },
+        {
+          q: '¿Qué ocurre si corrijo el sangrado con la herramienta automática?',
+          a: 'La herramienta expande la caja técnica de sangrado (BleedBox) en el documento PDF para que el RIP de la imprenta la reconozca. Sin embargo, si el diseño original tiene fondos blancos pegados al borde, deberás extenderlos en tu programa de maquetación (InDesign, Illustrator, Canva) para evitar filos blancos al guillotinar.'
+        },
+        {
+          q: '¿Cómo se conecta Preflight con el presupuesto (Budget) y la producción?',
+          a: 'Las características técnicas que defines al presupuestar en Budget (tamaño de corte, número de páginas, tipo de papel) configuran automáticamente las reglas del Preflight. Al aprobar el archivo, se genera un identificador de evidencia (evidenceId) criptográfico que garantiza que la imprenta reciba exactamente la versión verificada.'
+        }
+      ]
+    },
+    en: {
+      label: 'PRINTPRICE PREFLIGHT / FORENSIC PREPRESS ENGINE',
+      title: 'Check your PDF before printing.',
+      subheadline: 'Identify technical issues, understand what needs review, and prepare your file for the next step.',
+      ctaPrimary: 'Check my PDF →',
+      ctaSecondary: 'View sample report',
+      slogan: ['PRICE IT.', 'FIX IT.', 'PRINT IT.'],
+      badge: 'DETERMINISTIC CLOUD PROCESSING',
+
+      audienceTitle: 'Built for every stage of graphic manufacturing',
+      audienceSubtitle: 'Clear guidance for creators; forensic precision for industrial printing plants.',
+      audiences: [
+        {
+          title: 'Authors & Self-Publishers',
+          badge: 'EASY TO USE',
+          desc: 'Verify bleed, safety margins, and resolution for cover and interior without deciphering complex technical codes.',
+          icon: '✍️'
+        },
+        {
+          title: 'Publishers & Art Directors',
+          badge: 'QUALITY ASSURANCE',
+          desc: 'Audit frontlist and backlist titles before sending to press. Catch problematic fonts, RGB elements, and spine mismatches.',
+          icon: '📚'
+        },
+        {
+          title: 'Printhouses & Factories',
+          badge: 'FILE INTAKE',
+          desc: 'Automate print file validation. Receive production-ready jobs with cryptographic evidence (evidenceId) and eliminate prepress labor.',
+          icon: '🏭'
+        },
+        {
+          title: 'Developers & Platforms',
+          badge: 'API & WORKFLOWS',
+          desc: 'Embed automated PDF inspection and non-destructive remediation directly into your MIS, ERP, or web-to-print store via REST API.',
+          icon: '⚡'
+        }
+      ],
+
+      checksTitle: 'What PrintPrice Preflight checks',
+      checksSubtitle: 'Deterministic evaluation based on ISO standards and real manufacturing constraints.',
+      checks: [
+        { name: 'Page Boxes (Geometry)', desc: 'Normalized verification of MediaBox, TrimBox, and BleedBox to ensure exact trim sizes.' },
+        { name: 'Perimeter Bleed', desc: 'Checks for standard 3mm bleed to prevent unprinted white edges during trimming.' },
+        { name: 'Effective Image DPI', desc: 'Calculates the real effective resolution of each embedded image against the 300 DPI threshold.' },
+        { name: 'Font Embedding', desc: 'Detects non-embedded fonts, partial subsets, and Type 3 fonts prone to press substitution.' },
+        { name: 'Color Spaces & Inks', desc: 'Pinpoint detection of RGB elements, uncalibrated ICC profiles, and unintended spot colors.' },
+        { name: 'Total Ink Coverage (TAC)', desc: 'Measures total ink limit to prevent ink smudging, set-off, and drying issues on press.' },
+        { name: 'Transparencies & Layers', desc: 'Identifies blend modes, soft masks, and complex transparency groups requiring flattening.' },
+        { name: 'PDF/X Standards', desc: 'Verifies conformance with ISO standards (PDF/X-1a, PDF/X-4) for industrial RIP compatibility.' }
+      ],
+
+      workflowTitle: 'How the analysis works',
+      workflowSteps: [
+        { step: '01', title: 'Upload your PDF', desc: 'Drag and drop your file in the browser or submit via REST API without installing local software.' },
+        { step: '02', title: 'Forensic inspection', desc: 'The cloud engine deterministically inspects geometry, vectors, raster assets, typography, and metadata.' },
+        { step: '03', title: 'Clear diagnostics', desc: 'Receive an interactive visual report grouped by affected pages, risk severity, and action items.' },
+        { step: '04', title: 'Remediation & print', desc: 'Apply safe automated fixes or download the diagnostic summary to make adjustments in your design tool.' }
+      ],
+
+      limitsTitle: 'Available fixes and technical limits',
+      limitsSubtitle: 'Absolute transparency: what software can resolve and what requires adjusting the source layout.',
+      limits: [
+        {
+          feature: 'BleedBox Expansion',
+          action: 'Automated geometry adjustment',
+          limit: 'The engine expands the technical BleedBox dictionary in the PDF, but cannot invent image pixels if the artwork does not extend past the trim edge.',
+          type: 'safe'
+        },
+        {
+          feature: 'Low Resolution Images',
+          action: 'Precise location flag',
+          limit: 'Software never artificially upsamples low-res images, as that would hallucinate fake detail. Replace with high-res source in design software.',
+          type: 'warning'
+        },
+        {
+          feature: 'CMYK Color Conversion',
+          action: 'Standardized ISO conversion',
+          limit: 'Converts via Fogra51 / PSO Coated profiles. Vibrant out-of-gamut RGB colors may experience natural tonal shifts upon CMYK translation.',
+          type: 'warning'
+        },
+        {
+          feature: 'Missing Fonts',
+          action: 'Glyph diagnosis and warning',
+          limit: 'If a font is not embedded in the source PDF, the engine cannot create vector outlines. The document must be re-exported with embedded fonts.',
+          type: 'warning'
+        }
+      ],
+
+      demoTitle: 'Sample Report (Interactive Demonstration)',
+      demoNotice: 'Data extracted from an internal synthetic test document (64 pages, 135g coated paper). Identified strictly as a demonstration.',
+
+      privacyTitle: 'Privacy and secure file processing',
+      privacyPoints: [
+        'Uploaded files are processed in encrypted infrastructure solely to generate diagnostics and apply requested fixes.',
+        'Automated scheduled deletion of temporary files upon job completion or download token expiration.',
+        'Zero AI training: customer files are never used to train machine learning models nor shared with third parties.',
+        'End-to-end SSL/TLS encryption for uploads, analysis pipelines, and artifact downloads.'
+      ],
+
+      faqTitle: 'Frequently Asked Questions',
+      faqs: [
+        {
+          q: 'Does PrintPrice Preflight guarantee a 100% error-free print run?',
+          a: 'No. No software can guarantee a "perfect file" universally. Verification depends on the selected production profile and the manufacturing tolerances of the target printer. Preflight does not replace editorial proofreading, contract proofs, or press-side approval.'
+        },
+        {
+          q: 'Why does Preflight not automatically upscale low-resolution images?',
+          a: 'Because software upscaling invents artificial pixels that often result in blurry, artifact-heavy prints. The only reliable approach in professional printing is to replace the image with a genuine high-resolution source file.'
+        },
+        {
+          q: 'What happens when I apply the automated bleed fix?',
+          a: 'The fix updates the BleedBox coordinates in the PDF metadata so prepress RIPs recognize the trim boundaries. However, if your design left white margins inside the trim area, you must extend the artwork in InDesign or Illustrator to avoid white edges.'
+        },
+        {
+          q: 'How does Preflight connect with Budget and manufacturing?',
+          a: 'The physical specifications selected in Budget (trim size, page count, paper stock) automatically configure Preflight policies. Once approved, an immutable cryptographic evidenceId is attached to the work order, ensuring the plant receives the exact audited file.'
+        }
+      ]
+    },
+    de: {
+      label: 'PRINTPRICE PREFLIGHT / FORENSISCHE DRUCKDATENPRÜFUNG',
+      title: 'Prüfen Sie Ihr PDF vor dem Druck.',
+      subheadline: 'Erkennen Sie technische Mängel, verstehen Sie erforderliche Korrekturen und bereiten Sie Ihre Datei optimal vor.',
+      ctaPrimary: 'PDF jetzt prüfen →',
+      ctaSecondary: 'Beispielbericht ansehen',
+      slogan: ['PRICE IT.', 'FIX IT.', 'PRINT IT.'],
+      badge: 'DETERMINISTISCHE CLOUD-ANALYSE',
+
+      audienceTitle: 'Entwickelt für jeden Schritt der Druckproduktion',
+      audienceSubtitle: 'Verständliche Erklärungen für Autoren; forensische Präzision für industrielle Druckereien.',
+      audiences: [
+        {
+          title: 'Autoren & Selbstverleger',
+          badge: 'EINFACHE BEDIENUNG',
+          desc: 'Überprüfen Sie Beschnitt, Sicherheitsabstände und Bildauflösung für Umschlag und Innenteil ohne kryptische Fachbegriffe.',
+          icon: '✍️'
+        },
+        {
+          title: 'Verlage & Buchgestalter',
+          badge: 'QUALITÄTSSICHERUNG',
+          desc: 'Prüfen Sie Neuerscheinungen und Nachdrucke vor dem Druckgang. Erkennen Sie RGB-Elemente, fehlende Schriften und Rückenbreitenfehler.',
+          icon: '📚'
+        },
+        {
+          title: 'Druckereien & Buchbindereien',
+          badge: 'DATEIEINGANGSKONTROLLE',
+          desc: 'Automatisieren Sie den Druckdateneingang. Erhalten Sie verifizierte Aufträge mit kryptografischer Evidenz (evidenceId) ohne manuellen Aufwand.',
+          icon: '🏭'
+        },
+        {
+          title: 'Entwickler & Plattformen',
+          badge: 'API & INTEGRATION',
+          desc: 'Integrieren Sie die deterministische PDF-Prüfung und -Reparatur über eine REST-API direkt in Ihr ERP-, MIS- oder Web-to-Print-System.',
+          icon: '⚡'
+        }
+      ],
+
+      checksTitle: 'Was PrintPrice Preflight prüft',
+      checksSubtitle: 'Deterministische Prüfung basierend auf ISO-Standards und realen Fertigungsbedingungen.',
+      checks: [
+        { name: 'Seitenboxen (Geometrie)', desc: 'Normalisierte Prüfung von MediaBox, TrimBox und BleedBox für exakte Endformate.' },
+        { name: 'Umlaufender Beschnitt (Bleed)', desc: 'Erkennung von fehlendem 3-mm-Beschnitt zur Vermeidung von Blitzern beim Schneiden.' },
+        { name: 'Effektive Bildauflösung (DPI)', desc: 'Ermittlung der tatsächlichen Auflösung jedes eingebetteten Bildes im Verhältnis zum 300-DPI-Standard.' },
+        { name: 'Schrifteinbettung', desc: 'Prüfung auf nicht eingebettete Schriftarten, unvollständige Subsets und ersetzungsgefährdete Schriften.' },
+        { name: 'Farbräume & Sonderfarben', desc: 'Präzise Erkennung von RGB-Objekten, inkompatiblen ICC-Profilen und unbeabsichtigten Schmuckfarben.' },
+        { name: 'Gesamtfarbauftrag (TAC / TIC)', desc: 'Messung des maximalen Farbauftrags zur Vermeidung von Ablegen, Verwischen und Trocknungsverzögerungen.' },
+        { name: 'Transparenzen & Ebenen', desc: 'Identifikation von Füllmethoden, Soft-Masks und Transparenzgruppen, die Verflachung erfordern.' },
+        { name: 'PDF/X-Standards', desc: 'Konformitätsprüfung nach ISO-Normen (PDF/X-1a, PDF/X-4) für maximale RIP-Kompatibilität.' }
+      ],
+
+      workflowTitle: 'So funktioniert die Prüfung',
+      workflowSteps: [
+        { step: '01', title: 'PDF-Datei hochladen', desc: 'Laden Sie Ihre Datei direkt im Browser hoch oder senden Sie sie über die REST-API – ganz ohne lokale Software.' },
+        { step: '02', title: 'Forensische Analyse', desc: 'Die Cloud-Engine prüft Geometrie, Vektoren, Bilder, Schriften und Metadaten deterministisch.' },
+        { step: '03', title: 'Verständlicher Bericht', desc: 'Sie erhalten einen interaktiven Bericht mit Risikoscore, betroffenen Seitenzahlen und Handlungsempfehlungen.' },
+        { step: '04', title: 'Korrektur & Freigabe', desc: 'Wenden Sie sichere Reparaturen an oder nutzen Sie die Hinweise, um die Datei in Ihrem Layoutprogramm anzupassen.' }
+      ],
+
+      limitsTitle: 'Verfügbare Reparaturen und technische Grenzen',
+      limitsSubtitle: 'Ehrliche Transparenz: Was die Software reparieren kann und was im Originaldokument gelöst werden muss.',
+      limits: [
+        {
+          feature: 'BleedBox-Erweiterung',
+          action: 'Automatische Geometrieanpassung',
+          limit: 'Die Engine passt die Beschnittbox im PDF an, kann jedoch keine Bildinhalte künstlich erfinden, wenn das Layout weiß bleibt.',
+          type: 'safe'
+        },
+        {
+          feature: 'Bilder mit geringer Auflösung',
+          action: 'Exakte Lokalisierung im Dokument',
+          limit: 'Die Software rechnet Bilder niemals künstlich hoch (kein Fake-Upsampling). Bitte ersetzen Sie das Bild im Satzprogramm.',
+          type: 'warning'
+        },
+        {
+          feature: 'CMYK-Farbkonvertierung',
+          action: 'Standardisierte ISO-Farbwandlung',
+          limit: 'Wandlung über Fogra51 / PSO Coated Profile. Sehr leuchtende RGB-Töne können im CMYK-Druck naturgemäß dezenter wirken.',
+          type: 'warning'
+        },
+        {
+          feature: 'Fehlende Schriftarten',
+          action: 'Glyphenprüfung und Warnung',
+          limit: 'Fehlt eine Schriftart im PDF, können Vektoren nicht erraten werden. Das Dokument muss mit eingebetteten Schriften exportiert werden.',
+          type: 'warning'
+        }
+      ],
+
+      demoTitle: 'Beispielbericht (Interaktive Demonstration)',
+      demoNotice: 'Auszug aus einem internen Testdokument (64 Seiten, 135 g Bilderdruckpapier). Ausdrücklich als Demonstration gekennzeichnet.',
+
+      privacyTitle: 'Datenschutz und sichere Dateiverarbeitung',
+      privacyPoints: [
+        'Dateien werden auf verschlüsselter Infrastruktur ausschließlich zur Berichtserstellung und Reparatur analysiert.',
+        'Automatische Löschung aller temporären Dokumente nach Abschluss des Vorgangs oder Ablauf des Download-Tokens.',
+        'Kein KI-Training: Kundendateien werden niemals für das Training von Algorithmen verwendet oder an Dritte weitergegeben.',
+        'Vollständige SSL/TLS-Verschlüsselung während Upload, forensischer Prüfung und Download.'
+      ],
+
+      faqTitle: 'Häufig gestellte Fragen (FAQ)',
+      faqs: [
+        {
+          q: 'Garantiert PrintPrice Preflight einen fehlerfreien Druck?',
+          a: 'Nein. Keine Software der Welt kann eine absolute Druckgarantie aussprechen. Das Ergebnis hängt vom gewählten Profil und den Fertigungstoleranzen der Druckerei ab. Preflight ersetzt weder das Lektorat noch einen zertifizierten Proof oder die Druckfreigabe.'
+        },
+        {
+          q: 'Warum rechnet Preflight niedrig aufgelöste Fotos nicht automatisch hoch?',
+          a: 'Weil künstliches Hochrechnen (Upsampling) Bilddaten erfindet und zu unscharfen Drucken führt. Für echte Druckqualität muss das Bild im Layoutprogramm durch die Originaldatei ersetzt werden.'
+        },
+        {
+          q: 'Was bewirkt die automatische Beschnittkorrektur?',
+          a: 'Die Funktion definiert die Beschnittbox (BleedBox) im PDF neu, damit der Belichter die Schnittkanten korrekt liest. Verlaufen Bildelemente jedoch nicht bis an den Rand, müssen sie im Layoutprogramm über den Rand gezogen werden.'
+        },
+        {
+          q: 'Wie ist Preflight mit der Preiskalkulation (Budget) verbunden?',
+          a: 'Die im Kalkulator gewählten Parameter (Endformat, Seitenzahl, Papiersorte) steuern direkt die Prüfregeln von Preflight. Bei Freigabe wird ein kryptografischer Hash (evidenceId) generiert, der sicherstellt, dass die Druckerei exakt diese Datei erhält.'
+        }
+      ]
+    }
+  };
+
+  const t = texts[locale as keyof typeof texts] || texts.es;
+
   return (
-    <div className="product-page">
-      {/* Product Hero - High Authority Activation */}
-      <HeroPlatform 
-        label="SYSTEM ENGINE / FIX-IT LAYER"
-        title={<>FIX YOUR FILES <br/> BEFORE <br/> <span style={{ color: 'var(--accent-primary)' }}>PRODUCTION</span></>}
-        slogan={["PLAN.", "FIX.", "SCALE."]}
+    <div className="preflight-product-page">
+      {/* 1. Hero Platform with Red Particles */}
+      <HeroPlatform
+        label={t.label}
+        title={t.title}
+        slogan={t.slogan}
         isHeadlineSlogan={false}
-        subheadline="Detect, fix, and certify your print files automatically — before they reach production. Automated file validation and correction for real production workflows."
-        primaryAction={{ label: "Check my file →", href: "https://preflight.printprice.pro/" }}
-        secondaryAction={{ label: "View technical specs →", href: "#engine" }}
+        subheadline={t.subheadline}
+        primaryAction={{
+          label: t.ctaPrimary,
+          href: 'https://preflight.printprice.pro/'
+        }}
+        secondaryAction={{
+          label: t.ctaSecondary,
+          href: '#demo-report'
+        }}
         variant="particles"
       />
 
-      {/* Visual Reinforcement - Diagnostic Pipeline */}
-      <PreflightDiagnosticPipeline />
+      {/* Slogan Brand Bar */}
+      <div style={{ textAlign: 'center', marginTop: '-2rem', marginBottom: '3.5rem', opacity: 0.6 }}>
+        <p className="technical-text" style={{ fontSize: '0.75rem', letterSpacing: '0.25em' }}>
+          PRICE IT → FIX IT → PRINT IT
+        </p>
+      </div>
 
-      {/* Instant Clarity - What it actually does */}
-      <Section variant="primary">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(450px, 100%), 1fr))', gap: '4rem', alignItems: 'center' }}>
-            <div>
-                <h4 className="technical-text" style={{ fontSize: '0.75rem', color: 'var(--accent-primary)', letterSpacing: '0.2em', marginBottom: '1.5rem', fontWeight: 900 }}>CORE OPERATION</h4>
-                <h2 style={{ fontSize: '3rem', letterSpacing: '-0.04em', marginBottom: '2.5rem', lineHeight: 1.1 }}>One engine. <br/> Zero errors.</h2>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', lineHeight: 1.5, marginBottom: '3.5rem', maxWidth: '45ch' }}>
-                    Preflight isn't just a file checker. It is the deterministic correction layer that sits between your pricing and production, ensuring every file is valid, fixed, and safe to print.
-                </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                    {[
-                        { icon: 'shield', text: 'Detects real production issues instantly' },
-                        { icon: 'fix', text: 'Fixes structure and color errors automatically' },
-                        { icon: 'policy', text: 'Validates against strict production rules' },
-                        { icon: 'print', text: 'Generates production-ready outputs' },
-                    ].map((item, i) => (
-                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-                            <Icon name={item.icon as any} size={18} style={{ color: 'var(--accent-primary)' }} />
-                            <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-primary)' }}>{item.text}</span>
-                        </div>
-                    ))}
+      {/* 2. Target Audience Profiles */}
+      <Section variant="secondary">
+        <Container>
+          <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto 3.5rem' }}>
+            <span className="pill-badge" style={{ marginBottom: '1rem' }}>
+              {t.badge}
+            </span>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', marginBottom: '1rem' }}>
+              {t.audienceTitle}
+            </h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.6 }}>
+              {t.audienceSubtitle}
+            </p>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
+              gap: '1.5rem'
+            }}
+          >
+            {t.audiences.map((aud, i) => (
+              <div
+                key={i}
+                className="rounded-card"
+                style={{
+                  background: 'var(--bg-primary)',
+                  padding: '2rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  border: '1px solid var(--border-color)'
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+                    <span style={{ fontSize: '2rem' }}>{aud.icon}</span>
+                    <span
+                      className="technical-text"
+                      style={{ fontSize: '0.65rem', color: 'var(--accent-primary)', fontWeight: 800 }}
+                    >
+                      {aud.badge}
+                    </span>
+                  </div>
+                  <h3 style={{ fontSize: '1.35rem', fontWeight: 800, marginBottom: '0.75rem' }}>
+                    {aud.title}
+                  </h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6 }}>
+                    {aud.desc}
+                  </p>
                 </div>
-            </div>
-
-            <WorkflowRail 
-                title="ORCHESTRATION FLOW"
-                steps={[
-                    { label: "PRICE IT", status: "DONE" },
-                    { label: "FIX IT (PREFLIGHT)", status: "READY" },
-                    { label: "PRINT IT", status: "PENDING" },
-                ]}
-            />
-        </div>
+              </div>
+            ))}
+          </div>
+        </Container>
       </Section>
 
-      {/* Validation Engine & Fix Pipeline */}
-      <Section variant="secondary" id="engine">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '4rem' }}>
-            {/* Validation Engine */}
-            <div>
-                <div style={{ height: '3px', width: '40px', background: 'var(--accent-primary)', marginBottom: '2rem' }}></div>
-                <h3 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '1.5rem', letterSpacing: '-0.03em' }}>Validation Engine</h3>
-                <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '2rem' }}>
-                    Every file is evaluated against real production policies. Our rule-based engine performs a deterministic analysis of geometry, color, and structure. No guessing.
-                </p>
-                <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                    {['Geometry Enforcement', 'Color Policy Validation', 'Ink Coverage Audit', 'Structural Integrity'].map(rule => (
-                        <li key={rule} className="technical-text" style={{ fontSize: '0.7rem', opacity: 0.6, fontWeight: 900 }}>[ {rule} ]</li>
-                    ))}
-                </ul>
-            </div>
+      {/* 3. What it Checks */}
+      <Section variant="primary">
+        <Container>
+          <div style={{ maxWidth: '800px', marginBottom: '3.5rem' }}>
+            <span className="technical-text" style={{ color: 'var(--accent-primary)', fontSize: '0.75rem', letterSpacing: '0.15em', fontWeight: 800 }}>
+              DETECCIÓN TÉCNICA
+            </span>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', marginTop: '0.5rem', marginBottom: '1rem' }}>
+              {t.checksTitle}
+            </h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.6 }}>
+              {t.checksSubtitle}
+            </p>
+          </div>
 
-            {/* Automatic Fix Pipeline */}
-            <div style={{ position: 'relative', paddingLeft: '2rem', borderLeft: '1px solid var(--border-color)' }}>
-                <h3 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '1.5rem', letterSpacing: '-0.03em' }}>Fix Pipeline</h3>
-                <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '2rem' }}>
-                    Correct errors automatically. From bleed generation to color conversion, our pipeline modifies files in real-time to match production requirements.
-                </p>
-                <div style={{ background: 'var(--bg-primary)', padding: '2rem', border: '1px solid var(--border-color)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
-                        <span className="technical-text" style={{ fontSize: '0.6rem' }}>RAW_ASSET</span>
-                        <div style={{ width: '20px', height: '1px', background: 'var(--accent-primary)', alignSelf: 'center' }}></div>
-                        <span className="technical-text" style={{ fontSize: '0.6rem' }}>FIXED_OUTPUT</span>
-                    </div>
-                    <div style={{ height: '4px', background: 'var(--bg-secondary)', position: 'relative', overflow: 'hidden' }}>
-                        <div style={{ position: 'absolute', top: 0, left: 0, height: '100%', width: '60%', background: 'var(--accent-primary)', animation: 'monolith-pulse 2s infinite' }}></div>
-                    </div>
-                    <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                        <span className="technical-text" style={{ fontSize: '0.55rem', opacity: 0.5 }}>- GENERATING_BLEED</span>
-                        <span className="technical-text" style={{ fontSize: '0.55rem', opacity: 0.5 }}>- CONVERTING_STREAMS</span>
-                        <span className="technical-text" style={{ fontSize: '0.55rem', opacity: 0.5 }}>- EMBEDDING_FONTS</span>
-                    </div>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))',
+              gap: '1.25rem'
+            }}
+          >
+            {t.checks.map((check, i) => (
+              <div
+                key={i}
+                className="rounded-card"
+                style={{
+                  background: 'var(--bg-secondary)',
+                  padding: '1.75rem',
+                  border: '1px solid var(--border-color)'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent-primary)' }}></div>
+                  <h4 style={{ fontSize: '1.05rem', fontWeight: 700 }}>{check.name}</h4>
                 </div>
-            </div>
-
-            {/* Distributed Processing */}
-            <div>
-                <h3 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '1.5rem', letterSpacing: '-0.03em' }}>Scale on demand</h3>
-                <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '2rem' }}>
-                    Your files are processed by a distributed network of async workers. Not your device. Handle gigabyte-level PDFs without local processing lag.
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5 }}>
+                  {check.desc}
                 </p>
-                <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-                    <div>
-                        <div style={{ fontSize: '2rem', fontWeight: 800 }}>120+</div>
-                        <div className="technical-text" style={{ fontSize: '0.6rem', color: 'var(--text-muted)' }}>NODES ACTIVE</div>
-                    </div>
-                    <div>
-                        <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--accent-primary)' }}>∞</div>
-                        <div className="technical-text" style={{ fontSize: '0.6rem', color: 'var(--text-muted)' }}>SCALABILITY</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+              </div>
+            ))}
+          </div>
+        </Container>
       </Section>
 
-      {/* Outcome Cards - Tier 2 Interaction */}
-      <Section variant="primary">
-        <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
-            <h4 className="technical-text" style={{ fontSize: '0.75rem', color: 'var(--accent-primary)', letterSpacing: '0.2em', marginBottom: '1.5rem', fontWeight: 900 }}>SYSTEM CAPABILITIES</h4>
-            <h2 style={{ fontSize: '3rem', fontWeight: 800, letterSpacing: '-0.05em' }}>Built for certainty</h2>
-        </div>
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
-          gap: '1.4rem'
-        }}>
-          {[
-            { icon: 'shield', tag: 'CERTAINTY', title: 'Detect production issues', desc: 'Identify bleeds, font errors, and resolution gaps before they reach the press. Catch what humans miss.' },
-            { icon: 'fix', tag: 'AUTONOMY', title: 'Fix files automatically', desc: 'Apply automated remediation pipelines. Correct color spaces and generate missing data without manual work.' },
-            { icon: 'alert', tag: 'SECURITY', title: 'Prevent costly print errors', desc: 'Stop unprintable files from entering your queue. Save time, material, and reputation automatically.' },
-          ].map((feature, i) => (
-            <div key={i} style={{ gridColumn: 'auto', height: '100%' }}>
-              <SystemCardHover borderRadius={0}>
-                <div style={{ padding: '4rem', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '3rem' }}>
-                        <div style={{ display: 'flex', height: '3.5rem', width: '3.5rem', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.03)' }}>
-                            <Icon name={feature.icon as any} size={28} style={{ color: 'var(--accent-primary)' }} />
-                        </div>
-                        <span className="technical-text" style={{ fontSize: '0.6rem', color: 'var(--accent-primary)', opacity: 0.8, textTransform: 'uppercase', letterSpacing: '0.2rem', fontWeight: 900 }}>{feature.tag}</span>
-                    </div>
-                    <h3 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '1.5rem', letterSpacing: '-0.04em' }}>{feature.title}</h3>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.6, opacity: 0.8 }}>{feature.desc}</p>
+      {/* 4. Workflow Steps */}
+      <Section variant="secondary">
+        <Container>
+          <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto 3.5rem' }}>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', marginBottom: '1rem' }}>
+              {t.workflowTitle}
+            </h2>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))',
+              gap: '1.5rem'
+            }}
+          >
+            {t.workflowSteps.map((step, i) => (
+              <div
+                key={i}
+                className="rounded-card"
+                style={{
+                  background: 'var(--bg-primary)',
+                  padding: '2rem',
+                  border: '1px solid var(--border-color)',
+                  position: 'relative'
+                }}
+              >
+                <span
+                  className="technical-text"
+                  style={{
+                    fontSize: '2rem',
+                    fontWeight: 900,
+                    color: 'var(--accent-primary)',
+                    opacity: 0.35,
+                    display: 'block',
+                    marginBottom: '1rem'
+                  }}
+                >
+                  {step.step}
+                </span>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '0.75rem' }}>
+                  {step.title}
+                </h3>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+                  {step.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      {/* 5. Interactive Demo Report */}
+      <Section variant="primary" id="demo-report">
+        <Container>
+          <div style={{ maxWidth: '850px', margin: '0 auto' }}>
+            <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+              <span className="pill-badge" style={{ marginBottom: '1rem' }}>
+                DEMOSTRACIÓN TÉCNICA
+              </span>
+              <h2 style={{ fontSize: 'clamp(1.85rem, 3.5vw, 2.5rem)', marginBottom: '0.75rem' }}>
+                {t.demoTitle}
+              </h2>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
+                {t.demoNotice}
+              </p>
+            </div>
+
+            {/* Diagnostic Report Card */}
+            <div
+              className="rounded-card"
+              style={{
+                background: 'var(--bg-secondary)',
+                border: '1px solid var(--border-color)',
+                padding: 'clamp(1.5rem, 4vw, 2.5rem)',
+                boxShadow: 'var(--shadow-dropdown)'
+              }}
+            >
+              {/* Header of Report */}
+              <div
+                style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  borderBottom: '1px solid var(--border-color)',
+                  paddingBottom: '1.5rem',
+                  marginBottom: '1.5rem'
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
+                    <span className="technical-text" style={{ fontSize: '0.75rem', fontWeight: 800 }}>
+                      DOCUMENTO: guia_editorial_muestra_v2.pdf
+                    </span>
+                    <span
+                      style={{
+                        padding: '0.2rem 0.6rem',
+                        borderRadius: '999px',
+                        background: 'rgba(234, 179, 8, 0.15)',
+                        color: '#eab308',
+                        fontSize: '0.7rem',
+                        fontWeight: 700
+                      }}
+                    >
+                      REVISIÓN REQUERIDA
+                    </span>
+                  </div>
+                  <div className="technical-text" style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>
+                    evidenceId: sha256:7f83b1a2c94d0e82... • Perfil: OFFSET_STANDARD_F51 • 64 págs.
                   </div>
                 </div>
-              </SystemCardHover>
+
+                <div style={{ textAlign: 'right' }}>
+                  <div className="technical-text" style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>ÍNDICE DE RIESGO</div>
+                  <div style={{ fontSize: '1.75rem', fontWeight: 900, color: 'var(--accent-primary)' }}>
+                    0.38 <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: 400 }}>/ 1.0</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Finding Items */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {/* Item 1: Bleed */}
+                <div
+                  style={{
+                    background: 'var(--bg-primary)',
+                    padding: '1.25rem',
+                    borderRadius: '12px',
+                    borderLeft: '4px solid #eab308'
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                    <div>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#eab308', textTransform: 'uppercase' }}>
+                        [AVISO] SANGRE FALTANTE EN PLIEGO
+                      </span>
+                      <h4 style={{ fontSize: '1.05rem', fontWeight: 700, margin: '0.25rem 0' }}>
+                        Páginas 1, 14, 28: La ilustración no sobrepasa la línea de corte
+                      </h4>
+                    </div>
+                    <span className="technical-text" style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>
+                      GEOMETRÍA
+                    </span>
+                  </div>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.5, marginBottom: '0.75rem' }}>
+                    La caja TrimBox está definida a 148×210 mm, pero no existe sangrado de 3 mm en los bordes superior y exterior.
+                  </p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
+                    <span
+                      style={{
+                        padding: '0.25rem 0.6rem',
+                        borderRadius: '6px',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        fontSize: '0.75rem',
+                        color: 'var(--text-secondary)'
+                      }}
+                    >
+                      Acción: Ajustar fondos en InDesign o expandir BleedBox geométrica
+                    </span>
+                  </div>
+                </div>
+
+                {/* Item 2: Low-res image */}
+                <div
+                  style={{
+                    background: 'var(--bg-primary)',
+                    padding: '1.25rem',
+                    borderRadius: '12px',
+                    borderLeft: '4px solid #dc2626'
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                    <div>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#dc2626', textTransform: 'uppercase' }}>
+                        [CRÍTICO] RESOLUCIÓN INSUFICIENTE DE IMAGEN
+                      </span>
+                      <h4 style={{ fontSize: '1.05rem', fontWeight: 700, margin: '0.25rem 0' }}>
+                        Página 7: 'fotografia_portadilla.jpg' a 172 DPI
+                      </h4>
+                    </div>
+                    <span className="technical-text" style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>
+                      IMAGEN
+                    </span>
+                  </div>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.5, marginBottom: '0.75rem' }}>
+                    La imagen se imprimirá pixelada o con pérdida de detalle fino (estándar requerido: 300 DPI efectivos).
+                  </p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
+                    <span
+                      style={{
+                        padding: '0.25rem 0.6rem',
+                        borderRadius: '6px',
+                        background: 'rgba(220, 38, 38, 0.1)',
+                        fontSize: '0.75rem',
+                        color: '#f87171',
+                        fontWeight: 600
+                      }}
+                    >
+                      Límite técnico: No es posible reescalar sin inventar píxeles. Sustituir en maqueta por imagen original de alta calidad.
+                    </span>
+                  </div>
+                </div>
+
+                {/* Item 3: Rich Black */}
+                <div
+                  style={{
+                    background: 'var(--bg-primary)',
+                    padding: '1.25rem',
+                    borderRadius: '12px',
+                    borderLeft: '4px solid #3b82f6'
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                    <div>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#3b82f6', textTransform: 'uppercase' }}>
+                        [OPTIMIZACIÓN] TEXTO EN NEGRO DE 4 TINTAS (RICH BLACK)
+                      </span>
+                      <h4 style={{ fontSize: '1.05rem', fontWeight: 700, margin: '0.25rem 0' }}>
+                        Páginas 12, 19: Texto corrido de 9 pt compuesto en C:60 M:50 Y:50 K:100
+                      </h4>
+                    </div>
+                    <span className="technical-text" style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>
+                      TINTA / TAC
+                    </span>
+                  </div>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.5, marginBottom: '0.75rem' }}>
+                    Riesgo de falta de registro en prensa offset para tipografía pequeña.
+                  </p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
+                    <span
+                      style={{
+                        padding: '0.25rem 0.6rem',
+                        borderRadius: '6px',
+                        background: 'rgba(59, 130, 246, 0.1)',
+                        fontSize: '0.75rem',
+                        color: '#60a5fa'
+                      }}
+                    >
+                      Corrección automática disponible: Re-mapear texto fino exclusivamente a 100% Black (K).
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA Inside Demo */}
+              <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+                <a
+                  href="https://preflight.printprice.pro/"
+                  className="btn-primary"
+                  style={{ padding: '0.875rem 2rem', fontSize: '1rem', display: 'inline-block' }}
+                >
+                  {t.ctaPrimary}
+                </a>
+              </div>
             </div>
-          ))}
-        </div>
+          </div>
+        </Container>
       </Section>
 
-      {/* Real Problems Audit */}
+      {/* 6. Fixes & Limits */}
       <Section variant="secondary">
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '6rem', alignItems: 'start' }}>
-            <div>
-                <h2 style={{ fontSize: '2.5rem', letterSpacing: '-0.05em', marginBottom: '2rem' }}>Audit-ready specs.</h2>
-                <div style={{ background: 'var(--accent-primary)', height: '4px', width: '60px', marginBottom: '2.5rem' }}></div>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.6 }}>
-                    Every file passes through a forensic-level audit. We detect and resolve the technical debt that causes production failures.
-                </p>
-                <div style={{ marginTop: '3rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-color)', paddingBottom: '1rem' }}>
-                        <span className="technical-text" style={{ fontSize: '0.7rem' }}>PDF_ENGINE</span>
-                        <span className="technical-text" style={{ fontSize: '0.7rem', color: 'var(--accent-primary)', fontWeight: 900 }}>v3.12_COMPLIANT</span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <span className="technical-text" style={{ fontSize: '0.7rem' }}>POLICIES_ACTIVE</span>
-                        <span className="technical-text" style={{ fontSize: '0.7rem', color: 'var(--accent-primary)', fontWeight: 900 }}>64_RULES_ENFORCED</span>
-                    </div>
-                </div>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '3rem' }}>
-                {[
-                    { title: "Missing Bleed", desc: "Generated automatically from image metadata." },
-                    { title: "Font Embedding", desc: "Forced embedding and subset validation." },
-                    { title: "Low Resolution", desc: "Interpolation analysis and threshold enforcement." },
-                    { title: "Ink Limit", desc: "Dynamic TAC reduction and ink calibration." },
-                    { title: "Color Profiles", desc: "Deterministic ICC conversion and verification." },
-                    { title: "Incompatibility", desc: "Automatic PDF/X-4 remediation and sealing." },
-                ].map((prob, i) => (
-                    <div key={i}>
-                        <h4 className="technical-text" style={{ fontSize: '0.65rem', color: 'var(--accent-primary)', marginBottom: '1rem', fontWeight: 900 }}>RESOLVED</h4>
-                        <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem', fontWeight: 800 }}>{prob.title}</h3>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', lineHeight: 1.5, opacity: 0.7 }}>{prob.desc}</p>
-                    </div>
-                ))}
-            </div>
-        </div>
-      </Section>
+        <Container>
+          <div style={{ maxWidth: '850px', margin: '0 auto 3.5rem', textAlign: 'center' }}>
+            <span className="pill-badge" style={{ marginBottom: '1rem' }}>
+              TRANSPARENCIA TÉCNICA
+            </span>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', marginBottom: '1rem' }}>
+              {t.limitsTitle}
+            </h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.6 }}>
+              {t.limitsSubtitle}
+            </p>
+          </div>
 
-      {/* Target Segments */}
-      <Section variant="primary">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '4rem' }}>
-            {[
-                { person: "Publishers", icon: "publisher", benefit: "Reduce expensive reprints and late-stage delivery failures." },
-                { person: "Print Houses", icon: "factory", benefit: "Enforce incoming file standards without manual prepress labor." },
-                { person: "Authors", icon: "author", benefit: "Fix technical errors instantly and move to production with confidence." },
-                { person: "Developers", icon: "code", benefit: "Integrate high-precision validation directly into your own app or API." },
-            ].map((p, i) => (
-                <div key={i} style={{ textAlign: 'center' }}>
-                    <div style={{ display: 'inline-flex', padding: '1.5rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', marginBottom: '2rem' }}>
-                        <Icon name={p.icon as any} size={32} style={{ color: 'var(--accent-primary)' }} />
-                    </div>
-                    <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '1rem' }}>{p.person}</h3>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6 }}>{p.benefit}</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '1.5rem' }}>
+            {t.limits.map((item, i) => (
+              <div
+                key={i}
+                className="rounded-card"
+                style={{
+                  background: 'var(--bg-primary)',
+                  padding: '2rem',
+                  border: '1px solid var(--border-color)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                    <h4 style={{ fontSize: '1.2rem', fontWeight: 800 }}>{item.feature}</h4>
+                    <span
+                      className="technical-text"
+                      style={{
+                        fontSize: '0.65rem',
+                        padding: '0.2rem 0.5rem',
+                        borderRadius: '4px',
+                        background: item.type === 'safe' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(234, 179, 8, 0.1)',
+                        color: item.type === 'safe' ? '#4ade80' : '#facc15',
+                        fontWeight: 700
+                      }}
+                    >
+                      {item.action}
+                    </span>
+                  </div>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+                    {item.limit}
+                  </p>
                 </div>
+              </div>
             ))}
-        </div>
+          </div>
+        </Container>
       </Section>
 
-      {/* Final CTA - Monolith Authority */}
-      <ActionCTA 
-        slogan="VALIDATE YOUR FILES NOW"
-        title="Stop printing errors."
-        description="Avoid costly reprints and production delays. Get validation results in seconds. No signup required."
-        buttonLabel="Check my file now →"
-        buttonHref="https://preflight.printprice.pro/"
-        trackingAction="preflight_cta_final_v2"
-      />
-      
-      <div style={{ textAlign: 'center', paddingBottom: '6rem', opacity: 0.4 }}>
-          <span className="technical-text" style={{ fontSize: '0.65rem', letterSpacing: '0.1em' }}>POWERED BY GHOSTSCRIPT + POPPLER POLICY PIPELINES</span>
+      {/* 7. Comprehensive Preflight Comparisons */}
+      <Section variant="primary" id="comparisons">
+        <Container>
+          <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto 3rem' }}>
+            <span className="pill-badge" style={{ marginBottom: '1rem' }}>
+              ANÁLISIS DOCUMENTAL COMPARATIVO
+            </span>
+            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', marginBottom: '1rem' }}>
+              Comparativa objetiva de soluciones de Preflight
+            </h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', lineHeight: 1.6 }}>
+              Basado en la documentación técnica oficial vigente de cada producto (Revisión: Octubre 2026).
+            </p>
+
+            {/* Selector de Pestañas */}
+            <div
+              style={{
+                display: 'inline-flex',
+                gap: '0.5rem',
+                background: 'var(--bg-secondary)',
+                padding: '0.35rem',
+                borderRadius: '12px',
+                marginTop: '1.5rem',
+                border: '1px solid var(--border-color)'
+              }}
+            >
+              <button
+                onClick={() => setActiveTab('individual')}
+                style={{
+                  padding: '0.65rem 1.25rem',
+                  borderRadius: '8px',
+                  background: activeTab === 'individual' ? 'var(--accent-primary)' : 'transparent',
+                  color: activeTab === 'individual' ? '#fff' : 'var(--text-secondary)',
+                  fontWeight: 700,
+                  fontSize: '0.9rem',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                A. Particulares y Editoriales
+              </button>
+              <button
+                onClick={() => setActiveTab('pro')}
+                style={{
+                  padding: '0.65rem 1.25rem',
+                  borderRadius: '8px',
+                  background: activeTab === 'pro' ? 'var(--accent-primary)' : 'transparent',
+                  color: activeTab === 'pro' ? '#fff' : 'var(--text-secondary)',
+                  fontWeight: 700,
+                  fontSize: '0.9rem',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                B. Flujos Profesionales e Imprentas
+              </button>
+            </div>
+          </div>
+
+          {/* Tabla A */}
+          {activeTab === 'individual' && (
+            <div>
+              <div className="table-scroll-hint">
+                <span>⇄ Desplaza horizontalmente para ver la tabla completa</span>
+              </div>
+              <div className="comparison-table-wrapper">
+                <table style={{ width: '100%', minWidth: '850px', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
+                  <thead>
+                    <tr style={{ background: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)' }}>
+                      <th style={{ padding: '1.25rem 1rem', textAlign: 'left', width: '22%' }}>Criterio</th>
+                      <th style={{ padding: '1.25rem 1rem', textAlign: 'left', width: '26%', color: 'var(--accent-primary)', fontWeight: 800 }}>
+                        PrintPrice Preflight (Web)
+                      </th>
+                      <th style={{ padding: '1.25rem 1rem', textAlign: 'left', width: '26%' }}>Adobe Acrobat Pro</th>
+                      <th style={{ padding: '1.25rem 1rem', textAlign: 'left', width: '26%' }}>Enfocus PitStop Pro</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
+                      <td style={{ padding: '1rem', fontWeight: 700 }}>Forma de acceso</td>
+                      <td style={{ padding: '1rem', color: 'var(--accent-primary)' }}>
+                        <strong>Disponible</strong><br />Navegador web (SaaS cloud). Sin registro previo obligatorio.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Escritorio local (macOS / Windows).
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Plugin ejecutado dentro de Adobe Acrobat.
+                      </td>
+                    </tr>
+                    <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
+                      <td style={{ padding: '1rem', fontWeight: 700 }}>Instalación requerida</td>
+                      <td style={{ padding: '1rem', color: 'var(--accent-primary)' }}>
+                        <strong>No aplica</strong><br />Cero instalación local; funciona en cualquier navegador moderno.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Requiere Acrobat Pro y Adobe Creative Cloud.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Requiere instalación de Acrobat + plugin PitStop.
+                      </td>
+                    </tr>
+                    <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
+                      <td style={{ padding: '1rem', fontWeight: 700 }}>Conocimientos necesarios</td>
+                      <td style={{ padding: '1rem', color: 'var(--accent-primary)' }}>
+                        <strong>Disponible</strong><br />Nivel accesible: traduce códigos técnicos a recomendaciones prácticas de maquetación.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Nivel medio/avanzado: requiere conocer cajas de página, perfiles ICC y normas ISO.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Especialista de preimpresión: curvas de aprendizaje altas para crear Action Lists.
+                      </td>
+                    </tr>
+                    <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
+                      <td style={{ padding: '1rem', fontWeight: 700 }}>Lectura del informe</td>
+                      <td style={{ padding: '1rem', color: 'var(--accent-primary)' }}>
+                        <strong>Disponible</strong><br />Informe web interactivo con índice de riesgo, páginas afectadas y avisos priorizados.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Panel modal en pantalla con exportación de resultados a PDF o XML.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Navegador interactivo con resaltado directo sobre el objeto gráfico en el visor.
+                      </td>
+                    </tr>
+                    <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
+                      <td style={{ padding: '1rem', fontWeight: 700 }}>Corrección y edición</td>
+                      <td style={{ padding: '1rem', color: 'var(--accent-primary)' }}>
+                        <strong>Depende de edición o configuración</strong><br />Reparaciones deterministas (TrimBox, BleedBox, OutputIntent). Sin edición vectorial directa.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Fixups automáticos predefinidos. Edición básica de textos y objetos.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Edición quirúrgica profunda de vectores, textos, trazados y tintas en el propio PDF.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ padding: '1rem', fontWeight: 700 }}>Modelo de licencia</td>
+                      <td style={{ padding: '1rem', color: 'var(--accent-primary)' }}>
+                        <strong>Disponible</strong><br />Uso individual freemium en web; planes por volumen y API para empresas.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Suscripción mensual o anual a Adobe Creative Cloud o Acrobat Pro.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Suscripción anual o compra de licencia perpetua con mantenimiento.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* Tabla B */}
+          {activeTab === 'pro' && (
+            <div>
+              <div className="table-scroll-hint">
+                <span>⇄ Desplaza horizontalmente para ver la tabla completa</span>
+              </div>
+              <div className="comparison-table-wrapper">
+                <table style={{ width: '100%', minWidth: '950px', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
+                  <thead>
+                    <tr style={{ background: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)' }}>
+                      <th style={{ padding: '1.25rem 1rem', textAlign: 'left', width: '20%' }}>Dimensión</th>
+                      <th style={{ padding: '1.25rem 1rem', textAlign: 'left', width: '27%', color: 'var(--accent-primary)', fontWeight: 800 }}>
+                        PrintPrice Preflight OS
+                      </th>
+                      <th style={{ padding: '1.25rem 1rem', textAlign: 'left', width: '27%' }}>Enfocus PitStop Server</th>
+                      <th style={{ padding: '1.25rem 1rem', textAlign: 'left', width: '26%' }}>callas pdfToolbox Server</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
+                      <td style={{ padding: '1rem', fontWeight: 700 }}>Perfiles configurables</td>
+                      <td style={{ padding: '1rem', color: 'var(--accent-primary)' }}>
+                        <strong>Disponible</strong><br />Perfiles deterministas definidos en contratos JSON (Offset, Digital, PDF/X-4).
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Perfiles y Action Lists configurables desde interfaz gráfica de PitStop Pro.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Process Plans con lógica condicional avanzada, JavaScript y perfiles GWG.
+                      </td>
+                    </tr>
+                    <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
+                      <td style={{ padding: '1rem', fontWeight: 700 }}>Estándares y alcance</td>
+                      <td style={{ padding: '1rem', color: 'var(--accent-primary)' }}>
+                        <strong>Disponible</strong><br />Evaluación de conformidad ISO 15930 (PDF/X-1a, PDF/X-4) con integración veraPDF.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Validación completa de PDF/X-1a hasta PDF/X-6 y especificaciones Ghent Workgroup.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Motor de referencia oficial para la Ghent Workgroup e ISO (PDF/X, PDF/A, PDF/VT).
+                      </td>
+                    </tr>
+                    <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
+                      <td style={{ padding: '1rem', fontWeight: 700 }}>Procesamiento por lotes</td>
+                      <td style={{ padding: '1rem', color: 'var(--accent-primary)' }}>
+                        <strong>Disponible</strong><br />Microservicios asíncronos distribuidos en colas Redis para escalado horizontal.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Motor multihilo optimizado para colas concurrentes en servidores locales.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Motor multinúcleo de alto rendimiento para miles de páginas por minuto.
+                      </td>
+                    </tr>
+                    <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
+                      <td style={{ padding: '1rem', fontWeight: 700 }}>Hot Folders (Carpetas calientes)</td>
+                      <td style={{ padding: '1rem', color: 'var(--accent-primary)' }}>
+                        <strong>No aplica</strong> (Nativo web)<br />Infraestructura 100% cloud/API. Integrable en red local mediante conectores REST.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Monitorización nativa de carpetas de entrada, éxito y error en redes SMB/NFS.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Monitorización automatizada de carpetas locales y almacenamiento compartido.
+                      </td>
+                    </tr>
+                    <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
+                      <td style={{ padding: '1rem', fontWeight: 700 }}>CLI, SDK o API</td>
+                      <td style={{ padding: '1rem', color: 'var(--accent-primary)' }}>
+                        <strong>Disponible (API REST)</strong><br />API REST nativa JSON/multipart (/preflight/analyze, /preflight/autofix).
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible (CLI)</strong><br />Línea de comandos (CLI) incluida para integración con scripts y Switch.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible (CLI y SDK)</strong><br />CLI independiente y SDK de integración nativa (C/C++, Java, .NET, Python).
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style={{ padding: '1rem', fontWeight: 700 }}>Trazabilidad y original</td>
+                      <td style={{ padding: '1rem', color: 'var(--accent-primary)' }}>
+                        <strong>Disponible</strong><br />Preservación estricta del original y generación de hash SHA-256 (evidenceId) inmutable.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />El archivo original se mueve a la carpeta de archivo; el reparado se crea aparte.
+                      </td>
+                      <td style={{ padding: '1rem' }}>
+                        <strong>Disponible</strong><br />Políticas de backup y conservación de versiones originales antes de transformar.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+            <Link
+              href="/docs/engines/preflight-engine"
+              className="technical-text"
+              style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textDecoration: 'underline' }}
+            >
+              Consulta la documentación técnica completa del motor Preflight en docs.printprice.pro ➔
+            </Link>
+          </div>
+        </Container>
+      </Section>
+
+      {/* 8. Privacy & Data Policies */}
+      <Section variant="secondary">
+        <Container>
+          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+            <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+              <h2 style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.25rem)', marginBottom: '0.75rem' }}>
+                {t.privacyTitle}
+              </h2>
+            </div>
+
+            <div
+              className="rounded-card"
+              style={{
+                background: 'var(--bg-primary)',
+                padding: '2rem',
+                border: '1px solid var(--border-color)'
+              }}
+            >
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {t.privacyPoints.map((pt, i) => (
+                  <li key={i} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                    <span style={{ color: 'var(--accent-primary)', fontWeight: 800, marginTop: '0.1rem' }}>✓</span>
+                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6 }}>{pt}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* 9. FAQ Section */}
+      <Section variant="primary">
+        <Container>
+          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+              <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.5rem)', marginBottom: '0.75rem' }}>
+                {t.faqTitle}
+              </h2>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              {t.faqs.map((faq, i) => (
+                <div
+                  key={i}
+                  className="rounded-card"
+                  style={{
+                    background: 'var(--bg-secondary)',
+                    padding: '1.75rem',
+                    border: '1px solid var(--border-color)'
+                  }}
+                >
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '0.75rem' }}>
+                    {faq.q}
+                  </h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6 }}>
+                    {faq.a}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* 10. Disclaimers & Final Action CTA */}
+      <Section variant="secondary" style={{ borderTop: '1px solid var(--border-color)' }}>
+        <Container>
+          <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+            <h2 style={{ fontSize: 'clamp(2.25rem, 5vw, 3.25rem)', marginBottom: '1.25rem' }}>
+              {t.title}
+            </h2>
+            <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', marginBottom: '2.5rem', lineHeight: 1.6 }}>
+              {t.subheadline}
+            </p>
+
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap', marginBottom: '3rem' }}>
+              <a
+                href="https://preflight.printprice.pro/"
+                className="btn-primary"
+                style={{ padding: '1rem 2.5rem', fontSize: '1.05rem', fontWeight: 700 }}
+              >
+                {t.ctaPrimary}
+              </a>
+              <Link
+                href="/for-authors"
+                className="btn-secondary"
+                style={{ padding: '1rem 2rem', fontSize: '1rem' }}
+              >
+                Ver flujo para autores
+              </Link>
+            </div>
+
+            {/* Mandatory Disclaimer */}
+            <div
+              style={{
+                padding: '1.5rem',
+                borderRadius: '12px',
+                background: 'var(--bg-primary)',
+                border: '1px solid var(--border-color)',
+                textAlign: 'left'
+              }}
+            >
+              <span className="technical-text" style={{ fontSize: '0.65rem', color: 'var(--accent-primary)', fontWeight: 800, display: 'block', marginBottom: '0.5rem' }}>
+                LIMITACIÓN DE RESPONSABILIDAD TÉCNICA
+              </span>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>
+                PrintPrice Preflight evalúa la conformidad técnica de documentos PDF según las especificaciones del perfil seleccionado. 
+                Los resultados no constituyen una certificación universal de imprenta ni sustituyen la corrección editorial, la prueba de color de contrato ni la aprobación final de producción por parte del taller gráfico.
+              </p>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Permanent Brand Slogan */}
+      <div style={{ textAlign: 'center', padding: '3rem 0 5rem', opacity: 0.5 }}>
+        <p className="technical-text" style={{ fontSize: '0.85rem', letterSpacing: '0.25em' }}>
+          PRICE IT. FIX IT. PRINT IT.
+        </p>
       </div>
     </div>
   );

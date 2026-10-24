@@ -174,39 +174,56 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Herramientas */}
+          {/* Productos principales */}
           <div>
-            <h4 style={headingStyle}>{dict.footer.tools}</h4>
+            <h4 style={headingStyle}>{dict.nav.products}</h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
               <li>
-                <a href="https://budget.printprice.pro/" target="_blank" rel="noopener noreferrer" style={linkStyle}>
-                  Budget (Presupuestación) ↗
-                </a>
+                <Link href="/products/budget" style={linkStyle}>
+                  Price it (Calculador)
+                </Link>
               </li>
-              <li><Link href="/products/preflight" style={linkStyle}>Preflight (Auditoría PDF)</Link></li>
-              <li><Link href="/products/mockup" style={linkStyle}>Mockup 3D (Visor de Libro)</Link></li>
+              <li>
+                <Link href="/products/preflight" style={{ ...linkStyle, fontWeight: 700, color: 'var(--text-primary)' }}>
+                  Fix it (Preflight PDF)
+                </Link>
+              </li>
+              <li>
+                <Link href="/products/print" style={linkStyle}>
+                  Print it (Marketplace)
+                </Link>
+              </li>
+              <li>
+                <Link href="/products/mockup" style={linkStyle}>
+                  Maqueta 3D (Visor de libro)
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Espacio Operativo & Recursos */}
+          <div>
+            <h4 style={headingStyle}>{dict.footer.resources}</h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
               <li>
                 <a href="https://control.printprice.pro/" target="_blank" rel="noopener noreferrer" style={linkStyle}>
                   Control Plane (Imprentas) ↗
                 </a>
               </li>
-            </ul>
-          </div>
-
-          {/* Recursos */}
-          <div>
-            <h4 style={headingStyle}>{dict.footer.resources}</h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+              <li>
+                <a href="https://docs.printprice.pro/docs/platform/paper-supplier-hub" target="_blank" rel="noopener noreferrer" style={linkStyle}>
+                  {dict.nav.paperHub} ↗
+                </a>
+              </li>
               <li>
                 <a href="https://docs.printprice.pro/" target="_blank" rel="noopener noreferrer" style={linkStyle}>
                   {dict.nav.docs} ↗
                 </a>
               </li>
-              <li><Link href="/developers" style={linkStyle}>{dict.nav.developers}</Link></li>
               <li>
-                <a href="https://docs.printprice.pro/docs/platform/paper-supplier-hub" target="_blank" rel="noopener noreferrer" style={linkStyle}>
-                  {dict.nav.paperHub} ↗
-                </a>
+                <Link href="/developers" style={linkStyle}>
+                  {dict.nav.developers}
+                </Link>
               </li>
             </ul>
           </div>

@@ -197,14 +197,27 @@ export default function ForPrinthousesPage() {
               </p>
             </div>
 
-            <div className="rounded-card" style={{ padding: '2rem' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
-                ✂️
+            <div className="rounded-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
+                  ✂️
+                </div>
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>
+                  {locale === 'es' ? 'Controles Técnicos y Preflight Automatizado' : locale === 'de' ? 'Technische Prüfung & Automatisiertes Preflight' : 'Technical Quality & Automated Preflight'}
+                </h3>
+                <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
+                  {locale === 'es'
+                    ? 'Controles técnicos de entrada y automatización disponibles mediante API o Control Plane. Validación de cajas de página, sangrado de 3 mm y perfiles ISO con trazabilidad inmutable mediante evidenceId.'
+                    : locale === 'de'
+                    ? 'Automatisierte Dateieingangskontrolle über API oder Control Plane. Prüfung von Seitenboxen, 3-mm-Beschnitt und ISO-Farbprofilen mit unveränderlicher evidenceId-Nachverfolgung.'
+                    : 'Automated file intake inspection via API or Control Plane. Page boxes, 3mm bleed, and ISO color compliance tracked with immutable evidenceId hashes.'}
+                </p>
               </div>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>{dict.printhousesPage.tool2Title}</h3>
-              <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                {dict.printhousesPage.tool2Desc}
-              </p>
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+                <Link href="/products/preflight" className="btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>
+                  {locale === 'es' ? 'Ver capacidades técnicas ➔' : locale === 'de' ? 'Technische Details ➔' : 'View technical specs ➔'}
+                </Link>
+              </div>
             </div>
 
             <div className="rounded-card" style={{ padding: '2rem' }}>

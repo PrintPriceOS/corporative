@@ -1,7 +1,7 @@
 {
   "robots_status": 200,
   "sitemap_status": 200,
-  "sitemap_url_count": 16,
+  "sitemap_url_count": 20,
   "all_titles_unique": true,
   "all_descriptions_unique": true,
   "routes": [
@@ -86,6 +86,78 @@
         "Organization",
         "WebSite",
         "BreadcrumbList"
+      ],
+      "indexable": true
+    },
+    {
+      "path": "/products",
+      "name": "Products Hub",
+      "intent": "Core 3 products and supporting capabilities",
+      "http_status": 200,
+      "title": "Productos de Fabricación Gráfica: Price it, Fix it, Print it | PrintPrice Pro",
+      "description": "Conoce los tres pilares de PrintPrice Pro: calculador de precios (Price it), preflight forense (Fix it) y marketplace de impresión industrial (Print it).",
+      "canonical": "https://printprice.pro/products",
+      "canonical_valid": true,
+      "h1": "PRICE IT. FIX IT. PRINT IT.",
+      "json_ld_types": [
+        "Organization",
+        "WebSite",
+        "BreadcrumbList"
+      ],
+      "indexable": true
+    },
+    {
+      "path": "/products/budget",
+      "name": "Price It (Budget)",
+      "intent": "Book printing cost calculator",
+      "http_status": 200,
+      "title": "Print Cost Calculator &amp; Estimator | PrintPrice Pro",
+      "description": "Calculate exact printing costs in seconds with our high-precision Pricing Engine. No guesswork—real production costs for books, packaging, and commercial print.",
+      "canonical": "https://printprice.pro/products/budget",
+      "canonical_valid": true,
+      "h1": "CALCULATE REAL PRINT COSTS IN SECONDS",
+      "json_ld_types": [
+        "Organization",
+        "WebSite",
+        "BreadcrumbList"
+      ],
+      "indexable": true
+    },
+    {
+      "path": "/products/preflight",
+      "name": "PrintPrice Preflight",
+      "intent": "PDF preflight analysis and automated fixing",
+      "http_status": 200,
+      "title": "Comprueba tu PDF antes de imprimir | PrintPrice Preflight",
+      "description": "Identifica problemas técnicos en tu PDF (sangrado, resolución de imágenes, fuentes, espacios de color) y prepara tu archivo para imprenta con PrintPrice Preflight.",
+      "canonical": "https://printprice.pro/products/preflight",
+      "canonical_valid": true,
+      "h1": "Comprueba tu PDF antes de imprimir.",
+      "json_ld_types": [
+        "Organization",
+        "WebSite",
+        "BreadcrumbList",
+        "BreadcrumbList",
+        "SoftwareApplication"
+      ],
+      "indexable": true
+    },
+    {
+      "path": "/products/print",
+      "name": "Print It (Marketplace)",
+      "intent": "Industrial print production marketplace",
+      "http_status": 200,
+      "title": "Marketplace de Impresión y Fabricación Gráfica | PrintPrice Pro",
+      "description": "Encuentra la imprenta industrial homologada para tu libro o catálogo. Enrutamiento algorítmico (Matchmaker) según pliegos, maquinaria y evidencia técnica inmutable.",
+      "canonical": "https://printprice.pro/products/print",
+      "canonical_valid": true,
+      "h1": "Encuentra la imprenta adecuada y encarga tu producción.",
+      "json_ld_types": [
+        "Organization",
+        "WebSite",
+        "BreadcrumbList",
+        "BreadcrumbList",
+        "SoftwareApplication"
       ],
       "indexable": true
     },

@@ -9,13 +9,86 @@ import { useLocale } from '@/lib/i18n';
 
 export default function Home() {
   const { dict, locale } = useLocale();
-  const [activeTab, setActiveTab] = useState<'authors' | 'printers'>('authors');
+  const [activeTab, setActiveTab] = useState<'price' | 'fix' | 'print'>('price');
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
   };
 
+  // 1. PRODUCTOS — Qué puedes hacer (The 3 Core Pillars)
+  const CORE_PRODUCTS = [
+    {
+      id: 'price-it',
+      pillar: '01 / PRICE IT',
+      title: 'Price it',
+      tagline: locale === 'es' 
+        ? 'Calculador de precios de impresión de libros'
+        : locale === 'de'
+        ? 'Preiskalkulator für den Buchdruck'
+        : 'Print book pricing calculator',
+      description: locale === 'es'
+        ? 'Calcula el coste de producción en segundos. Compara tecnología digital vs offset según tirada, estima el grosor de lomo exacto y vincula precios de papel actualizados sin registro obligatorio ni suscripciones.'
+        : locale === 'de'
+        ? 'Berechnen Sie reale Produktionskosten in Sekundenschnelle. Vergleichen Sie Digital- und Offsetdruck, berechnen Sie die exakte Rückendicke und binden Sie aktuelle Papierpreise ein.'
+        : 'Calculate production costs in seconds. Compare digital vs offset press runs, compute exact spine thickness, and integrate live paper rates with no compulsory sign-up or subscriptions.',
+      primaryCtaText: locale === 'es' ? 'Calcular precio ahora ➔' : locale === 'de' ? 'Preis jetzt kalkulieren ➔' : 'Calculate price now ➔',
+      primaryCtaHref: 'https://budget.printprice.pro/',
+      secondaryCtaText: locale === 'es' ? 'Conocer motor Budget' : locale === 'de' ? 'Budget-Engine Details' : 'About Budget Engine',
+      secondaryCtaHref: '/products/budget',
+      icon: '💶',
+      badge: 'PRICE IT',
+    },
+    {
+      id: 'fix-it',
+      pillar: '02 / FIX IT',
+      title: 'Fix it',
+      tagline: locale === 'es'
+        ? 'Preflight técnico de archivos PDF'
+        : locale === 'de'
+        ? 'Technisches PDF-Preflight'
+        : 'Technical PDF preflight inspection',
+      description: locale === 'es'
+        ? 'Comprueba y prepara tu archivo antes de entrar a máquina. Detecta sangres perimetrales de 3 mm, resolución efectiva a 300 DPI, espacios de color CMYK y tipografías incrustadas con explicaciones claras y directas.'
+        : locale === 'de'
+        ? 'Prüfen und bereiten Sie Ihre Datei vor dem Druck auf. Erkennt 3 mm Randbeschnitt, 300 DPI Bildauflösung, CMYK-Farbräume und Schrifteinbettung mit verständlichen Hinweisen.'
+        : 'Inspect and prepare your artwork file before it reaches the press. Detects 3mm bleeds, 300 DPI effective resolution, CMYK gamuts, and font glyphs with clear, actionable diagnostics.',
+      primaryCtaText: locale === 'es' ? 'Comprobar PDF gratis ➔' : locale === 'de' ? 'PDF kostenlos prüfen ➔' : 'Check PDF for free ➔',
+      primaryCtaHref: 'https://preflight.printprice.pro/',
+      secondaryCtaText: locale === 'es' ? 'Ver capacidades y auditoría' : locale === 'de' ? 'Funktionen & Prüfung' : 'View audit features',
+      secondaryCtaHref: '/products/preflight',
+      icon: '🛡️',
+      badge: 'FIX IT',
+    },
+    {
+      id: 'print-it',
+      pillar: '03 / PRINT IT',
+      title: 'Print it',
+      tagline: locale === 'es'
+        ? 'Marketplace de producción con talleres homologados'
+        : locale === 'de'
+        ? 'Produktions-Marketplace mit Partnerdruckereien'
+        : 'Production marketplace with vetted plants',
+      description: locale === 'es'
+        ? 'Encuentra la imprenta adecuada y encarga la producción. Conecta las especificaciones presupuestadas y tu archivo validado con talleres acreditados mediante trazabilidad inmutable (evidenceId).'
+        : locale === 'de'
+        ? 'Finden Sie den passenden Betrieb und beauftragen Sie die Fertigung. Verbindet kalkulierte Spezifikationen und geprüfte Daten mit zertifizierten Druckereien über evidenceId.'
+        : 'Find the right printer and commission production. Connects budgeted specifications and validated files directly with accredited plants backed by immutable evidenceId traceability.',
+      primaryCtaText: locale === 'es' ? 'Configurar y encargar ➔' : locale === 'de' ? 'Projekt konfigurieren ➔' : 'Configure & order ➔',
+      primaryCtaHref: 'https://budget.printprice.pro/',
+      secondaryCtaText: locale === 'es' ? 'Cómo funciona el marketplace' : locale === 'de' ? 'Marketplace-Ablauf' : 'How the marketplace works',
+      secondaryCtaHref: '/products/print',
+      icon: '🏭',
+      badge: 'PRINT IT',
+      disclaimer: locale === 'es'
+        ? '* El encargo para compradores se activa a través de Budget conectando con talleres homologados. Control Plane está reservado a la operativa interna de imprentas.'
+        : locale === 'de'
+        ? '* Auftragserteilung erfolgt über das Budget-Modul an Partnerbetriebe. Control Plane ist Druckereien vorbehalten.'
+        : '* Buyer ordering is initiated via Budget connecting with vetted partner plants. Control Plane is strictly the printer operational backend.',
+    },
+  ];
+
+  // 2. PÚBLICOS — Para quién (The 4 Audiences)
   const STAKEHOLDER_CARDS = [
     {
       id: 'authors',
@@ -23,6 +96,7 @@ export default function Home() {
       tagline: dict.home.authorsTagline,
       description: dict.home.authorsDesc,
       badge: dict.home.authorsBadge,
+      toolsTag: 'PRICE IT · FIX IT · MAQUETA 3D',
       href: '/for-authors',
       ctaText: dict.home.authorsCta,
       icon: '📖',
@@ -33,6 +107,7 @@ export default function Home() {
       tagline: dict.home.publishersTagline,
       description: dict.home.publishersDesc,
       badge: dict.home.publishersBadge,
+      toolsTag: 'PRICE IT · FIX IT · PRINT IT',
       href: '/for-publishers',
       ctaText: dict.home.publishersCta,
       icon: '📚',
@@ -43,8 +118,13 @@ export default function Home() {
       tagline: dict.home.printhousesTagline,
       description: dict.home.printhousesDesc,
       badge: dict.home.printhousesBadge,
+      toolsTag: 'CONTROL PLANE · PRINT IT INTAKE',
       href: '/for-printhouses',
       ctaText: dict.home.printhousesCta,
+      extraLink: {
+        text: locale === 'es' ? 'Alta de taller ↗' : locale === 'de' ? 'Druckerei-Registrierung ↗' : 'Printhouse signup ↗',
+        href: 'https://control.printprice.pro/printhouse/register'
+      },
       icon: '⚙️',
     },
     {
@@ -53,89 +133,157 @@ export default function Home() {
       tagline: dict.home.suppliersTagline,
       description: dict.home.suppliersDesc,
       badge: dict.home.suppliersBadge,
+      toolsTag: 'PAPER SUPPLIER HUB · CONTROL PLANE',
       href: '/for-paper-suppliers',
       ctaText: dict.home.suppliersCta,
+      extraLink: {
+        text: locale === 'es' ? 'Alta de proveedor ↗' : locale === 'de' ? 'Lieferanten-Registrierung ↗' : 'Supplier signup ↗',
+        href: 'https://control.printprice.pro/supplier/register'
+      },
       icon: '📄',
     },
   ];
 
-  const COMPARISON_AUTHORS = [
+  // 3. COMPARATIVAS ORGANIZADAS POR PRODUCTO (User explicit mandate)
+  // Tab 1: PRICE IT (Cálculo y Presupuestación)
+  const COMPARISON_PRICE = [
     {
       feature: locale === 'es' ? 'Cálculo de presupuesto inmediato sin registro' : locale === 'de' ? 'Sofortige Kalkulation ohne Registrierungspflicht' : 'Instant budget estimate without compulsory signup',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      lulu: locale === 'es' ? 'Mediante módulo / registro' : locale === 'de' ? 'Über Modul / Registrierung' : 'Via module / registration',
-      gelato: locale === 'es' ? 'Mediante integración B2B' : locale === 'de' ? 'Über B2B-Integration' : 'Via B2B integration',
-      notes: locale === 'es' ? 'Budget calcula sin crear cuenta previa ni solicitar cotización manual.' : locale === 'de' ? 'Budget kalkuliert sofort ohne Vorab-Konto.' : 'Budget estimates immediately without prior account creation.',
+      traditional: locale === 'es' ? 'Manual (24-72h)' : locale === 'de' ? 'Manuell (24-72 Std.)' : 'Manual (24-72h)',
+      lulu: locale === 'es' ? 'Mediante registro' : locale === 'de' ? 'Über Registrierung' : 'Via registration',
+      gelato: locale === 'es' ? 'Mediante B2B' : locale === 'de' ? 'Über B2B' : 'Via B2B',
+      notes: locale === 'es' ? 'Budget calcula de inmediato con matrices reales en servidor.' : locale === 'de' ? 'Budget kalkuliert sofort ohne Vorab-Konto auf dem Server.' : 'Budget computes instantly using live server cost matrices.',
     },
     {
-      feature: locale === 'es' ? 'Comprobación técnica de PDF (Preflight de libros)' : locale === 'de' ? 'Technische PDF-Prüfung (Buch-Preflight)' : 'Technical PDF preflight check for books',
+      feature: locale === 'es' ? 'Desglose transparente entre impresión y papel' : locale === 'de' ? 'Transparente Aufteilung von Druck und Papier' : 'Transparent separation between printing and paper',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      lulu: locale === 'es' ? 'Disponible (básico)' : locale === 'de' ? 'Verfügbar (Basis)' : 'Available (basic)',
-      gelato: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      notes: locale === 'es' ? 'Verifica sangres de 3 mm, espacios de color CMYK, resolución a 300 DPI y TAC.' : locale === 'de' ? 'Prüft 3 mm Beschnitt, CMYK-Farbräume, 300 DPI und TAC.' : 'Verifies 3 mm bleeds, CMYK color spaces, 300 DPI and TAC.',
+      traditional: locale === 'es' ? 'Opaco / Global' : locale === 'de' ? 'Intransparent / Global' : 'Opaque / Bundled',
+      lulu: locale === 'es' ? 'No disponible' : locale === 'de' ? 'Nicht verfügbar' : 'Not available',
+      gelato: locale === 'es' ? 'No disponible' : locale === 'de' ? 'Nicht verfügbar' : 'Not available',
+      notes: locale === 'es' ? 'Paper Supplier Hub desglosa el coste de sustrato y el porte logístico.' : locale === 'de' ? 'Paper Supplier Hub trennt Materialpreis und Frachtkosten namentlich.' : 'Paper Supplier Hub strictly decouples substrate cost from freight.',
     },
     {
-      feature: locale === 'es' ? 'Visualización 3D interactiva de lomo y cubiertas' : locale === 'de' ? 'Interaktive 3D-Vorschau von Rücken und Umschlag' : 'Interactive 3D preview of spine and covers',
+      feature: locale === 'es' ? 'Punto de cruce automático entre digital y offset' : locale === 'de' ? 'Automatische Break-Even-Berechnung Digital vs. Offset' : 'Automatic crossover calculation between digital and offset',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      lulu: locale === 'es' ? 'No confirmado' : locale === 'de' ? 'Nicht bestätigt' : 'Not confirmed',
-      gelato: locale === 'es' ? 'No confirmado' : locale === 'de' ? 'Nicht bestätigt' : 'Not confirmed',
-      notes: locale === 'es' ? 'Simulación orientativa en navegador basada en gramaje y número de páginas.' : locale === 'de' ? 'Orientierende Browser-Simulation nach Papiergrammatur.' : 'Guidance browser simulation calculated from basis weight and pages.',
+      traditional: locale === 'es' ? 'Depende de cotizador' : locale === 'de' ? 'Abhängig von Sachbearbeiter' : 'Estimator dependent',
+      lulu: locale === 'es' ? 'Solo digital / POD' : locale === 'de' ? 'Nur Digital / POD' : 'Digital / POD only',
+      gelato: locale === 'es' ? 'Solo digital / POD' : locale === 'de' ? 'Nur Digital / POD' : 'Digital / POD only',
+      notes: locale === 'es' ? 'Determina en qué volumen exacto de ejemplares conviene cambiar de tecnología.' : locale === 'de' ? 'Bestimmt exakt die Auflagenschwelle für den Technologiewechsel.' : 'Pinpoints the exact copy threshold to transition from digital to offset press.',
     },
     {
-      feature: locale === 'es' ? 'Elección de taller o conexión con imprenta propia' : locale === 'de' ? 'Wahl des Betriebs oder eigene Druckerei anbinden' : 'Choice of print plant or connect own printhouse',
+      feature: locale === 'es' ? 'Matrices reales calibradas por talleres homologados' : locale === 'de' ? 'Reale Maschinenkosten hinterlegt von Partnerbetrieben' : 'Real machine rates calibrated by accredited plants',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      lulu: locale === 'es' ? 'Red cerrada de Lulu' : locale === 'de' ? 'Geschlossenes Lulu-Netzwerk' : 'Lulu closed network',
-      gelato: locale === 'es' ? 'Red cerrada de Gelato' : locale === 'de' ? 'Geschlossenes Gelato-Netzwerk' : 'Gelato closed network',
-      notes: locale === 'es' ? 'Permite seleccionar de la red o conectar las máquinas de tu taller homologado.' : locale === 'de' ? 'Erlaubt Netzwerk-Auswahl oder Anbindung eigener Maschinen.' : 'Allows selecting from network or binding own plant machines.',
+      traditional: locale === 'es' ? 'Presupuesto individual' : locale === 'de' ? 'Einzelangebot' : 'Single quote',
+      lulu: locale === 'es' ? 'Tarifa fija cerrada' : locale === 'de' ? 'Feste Einheitstarife' : 'Fixed closed pricing',
+      gelato: locale === 'es' ? 'Tarifa fija cerrada' : locale === 'de' ? 'Feste Einheitstarife' : 'Fixed closed pricing',
+      notes: locale === 'es' ? 'Costes horarios, mermas de arranque y pliegos modelados en Control Plane.' : locale === 'de' ? 'Stundensätze, Rüstzeiten und Bogenformate aus dem Control Plane.' : 'Hourly rates, makeready waste, and imposition sheets from Control Plane.',
     },
     {
-      feature: locale === 'es' ? 'Distribución en librerías globales (Amazon / Ingrams)' : locale === 'de' ? 'Globaler Buchhandelsvertrieb (Amazon / Ingrams)' : 'Global retail distribution (Amazon / Ingrams)',
-      printprice: locale === 'es' ? 'Mediante integración' : locale === 'de' ? 'Über Integration' : 'Via integration',
-      lulu: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      gelato: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      notes: locale === 'es' ? 'Lulu y Gelato disponen de red de distribución y venta minorista bajo demanda.' : locale === 'de' ? 'Lulu und Gelato bieten eigene Buchhandels-Vertriebskanäle.' : 'Lulu and Gelato provide direct retail print-on-demand networks.',
+      feature: locale === 'es' ? 'Ficha técnica inmutable con identificador único (evidenceId)' : locale === 'de' ? 'Unveränderlicher Prüf- und Kalkulations-Hash (evidenceId)' : 'Immutable technical ticket with hash (evidenceId)',
+      printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
+      traditional: locale === 'es' ? 'Albarán / Email' : locale === 'de' ? 'Lieferschein / E-Mail' : 'Email / Packing slip',
+      lulu: locale === 'es' ? 'Número de pedido' : locale === 'de' ? 'Bestellnummer' : 'Order number',
+      gelato: locale === 'es' ? 'ID de encargo' : locale === 'de' ? 'Auftrags-ID' : 'Job ID',
+      notes: locale === 'es' ? 'Garantiza que la orden de producción se ejecute con las especificaciones exactas.' : locale === 'de' ? 'Stellt sicher, dass der Auftrag exakt nach Spezifikation gefertigt wird.' : 'Guarantees the job runs against audited specs without drift.',
     },
   ];
 
-  const COMPARISON_PRINTERS = [
+  // Tab 2: FIX IT (Preflight y Preparación de PDF) — Official Sources from PREFLIGHT_COMPARISON_SOURCES.md
+  const COMPARISON_FIX = [
     {
-      feature: locale === 'es' ? 'Modelado de máquinas (pliegos, makeready, mermas)' : locale === 'de' ? 'Maschinenmodellierung (Bogen, Rüstzeit, Makulatur)' : 'Machine profiling (sheets, makeready, waste)',
+      feature: locale === 'es' ? 'Comprobación web directa sin instalación de software' : locale === 'de' ? 'Direkte Web-Prüfung ohne Softwareinstallation' : 'Direct browser preflight without desktop software installation',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      printiq: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      printvis: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      tharstern: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      notes: locale === 'es' ? 'Configuración de costes horarios, tamaños de pliego, pinzas y velocidades.' : locale === 'de' ? 'Stundensätze, Bogenformate, Greiferränder und Laufgeschwindigkeiten.' : 'Hourly rates, sheet formats, gripper margins and run speeds.',
+      acrobat: locale === 'es' ? 'No aplica' : locale === 'de' ? 'Nicht anwendbar' : 'Not applicable',
+      pitstop: locale === 'es' ? 'Mediante servidor' : locale === 'de' ? 'Über Server' : 'Via server',
+      pdftoolbox: locale === 'es' ? 'Mediante servidor' : locale === 'de' ? 'Über Server' : 'Via server',
+      notes: locale === 'es' ? 'Preflight se ejecuta directamente en navegador sin licencias de escritorio pesadas.' : locale === 'de' ? 'Preflight läuft browserbasiert ohne Desktop-Lizenzen.' : 'Preflight executes in browser with no heavy desktop licenses required.',
     },
     {
-      feature: locale === 'es' ? 'Catálogo federado de papel (sustratos técnicos)' : locale === 'de' ? 'Föderierter Substratkatalog (Papiere)' : 'Federated paper catalog (technical substrates)',
+      feature: locale === 'es' ? 'Detección perimetral de sangres (TrimBox y BleedBox)' : locale === 'de' ? 'Beschnittprüfung (TrimBox und BleedBox)' : 'Perimeter bleed audit (TrimBox and BleedBox)',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      printiq: locale === 'es' ? 'Disponible (módulo compras)' : locale === 'de' ? 'Verfügbar (Einkaufsmodul)' : 'Available (procurement)',
-      printvis: locale === 'es' ? 'Mediante integración' : locale === 'de' ? 'Über Integration' : 'Via integration',
-      tharstern: locale === 'es' ? 'Mediante integración' : locale === 'de' ? 'Über Integration' : 'Via integration',
-      notes: locale === 'es' ? 'Paper Supplier Hub separa estrictamente el coste de fabricación y el porte.' : locale === 'de' ? 'Paper Supplier Hub trennt strikt Materialpreis und Frachtkosten.' : 'Paper Supplier Hub strictly decouples material from freight.',
+      acrobat: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
+      pitstop: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
+      pdftoolbox: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
+      notes: locale === 'es' ? 'Comprueba los 3 mm obligatorios en los 4 bordes para evitar filos blancos de guillotina.' : locale === 'de' ? 'Prüft 3 mm Randbeschnitt an allen vier Kanten gegen weiße Blitzer.' : 'Verifies mandatory 3mm margins across all 4 edges to prevent trim slivers.',
     },
     {
-      feature: locale === 'es' ? 'Trazabilidad de evidencia inmutable (evidenceId)' : locale === 'de' ? 'Unveränderliche Evidenz-Rückverfolgbarkeit' : 'Immutable evidence audit trace (evidenceId)',
+      feature: locale === 'es' ? 'Auditoría de resolución efectiva con localización por página (<300 DPI)' : locale === 'de' ? 'Effektive Bildauflösung seitengenau (<300 DPI)' : 'Effective image DPI audit with page localization (<300 DPI)',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      printiq: locale === 'es' ? 'Mediante auditoría' : locale === 'de' ? 'Über Audit-Protokoll' : 'Via audit log',
-      printvis: locale === 'es' ? 'Mediante registro ERP' : locale === 'de' ? 'Über ERP-Buchungsjournal' : 'Via ERP journal',
-      tharstern: locale === 'es' ? 'Mediante histórico' : locale === 'de' ? 'Über Auftragshistorie' : 'Via job history',
-      notes: locale === 'es' ? 'Hash e identificador único que vincula presupuesto y archivo validado.' : locale === 'de' ? 'Eindeutiger kryptografischer Hash verbindet Budget und geprüfte Datei.' : 'Cryptographic hash binding quote to validated artwork file.',
+      acrobat: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
+      pitstop: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
+      pdftoolbox: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
+      notes: locale === 'es' ? 'Señala imágenes por debajo de 300 DPI indicando la página exacta donde se ubican.' : locale === 'de' ? 'Lokalisiert Bilder unter 300 DPI seitengenau im Prüfbericht.' : 'Pinpoints images below 300 DPI with exact page coordinates.',
     },
     {
-      feature: locale === 'es' ? 'ERP/MIS contable y laboral integral' : locale === 'de' ? 'Vollständiges Buchhaltungs- und Lohn-ERP' : 'Full accounting and payroll MIS/ERP',
-      printprice: locale === 'es' ? 'Mediante integración' : locale === 'de' ? 'Über Integration' : 'Via integration',
-      printiq: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      printvis: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      tharstern: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      notes: locale === 'es' ? 'PrintPrice OS se integra como motor de cotización e inteligencia técnica.' : locale === 'de' ? 'PrintPrice OS fungiert als fokussierter Kalkulations- und Preflight-Motor.' : 'PrintPrice OS integrates as the specialized pricing and preflight engine.',
+      feature: locale === 'es' ? 'Diagnóstico accesible sin tecnicismos complejos' : locale === 'de' ? 'Verständlicher Prüfbericht ohne Fachchinesisch' : 'Clear actionable diagnostics without esoteric jargon',
+      printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
+      acrobat: locale === 'es' ? 'Requiere formación' : locale === 'de' ? 'Schulung erforderlich' : 'Requires training',
+      pitstop: locale === 'es' ? 'Uso industrial avanzado' : locale === 'de' ? 'Fortgeschrittene Nutzung' : 'Advanced industrial',
+      pdftoolbox: locale === 'es' ? 'Uso industrial avanzado' : locale === 'de' ? 'Fortgeschrittene Nutzung' : 'Advanced industrial',
+      notes: locale === 'es' ? 'Explica con claridad al autor o diseñador qué debe corregir en su maquetación.' : locale === 'de' ? 'Erklärt Autoren verständlich, wie Fehler im Layout behoben werden.' : 'Guides creators and designers plainly on how to remediate layout flaws.',
+    },
+    {
+      feature: locale === 'es' ? 'Corrección geométrica asistida de sangrado (BleedBox)' : locale === 'de' ? 'Assistiere geometrische Beschnittanpassung (BleedBox)' : 'Assisted geometric bleed remediation (BleedBox)',
+      printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
+      acrobat: locale === 'es' ? 'Depende de edición' : locale === 'de' ? 'Versionsabhängig' : 'Edition dependent',
+      pitstop: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
+      pdftoolbox: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
+      notes: locale === 'es' ? 'Ajusta cajas PDF cuando el arte incluye fondo suficiente pero falta caja de sangrado.' : locale === 'de' ? 'Passt PDF-Boxen an, wenn Hintergrundfläche vorhanden ist.' : 'Expands PDF page boxes when background art exceeds trim bounds.',
+    },
+    {
+      feature: locale === 'es' ? 'Firma criptográfica del informe vinculada a producción (evidenceId)' : locale === 'de' ? 'Kryptografische Berichtssignatur für Druckauftrag (evidenceId)' : 'Cryptographic audit signature linked to order (evidenceId)',
+      printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
+      acrobat: locale === 'es' ? 'No aplica' : locale === 'de' ? 'Nicht anwendbar' : 'Not applicable',
+      pitstop: locale === 'es' ? 'Mediante integración' : locale === 'de' ? 'Über Integration' : 'Via integration',
+      pdftoolbox: locale === 'es' ? 'Mediante integración' : locale === 'de' ? 'Über Integration' : 'Via integration',
+      notes: locale === 'es' ? 'Hash SHA-256 inmutable que garantiza que el impresor recibe el archivo auditado.' : locale === 'de' ? 'SHA-256-Hash stellt sicher, dass der Drucker die geprüfte Datei erhält.' : 'SHA-256 hash ensuring plant prints the exact preflighted asset.',
+    },
+  ];
+
+  // Tab 3: PRINT IT (Búsqueda, Contratación y Seguimiento)
+  const COMPARISON_PRINT = [
+    {
+      feature: locale === 'es' ? 'Enrutamiento con talleres homologados independientes' : locale === 'de' ? 'Vermittlung an unabhängige zertifizierte Druckereien' : 'Routing to independent vetted industrial plants',
+      printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
+      closedNetworks: locale === 'es' ? 'Red cautiva cerrada' : locale === 'de' ? 'Geschlossenes Netzwerk' : 'Closed captive network',
+      traditionalBrokers: locale === 'es' ? 'Taller discrecional' : locale === 'de' ? 'Intransparente Vergabe' : 'Discretionary broker plant',
+      notes: locale === 'es' ? 'El algoritmo Matchmaker selecciona talleres según el formato de máquina idóneo.' : locale === 'de' ? 'Matchmaker-Algorithmus wählt Betriebe nach optimalem Maschinenformat.' : 'Matchmaker assigns plants according to ideal imposition sheet formats.',
+    },
+    {
+      feature: locale === 'es' ? 'Trazabilidad inmutable de especificaciones (evidenceId)' : locale === 'de' ? 'Unveränderliche Vorgaben-Rückverfolgung (evidenceId)' : 'Immutable job specifications trace (evidenceId)',
+      printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
+      closedNetworks: locale === 'es' ? 'No confirmado' : locale === 'de' ? 'Nicht bestätigt' : 'Not confirmed',
+      traditionalBrokers: locale === 'es' ? 'Albarán / Email' : locale === 'de' ? 'Lieferschein / E-Mail' : 'Email paper trail',
+      notes: locale === 'es' ? 'El identificador vincula presupuesto, archivo validado y orden física de impresión.' : locale === 'de' ? 'Kryptografische ID verbindet Angebot, geprüfte Datei und Auftrag.' : 'Binds quote, validated artwork, and physical job ticket cryptographically.',
+    },
+    {
+      feature: locale === 'es' ? 'Preflight técnico obligatorio antes de entrar a máquina' : locale === 'de' ? 'Verpflichtendes technisches Preflight vor Maschinengang' : 'Mandatory technical preflight before press run',
+      printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
+      closedNetworks: locale === 'es' ? 'Filtro automático básico' : locale === 'de' ? 'Einfacher Basisfilter' : 'Basic automated filter',
+      traditionalBrokers: locale === 'es' ? 'Revisión manual / Extra' : locale === 'de' ? 'Manuelle Prüfung / Aufpreis' : 'Manual review / Surcharge',
+      notes: locale === 'es' ? 'Evita paradas de prensa costosas por archivos con sangrado ausente o fuentes no incrustadas.' : locale === 'de' ? 'Verhindert Maschinenstillstand durch fehlenden Beschnitt oder Schriften.' : 'Prevents costly plant stop-press due to missing bleeds or raster flaws.',
+    },
+    {
+      feature: locale === 'es' ? 'Espacio operativo independiente para el taller (Control Plane)' : locale === 'de' ? 'Unabhängige Betriebskonsole für Druckereien (Control Plane)' : 'Independent operations console for printers (Control Plane)',
+      printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
+      closedNetworks: locale === 'es' ? 'Portal de proveedor cautivo' : locale === 'de' ? 'Geschlossenes Portal' : 'Captive vendor portal',
+      traditionalBrokers: locale === 'es' ? 'No disponible' : locale === 'de' ? 'Nicht verfügbar' : 'Not available',
+      notes: locale === 'es' ? 'Los talleres modelan sus máquinas y gestionan órdenes con estricto aislamiento de datos.' : locale === 'de' ? 'Druckereien verwalten Maschinen und Aufträge mit strengem Datenschutz.' : 'Plants configure presses and manage jobs under strict tenant data isolation.',
+    },
+    {
+      feature: locale === 'es' ? 'Desacoplamiento estricto de coste de fabricación vs. transporte' : locale === 'de' ? 'Strikte Trennung von Fertigungs- und Frachtkosten' : 'Strict decoupling of manufacturing cost vs. freight logistics',
+      printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
+      closedNetworks: locale === 'es' ? 'Porte empaquetado opaco' : locale === 'de' ? 'In Mischkalkulation verdeckt' : 'Bundled opaque shipping',
+      traditionalBrokers: locale === 'es' ? 'Variable discrecional' : locale === 'de' ? 'Intransparenter Zuschlag' : 'Discretionary freight markup',
+      notes: locale === 'es' ? 'Desglose nítido para saber exactamente cuánto cuesta imprimir y cuánto transportar.' : locale === 'de' ? 'Klare Aufschlüsselung: Was kostet der Druck, was die Logistik?' : 'Crisp transparency on actual printing production versus shipping freight.',
     },
   ];
 
   return (
     <main style={{ minHeight: '100vh', paddingBottom: '4rem' }}>
       {/* 
-        HERO SECTION WITH FLOATING RED DOT PARTICLES (User Signature Banner)
+        HERO SECTION WITH FLOATING RED DOT PARTICLES (Approved Onboarding Aesthetic)
       */}
       <HeroPlatform
         variant="particles"
@@ -156,8 +304,8 @@ export default function Home() {
           sublabel: `${dict.home.heroCheck1} · ${dict.home.heroCheck2} · ${dict.home.heroCheck3}`,
         }}
         secondaryAction={{
-          label: dict.home.heroCtaSecondary,
-          href: "#how-it-works",
+          label: locale === 'es' ? 'Ver los tres productos ➔' : locale === 'de' ? 'Die drei Produkte ansehen ➔' : 'Explore the 3 products ➔',
+          href: "#productos",
         }}
         rightContent={
           <div
@@ -214,12 +362,179 @@ export default function Home() {
         }
       />
 
-      {/* 4 Stakeholder Cards Section */}
+      {/* 
+        SECCIÓN 1: PRODUCTOS — QUÉ PUEDES HACER (Explica la propuesta primero: PRICE IT. FIX IT. PRINT IT.)
+      */}
+      <section
+        id="productos"
+        style={{
+          padding: 'clamp(4rem, 8vw, 6rem) 0',
+          background: 'var(--bg-primary)',
+          borderBottom: '1px solid var(--border-color)',
+        }}
+      >
+        <Container>
+          <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 3.5rem' }}>
+            <span className="pill-badge" style={{ marginBottom: '0.75rem' }}>
+              PRODUCTOS — QUÉ PUEDES HACER
+            </span>
+            <h2 style={{ fontSize: 'clamp(2rem, 4.5vw, 2.85rem)', marginBottom: '1rem', letterSpacing: '-0.02em', fontWeight: 900 }}>
+              PRICE IT. FIX IT. PRINT IT.
+            </h2>
+            <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+              {dict.home.productsSubtitle}
+            </p>
+          </div>
+
+          {/* 3 Core Product Cards */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))',
+              gap: '2rem',
+              marginBottom: '3rem',
+            }}
+          >
+            {CORE_PRODUCTS.map((prod) => (
+              <div
+                key={prod.id}
+                className="rounded-card"
+                style={{
+                  padding: '2.5rem 2rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  background: 'var(--bg-secondary)',
+                  border: '1px solid var(--border-color)',
+                  position: 'relative',
+                  boxShadow: 'var(--shadow-dropdown)',
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+                    <span style={{ fontSize: '2.25rem' }}>{prod.icon}</span>
+                    <span
+                      style={{
+                        fontSize: '0.675rem',
+                        fontWeight: 800,
+                        padding: '0.2rem 0.65rem',
+                        borderRadius: 'var(--radius-pill)',
+                        background: 'var(--accent-container)',
+                        color: 'var(--accent-primary)',
+                      }}
+                    >
+                      {prod.pillar}
+                    </span>
+                  </div>
+
+                  <h3 style={{ fontSize: '1.65rem', fontWeight: 800, marginBottom: '0.4rem' }}>
+                    {prod.title}
+                  </h3>
+
+                  <p style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1rem' }}>
+                    {prod.tagline}
+                  </p>
+
+                  <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+                    {prod.description}
+                  </p>
+
+                  {prod.disclaimer && (
+                    <p style={{ fontSize: '0.775rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '1.5rem', fontStyle: 'italic' }}>
+                      {prod.disclaimer}
+                    </p>
+                  )}
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1rem' }}>
+                  <a
+                    href={prod.primaryCtaHref}
+                    className="btn-primary"
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      padding: '0.85rem 1.25rem',
+                      fontSize: '0.95rem',
+                    }}
+                  >
+                    {prod.primaryCtaText}
+                  </a>
+
+                  <Link
+                    href={prod.secondaryCtaHref}
+                    className="btn-secondary"
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      padding: '0.7rem 1.25rem',
+                      fontSize: '0.875rem',
+                    }}
+                  >
+                    {prod.secondaryCtaText} ➔
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Integrated Complementary Tool: Maqueta 3D */}
+          <div
+            className="rounded-card"
+            style={{
+              padding: 'clamp(1.25rem, 3vw, 1.75rem)',
+              background: 'linear-gradient(135deg, rgba(220, 0, 0, 0.04) 0%, var(--bg-secondary) 100%)',
+              border: '1px solid var(--border-color)',
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '1.25rem',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'clamp(0.75rem, 2vw, 1.25rem)', flexWrap: 'wrap', flex: '1 1 260px' }}>
+              <span style={{ fontSize: '2rem', lineHeight: 1 }}>📖</span>
+              <div style={{ flex: '1 1 200px', minWidth: 0 }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                  <span style={{ fontWeight: 800, fontSize: '0.975rem', lineHeight: 1.4 }}>
+                    {locale === 'es' ? 'Herramienta complementaria de visualización: Maqueta 3D Interactiva' : locale === 'de' ? 'Ergänzende 3D-Vorschau: Interaktives Buch-Mockup' : 'Complementary visualization tool: Interactive 3D Mockup'}
+                  </span>
+                  <span style={{ fontSize: '0.625rem', background: 'var(--accent-container)', color: 'var(--accent-primary)', padding: '0.1rem 0.45rem', borderRadius: 'var(--radius-pill)', fontWeight: 800 }}>
+                    COMPLEMENTARIA
+                  </span>
+                </div>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>
+                  {locale === 'es'
+                    ? 'Visualiza la cubierta, contraportada y grosor de lomo calculado en tu navegador antes de encargar la tirada física.'
+                    : locale === 'de'
+                    ? 'Prüfen Sie Umschlag, Rückenstärke und Aufschlagverhalten direkt im Browser vor Auftragserteilung.'
+                    : 'Preview cover, back, and computed spine thickness in your browser before ordering the physical run.'}
+                </p>
+              </div>
+            </div>
+
+            <Link
+              href="/products/mockup"
+              className="btn-secondary"
+              style={{ padding: '0.65rem 1.25rem', fontSize: '0.875rem', whiteSpace: 'nowrap' }}
+            >
+              {locale === 'es' ? 'Ver Maqueta 3D ➔' : locale === 'de' ? '3D-Mockup ansehen ➔' : 'View 3D Mockup ➔'}
+            </Link>
+          </div>
+        </Container>
+      </section>
+
+      {/* 
+        SECCIÓN 2: PÚBLICOS — PARA QUIÉN (4 Entradas especializadas conectadas con sus herramientas y registros)
+      */}
       <Section showGrid={false}>
         <Container>
-          <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 3.5rem' }}>
+          <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 3.5rem' }}>
             <span className="pill-badge" style={{ marginBottom: '0.75rem' }}>
-              PRICE IT. FIX IT. PRINT IT.
+              PÚBLICOS — PARA QUIÉN
             </span>
             <h2 style={{ fontSize: 'clamp(1.85rem, 4vw, 2.5rem)', marginBottom: '0.75rem' }}>
               {dict.home.stakeholdersHeading}
@@ -269,16 +584,20 @@ export default function Home() {
                     {card.title}
                   </h3>
 
-                  <p style={{ fontSize: '0.925rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.75rem' }}>
+                  <p style={{ fontSize: '0.925rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
                     {card.tagline}
                   </p>
+
+                  <div style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.04em', marginBottom: '0.85rem', textTransform: 'uppercase' }}>
+                    {card.toolsTag}
+                  </div>
 
                   <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '2rem' }}>
                     {card.description}
                   </p>
                 </div>
 
-                <div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   <Link
                     href={card.href}
                     className="btn-secondary"
@@ -293,6 +612,25 @@ export default function Home() {
                   >
                     {card.ctaText} ➔
                   </Link>
+
+                  {card.extraLink && (
+                    <a
+                      href={card.extraLink.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        width: '100%',
+                        textAlign: 'center',
+                        fontSize: '0.775rem',
+                        color: 'var(--accent-primary)',
+                        fontWeight: 700,
+                        textDecoration: 'none',
+                        padding: '0.35rem 0',
+                      }}
+                    >
+                      {card.extraLink.text}
+                    </a>
+                  )}
                 </div>
               </div>
             ))}
@@ -300,7 +638,9 @@ export default function Home() {
         </Container>
       </Section>
 
-      {/* Cómo funciona / How it works */}
+      {/* 
+        SECCIÓN 3: CÓMO FUNCIONA / WORKFLOW END-TO-END
+      */}
       <section
         id="how-it-works"
         style={{
@@ -314,7 +654,7 @@ export default function Home() {
           <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 3.5rem' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
               <span className="pill-badge">
-                PRICE IT. FIX IT. PRINT IT.
+                WORKFLOW INDUSTRIAL
               </span>
             </div>
             <h2 style={{ fontSize: 'clamp(1.85rem, 4vw, 2.5rem)', marginBottom: '0.75rem' }}>
@@ -350,11 +690,11 @@ export default function Home() {
                 02
               </div>
               <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.05em', marginBottom: '0.35rem' }}>
-                CALCULATE
+                FIX IT.
               </div>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{dict.home.step2Title}</h3>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{dict.home.step3Title}</h3>
               <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                {dict.home.step2Desc}
+                {dict.home.step3Desc}
               </p>
             </div>
 
@@ -363,11 +703,15 @@ export default function Home() {
                 03
               </div>
               <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.05em', marginBottom: '0.35rem' }}>
-                FIX IT.
+                VISUALIZAR
               </div>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{dict.home.step3Title}</h3>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Maqueta 3D</h3>
               <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                {dict.home.step3Desc}
+                {locale === 'es'
+                  ? 'Simulación tridimensional interactiva del lomo y cubiertas basada en el gramaje y páginas calculadas.'
+                  : locale === 'de'
+                  ? 'Interaktive 3D-Simulation von Buchrücken und Umschlag basierend auf Papiergrammatur und Seitenzahl.'
+                  : 'Interactive 3D simulation of spine and cover based on calculated paper basis weight and page count.'}
               </p>
             </div>
 
@@ -387,147 +731,21 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* Capacidades Técnicas Disponibles */}
-      <Section showGrid={false}>
-        <Container>
-          <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto 3.5rem' }}>
-            <span className="pill-badge" style={{ marginBottom: '0.75rem' }}>
-              PRICE IT. FIX IT. PRINT IT.
-            </span>
-            <h2 style={{ fontSize: 'clamp(1.85rem, 4vw, 2.5rem)', marginBottom: '0.75rem' }}>
-              {dict.home.capsHeading}
-            </h2>
-            <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)' }}>
-              {dict.home.capsSubtitle}
-            </p>
-          </div>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-              gap: '1.5rem',
-            }}
-          >
-            <div className="rounded-card" style={{ padding: '2rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                <span style={{ fontSize: '1.75rem' }}>💶</span>
-                <h3 style={{ fontSize: '1.25rem', margin: 0 }}>Budget (Pricing Engine)</h3>
-              </div>
-              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
-                {locale === 'es'
-                  ? 'Cálculo instantáneo por servidor. Identifica con rigor el punto de cruce de costes entre tiradas cortas digitales y tiradas medias/largas en offset.'
-                  : locale === 'de'
-                  ? 'Sofortige Serverkalkulation. Identifiziert präzise den Schnittpunkt zwischen Digitaldruck- und Bogenoffsetauflagen.'
-                  : 'Instant server calculation. Accurately identifies the cost crossover point between short digital runs and medium/long offset runs.'}
-              </p>
-              <a href="https://budget.printprice.pro/" className="nav-dropdown-item" style={{ display: 'inline-flex', padding: '0.4rem 0.6rem', color: 'var(--accent-primary)', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none' }}>
-                Budget Engine ↗
-              </a>
-            </div>
-
-            <div className="rounded-card" style={{ padding: '2rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                <span style={{ fontSize: '1.75rem' }}>🛡️</span>
-                <h3 style={{ fontSize: '1.25rem', margin: 0 }}>Preflight (File Validation)</h3>
-              </div>
-              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
-                {locale === 'es'
-                  ? 'Inspección automática de parámetros de impresión: sangres perimetrales de 3 mm, espacio de color CMYK, sobreimpresiones y cobertura máxima de tinta (TAC).'
-                  : locale === 'de'
-                  ? 'Automatische Prüfung der Druckparameter: 3 mm Beschnittzugabe, CMYK-Farbraum, Überdrucken und maximale Farbdeckung (TAC).'
-                  : 'Automated inspection of print parameters: 3 mm perimeter bleeds, CMYK color space, overprints, and total area coverage (TAC).'}
-              </p>
-              <Link href="/products/preflight" className="nav-dropdown-item" style={{ display: 'inline-flex', padding: '0.4rem 0.6rem', color: 'var(--accent-primary)', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none' }}>
-                Preflight Engine ➔
-              </Link>
-            </div>
-
-            <div className="rounded-card" style={{ padding: '2rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                <span style={{ fontSize: '1.75rem' }}>📐</span>
-                <h3 style={{ fontSize: '1.25rem', margin: 0 }}>Mockup Engine 3D</h3>
-              </div>
-              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
-                {locale === 'es'
-                  ? 'Previsualización 3D en navegador con grosor de lomo calculado según el gramaje del papel y número de páginas. Permite verificar la orientación de cubiertas.'
-                  : locale === 'de'
-                  ? '3D-Vorschau im Browser mit Buchrückendicke, berechnet nach Papiergewicht und Seitenzahl. Kontrolliert Umschlagorientierung vor dem Druck.'
-                  : '3D browser preview with spine thickness computed from paper basis weight and page count. Validates cover orientation before print.'}
-              </p>
-              <Link href="/products/mockup" className="nav-dropdown-item" style={{ display: 'inline-flex', padding: '0.4rem 0.6rem', color: 'var(--accent-primary)', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none' }}>
-                Mockup Engine ➔
-              </Link>
-            </div>
-
-            <div className="rounded-card" style={{ padding: '2rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                <span style={{ fontSize: '1.75rem' }}>🏭</span>
-                <h3 style={{ fontSize: '1.25rem', margin: 0 }}>Control Plane (Printhouse Hub)</h3>
-              </div>
-              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
-                {locale === 'es'
-                  ? 'Consola para directores de taller: modelado de prensas, calibración de encuadernación, gestión de órdenes de trabajo y trazabilidad inmutable mediante hash de evidencia.'
-                  : locale === 'de'
-                  ? 'Betriebskonsole für Druckereien: Maschinenmodellierung, Weiterverarbeitungskalibrierung und Auftragsverwaltung mit Evidenz-Hash.'
-                  : 'Plant management console: press profiling, bindery calibration, job order intake, and immutable trace via evidence hash.'}
-              </p>
-              <a href="https://control.printprice.pro/" className="nav-dropdown-item" style={{ display: 'inline-flex', padding: '0.4rem 0.6rem', color: 'var(--accent-primary)', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none' }}>
-                Control Plane ↗
-              </a>
-            </div>
-
-            <div className="rounded-card" style={{ padding: '2rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                <span style={{ fontSize: '1.75rem' }}>📦</span>
-                <h3 style={{ fontSize: '1.25rem', margin: 0 }}>Paper Supplier Hub</h3>
-              </div>
-              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
-                {locale === 'es'
-                  ? 'Catálogo maestro federado para fabricantes y distribuidores de papel. Separación rigurosa de coste de fabricación vs. tarifas logísticas de transporte.'
-                  : locale === 'de'
-                  ? 'Föderierter Hauptkatalog für Papierhersteller und Großhändler mit strikter Trennung von Materialpreis und Frachtkosten.'
-                  : 'Federated master substrate catalog for paper mills and distributors. Strict decoupling between manufacturing cost and freight.'}
-              </p>
-              <a href="https://docs.printprice.pro/docs/platform/paper-supplier-hub" target="_blank" rel="noopener noreferrer" className="nav-dropdown-item" style={{ display: 'inline-flex', padding: '0.4rem 0.6rem', color: 'var(--accent-primary)', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none' }}>
-                Paper Supplier Hub ↗
-              </a>
-            </div>
-
-            <div className="rounded-card" style={{ padding: '2rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                <span style={{ fontSize: '1.75rem' }}>🔌</span>
-                <h3 style={{ fontSize: '1.25rem', margin: 0 }}>API &amp; Developer Specs</h3>
-              </div>
-              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
-                {locale === 'es'
-                  ? 'Especificaciones OpenAPI para conectar tiendas online, sistemas editoriales y software de gestión de taller (MIS/ERP) existentes.'
-                  : locale === 'de'
-                  ? 'OpenAPI-Spezifikationen zur Anbindung von Webshops, Verlagssystemen und vorhandener Druckerei-MIS/ERP-Software.'
-                  : 'OpenAPI specs for connecting online bookshops, publishing platforms, and existing printhouse MIS/ERP systems.'}
-              </p>
-              <Link href="/developers" className="nav-dropdown-item" style={{ display: 'inline-flex', padding: '0.4rem 0.6rem', color: 'var(--accent-primary)', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none' }}>
-                Developer Portal ➔
-              </Link>
-            </div>
-          </div>
-        </Container>
-      </Section>
-
-      {/* Comparativas Objetivas */}
+      {/* 
+        SECCIÓN 4: COMPARATIVAS ORGANIZADAS POR PRODUCTO (PRICE IT, FIX IT, PRINT IT)
+      */}
       <section
         id="comparativas"
         style={{
           padding: 'clamp(4rem, 8vw, 6rem) 0',
-          background: 'var(--bg-secondary)',
-          borderTop: '1px solid var(--border-color)',
+          background: 'var(--bg-primary)',
           borderBottom: '1px solid var(--border-color)',
         }}
       >
         <Container>
           <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 3rem' }}>
             <span className="pill-badge" style={{ marginBottom: '0.75rem' }}>
-              PRICE IT. FIX IT. PRINT IT.
+              COMPARATIVAS POR PRODUCTO
             </span>
             <h2 style={{ fontSize: 'clamp(1.85rem, 4vw, 2.5rem)', marginBottom: '0.75rem' }}>
               {dict.home.compHeading}
@@ -536,25 +754,27 @@ export default function Home() {
               {dict.home.compSubtitle}
             </p>
 
-            {/* Selector de Pestañas */}
+            {/* Selector de Pestañas: PRICE IT, FIX IT, PRINT IT */}
             <div
               style={{
                 display: 'inline-flex',
-                background: 'var(--bg-primary)',
+                background: 'var(--bg-secondary)',
                 padding: '0.35rem',
                 borderRadius: 'var(--radius-pill)',
                 border: '1px solid var(--border-color)',
                 marginTop: '1.5rem',
                 gap: '0.25rem',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
               }}
             >
               <button
                 type="button"
-                onClick={() => setActiveTab('authors')}
+                onClick={() => setActiveTab('price')}
                 style={{
                   border: 'none',
-                  background: activeTab === 'authors' ? 'var(--accent-primary)' : 'transparent',
-                  color: activeTab === 'authors' ? '#ffffff' : 'var(--text-secondary)',
+                  background: activeTab === 'price' ? 'var(--accent-primary)' : 'transparent',
+                  color: activeTab === 'price' ? '#ffffff' : 'var(--text-secondary)',
                   padding: '0.5rem 1.25rem',
                   borderRadius: 'var(--radius-pill)',
                   fontWeight: 700,
@@ -563,16 +783,16 @@ export default function Home() {
                   transition: 'all 0.15s ease',
                 }}
               >
-                {dict.home.tabAuthors}
+                {dict.home.tabPriceIt}
               </button>
 
               <button
                 type="button"
-                onClick={() => setActiveTab('printers')}
+                onClick={() => setActiveTab('fix')}
                 style={{
                   border: 'none',
-                  background: activeTab === 'printers' ? 'var(--accent-primary)' : 'transparent',
-                  color: activeTab === 'printers' ? '#ffffff' : 'var(--text-secondary)',
+                  background: activeTab === 'fix' ? 'var(--accent-primary)' : 'transparent',
+                  color: activeTab === 'fix' ? '#ffffff' : 'var(--text-secondary)',
                   padding: '0.5rem 1.25rem',
                   borderRadius: 'var(--radius-pill)',
                   fontWeight: 700,
@@ -581,39 +801,61 @@ export default function Home() {
                   transition: 'all 0.15s ease',
                 }}
               >
-                {dict.home.tabPrinters}
+                {dict.home.tabFixIt}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab('print')}
+                style={{
+                  border: 'none',
+                  background: activeTab === 'print' ? 'var(--accent-primary)' : 'transparent',
+                  color: activeTab === 'print' ? '#ffffff' : 'var(--text-secondary)',
+                  padding: '0.5rem 1.25rem',
+                  borderRadius: 'var(--radius-pill)',
+                  fontWeight: 700,
+                  fontSize: '0.9rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                {dict.home.tabPrintIt}
               </button>
             </div>
           </div>
 
-          {/* Tabla Bloque A */}
-          {activeTab === 'authors' && (
+          {/* TAB 1: PRICE IT — Cálculo y Presupuestación */}
+          {activeTab === 'price' && (
             <>
               <div className="comparison-table-wrapper">
                 <table className="comparison-table">
                   <thead>
                     <tr>
-                      <th style={{ width: '32%' }}>{dict.home.compFeature}</th>
-                      <th style={{ width: '18%', color: 'var(--accent-primary)' }}>PrintPrice Pro</th>
-                      <th style={{ width: '18%' }}>Lulu</th>
-                      <th style={{ width: '18%' }}>GelatoConnect</th>
-                      <th style={{ width: '14%' }}>{dict.home.compScope}</th>
+                      <th style={{ width: '30%' }}>{dict.home.compFeature}</th>
+                      <th style={{ width: '18%', color: 'var(--accent-primary)' }}>PrintPrice Pro (Budget)</th>
+                      <th style={{ width: '14%' }}>Tradicional / Manual</th>
+                      <th style={{ width: '14%' }}>Lulu</th>
+                      <th style={{ width: '12%' }}>Gelato</th>
+                      <th style={{ width: '12%' }}>{dict.home.compScope}</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {COMPARISON_AUTHORS.map((row, idx) => (
+                    {COMPARISON_PRICE.map((row, idx) => (
                       <tr key={idx}>
                         <td style={{ fontWeight: 600 }}>{row.feature}</td>
                         <td>
                           <span className="badge-available">{row.printprice}</span>
                         </td>
                         <td>
-                          <span className={row.lulu.includes('Disponible') || row.lulu.includes('Available') || row.lulu.includes('Verfügbar') ? 'badge-available' : 'badge-module'}>
+                          <span className="badge-module">{row.traditional}</span>
+                        </td>
+                        <td>
+                          <span className={row.lulu.includes('Disponible') || row.lulu.includes('Available') ? 'badge-available' : 'badge-module'}>
                             {row.lulu}
                           </span>
                         </td>
                         <td>
-                          <span className={row.gelato.includes('Disponible') || row.gelato.includes('Available') || row.gelato.includes('Verfügbar') ? 'badge-available' : 'badge-integration'}>
+                          <span className={row.gelato.includes('Disponible') || row.gelato.includes('Available') ? 'badge-available' : 'badge-integration'}>
                             {row.gelato}
                           </span>
                         </td>
@@ -629,44 +871,81 @@ export default function Home() {
             </>
           )}
 
-          {/* Tabla Bloque B */}
-          {activeTab === 'printers' && (
+          {/* TAB 2: FIX IT — Preflight y Preparación de PDF */}
+          {activeTab === 'fix' && (
             <>
               <div className="comparison-table-wrapper">
                 <table className="comparison-table">
                   <thead>
                     <tr>
                       <th style={{ width: '28%' }}>{dict.home.compFeature}</th>
-                      <th style={{ width: '16%', color: 'var(--accent-primary)' }}>PrintPrice Pro</th>
-                      <th style={{ width: '15%' }}>printIQ</th>
-                      <th style={{ width: '15%' }}>PrintVis</th>
-                      <th style={{ width: '14%' }}>Tharstern</th>
+                      <th style={{ width: '18%', color: 'var(--accent-primary)' }}>PrintPrice Preflight</th>
+                      <th style={{ width: '15%' }}>Adobe Acrobat Pro</th>
+                      <th style={{ width: '15%' }}>Enfocus PitStop</th>
+                      <th style={{ width: '12%' }}>callas pdfToolbox</th>
                       <th style={{ width: '12%' }}>{dict.home.compScope}</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {COMPARISON_PRINTERS.map((row, idx) => (
+                    {COMPARISON_FIX.map((row, idx) => (
                       <tr key={idx}>
                         <td style={{ fontWeight: 600 }}>{row.feature}</td>
                         <td>
-                          <span className={row.printprice.includes('Disponible') || row.printprice.includes('Available') || row.printprice.includes('Verfügbar') ? 'badge-available' : 'badge-integration'}>
-                            {row.printprice}
+                          <span className="badge-available">{row.printprice}</span>
+                        </td>
+                        <td>
+                          <span className={row.acrobat.includes('Disponible') || row.acrobat.includes('Available') ? 'badge-available' : 'badge-module'}>
+                            {row.acrobat}
                           </span>
                         </td>
                         <td>
-                          <span className={row.printiq.includes('Disponible') || row.printiq.includes('Available') || row.printiq.includes('Verfügbar') ? 'badge-available' : 'badge-module'}>
-                            {row.printiq}
+                          <span className={row.pitstop.includes('Disponible') || row.pitstop.includes('Available') ? 'badge-available' : 'badge-integration'}>
+                            {row.pitstop}
                           </span>
                         </td>
                         <td>
-                          <span className={row.printvis.includes('Disponible') || row.printvis.includes('Available') || row.printvis.includes('Verfügbar') ? 'badge-available' : 'badge-integration'}>
-                            {row.printvis}
+                          <span className={row.pdftoolbox.includes('Disponible') || row.pdftoolbox.includes('Available') ? 'badge-available' : 'badge-integration'}>
+                            {row.pdftoolbox}
                           </span>
                         </td>
+                        <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{row.notes}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="table-scroll-hint" role="note" aria-label="Desplazamiento horizontal disponible">
+                <span>⇄ {locale === 'es' ? 'Desliza horizontalmente para ver todas las columnas' : locale === 'de' ? 'Horizontal wischen für alle Spalten' : 'Scroll horizontally to view all columns'}</span>
+              </div>
+            </>
+          )}
+
+          {/* TAB 3: PRINT IT — Búsqueda, Contratación y Seguimiento */}
+          {activeTab === 'print' && (
+            <>
+              <div className="comparison-table-wrapper">
+                <table className="comparison-table">
+                  <thead>
+                    <tr>
+                      <th style={{ width: '30%' }}>{dict.home.compFeature}</th>
+                      <th style={{ width: '20%', color: 'var(--accent-primary)' }}>PrintPrice Marketplace</th>
+                      <th style={{ width: '18%' }}>Redes Cautivas (Lulu / Gelato)</th>
+                      <th style={{ width: '18%' }}>Intermediarios Tradicionales</th>
+                      <th style={{ width: '14%' }}>{dict.home.compScope}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {COMPARISON_PRINT.map((row, idx) => (
+                      <tr key={idx}>
+                        <td style={{ fontWeight: 600 }}>{row.feature}</td>
                         <td>
-                          <span className={row.tharstern.includes('Disponible') || row.tharstern.includes('Available') || row.tharstern.includes('Verfügbar') ? 'badge-available' : 'badge-integration'}>
-                            {row.tharstern}
-                          </span>
+                          <span className="badge-available">{row.printprice}</span>
+                        </td>
+                        <td>
+                          <span className="badge-module">{row.closedNetworks}</span>
+                        </td>
+                        <td>
+                          <span className="badge-integration">{row.traditionalBrokers}</span>
                         </td>
                         <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{row.notes}</td>
                       </tr>
@@ -682,7 +961,7 @@ export default function Home() {
 
           <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
             {locale === 'es'
-              ? '* Metodología: Datos cotejados a partir de manuales públicos de producto, páginas de producto oficiales y documentación técnica (octubre 2026).'
+              ? '* Metodología: Datos cotejados a partir de manuales públicos de producto, especificaciones oficiales y documentación técnica (octubre 2026).'
               : locale === 'de'
               ? '* Methodik: Öffentliche Produktdokumentationen und technische Spezifikationen (Stand: Oktober 2026).'
               : '* Methodology: Cross-checked against public product documentation and verified specs (as of October 2026).'}
@@ -690,13 +969,15 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* FAQ Segmentada */}
+      {/* 
+        SECCIÓN 5: FAQ SEGMENTADA
+      */}
       <Section showGrid={false}>
         <Container>
           <div style={{ maxWidth: '780px', margin: '0 auto' }}>
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <span className="pill-badge" style={{ marginBottom: '0.75rem' }}>
-                PRICE IT. FIX IT. PRINT IT.
+                TRANSPARENCIA TOTAL
               </span>
               <h2 style={{ fontSize: 'clamp(1.85rem, 4vw, 2.5rem)', marginBottom: '0.5rem' }}>
                 {dict.home.faqHeading}
@@ -709,24 +990,64 @@ export default function Home() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
               {[
                 {
-                  q: locale === 'es' ? '¿El cálculo en Budget es un presupuesto exacto o una estimación?' : locale === 'de' ? 'Ist die Budget-Kalkulation verbindlich oder eine Schätzung?' : 'Is the Budget calculation a binding quote or an estimate?',
-                  a: locale === 'es' ? 'El cálculo en Budget es una estimación técnica basada en las matrices de costes calibradas por las imprentas adscritas y los precios vigentes de papel. La cotización final se confirma al subir el archivo definitivo y verificar condiciones especiales de taller.' : locale === 'de' ? 'Die Budget-Berechnung ist eine präzise technische Schätzung basierend auf den hinterlegten Maschinenkosten der Druckereien und aktuellen Papierpreisen.' : 'The Budget calculation is an accurate technical estimate based on machine cost matrices calibrated by member print plants and live paper rates.',
+                  q: locale === 'es' 
+                    ? '¿En qué se diferencian Price it, Fix it y Print it?'
+                    : locale === 'de'
+                    ? 'Worin unterscheiden sich Price it, Fix it und Print it?'
+                    : 'What is the difference between Price it, Fix it, and Print it?',
+                  a: locale === 'es'
+                    ? 'Son los tres productos principales de PrintPrice Pro: Price it es el calculador para presupuestar el coste real de producción; Fix it es el motor de preflight para auditar y preparar tu PDF antes de máquina; y Print it es el marketplace para encargar la fabricación física a imprentas homologadas.'
+                    : locale === 'de'
+                    ? 'Dies sind die drei Kernprodukte: Price it kalkuliert Produktionskosten; Fix it führt das PDF-Preflight vor dem Maschinengang durch; Print it ist der Marketplace zur Auftragsvergabe an zertifizierte Druckbetriebe.'
+                    : 'They are the three core products: Price it calculates true production costs; Fix it audits and prepares PDFs before print; Print it is the marketplace connecting jobs to vetted plants.',
                 },
                 {
-                  q: locale === 'es' ? '¿Un autor particular necesita empresa, CIF o facturación B2B?' : locale === 'de' ? 'Benötigen Autoren einen Gewerbenachweis oder USt-IdNr.?' : 'Do individual authors need a company or corporate tax ID?',
-                  a: locale === 'es' ? 'No. El espacio de presupuestación está diseñado para que cualquier persona particular o autor independiente pueda configurar su libro, comprobar sus archivos y conocer los costes sin necesidad de constituir una empresa.' : locale === 'de' ? 'Nein. Privatpersonen und Selfpublisher können Bücher ohne Gewerbeanmeldung konfigurieren, prüfen und kalkulieren.' : 'No. The quoting space is designed so that any individual author can configure their book, validate files, and see costs without corporate registration.',
+                  q: locale === 'es'
+                    ? '¿Cómo se encarga la producción en PRINT IT?'
+                    : locale === 'de'
+                    ? 'Wie wird ein Auftrag in PRINT IT erteilt?'
+                    : 'How do buyers commission jobs in PRINT IT?',
+                  a: locale === 'es'
+                    ? 'El comprador inicia el proyecto en el configurador de Budget (https://budget.printprice.pro/), donde introduce medidas, páginas y sustratos. Al confirmar especificaciones y validar el archivo en Fix it, el motor Matchmaker enruta el pedido a talleres acreditados. Control Plane es exclusivo para la operativa interna del impresor.'
+                    : locale === 'de'
+                    ? 'Kunden konfigurieren ihr Projekt in Budget, prüfen das PDF in Fix it und der Matchmaker vermittelt den Auftrag an Partnerbetriebe. Das Control Plane dient ausschließlich der internen Druckereiverwaltung.'
+                    : 'Buyers configure projects in Budget, validate files via Fix it, and the Matchmaker engine matches the job with accredited plants. Control Plane is exclusively the operational backend for printers.',
                 },
                 {
-                  q: locale === 'es' ? '¿Qué revisa el sistema de Preflight en mi PDF?' : locale === 'de' ? 'Was genau prüft das Preflight-System in meinem PDF?' : 'What does the Preflight engine check in my PDF?',
-                  a: locale === 'es' ? 'Preflight analiza que el documento cumpla las dimensiones de corte deseadas, incluya 3 mm de sangre por lado para evitar filos blancos, mantenga las imágenes con resolución óptima (300 DPI recomendados) y no exceda la cobertura total de tinta (TAC).' : locale === 'de' ? 'Preflight prüft 3 mm Beschnittzugabe, 300 DPI Bildauflösung, CMYK-Farbräume und maximale Farbdeckung (TAC).' : 'Preflight verifies trim dimensions, 3 mm perimeter bleeds to eliminate white borders, 300 DPI image resolution, and total area coverage (TAC).',
+                  q: locale === 'es'
+                    ? '¿Para qué sirve la Maqueta 3D y por qué no es un cuarto producto independiente?'
+                    : locale === 'de'
+                    ? 'Welche Rolle spielt das 3D-Mockup und warum ist es kein viertes Produkt?'
+                    : 'What is the role of the 3D Mockup and why is it not a fourth pillar?',
+                  a: locale === 'es'
+                    ? 'La Maqueta 3D es una herramienta complementaria de visualización. Permite previsualizar en el navegador la cubierta, contraportada y grosor de lomo calculado antes de imprimir, pero se integra dentro del flujo de diseño y preparación.'
+                    : locale === 'de'
+                    ? 'Das 3D-Mockup ist ein ergänzendes Vorschautool. Es visualisiert Umschlag und Buchrücken im Browser, ist aber funktionell in den Vorbereitungsworkflow integriert.'
+                    : 'The 3D Mockup is a complementary visualization utility integrated into the design workflow to preview covers and calculated spine thickness before printing.',
                 },
                 {
-                  q: locale === 'es' ? '¿Cómo se garantiza la confidencialidad de las imprentas en Control Plane?' : locale === 'de' ? 'Wie wird die Vertraulichkeit der Druckereidaten gewährleistet?' : 'How is printhouse data confidentiality guaranteed in Control Plane?',
-                  a: locale === 'es' ? 'PrintPrice OS aplica un aislamiento estricto de tenants (multi-tenant con control de acceso basado en roles RBAC). Tus costes horarios de máquina, mermas de taller, acuerdos con proveedores y márgenes son estrictamente privados.' : locale === 'de' ? 'PrintPrice OS setzt strikte Mandantentrennung (Multi-Tenant mit RBAC) um. Stundensätze, Makulaturen und Margen bleiben absolut vertraulich.' : 'PrintPrice OS enforces strict tenant isolation (multi-tenant with role-based access control RBAC). Machine rates, waste matrices, and margins remain strictly private.',
+                  q: locale === 'es'
+                    ? '¿Quién debe acceder a Control Plane?'
+                    : locale === 'de'
+                    ? 'Wer nutzt das Control Plane?'
+                    : 'Who accesses Control Plane?',
+                  a: locale === 'es'
+                    ? 'Control Plane (https://control.printprice.pro/) es el espacio operativo exclusivo para directores de taller gráfico y proveedores de papel. Permite modelar maquinaria, calibrar costes horarios y recibir órdenes técnicas. No es una entrada para autores ni editoriales compradoras.'
+                    : locale === 'de'
+                    ? 'Control Plane ist das Betriebsportal für Druckereileiter und Papiergroßhändler zur Maschinenmodellierung und Auftragsabwicklung. Es ist kein Kundenportal.'
+                    : 'Control Plane is exclusively the back-office console for printing plant operators and paper mills to profile machinery and process verified tickets. It is not for buyers.',
                 },
                 {
-                  q: locale === 'es' ? '¿Puedo integrar PrintPrice con mi tienda online o sistema ERP?' : locale === 'de' ? 'Kann PrintPrice an Onlineshops oder ERP-Systeme angebunden werden?' : 'Can I integrate PrintPrice with my online shop or ERP system?',
-                  a: locale === 'es' ? 'Sí. Disponemos de especificaciones OpenAPI y webhooks para recibir solicitudes de presupuesto, enviar archivos validados e integrar el motor de cálculo en tus flujos existentes.' : locale === 'de' ? 'Ja. OpenAPI-Spezifikationen und Webhooks ermöglichen die nahtlose Anbindung an bestehende Webshops und ERP-Systeme.' : 'Yes. OpenAPI specs and webhooks allow receiving quote requests, submitting preflighted files, and integrating the calculation engine into existing pipelines.',
+                  q: locale === 'es'
+                    ? '¿Qué es Paper Supplier Hub y en qué se diferencia del marketplace de impresión?'
+                    : locale === 'de'
+                    ? 'Was ist der Paper Supplier Hub im Vergleich zum Druck-Marketplace?'
+                    : 'What is Paper Supplier Hub and how does it differ from the print marketplace?',
+                  a: locale === 'es'
+                    ? 'Paper Supplier Hub es la capacidad federada para que fabricantes y distribuidores de papel publiquen sus catálogos maestros de sustratos y conecten tarifas técnicas con imprentas. No es un marketplace de venta minorista para particulares ni autores.'
+                    : locale === 'de'
+                    ? 'Paper Supplier Hub ist die Föderationsplattform für Papierhersteller zur Bereitstellung technischer Substratkataloge an Druckereien, kein Endkunden-Marketplace.'
+                    : 'Paper Supplier Hub is the substrate catalog federation connecting mill paper rates to printhouses, strictly decoupled from the book printing marketplace.',
                 },
               ].map((faq, index) => (
                 <div
@@ -760,7 +1081,9 @@ export default function Home() {
         </Container>
       </Section>
 
-      {/* CTA Final de Cierre con Slogan Invariable */}
+      {/* 
+        CTA FINAL DE CIERRE CON SLOGAN INVARIABLE
+      */}
       <section
         style={{
           padding: 'clamp(4.5rem, 8vw, 6.5rem) 0',

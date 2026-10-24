@@ -9,6 +9,17 @@ export type Locale = 'es' | 'en' | 'de';
 
 export interface Translations {
   nav: {
+    products: string;
+    priceIt: string;
+    priceItDesc: string;
+    fixIt: string;
+    fixItDesc: string;
+    printIt: string;
+    printItDesc: string;
+    mockup: string;
+    mockupDesc: string;
+    controlPlane: string;
+    controlPlaneDesc: string;
     forWhom: string;
     authors: string;
     authorsDesc: string;
@@ -72,12 +83,17 @@ export interface Translations {
     step3Desc: string;
     step4Title: string;
     step4Desc: string;
+    productsHeading: string;
+    productsSubtitle: string;
     capsHeading: string;
     capsSubtitle: string;
     compHeading: string;
     compSubtitle: string;
     tabAuthors: string;
     tabPrinters: string;
+    tabPriceIt: string;
+    tabFixIt: string;
+    tabPrintIt: string;
     compFeature: string;
     compScope: string;
     faqHeading: string;

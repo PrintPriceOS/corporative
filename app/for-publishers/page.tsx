@@ -203,14 +203,30 @@ export default function ForPublishersPage() {
               </p>
             </div>
 
-            <div className="rounded-card" style={{ padding: '2rem' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
-                🔍
+            <div className="rounded-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', fontWeight: 800, marginBottom: '1.25rem' }}>
+                  🔍
+                </div>
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>
+                  {locale === 'es' ? 'Preflight Editorial: Revisión de Archivos' : locale === 'de' ? 'Verlags-Preflight: Dateiprüfung' : 'Publisher Preflight: File Review'}
+                </h3>
+                <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
+                  {locale === 'es'
+                    ? 'Revisión exhaustiva de archivos y preparación de entregas antes de enviar a imprenta. Detecta discrepancias de lomo, fuentes no incrustadas y perfiles de color en novedades y reediciones.'
+                    : locale === 'de'
+                    ? 'Gründliche Dateiprüfung und Druckdatenaufbereitung vor Drucklegung. Erkennt Rückenbreitenabweichungen, fehlende Schriften und Farbprofile bei Neuerscheinungen und Nachdrucken.'
+                    : 'Thorough file review and delivery prep before sending to print. Catch spine mismatches, unembedded fonts, and color profiles across new titles and reprints.'}
+                </p>
               </div>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>{dict.publishersPage.tool3Title}</h3>
-              <p style={{ fontSize: '0.925rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                {dict.publishersPage.tool3Desc}
-              </p>
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+                <a href="https://preflight.printprice.pro/" className="btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>
+                  {locale === 'es' ? 'Auditar entrega ➔' : locale === 'de' ? 'Druckdaten prüfen ➔' : 'Audit files ➔'}
+                </a>
+                <Link href="/products/preflight" className="btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>
+                  {locale === 'es' ? 'Ver producto' : locale === 'de' ? 'Produkt' : 'Product'}
+                </Link>
+              </div>
             </div>
           </div>
         </Container>

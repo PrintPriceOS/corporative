@@ -13,13 +13,61 @@ export const Header: React.FC = () => {
   const { dict, locale } = useLocale();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProductsOpen, setIsProductsOpen] = useState(false);
   const [isWhoOpen, setIsWhoOpen] = useState(false);
-  const [isResourcesOpen, setIsResourcesOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isStartModalOpen, setIsStartModalOpen] = useState(false);
 
+  const productsDropdownRef = useRef<HTMLDivElement>(null);
   const whoDropdownRef = useRef<HTMLDivElement>(null);
-  const resourcesDropdownRef = useRef<HTMLDivElement>(null);
+
+  const CORE_PRODUCTS = [
+    {
+      title: 'Price it',
+      desc: dict.nav.priceItDesc,
+      badge: '01 / PRICE',
+      href: '/products/budget',
+      icon: '💶',
+    },
+    {
+      title: 'Fix it',
+      desc: dict.nav.fixItDesc,
+      badge: '02 / FIX',
+      href: '/products/preflight',
+      icon: '🛡️',
+    },
+    {
+      title: 'Print it',
+      desc: dict.nav.printItDesc,
+      badge: '03 / PRINT',
+      href: '/products/print',
+      icon: '🏭',
+    },
+  ];
+
+  const COMPLEMENTARY_TOOLS = [
+    {
+      title: dict.nav.mockup,
+      desc: dict.nav.mockupDesc,
+      badge: locale === 'es' ? 'VISOR 3D' : locale === 'de' ? '3D-VORSCHAU' : '3D PREVIEW',
+      href: '/products/mockup',
+      external: false,
+    },
+    {
+      title: dict.nav.controlPlane,
+      desc: dict.nav.controlPlaneDesc,
+      badge: 'OPERATIVA',
+      href: 'https://control.printprice.pro/',
+      external: true,
+    },
+    {
+      title: dict.nav.paperHub,
+      desc: dict.nav.paperHubDesc,
+      badge: 'PAPER HUB',
+      href: 'https://docs.printprice.pro/docs/platform/paper-supplier-hub',
+      external: true,
+    },
+  ];
 
   const STAKEHOLDERS = [
     {
@@ -51,8 +99,8 @@ export const Header: React.FC = () => {
   // Close modals on Escape key
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') {
+      setIsProductsOpen(false);
       setIsWhoOpen(false);
-      setIsResourcesOpen(false);
       setIsLoginModalOpen(false);
       setIsStartModalOpen(false);
       setIsMobileMenuOpen(false);
@@ -78,11 +126,11 @@ export const Header: React.FC = () => {
   // Click outside listener for dropdowns
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
+      if (productsDropdownRef.current && !productsDropdownRef.current.contains(e.target as Node)) {
+        setIsProductsOpen(false);
+      }
       if (whoDropdownRef.current && !whoDropdownRef.current.contains(e.target as Node)) {
         setIsWhoOpen(false);
-      }
-      if (resourcesDropdownRef.current && !resourcesDropdownRef.current.contains(e.target as Node)) {
-        setIsResourcesOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -141,22 +189,183 @@ export const Header: React.FC = () => {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 'clamp(0.5rem, 1vw, 1.35rem)',
+              gap: 'clamp(0.4rem, 0.9vw, 1.25rem)',
               fontSize: '0.875rem',
               fontWeight: 600,
               color: 'var(--text-secondary)',
             }}
             aria-label="Navegación principal"
           >
-            {/* Para quién Dropdown */}
+            {/* 1. PRODUCTOS Dropdown (Qué puedes hacer) */}
+            <div ref={productsDropdownRef} style={{ position: 'relative' }}>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsProductsOpen(!isProductsOpen);
+                  setIsWhoOpen(false);
+                }}
+                onMouseEnter={() => {
+                  setIsProductsOpen(true);
+                  setIsWhoOpen(false);
+                }}
+                aria-expanded={isProductsOpen}
+                aria-haspopup="true"
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: isProductsOpen ? 'var(--text-primary)' : 'inherit',
+                  font: 'inherit',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  padding: '0.4rem 0.25rem',
+                }}
+              >
+                <span>{dict.nav.products}</span>
+                <span
+                  style={{
+                    fontSize: '0.7rem',
+                    transition: 'transform 0.2s ease',
+                    transform: isProductsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                    opacity: 0.6,
+                  }}
+                >
+                  ▼
+                </span>
+              </button>
+
+              {isProductsOpen && (
+                <div
+                  onMouseLeave={() => setIsProductsOpen(false)}
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 0.5rem)',
+                    left: 0,
+                    width: '390px',
+                    background: 'var(--bg-primary)',
+                    borderRadius: 'var(--radius-card)',
+                    border: '1px solid var(--border-color)',
+                    boxShadow: 'var(--shadow-dropdown)',
+                    padding: '0.85rem',
+                    zIndex: 1600,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.35rem',
+                  }}
+                >
+                  <div style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.05em', padding: '0.25rem 0.5rem', textTransform: 'uppercase' }}>
+                    PRICE IT. FIX IT. PRINT IT.
+                  </div>
+
+                  {CORE_PRODUCTS.map((prod) => (
+                    <Link
+                      key={prod.title}
+                      href={prod.href}
+                      onClick={() => setIsProductsOpen(false)}
+                      style={{
+                        padding: '0.75rem 0.85rem',
+                        borderRadius: 'var(--radius-input)',
+                        textDecoration: 'none',
+                        color: 'var(--text-primary)',
+                        display: 'flex',
+                        gap: '0.85rem',
+                        alignItems: 'flex-start',
+                        transition: 'background-color 0.15s ease',
+                      }}
+                      className="nav-dropdown-item"
+                    >
+                      <span style={{ fontSize: '1.25rem', lineHeight: 1, marginTop: '0.1rem' }}>{prod.icon}</span>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.15rem' }}>
+                          <span style={{ fontWeight: 800, fontSize: '0.925rem' }}>{prod.title}</span>
+                          <span
+                            style={{
+                              fontSize: '0.625rem',
+                              fontWeight: 800,
+                              padding: '0.125rem 0.45rem',
+                              borderRadius: 'var(--radius-pill)',
+                              background: 'var(--accent-container)',
+                              color: 'var(--accent-primary)',
+                            }}
+                          >
+                            {prod.badge}
+                          </span>
+                        </div>
+                        <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>
+                          {prod.desc}
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+
+                  <div style={{ margin: '0.35rem 0', borderTop: '1px solid var(--border-color)' }} />
+
+                  <div style={{ fontSize: '0.675rem', fontWeight: 700, color: 'var(--text-muted)', padding: '0.2rem 0.5rem', textTransform: 'uppercase' }}>
+                    {locale === 'es' ? 'Capacidades de soporte' : locale === 'de' ? 'Ergänzende Module' : 'Supporting capabilities'}
+                  </div>
+
+                  {COMPLEMENTARY_TOOLS.map((tool) => (
+                    tool.external ? (
+                      <a
+                        key={tool.title}
+                        href={tool.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setIsProductsOpen(false)}
+                        style={{
+                          padding: '0.5rem 0.85rem',
+                          borderRadius: 'var(--radius-input)',
+                          textDecoration: 'none',
+                          color: 'var(--text-primary)',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          fontSize: '0.825rem',
+                        }}
+                        className="nav-dropdown-item"
+                      >
+                        <span style={{ fontWeight: 600 }}>{tool.title} ↗</span>
+                        <span style={{ fontSize: '0.625rem', color: 'var(--text-muted)' }}>{tool.badge}</span>
+                      </a>
+                    ) : (
+                      <Link
+                        key={tool.title}
+                        href={tool.href}
+                        onClick={() => setIsProductsOpen(false)}
+                        style={{
+                          padding: '0.5rem 0.85rem',
+                          borderRadius: 'var(--radius-input)',
+                          textDecoration: 'none',
+                          color: 'var(--text-primary)',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          fontSize: '0.825rem',
+                        }}
+                        className="nav-dropdown-item"
+                      >
+                        <span style={{ fontWeight: 600 }}>{tool.title}</span>
+                        <span style={{ fontSize: '0.625rem', color: 'var(--text-muted)' }}>{tool.badge}</span>
+                      </Link>
+                    )
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* 2. PÚBLICOS Dropdown (Para quién) */}
             <div ref={whoDropdownRef} style={{ position: 'relative' }}>
               <button
                 type="button"
                 onClick={() => {
                   setIsWhoOpen(!isWhoOpen);
-                  setIsResourcesOpen(false);
+                  setIsProductsOpen(false);
                 }}
-                onMouseEnter={() => setIsWhoOpen(true)}
+                onMouseEnter={() => {
+                  setIsWhoOpen(true);
+                  setIsProductsOpen(false);
+                }}
                 aria-expanded={isWhoOpen}
                 aria-haspopup="true"
                 style={{
@@ -203,6 +412,9 @@ export const Header: React.FC = () => {
                     gap: '0.35rem',
                   }}
                 >
+                  <div style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.05em', padding: '0.25rem 0.5rem', textTransform: 'uppercase' }}>
+                    {dict.nav.forWhom}
+                  </div>
                   {STAKEHOLDERS.map((stk) => (
                     <Link
                       key={stk.title}
@@ -244,135 +456,19 @@ export const Header: React.FC = () => {
               )}
             </div>
 
-            <Link href="/#how-it-works" style={{ color: 'inherit', textDecoration: 'none' }}>
-              {dict.nav.howItWorks}
-            </Link>
-
+            {/* Direct Links */}
             <Link href="/#comparativas" style={{ color: 'inherit', textDecoration: 'none' }}>
               {dict.nav.comparisons}
             </Link>
 
-            {/* Recursos Dropdown */}
-            <div ref={resourcesDropdownRef} style={{ position: 'relative' }}>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsResourcesOpen(!isResourcesOpen);
-                  setIsWhoOpen(false);
-                }}
-                onMouseEnter={() => setIsResourcesOpen(true)}
-                aria-expanded={isResourcesOpen}
-                aria-haspopup="true"
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: isResourcesOpen ? 'var(--text-primary)' : 'inherit',
-                  font: 'inherit',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.35rem',
-                  padding: '0.4rem 0.25rem',
-                }}
-              >
-                <span>{dict.nav.resources}</span>
-                <span
-                  style={{
-                    fontSize: '0.7rem',
-                    transition: 'transform 0.2s ease',
-                    transform: isResourcesOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                    opacity: 0.6,
-                  }}
-                >
-                  ▼
-                </span>
-              </button>
-
-              {isResourcesOpen && (
-                <div
-                  onMouseLeave={() => setIsResourcesOpen(false)}
-                  style={{
-                    position: 'absolute',
-                    top: 'calc(100% + 0.5rem)',
-                    left: 0,
-                    width: '320px',
-                    background: 'var(--bg-primary)',
-                    borderRadius: 'var(--radius-card)',
-                    border: '1px solid var(--border-color)',
-                    boxShadow: 'var(--shadow-dropdown)',
-                    padding: '0.75rem',
-                    zIndex: 1600,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '0.35rem',
-                  }}
-                >
-                  <a
-                    href="https://docs.printprice.pro/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setIsResourcesOpen(false)}
-                    style={{
-                      padding: '0.75rem 1rem',
-                      borderRadius: 'var(--radius-input)',
-                      textDecoration: 'none',
-                      color: 'var(--text-primary)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '0.2rem',
-                    }}
-                    className="nav-dropdown-item"
-                  >
-                    <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>{dict.nav.docs} ↗</span>
-                    <span style={{ fontSize: '0.775rem', color: 'var(--text-secondary)' }}>
-                      {dict.nav.docsDesc}
-                    </span>
-                  </a>
-
-                  <Link
-                    href="/developers"
-                    onClick={() => setIsResourcesOpen(false)}
-                    style={{
-                      padding: '0.75rem 1rem',
-                      borderRadius: 'var(--radius-input)',
-                      textDecoration: 'none',
-                      color: 'var(--text-primary)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '0.2rem',
-                    }}
-                    className="nav-dropdown-item"
-                  >
-                    <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>{dict.nav.developers}</span>
-                    <span style={{ fontSize: '0.775rem', color: 'var(--text-secondary)' }}>
-                      {dict.nav.developersDesc}
-                    </span>
-                  </Link>
-
-                  <a
-                    href="https://docs.printprice.pro/docs/platform/paper-supplier-hub"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setIsResourcesOpen(false)}
-                    style={{
-                      padding: '0.75rem 1rem',
-                      borderRadius: 'var(--radius-input)',
-                      textDecoration: 'none',
-                      color: 'var(--text-primary)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '0.2rem',
-                    }}
-                    className="nav-dropdown-item"
-                  >
-                    <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>{dict.nav.paperHub} ↗</span>
-                    <span style={{ fontSize: '0.775rem', color: 'var(--text-secondary)' }}>
-                      {dict.nav.paperHubDesc}
-                    </span>
-                  </a>
-                </div>
-              )}
-            </div>
+            <a
+              href="https://docs.printprice.pro/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'inherit', textDecoration: 'none' }}
+            >
+              {dict.nav.docs} ↗
+            </a>
 
             <Link href="/contact" style={{ color: 'inherit', textDecoration: 'none' }}>
               {dict.nav.contact}
@@ -479,11 +575,46 @@ export const Header: React.FC = () => {
             <LanguageSelector />
           </div>
 
+          {/* Mobile Navigation Dimension 1: PRODUCTOS */}
           <div>
-            <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.05em', marginBottom: '1rem', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.05em', marginBottom: '0.85rem', textTransform: 'uppercase' }}>
+              {dict.nav.products} — PRICE IT. FIX IT. PRINT IT.
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+              {CORE_PRODUCTS.map((prod) => (
+                <Link
+                  key={prod.title}
+                  href={prod.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  style={{
+                    padding: '0.75rem 1rem',
+                    background: 'var(--bg-secondary)',
+                    borderRadius: 'var(--radius-input)',
+                    textDecoration: 'none',
+                    color: 'var(--text-primary)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.2rem',
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontWeight: 800, fontSize: '0.95rem' }}>{prod.icon} {prod.title}</span>
+                    <span style={{ fontSize: '0.625rem', background: 'var(--accent-container)', color: 'var(--accent-primary)', padding: '0.1rem 0.4rem', borderRadius: 'var(--radius-pill)', fontWeight: 800 }}>
+                      {prod.badge}
+                    </span>
+                  </div>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{prod.desc}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Mobile Navigation Dimension 2: PÚBLICOS */}
+          <div>
+            <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.05em', marginBottom: '0.85rem', textTransform: 'uppercase' }}>
               {dict.nav.forWhom}
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
               {STAKEHOLDERS.map((stk) => (
                 <Link
                   key={stk.title}
@@ -497,11 +628,11 @@ export const Header: React.FC = () => {
                     color: 'var(--text-primary)',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '0.25rem',
+                    gap: '0.2rem',
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontWeight: 700, fontSize: '1rem' }}>{stk.title}</span>
+                    <span style={{ fontWeight: 700, fontSize: '0.95rem' }}>{stk.title}</span>
                     <span style={{ fontSize: '0.65rem', background: 'var(--accent-container)', color: 'var(--accent-primary)', padding: '0.1rem 0.4rem', borderRadius: 'var(--radius-pill)' }}>
                       {stk.badge}
                     </span>
@@ -512,15 +643,19 @@ export const Header: React.FC = () => {
             </div>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '1.05rem', fontWeight: 600 }}>
-            <Link href="/#how-it-works" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
-              {dict.nav.howItWorks}
+          {/* Complementary & Standard Links */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', fontSize: '1rem', fontWeight: 600, borderTop: '1px solid var(--border-color)', paddingTop: '1.25rem' }}>
+            <Link href="/products/mockup" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
+              {dict.nav.mockup}
             </Link>
             <Link href="/#comparativas" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
               {dict.nav.comparisons}
             </Link>
             <a href="https://docs.printprice.pro/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
               {dict.nav.docs} ↗
+            </a>
+            <a href="https://control.printprice.pro/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
+              Control Plane (Imprentas) ↗
             </a>
             <Link href="/developers" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
               {dict.nav.developers}
