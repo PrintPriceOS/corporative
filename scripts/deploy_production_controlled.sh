@@ -111,6 +111,118 @@ validate_candidate_sha() {
 }
 
 # ------------------------------------------------------------------------------
+# RESOLUCIÓN ROBUSTA DE DOC_ROOT DESDE CONFIGURACIÓN DE NGINX
+# Identifica bloque server del dominio, excluye locations y roots ajenos,
+# soporta rutas entre comillas/sin comillas y detecta ausencia o ambigüedad.
+# ------------------------------------------------------------------------------
+resolve_nginx_doc_root() {
+    local conf_path="$1"
+    local target_domain="$2"
+
+    if [ ! -f "${conf_path}" ]; then
+        echo "ERROR: Archivo de configuración de Nginx no encontrado en '${conf_path}'." >&2
+        return 1
+    fi
+
+    local resolved_root
+    if ! resolved_root="$("${PYTHON_BIN}" -c '
+import sys, re
+
+conf_file = sys.argv[1]
+target_domain = sys.argv[2].strip()
+
+try:
+    with open(conf_file, "r", encoding="utf-8", errors="replace") as f:
+        content = f.read()
+except Exception as e:
+    sys.stderr.write(f"ERROR: No se pudo leer {conf_file}: {e}\n")
+    sys.exit(1)
+
+# Eliminar comentarios de linea
+lines = []
+for line in content.splitlines():
+    line = re.sub(r"#.*$", "", line).strip()
+    if line:
+        lines.append(line)
+text = " ".join(lines)
+
+# Tokenizar directivas, bloques y delimitadores
+tokens = re.findall(r"(\{|\}|;|[^\s\{\};]+)", text)
+
+depth = 0
+server_depth = -1
+is_target_server = False
+current_server_roots = []
+server_roots = []
+
+idx = 0
+while idx < len(tokens):
+    tok = tokens[idx]
+    if tok == "{":
+        depth += 1
+        idx += 1
+    elif tok == "}":
+        if depth == server_depth:
+            if is_target_server and current_server_roots:
+                server_roots.extend(current_server_roots)
+            server_depth = -1
+            is_target_server = False
+            current_server_roots = []
+        depth -= 1
+        idx += 1
+    elif tok == "server" and idx + 1 < len(tokens) and tokens[idx+1] == "{":
+        server_depth = depth + 1
+        is_target_server = False
+        current_server_roots = []
+        idx += 1
+    elif server_depth != -1 and depth == server_depth:
+        # Nivel directo de directivas de bloque server (excluye bloques anidados como location)
+        if tok == "server_name":
+            idx += 1
+            while idx < len(tokens) and tokens[idx] != ";":
+                s_name = tokens[idx].strip("\"\x27")
+                if s_name == target_domain or s_name == f"www.{target_domain}" or s_name == f"ipv4.{target_domain}":
+                    is_target_server = True
+                idx += 1
+            if idx < len(tokens) and tokens[idx] == ";":
+                idx += 1
+        elif tok == "root":
+            idx += 1
+            path_tokens = []
+            while idx < len(tokens) and tokens[idx] != ";":
+                path_tokens.append(tokens[idx])
+                idx += 1
+            if path_tokens:
+                raw_path = " ".join(path_tokens).strip("\"\x27")
+                current_server_roots.append(raw_path)
+            if idx < len(tokens) and tokens[idx] == ";":
+                idx += 1
+        else:
+            idx += 1
+    else:
+        # Dentro de locations u otros bloques anidados: no registrar roots de nivel server
+        idx += 1
+
+unique_roots = sorted(list(set(server_roots)))
+if not unique_roots:
+    sys.stderr.write(f"ERROR: No se encontro directiva root valida a nivel de servidor para {target_domain} en {conf_file}.\n")
+    sys.exit(1)
+
+if len(unique_roots) > 1:
+    sys.stderr.write(f"ERROR: Ambiguedad en directiva root para {target_domain}: multiples raices distintas encontradas ({unique_roots}).\n")
+    sys.exit(1)
+
+print(unique_roots[0])
+sys.exit(0)
+' "${conf_path}" "${target_domain}")"; then
+        return 1
+    fi
+
+    echo "${resolved_root}"
+    return 0
+}
+
+# ------------------------------------------------------------------------------
 # VERIFICACIÓN DE IDENTIDAD DEL PROCESO SUPERVISOR
 # Acredita dominio -> proceso -> aplicación -> ruta (sin conteos globales)
 # ------------------------------------------------------------------------------
@@ -222,7 +334,7 @@ except Exception:
 # ------------------------------------------------------------------------------
 export SWAP_STATE="INITIAL"
 ROLLBACK_EXECUTED=false
-ORIGINAL_EXIT_CODE=0
+ORIGINAL_EXIT_CODE=""
 
 # Registro de la identidad del build previo
 # Función común de verificación de recuperación del servicio (en disco y en memoria viva)
@@ -402,9 +514,27 @@ exit_trap() {
         echo "La restauración de producción falló. Se requiere intervención manual."
         echo "========================================================================"
         exit 2
-    elif [ "${exit_code}" -ne 0 ] && [ "${SWAP_STATE}" != "ROLLBACK_DONE" ]; then
-        execute_rollback "Salida anormal con código ${exit_code}"
-        exit "${ORIGINAL_EXIT_CODE:-1}"
+    fi
+
+    local final_code=0
+    if [ -n "${ORIGINAL_EXIT_CODE:-}" ] && [ "${ORIGINAL_EXIT_CODE}" -ne 0 ]; then
+        final_code="${ORIGINAL_EXIT_CODE}"
+    elif [ "${exit_code}" -ne 0 ]; then
+        final_code="${exit_code}"
+    fi
+
+    if [ "${final_code}" -ne 0 ]; then
+        if [ "${SWAP_STATE}" != "ROLLBACK_DONE" ] && [ "${SWAP_STATE}" != "ROLLBACK_FAILED" ]; then
+            execute_rollback "Salida anormal con código ${final_code}"
+        fi
+        if [ "${SWAP_STATE}" = "ROLLBACK_FAILED" ]; then
+            echo "========================================================================"
+            echo "[ALERTA CRÍTICA: DESASTRE EN RESTAURACIÓN]"
+            echo "La restauración de producción falló. Se requiere intervención manual."
+            echo "========================================================================"
+            exit 2
+        fi
+        exit "${final_code}"
     fi
 }
 
@@ -482,10 +612,14 @@ run_deployment() {
         exit 1
     fi
 
-    # Extraer directiva root exclusiva del bloque del dominio
-    DOC_ROOT="$(grep -E '^\s*root\s+' "${DOMAIN_NGINX_CONF}" | head -n 1 | awk '{print $2}' | tr -d ';')"
-    if [ -z "${DOC_ROOT}" ] || [ ! -d "${DOC_ROOT}" ]; then
-        echo "ERROR CRÍTICO: No se pudo resolver DOC_ROOT desde ${DOMAIN_NGINX_CONF}. ABORTANDO." >&2
+    # Extraer directiva root exclusiva del bloque del dominio (sin locations, soporta comillas, detecta ambigüedad)
+    if ! DOC_ROOT="$(resolve_nginx_doc_root "${DOMAIN_NGINX_CONF}" "${DOMAIN}")"; then
+        echo "ERROR CRÍTICO: No se pudo resolver DOC_ROOT de forma unívoca desde ${DOMAIN_NGINX_CONF}. ABORTANDO." >&2
+        exit 1
+    fi
+
+    if [ ! -d "${DOC_ROOT}" ]; then
+        echo "ERROR CRÍTICO: El directorio DOC_ROOT resuelto (${DOC_ROOT}) no existe en el sistema de archivos. ABORTANDO." >&2
         exit 1
     fi
     echo "[OK] DOC_ROOT acreditado: ${DOC_ROOT}"

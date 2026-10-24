@@ -73,11 +73,13 @@ For governed, zero-downtime production deployment with verified state rollback a
      - *Origin local error or live process failure* => `ORIGIN_FAILED` (triggers immediate rollback, exit 1).
      - Eliminates `OR public_content_ok != true` that falsely declared cache invalidation without evidence.
      - Avoids false cache alarms on unchanged pages by comparing public ETag with current origin response for the same route.
-  5. **State Machine Rollback & Contingency Risk**: Rollback across `INITIAL`, `LIVE_MOVED`, `STAGING_MOVED`, `VERIFYING`, `ORIGIN_FAILED`, `PUBLIC_FAILED`. Rollback is not unconditionally guaranteed: severe disk corruption or unrecoverable legacy process state can result in `ROLLBACK_FAILED` (exit 2), requiring manual operator intervention.
+   5. **State Machine Rollback & Contingency Risk**: Rollback across `INITIAL`, `LIVE_MOVED`, `STAGING_MOVED`, `VERIFYING`, `ORIGIN_FAILED`, `PUBLIC_FAILED`. Rollback is not unconditionally guaranteed: severe disk corruption or unrecoverable legacy process state can result in `ROLLBACK_FAILED` (exit 2), requiring manual operator intervention.
+   6. **Robust Nginx DOC_ROOT Resolution**: Tokenizing parser identifying target domain server block, supporting single/double quotes and unquoted paths, strictly excluding locations such as `/.well-known`, avoiding first-match file pollution, aborting on ambiguity (>1 distinct root) or missing roots, and validating exact match with `APP_ROOT`.
+   7. **Strict Non-Zero Exit Trap Preservation**: Fixed EXIT trap so `ORIGINAL_EXIT_CODE` initialized to 0 never masks failures, ensuring explicit `exit 1` in `INITIAL` exits with code 1, while preserving `exit 2` for `ROLLBACK_FAILED` and `130`/`143` for signals.
 
 ### Simulation Test Suite
 - **Path**: `scripts/tests/test_runbook_simulation.sh`
-- **Coverage**: 29 end-to-end tests exercising real production script functions in an isolated sandbox with controllable test doubles:
+- **Coverage**: 37 end-to-end tests exercising real production script functions in an isolated sandbox with controllable test doubles:
   - Happy path `ACTIVE` (exit 0)
   - Stale cache detection `PENDING_CACHE_INVALIDATION` (exit 0)
   - Origin 500 failure rollback (`ORIGIN_FAILED`, exit 1)
@@ -91,6 +93,14 @@ For governed, zero-downtime production deployment with verified state rollback a
   - **Regression 2**: Unchanged page retaining identical ETag between origin and public proxy classifies as `ACTIVE`
   - **Regression 3**: Candidate reload and rollback receive and serve respective `RELEASE_ID` via PM2 environment and boot introspection
   - **Regression 4**: Built candidate without `server.js` strictly aborts in Phase 3 before Phase 4 swap (zero alteration of live production)
+  - **Regression 5**: Nginx domain root enclosed in double/single quotes resolves cleanly
+  - **Regression 6**: Nginx domain root unquoted resolves cleanly
+  - **Regression 7**: Nginx `location ^~ /.well-known/...` with foreign root placed before domain root is strictly excluded
+  - **Regression 8**: Nginx configuration with ambiguous domain roots strictly aborts before filesystem alterations
+  - **Regression 9**: Nginx configuration without valid domain root strictly aborts
+  - **Regression 10**: Subprocess running real traps: explicit `exit 1` in `INITIAL` returns exit code 1 and preserves application intact
+  - **Regression 11**: Subprocess running real traps: `ROLLBACK_FAILED` disaster returns exit code 2
+  - **Regression 12**: Subprocess running real traps: `SIGINT` and `SIGTERM` return 130 and 143 respectively
 - **Execution**:
   ```bash
   bash scripts/tests/test_runbook_simulation.sh

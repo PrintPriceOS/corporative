@@ -296,7 +296,16 @@ setup_dummy_env() {
     mkdir -p "${TEST_SANDBOX}/conf"
     export DOMAIN_NGINX_CONF="${TEST_SANDBOX}/conf/nginx.conf"
     export VHOST_CUSTOM_CONF="${TEST_SANDBOX}/conf/vhost_nginx.conf"
-    echo "root ${APP_ROOT};" > "${DOMAIN_NGINX_CONF}"
+    cat << EOF > "${DOMAIN_NGINX_CONF}"
+server {
+    listen 443 ssl;
+    server_name "${DOMAIN}" "www.${DOMAIN}";
+    location ^~ /.well-known/acme-challenge/ {
+        root /var/www/vhosts/default/htdocs;
+    }
+    root "${APP_ROOT}";
+}
+EOF
     echo "proxy_pass http://localhost:${EXPECTED_PORT};" > "${VHOST_CUSTOM_CONF}"
 
     SWAP_STATE="INITIAL"
@@ -853,6 +862,215 @@ else
     exit 1
 fi
 
+# ------------------------------------------------------------------------------
+# TEST 30: resolve_nginx_doc_root: root de dominio entre comillas
+# ------------------------------------------------------------------------------
+echo -n "Test 30: resolve_nginx_doc_root con root entre comillas... "
+CONF_QUOTED="${TEST_SANDBOX}/conf/nginx_quoted.conf"
+cat << EOF > "${CONF_QUOTED}"
+server {
+    listen 443 ssl;
+    server_name "${DOMAIN}";
+    root "/var/www/vhosts/printprice.pro/httpdocs";
+}
+EOF
+
+RESOLVED_30="$(resolve_nginx_doc_root "${CONF_QUOTED}" "${DOMAIN}")"
+if [ "${RESOLVED_30}" = "/var/www/vhosts/printprice.pro/httpdocs" ]; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: obtenido '${RESOLVED_30}']"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 31: resolve_nginx_doc_root: root de dominio sin comillas
+# ------------------------------------------------------------------------------
+echo -n "Test 31: resolve_nginx_doc_root con root sin comillas... "
+CONF_UNQUOTED="${TEST_SANDBOX}/conf/nginx_unquoted.conf"
+cat << EOF > "${CONF_UNQUOTED}"
+server {
+    listen 80;
+    server_name ${DOMAIN} www.${DOMAIN};
+    root /var/www/vhosts/printprice.pro/httpdocs;
+}
+EOF
+
+RESOLVED_31="$(resolve_nginx_doc_root "${CONF_UNQUOTED}" "${DOMAIN}")"
+if [ "${RESOLVED_31}" = "/var/www/vhosts/printprice.pro/httpdocs" ]; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: obtenido '${RESOLVED_31}']"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 32: resolve_nginx_doc_root: root de /.well-known antes del root de dominio
+# ------------------------------------------------------------------------------
+echo -n "Test 32: resolve_nginx_doc_root con /.well-known antes de root de dominio... "
+CONF_WELLKNOWN="${TEST_SANDBOX}/conf/nginx_wellknown.conf"
+cat << EOF > "${CONF_WELLKNOWN}"
+server {
+    listen 80;
+    server_name default.vhost;
+    root /var/www/default/htdocs;
+}
+
+server {
+    listen 443 ssl;
+    server_name "${DOMAIN}" "www.${DOMAIN}";
+    location ^~ /.well-known/acme-challenge/ {
+        root /var/www/vhosts/default/htdocs;
+    }
+    root "/var/www/vhosts/printprice.pro/httpdocs";
+}
+EOF
+
+RESOLVED_32="$(resolve_nginx_doc_root "${CONF_WELLKNOWN}" "${DOMAIN}")"
+if [ "${RESOLVED_32}" = "/var/www/vhosts/printprice.pro/httpdocs" ]; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: obtenido '${RESOLVED_32}']"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 33: resolve_nginx_doc_root: Configuración ambigua aborta con error
+# ------------------------------------------------------------------------------
+echo -n "Test 33: resolve_nginx_doc_root configuración ambigua aborta... "
+CONF_AMBIGUOUS="${TEST_SANDBOX}/conf/nginx_ambiguous.conf"
+cat << EOF > "${CONF_AMBIGUOUS}"
+server {
+    server_name ${DOMAIN};
+    root /var/www/vhosts/printprice.pro/httpdocs;
+}
+server {
+    server_name ${DOMAIN};
+    root /var/www/vhosts/other/path;
+}
+EOF
+
+RESOLVE_33_RET=0
+RESOLVED_33="$(resolve_nginx_doc_root "${CONF_AMBIGUOUS}" "${DOMAIN}" 2>"${TEST_SANDBOX}/test33.log")" || RESOLVE_33_RET=$?
+if [ "${RESOLVE_33_RET}" -ne 0 ] && grep -q "Ambiguedad en directiva root" "${TEST_SANDBOX}/test33.log"; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: ret=${RESOLVE_33_RET}]"
+    cat "${TEST_SANDBOX}/test33.log"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 34: resolve_nginx_doc_root: Sin root válido para el dominio aborta
+# ------------------------------------------------------------------------------
+echo -n "Test 34: resolve_nginx_doc_root sin root válido aborta... "
+CONF_NO_ROOT="${TEST_SANDBOX}/conf/nginx_no_root.conf"
+cat << EOF > "${CONF_NO_ROOT}"
+server {
+    server_name otherdomain.com;
+    root /var/www/vhosts/other/httpdocs;
+}
+server {
+    server_name ${DOMAIN};
+    location / {
+        proxy_pass http://localhost:3010;
+    }
+}
+EOF
+
+RESOLVE_34_RET=0
+RESOLVED_34="$(resolve_nginx_doc_root "${CONF_NO_ROOT}" "${DOMAIN}" 2>"${TEST_SANDBOX}/test34.log")" || RESOLVE_34_RET=$?
+if [ "${RESOLVE_34_RET}" -ne 0 ] && grep -q "No se encontro directiva root valida" "${TEST_SANDBOX}/test34.log"; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: ret=${RESOLVE_34_RET}]"
+    cat "${TEST_SANDBOX}/test34.log"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 35: Subproceso con trampas reales: exit 1 en INITIAL devuelve 1 e intacta app
+# ------------------------------------------------------------------------------
+echo -n "Test 35: Subproceso con trampas reales: exit 1 en INITIAL devuelve 1... "
+setup_dummy_env
+
+SUB_35_RET=0
+bash -c '
+    source "'"${TARGET_SCRIPT}"'"
+    ORIGINAL_EXIT_CODE=0
+    SWAP_STATE="INITIAL"
+    trap '\''exit_trap $?'\'' EXIT
+    exit 1
+' > "${TEST_SANDBOX}/test35.log" 2>&1 || SUB_35_RET=$?
+
+if [ "${SUB_35_RET}" -eq 1 ] && \
+   grep -q "Producción conservada intacta" "${TEST_SANDBOX}/test35.log" && \
+   [ "$(cat "${APP_ROOT}/.next/BUILD_ID")" = "OLD_BUILD_ID_111" ]; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: ret=${SUB_35_RET}]"
+    cat "${TEST_SANDBOX}/test35.log"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 36: Subproceso con trampas reales: ROLLBACK_FAILED devuelve 2
+# ------------------------------------------------------------------------------
+echo -n "Test 36: Subproceso con trampas reales: ROLLBACK_FAILED devuelve 2... "
+setup_dummy_env
+
+SUB_36_RET=0
+bash -c '
+    source "'"${TARGET_SCRIPT}"'"
+    SWAP_STATE="ROLLBACK_FAILED"
+    trap '\''exit_trap $?'\'' EXIT
+    exit 1
+' > "${TEST_SANDBOX}/test36.log" 2>&1 || SUB_36_RET=$?
+
+if [ "${SUB_36_RET}" -eq 2 ] && grep -q "DESASTRE EN RESTAURACIÓN" "${TEST_SANDBOX}/test36.log"; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: ret=${SUB_36_RET}]"
+    cat "${TEST_SANDBOX}/test36.log"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 37: Subproceso con trampas reales: Señales SIGINT/SIGTERM devuelven 130/143
+# ------------------------------------------------------------------------------
+echo -n "Test 37: Subproceso con trampas reales: Señales SIGINT/SIGTERM -> 130/143... "
+setup_dummy_env
+
+SUB_SIGINT_RET=0
+bash -c '
+    source "'"${TARGET_SCRIPT}"'"
+    ORIGINAL_EXIT_CODE=0
+    SWAP_STATE="INITIAL"
+    trap '\''signal_trap SIGINT $LINENO'\'' INT
+    trap '\''exit_trap $?'\'' EXIT
+    kill -INT $$
+' > "${TEST_SANDBOX}/test37_int.log" 2>&1 || SUB_SIGINT_RET=$?
+
+SUB_SIGTERM_RET=0
+bash -c '
+    source "'"${TARGET_SCRIPT}"'"
+    ORIGINAL_EXIT_CODE=0
+    SWAP_STATE="INITIAL"
+    trap '\''signal_trap SIGTERM $LINENO'\'' TERM
+    trap '\''exit_trap $?'\'' EXIT
+    kill -TERM $$
+' > "${TEST_SANDBOX}/test37_term.log" 2>&1 || SUB_SIGTERM_RET=$?
+
+if [ "${SUB_SIGINT_RET}" -eq 130 ] && [ "${SUB_SIGTERM_RET}" -eq 143 ] && \
+   [ "$(cat "${APP_ROOT}/.next/BUILD_ID")" = "OLD_BUILD_ID_111" ]; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: sigint=${SUB_SIGINT_RET}, sigterm=${SUB_SIGTERM_RET}]"
+    cat "${TEST_SANDBOX}/test37_int.log"
+    cat "${TEST_SANDBOX}/test37_term.log"
+    exit 1
+fi
+
 echo "========================================================================"
-echo "TODAS LAS 29 PRUEBAS DE RESILIENCIA Y RECUPERACIÓN COMPLETADAS CON ÉXITO."
+echo "TODAS LAS 37 PRUEBAS DE RESILIENCIA Y RECUPERACIÓN COMPLETADAS CON ÉXITO."
 echo "========================================================================"
