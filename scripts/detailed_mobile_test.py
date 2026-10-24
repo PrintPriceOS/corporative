@@ -104,8 +104,10 @@ async def run():
                         
                         return problems;
                     }''', w)
-                    
-                    shot_name = f"C:/Users/KIKE/.gemini/antigravity-ide/brain/0727c9fd-40fa-4e14-9d13-e1a204beb253/shot_{w}_{lang}{path.replace('/', '_') or '_home'}.png"
+                    import tempfile
+                    artifact_dir = os.environ.get("ARTIFACT_DIR", os.path.join(tempfile.gettempdir(), "printprice_audit"))
+                    os.makedirs(artifact_dir, exist_ok=True)
+                    shot_name = os.path.join(artifact_dir, f"shot_{w}_{lang}{path.replace('/', '_') or '_home'}.png")
                     await page.screenshot(path=shot_name, full_page=False)
                     
                     if analysis:

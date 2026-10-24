@@ -14,7 +14,7 @@ export default function BudgetPage() {
   const texts = {
     es: {
       heroLabel: 'MOTOR DE PRESUPUESTO / PRICE IT',
-      heroTitle: 'CALCULA COSTES REALES DE IMPRESIÓN EN SEGUNDOS',
+      heroTitle: 'CALCULA PRESUPUESTOS DE IMPRESIÓN EN SEGUNDOS',
       heroSlogan: ["PRICE IT.", "FIX IT.", "PRINT IT."],
       heroSub: 'Obtén presupuestos técnicos de libros y publicaciones al instante. Costes de fabricación calculados en servidor a partir de especificaciones de pliegos, gramajes y matrices de taller.',
       heroCtaPrimary: 'Calcular mi presupuesto de libro ➔',
@@ -46,7 +46,7 @@ export default function BudgetPage() {
     },
     en: {
       heroLabel: 'PRICING ENGINE / PRICE IT',
-      heroTitle: 'CALCULATE REAL PRINT COSTS IN SECONDS',
+      heroTitle: 'CALCULATE PRINT PRODUCTION ESTIMATES IN SECONDS',
       heroSlogan: ["PRICE IT.", "FIX IT.", "PRINT IT."],
       heroSub: 'Get instant manufacturing budgets for books and print jobs. Server-side production pricing resolved against technical specs and real shop matrices.',
       heroCtaPrimary: 'Calculate my book budget ➔',
@@ -73,12 +73,12 @@ export default function BudgetPage() {
       ],
       ctaSlogan: 'PRICE IT PRICING ENGINE',
       ctaTitle: 'Start your first cost calculation',
-      ctaDesc: 'Determine your print costs with technical exactness in seconds. Without unnecessary paperwork.',
+      ctaDesc: 'Determine your print production estimates with technical precision in seconds. Without unnecessary paperwork.',
       ctaBtn: 'Calculate cost now ➔'
     },
     de: {
       heroLabel: 'KALKULATIONSMOTOR / PRICE IT',
-      heroTitle: 'ECHTE DRUCKKOSTEN IN SEKUNDEN BERECHNEN',
+      heroTitle: 'DRUCKANGEBOTE IN SEKUNDEN BERECHNEN',
       heroSlogan: ["PRICE IT.", "FIX IT.", "PRINT IT."],
       heroSub: 'Erhalten Sie sofortige Fertigungsangebote für Bücher und Druckwerke. Serverseitige Preiskalkulation nach verifizierten Druckereimatrizen.',
       heroCtaPrimary: 'Buchangebot berechnen ➔',

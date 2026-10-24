@@ -19,10 +19,10 @@ export default function ProductsHubPage() {
       slogan: 'PRICE IT.',
       badge: locale === 'es' ? 'CALCULACIÓN DETERMINISTA' : locale === 'de' ? 'DETERMINISTISCHE KALKULATION' : 'DETERMINISTIC PRICING',
       description: locale === 'es'
-        ? 'Calcula costes reales de imprenta al instante para libros, catálogos y packaging. Conoce el punto de cruce exacto entre digital y offset sin intermediarios.'
+        ? 'Presupuestos de producción en servidor para libros y catálogos. Identifica la transición tecnológica más eficiente entre digital y offset sin intermediarios.'
         : locale === 'de'
-        ? 'Berechnen Sie sofort reale Druckkosten für Bücher und Kataloge. Finden Sie den exakten Break-Even zwischen Digital- und Offsetdruck.'
-        : 'Calculate exact printing costs instantly for books and catalogs. Discover the exact crossover point between digital and offset press runs.',
+        ? 'Serverseitige Vorkalkulation für Bücher und Kataloge. Ermitteln Sie den optimalen Technologieübergang zwischen Digital- und Offsetdruck.'
+        : 'Server-side production estimates for books and catalogs. Identify the optimal transition point between digital and offset press runs.',
       href: 'https://budget.printprice.pro/',
       internalHref: '/products/budget',
       cta: locale === 'es' ? 'Calcular precio ➔' : locale === 'de' ? 'Preis kalkulieren ➔' : 'Calculate price ➔',

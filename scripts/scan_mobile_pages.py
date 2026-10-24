@@ -77,8 +77,11 @@ async def run():
                 # Check for giant h1s or h1 with many lines
                 h1_issues = [d for d in page_data if d['tag'] == 'H1']
                 
+                import tempfile
+                artifact_dir = os.environ.get("ARTIFACT_DIR", os.path.join(tempfile.gettempdir(), "printprice_audit"))
+                os.makedirs(artifact_dir, exist_ok=True)
                 clean = path.replace('/', '_') or '_home'
-                shot_path = f"C:/Users/KIKE/.gemini/antigravity-ide/brain/0727c9fd-40fa-4e14-9d13-e1a204beb253/shot_{clean}_{lang}.png"
+                shot_path = os.path.join(artifact_dir, f"shot_{clean}_{lang}.png")
                 await page.screenshot(path=shot_path, full_page=False)
                 
                 results.append({

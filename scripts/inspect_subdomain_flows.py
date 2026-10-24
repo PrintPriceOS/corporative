@@ -3,8 +3,10 @@ import os
 import sys
 from playwright.async_api import async_playwright
 
+import tempfile
 sys.stdout.reconfigure(encoding='utf-8')
-ARTIFACT_DIR = r"C:\Users\KIKE\.gemini\antigravity-ide\brain\0727c9fd-40fa-4e14-9d13-e1a204beb253"
+ARTIFACT_DIR = os.environ.get("ARTIFACT_DIR", os.path.join(tempfile.gettempdir(), "printprice_audit"))
+os.makedirs(ARTIFACT_DIR, exist_ok=True)
 
 TARGETS = [
     ("budget", "https://budget.printprice.pro/"),

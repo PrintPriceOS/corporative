@@ -178,7 +178,7 @@ export default function AIAgentCorePage() {
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
                 {[
-                    { icon: 'calculator', endpoint: 'POST /v1/budget/estimate', title: 'Generate exact quotes', desc: 'Get real production pricing based on specs, quantity, materials, and destination.' },
+                    { icon: 'calculator', endpoint: 'POST /v1/budget/estimate', title: 'Generate structured quotes', desc: 'Get production pricing based on specs, quantity, materials, and destination.' },
                     { icon: 'shield', endpoint: 'POST /v1/preflight/jobs', title: 'Validate and fix files', desc: 'Detect print issues, apply automatic fixes, and certify output before production.' },
                     { icon: 'factory', endpoint: 'POST /v1/control/jobs', title: 'Create production jobs', desc: 'Turn estimates and validated files into routed production jobs.' },
                     { icon: 'activity', endpoint: 'GET /v1/control/jobs/{id}', title: 'Track execution', desc: 'Monitor job state, matched partner, and execution progress in real time.' }

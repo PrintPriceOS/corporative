@@ -19,7 +19,9 @@ PAGES = [
     ("/contact/partner", "contact_partner")
 ]
 
-ARTIFACT_DIR = r"C:\Users\KIKE\.gemini\antigravity-ide\brain\0727c9fd-40fa-4e14-9d13-e1a204beb253"
+import tempfile
+ARTIFACT_DIR = os.environ.get("ARTIFACT_DIR", os.path.join(tempfile.gettempdir(), "printprice_audit"))
+os.makedirs(ARTIFACT_DIR, exist_ok=True)
 
 async def run():
     async with async_playwright() as p:

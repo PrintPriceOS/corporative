@@ -1,6 +1,10 @@
 import asyncio
 from playwright.async_api import async_playwright
 
+import os, tempfile
+ARTIFACT_DIR = os.environ.get("ARTIFACT_DIR", os.path.join(tempfile.gettempdir(), "printprice_audit"))
+os.makedirs(ARTIFACT_DIR, exist_ok=True)
+
 async def run():
     async with async_playwright() as p:
         browser = await p.chromium.launch()
@@ -19,7 +23,7 @@ async def run():
             pass
             
         # Capture Spanish
-        await page.screenshot(path="C:/Users/KIKE/.gemini/antigravity-ide/brain/0727c9fd-40fa-4e14-9d13-e1a204beb253/authors_mobile_es.png")
+        await page.screenshot(path=os.path.join(ARTIFACT_DIR, "authors_mobile_es.png"))
         
         # Switch to German
         await page.evaluate("""() => {
@@ -27,7 +31,7 @@ async def run():
             window.dispatchEvent(new CustomEvent('ppp-locale-change', { detail: 'de' }));
         }""")
         await asyncio.sleep(1)
-        await page.screenshot(path="C:/Users/KIKE/.gemini/antigravity-ide/brain/0727c9fd-40fa-4e14-9d13-e1a204beb253/authors_mobile_de.png")
+        await page.screenshot(path=os.path.join(ARTIFACT_DIR, "authors_mobile_de.png"))
         
         # Switch to English
         await page.evaluate("""() => {
@@ -35,7 +39,7 @@ async def run():
             window.dispatchEvent(new CustomEvent('ppp-locale-change', { detail: 'en' }));
         }""")
         await asyncio.sleep(1)
-        await page.screenshot(path="C:/Users/KIKE/.gemini/antigravity-ide/brain/0727c9fd-40fa-4e14-9d13-e1a204beb253/authors_mobile_en.png")
+        await page.screenshot(path=os.path.join(ARTIFACT_DIR, "authors_mobile_en.png"))
         
         # Inspect German h1 and buttons bounding boxes and text
         await page.evaluate("""() => {

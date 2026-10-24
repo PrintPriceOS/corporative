@@ -16,7 +16,8 @@ PAGES = [
 
 LANGUAGES = ["es", "en", "de"]
 
-OUT_DIR = "C:/Users/KIKE/.gemini/antigravity-ide/brain/0727c9fd-40fa-4e14-9d13-e1a204beb253/mobile_audit"
+import tempfile
+OUT_DIR = os.environ.get("ARTIFACT_DIR", os.path.join(tempfile.gettempdir(), "printprice_audit", "mobile_audit"))
 os.makedirs(OUT_DIR, exist_ok=True)
 
 async def audit():

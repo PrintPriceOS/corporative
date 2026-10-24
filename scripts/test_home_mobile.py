@@ -1,6 +1,10 @@
 import asyncio
 from playwright.async_api import async_playwright
 
+import os, tempfile
+ARTIFACT_DIR = os.environ.get("ARTIFACT_DIR", os.path.join(tempfile.gettempdir(), "printprice_audit"))
+os.makedirs(ARTIFACT_DIR, exist_ok=True)
+
 async def run():
     async with async_playwright() as p:
         browser = await p.chromium.launch()
@@ -24,7 +28,7 @@ async def run():
             }}""", lang)
             await asyncio.sleep(0.5)
             
-            await page.screenshot(path=f"C:/Users/KIKE/.gemini/antigravity-ide/brain/0727c9fd-40fa-4e14-9d13-e1a204beb253/home_mobile_{lang}.png")
+            await page.screenshot(path=os.path.join(ARTIFACT_DIR, f"home_mobile_{lang}.png"))
             
         await browser.close()
 

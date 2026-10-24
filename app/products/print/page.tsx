@@ -27,7 +27,7 @@ export default function PrintProductPage() {
         {
           step: '01',
           title: 'Configura en Budget (Price it)',
-          desc: 'Define formato, número de páginas, tirada, papeles y encuadernación. El motor calcula las tarifas exactas de producción.'
+          desc: 'Define formato, número de páginas, tirada, papeles y encuadernación. El motor calcula las tarifas de producción según las matrices de planta asociadas.'
         },
         {
           step: '02',
@@ -42,7 +42,7 @@ export default function PrintProductPage() {
         {
           step: '04',
           title: 'Fabricación y seguimiento',
-          desc: 'La imprenta recibe el arte final verificado y la ficha técnica exacta. Producción predecible y entrega en tus plazos acordados.'
+          desc: 'La imprenta recibe el arte final validado y la ficha técnica vinculada al pedido. Producción predecible y entrega en tus plazos acordados.'
         }
       ],
 
@@ -81,7 +81,7 @@ export default function PrintProductPage() {
         },
         {
           q: '¿Qué garantía tengo de que el archivo no sufrirá alteraciones en el taller?',
-          a: 'El flujo genera una orden técnica verificada. La imprenta únicamente recibe y procesa el documento exactamente en la versión auditada que aprobaste en el paso de Preflight.'
+          a: 'El flujo genera una orden técnica verificada. La imprenta únicamente recibe y procesa el documento en la versión auditada que aprobaste en el paso de Preflight.'
         },
         {
           q: '¿Puedo encargar desde un único ejemplar o solo grandes tiradas?',
@@ -98,12 +98,12 @@ export default function PrintProductPage() {
       slogan: ['PRICE IT.', 'FIX IT.', 'PRINT IT.'],
 
       howItWorksTitle: 'How the Marketplace works',
-      howItWorksSubtitle: 'Direct, transparent model: every job is routed to the exact plant with the optimal machine setup for your book.',
+      howItWorksSubtitle: 'Direct, transparent model: every job is routed to the plant with the optimal machine setup for your book.',
       steps: [
         {
           step: '01',
           title: 'Configure in Budget (Price it)',
-          desc: 'Select trim size, page count, run length, paper stocks, and binding. The server pricing engine calculates exact production costs.'
+          desc: 'Select trim size, page count, run length, paper stocks, and binding. The server pricing engine calculates production rates based on onboarded plant matrices.'
         },
         {
           step: '02',
@@ -118,7 +118,7 @@ export default function PrintProductPage() {
         {
           step: '04',
           title: 'Manufacturing & delivery',
-          desc: 'The printhouse receives the verified PDF and exact technical specs. Predictable production delivered on schedule.'
+          desc: 'The printhouse receives the validated PDF and linked job ticket. Predictable production delivered on schedule.'
         }
       ],
 
@@ -157,7 +157,7 @@ export default function PrintProductPage() {
         },
         {
           q: 'How do I know the file will not be altered on press?',
-          a: 'The workflow attaches an audited technical job order. The printhouse can only pull and image the exact validated file approved during the Preflight step.'
+          a: 'The workflow attaches an audited technical job order. The printhouse can only pull and image the validated file approved during the Preflight step.'
         },
         {
           q: 'Can I order short runs or only large commercial print runs?',
@@ -179,7 +179,7 @@ export default function PrintProductPage() {
         {
           step: '01',
           title: 'In Budget kalkulieren (Price it)',
-          desc: 'Wählen Sie Format, Seitenzahl, Auflage, Papier und Bindung. Der Server berechnet die exakten Fertigungskosten.'
+          desc: 'Wählen Sie Format, Seitenzahl, Auflage, Papier und Bindung. Der Server berechnet die Fertigungstarife anhand hinterlegter Betriebsparameter.'
         },
         {
           step: '02',
@@ -194,7 +194,7 @@ export default function PrintProductPage() {
         {
           step: '04',
           title: 'Produktion & termingerechte Lieferung',
-          desc: 'Die Druckerei erhält geprüfte Daten und exakte Vorgaben. Berechenbare Fertigung und verlässliche Lieferung.'
+          desc: 'Die Druckerei erhält geprüfte Daten und den zugehörigen Auftragsschein. Berechenbare Fertigung und verlässliche Lieferung.'
         }
       ],
 
