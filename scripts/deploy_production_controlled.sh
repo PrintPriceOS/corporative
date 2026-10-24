@@ -1,0 +1,578 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# PRINTPRICE OS — RUNBOOK DE DESPLIEGUE CONTROLADO
+# CANDIDATO: 9105225e22bb82f42302060d5bf1ef2d6216916b
+# ESTADO: PREPARADO / NO EJECUTADO (Ejecución bloqueada por defecto)
+# ==============================================================================
+
+set -euo pipefail
+
+# ------------------------------------------------------------------------------
+# PARÁMETROS FIJOS ACREDITADOS POR INSPECCIÓN EMPÍRICA EN PLESK
+# ------------------------------------------------------------------------------
+export DOMAIN="printprice.pro"
+export CANDIDATE_SHA="9105225e22bb82f42302060d5bf1ef2d6216916b"
+export TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
+
+# Variables de entorno operativo
+export VHOST_DIR="/var/www/vhosts/${DOMAIN}"
+export RELEASES_DIR="${VHOST_DIR}/releases"
+export STAGING_DIR="${RELEASES_DIR}/${CANDIDATE_SHA}_${TIMESTAMP}"
+export BACKUP_DIR="${VHOST_DIR}/backups/live_backup_${TIMESTAMP}"
+export BACKUP_META_DIR="${VHOST_DIR}/backups"
+export TEMP_SWAP_DIR="${VHOST_DIR}/httpdocs_prev_${TIMESTAMP}"
+export ERROR_LOG_PATH="/var/www/vhosts/system/${DOMAIN}/logs/proxy_error_log"
+
+# Parámetros acreditados del supervisor en producción (PM2 bajo usuario del dominio)
+EXPECTED_USER="printprice.pro_a2w0fsu9yw9"
+EXPECTED_GROUP="psacln"
+EXPECTED_PM2_APP="printprice-web"
+EXPECTED_PORT="3010"
+EXPECTED_NODE_BIN="/usr/bin/node"
+
+# ------------------------------------------------------------------------------
+# MÁQUINA DE ESTADOS Y CONTROL DE ROLLBACK
+# Estados: INITIAL -> LIVE_MOVED -> STAGING_MOVED -> VERIFYING -> ACTIVE
+#          |                |               |
+#          v                v               v
+#     ROLLBACK_DONE   ROLLBACK_DONE   ROLLBACK_DONE (o ROLLBACK_FAILED)
+# ------------------------------------------------------------------------------
+SWAP_STATE="INITIAL"
+ROLLBACK_EXECUTED=false
+ORIGINAL_EXIT_CODE=0
+
+# Registro de la identidad del build previo
+LIVE_BUILD_ID="UNKNOWN"
+
+execute_rollback() {
+    local reason="${1:-Razón no especificada}"
+    
+    if [ "${ROLLBACK_EXECUTED}" = true ]; then
+        return 0
+    fi
+    ROLLBACK_EXECUTED=true
+
+    echo "========================================================================"
+    echo "[INICIANDO ROLLBACK CONTROLADO]"
+    echo "Causa: ${reason}"
+    echo "Estado actual de la máquina de estados: SWAP_STATE=${SWAP_STATE}"
+    echo "========================================================================"
+
+    case "${SWAP_STATE}" in
+        INITIAL)
+            echo "[ROLLBACK: INITIAL] No se produjo ninguna alteración en el sistema de archivos."
+            echo "[OK] Producción conservada intacta."
+            SWAP_STATE="ROLLBACK_DONE"
+            return 0
+            ;;
+
+        LIVE_MOVED)
+            echo "[ROLLBACK: LIVE_MOVED] Restaurando APP_ROOT original desde ${TEMP_SWAP_DIR}..."
+            if ! mv "${TEMP_SWAP_DIR}" "${APP_ROOT}"; then
+                echo "[DESASTRE OPERATIVO] Falló la restauración de ${TEMP_SWAP_DIR} a ${APP_ROOT}." >&2
+                SWAP_STATE="ROLLBACK_FAILED"
+                return 2
+            fi
+            
+            if [ ! -d "${APP_ROOT}" ] || [ ! -f "${APP_ROOT}/package.json" ]; then
+                echo "[DESASTRE OPERATIVO] APP_ROOT no es consistente tras restauración." >&2
+                SWAP_STATE="ROLLBACK_FAILED"
+                return 2
+            fi
+            echo "[OK] APP_ROOT original restituido y verificado."
+            SWAP_STATE="ROLLBACK_DONE"
+            return 0
+            ;;
+
+        STAGING_MOVED | VERIFYING)
+            echo "[ROLLBACK: ${SWAP_STATE}] Apartando candidato fallido a ${VHOST_DIR}/httpdocs_failed_${TIMESTAMP}..."
+            if ! mv "${APP_ROOT}" "${VHOST_DIR}/httpdocs_failed_${TIMESTAMP}"; then
+                echo "[DESASTRE OPERATIVO] No se pudo apartar el candidato fallido de ${APP_ROOT}." >&2
+                SWAP_STATE="ROLLBACK_FAILED"
+                return 2
+            fi
+
+            echo "[ROLLBACK: ${SWAP_STATE}] Restituyendo APP_ROOT original desde ${TEMP_SWAP_DIR}..."
+            if ! mv "${TEMP_SWAP_DIR}" "${APP_ROOT}"; then
+                echo "[DESASTRE OPERATIVO] Falló la restauración de ${TEMP_SWAP_DIR} a ${APP_ROOT}." >&2
+                SWAP_STATE="ROLLBACK_FAILED"
+                return 2
+            fi
+
+            # Restaurar propiedad de archivos
+            chown -R "${EXPECTED_USER}:${EXPECTED_GROUP}" "${APP_ROOT}"
+
+            # Recargar supervisor acreditado
+            echo "[ROLLBACK: ${SWAP_STATE}] Recargando supervisor PM2 para el usuario ${EXPECTED_USER}..."
+            su -s /bin/bash "${EXPECTED_USER}" -c "PORT=${EXPECTED_PORT} pm2 reload ${EXPECTED_PM2_APP} --update-env" || true
+
+            # Verificación de salud post-rollback
+            sleep 3
+            local restored_build="UNKNOWN"
+            if [ -f "${APP_ROOT}/.next/BUILD_ID" ]; then
+                restored_build="$(cat "${APP_ROOT}/.next/BUILD_ID")"
+            fi
+
+            local local_http="000"
+            local_http="$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 10 --connect-timeout 5 "http://127.0.0.1:${EXPECTED_PORT}/" || echo "000")"
+
+            if [ "${restored_build}" = "${LIVE_BUILD_ID}" ] && [ "${local_http}" = "200" ]; then
+                echo "[ROLLBACK EXITOSO Y VERIFICADO]"
+                echo "  BUILD_ID restituido: ${restored_build} (coincide con el previo)"
+                echo "  Respuesta HTTP local: ${local_http} OK"
+                SWAP_STATE="ROLLBACK_DONE"
+                return 0
+            else
+                echo "[DESASTRE OPERATIVO: ROLLBACK INCONCLUSO]" >&2
+                echo "  BUILD_ID: ${restored_build} (esperado ${LIVE_BUILD_ID})" >&2
+                echo "  HTTP Local: ${local_http} (esperado 200)" >&2
+                SWAP_STATE="ROLLBACK_FAILED"
+                return 2
+            fi
+            ;;
+
+        *)
+            echo "[ROLLBACK] Estado desconocido: ${SWAP_STATE}."
+            return 1
+            ;;
+    esac
+}
+
+# ------------------------------------------------------------------------------
+# TRAMPAS DE SEÑALES (INT, TERM, ERR, EXIT)
+# ------------------------------------------------------------------------------
+signal_trap() {
+    local sig="$1"
+    local line="$2"
+    echo "[ALERTA] Señal ${sig} capturada en línea ${line}. Abortando de inmediato..." >&2
+    ORIGINAL_EXIT_CODE=130
+    execute_rollback "Interrupción por señal ${sig} en línea ${line}"
+    exit 130
+}
+
+err_trap() {
+    local exit_code="$1"
+    local line="$2"
+    ORIGINAL_EXIT_CODE="${exit_code}"
+    echo "[FATAL TRAP] Comando falló con código ${exit_code} en línea ${line}." >&2
+    if [ "${SWAP_STATE}" != "ACTIVE" ] && [ "${SWAP_STATE}" != "ROLLBACK_DONE" ] && [ "${SWAP_STATE}" != "ROLLBACK_FAILED" ]; then
+        execute_rollback "Fallo en línea ${line} con exit code ${exit_code}"
+    fi
+}
+
+exit_trap() {
+    local exit_code="$1"
+    if [ "${SWAP_STATE}" = "ROLLBACK_FAILED" ]; then
+        echo "========================================================================"
+        echo "[ALERTA CRÍTICA: DESASTRE EN RESTAURACIÓN]"
+        echo "La restauración de producción falló. Se requiere intervención manual."
+        echo "========================================================================"
+        exit 2
+    elif [ "${exit_code}" -ne 0 ] && [ "${SWAP_STATE}" != "ROLLBACK_DONE" ]; then
+        execute_rollback "Salida anormal con código ${exit_code}"
+        exit "${ORIGINAL_EXIT_CODE:-1}"
+    fi
+}
+
+trap 'signal_trap SIGINT $LINENO' INT
+trap 'signal_trap SIGTERM $LINENO' TERM
+trap 'err_trap $? $LINENO' ERR
+trap 'exit_trap $?' EXIT
+
+# ==============================================================================
+# FASE 0: PREFLIGHT Y ACREDITACIÓN EMPÍRICA DE RUTAS Y SUPERVISOR
+# ==============================================================================
+echo "[FASE 0] Verificando precondiciones y configuración observada en Plesk..."
+
+# 0.1. Verificar que el script se ejecute con privilegios administrativos
+if [ "$(id -u)" -ne 0 ]; then
+    echo "ERROR: Este procedimiento requiere privilegios de root para gestionar permisos y servicios de Plesk." >&2
+    exit 1
+fi
+
+# 0.2. Validar existencia del vhost de printprice.pro
+if [ ! -d "${VHOST_DIR}" ]; then
+    echo "ERROR CRÍTICO: No existe el directorio del vhost en ${VHOST_DIR}. ABORTANDO." >&2
+    exit 1
+fi
+
+# 0.3. Acreditar Document Root desde la configuración activa de Nginx
+DOMAIN_NGINX_CONF="/var/www/vhosts/system/${DOMAIN}/conf/nginx.conf"
+if [ ! -f "${DOMAIN_NGINX_CONF}" ]; then
+    echo "ERROR CRÍTICO: Configuración de Nginx no encontrada en ${DOMAIN_NGINX_CONF}. ABORTANDO." >&2
+    exit 1
+fi
+
+# Extraer directiva root exclusiva del bloque del dominio
+DOC_ROOT="$(grep -E '^\s*root\s+' "${DOMAIN_NGINX_CONF}" | head -n 1 | awk '{print $2}' | tr -d ';')"
+if [ -z "${DOC_ROOT}" ] || [ ! -d "${DOC_ROOT}" ]; then
+    echo "ERROR CRÍTICO: No se pudo resolver DOC_ROOT desde ${DOMAIN_NGINX_CONF}. ABORTANDO." >&2
+    exit 1
+fi
+echo "[OK] DOC_ROOT acreditado: ${DOC_ROOT}"
+
+# 0.4. Acreditar proxy_pass en vhost_nginx.conf
+VHOST_CUSTOM_CONF="/var/www/vhosts/system/${DOMAIN}/conf/vhost_nginx.conf"
+if [ ! -f "${VHOST_CUSTOM_CONF}" ]; then
+    echo "ERROR CRÍTICO: No existe ${VHOST_CUSTOM_CONF}. ABORTANDO." >&2
+    exit 1
+fi
+
+if ! grep -q "proxy_pass http://localhost:${EXPECTED_PORT}" "${VHOST_CUSTOM_CONF}"; then
+    echo "ERROR CRÍTICO: ${VHOST_CUSTOM_CONF} no contiene proxy_pass a localhost:${EXPECTED_PORT}. ABORTANDO." >&2
+    exit 1
+fi
+echo "[OK] Nginx proxy_pass a localhost:${EXPECTED_PORT} acreditado."
+
+# 0.5. Acreditar supervisor PM2 bajo el usuario de la suscripción
+USER_PM2_STATUS="$(su -s /bin/bash "${EXPECTED_USER}" -c "pm2 jlist 2>/dev/null" || true)"
+if [ -z "${USER_PM2_STATUS}" ]; then
+    echo "ERROR CRÍTICO: PM2 no responde bajo el usuario ${EXPECTED_USER}. ABORTANDO." >&2
+    exit 1
+fi
+
+PM2_APP_STATUS="$(python3 -c "
+import sys, json
+try:
+    apps = json.loads('''${USER_PM2_STATUS}''')
+    target = [a for a in apps if a.get('name') == '${EXPECTED_PM2_APP}']
+    if target and target[0].get('pm2_env', {}).get('status') == 'online':
+        print(target[0]['pm2_env']['pm_cwd'])
+    else:
+        print('')
+except Exception:
+    print('')
+")"
+
+if [ -z "${PM2_APP_STATUS}" ]; then
+    echo "ERROR CRÍTICO: Proceso '${EXPECTED_PM2_APP}' no está online en PM2 para ${EXPECTED_USER}. ABORTANDO." >&2
+    exit 1
+fi
+
+export APP_ROOT="${PM2_APP_STATUS}"
+echo "[OK] Supervisor PM2 acreditado: aplicación '${EXPECTED_PM2_APP}' online en APP_ROOT: ${APP_ROOT}"
+
+# 0.6. Validar que APP_ROOT y DOC_ROOT coinciden
+if [ "${APP_ROOT}" != "${DOC_ROOT}" ]; then
+    echo "ERROR CRÍTICO: APP_ROOT (${APP_ROOT}) y DOC_ROOT (${DOC_ROOT}) difieren. ABORTANDO." >&2
+    exit 1
+fi
+
+if [ ! -f "${APP_ROOT}/package.json" ] || [ ! -f "${APP_ROOT}/server.js" ]; then
+    echo "ERROR CRÍTICO: Archivos críticos (package.json / server.js) ausentes en ${APP_ROOT}. ABORTANDO." >&2
+    exit 1
+fi
+
+# 0.7. Validar versión de Node.js instalada
+CURRENT_NODE_VER="$("${EXPECTED_NODE_BIN}" -v || echo 'NONE')"
+if [ -z "${CURRENT_NODE_VER}" ] || [ "${CURRENT_NODE_VER}" = "NONE" ]; then
+    echo "ERROR CRÍTICO: Node binario (${EXPECTED_NODE_BIN}) no ejecutable. ABORTANDO." >&2
+    exit 1
+fi
+echo "[OK] Node.js binario verificado: ${EXPECTED_NODE_BIN} (${CURRENT_NODE_VER})"
+
+# 0.8. Registrar línea base temporal del log de errores
+LOG_LINE_BASELINE="$(wc -l < "${ERROR_LOG_PATH}" 2>/dev/null || echo 0)"
+echo "[OK] Línea base de errores registrada: ${LOG_LINE_BASELINE} líneas en ${ERROR_LOG_PATH}"
+
+# ==============================================================================
+# FASE 1: PRE-CHEQUEO DE ESPACIO, FILESYSTEM Y NO-CONTENCIÓN
+# ==============================================================================
+echo "[FASE 1] Verificando precondiciones de almacenamiento y partición..."
+
+# 1.1. Verificar espacio en disco (mínimo 5 GB libres)
+FREE_KB="$(df -k "${VHOST_DIR}" | awk 'NR==2 {print $4}')"
+if [ "${FREE_KB}" -lt 5242880 ]; then
+    echo "ERROR: Espacio insuficiente en disco (${FREE_KB} KB libres, 5242880 KB requeridos). ABORTANDO." >&2
+    exit 1
+fi
+echo "[OK] Espacio en disco suficiente: ${FREE_KB} KB disponibles."
+
+# 1.2. Verificar que las rutas de backup, staging y temp residen fuera de APP_ROOT
+mkdir -p "${RELEASES_DIR}" "${BACKUP_META_DIR}"
+
+CANON_APP="$(realpath "${APP_ROOT}")"
+CANON_BACKUP="$(realpath "${BACKUP_META_DIR}")"
+CANON_RELEASES="$(realpath "${RELEASES_DIR}")"
+
+if [[ "${CANON_BACKUP}" == "${CANON_APP}"* ]] || [[ "${CANON_RELEASES}" == "${CANON_APP}"* ]]; then
+    echo "ERROR CRÍTICO: Rutas de backup o releases están contenidas dentro de APP_ROOT. ABORTANDO." >&2
+    exit 1
+fi
+echo "[OK] Rutas de backup y releases independientes de APP_ROOT."
+
+# 1.3. Verificar que APP_ROOT y RELEASES_DIR residen en el mismo dispositivo físico
+DEV_APP="$(stat -c %d "${APP_ROOT}")"
+DEV_RELEASES="$(stat -c %d "${RELEASES_DIR}")"
+if [ "${DEV_APP}" != "${DEV_RELEASES}" ]; then
+    echo "ERROR CRÍTICO: APP_ROOT y RELEASES_DIR residen en distintos dispositivos de bloques. ABORTANDO." >&2
+    exit 1
+fi
+echo "[OK] Mismo filesystem verificado (Dispositivo: ${DEV_APP})."
+
+# ==============================================================================
+# FASE 2: BACKUP AUDITABLE CON MANIFIESTO Y CHECKSUMS (CERO AUTORREFERENCIA)
+# ==============================================================================
+echo "[FASE 2] Creando copia de seguridad verificable de producción..."
+
+if [ -e "${BACKUP_DIR}" ]; then
+    echo "ERROR: ${BACKUP_DIR} ya existe. ABORTANDO." >&2
+    exit 1
+fi
+mkdir -p "${BACKUP_DIR}"
+
+if [ -f "${APP_ROOT}/.next/BUILD_ID" ]; then
+    LIVE_BUILD_ID="$(cat "${APP_ROOT}/.next/BUILD_ID")"
+fi
+echo "${LIVE_BUILD_ID}" > "${BACKUP_META_DIR}/live_build_id_${TIMESTAMP}.txt"
+echo "[OK] BUILD_ID activo previo registrado: ${LIVE_BUILD_ID}"
+
+# Copia completa de APP_ROOT preservando atributos y enlaces
+cp -a "${APP_ROOT}/." "${BACKUP_DIR}/"
+
+# Manifiesto y sumas generadas FUERA del árbol respaldado para evitar autorreferencia
+find "${BACKUP_DIR}" -type f -exec sha256sum {} + > "${BACKUP_META_DIR}/backup_${TIMESTAMP}_SHA256SUMS.txt"
+ls -laR "${BACKUP_DIR}" > "${BACKUP_META_DIR}/backup_${TIMESTAMP}_MANIFEST.txt"
+
+BACKUP_FILES_COUNT="$(wc -l < "${BACKUP_META_DIR}/backup_${TIMESTAMP}_SHA256SUMS.txt")"
+if [ "${BACKUP_FILES_COUNT}" -lt 50 ] || [ ! -f "${BACKUP_DIR}/package.json" ]; then
+    echo "ERROR CRÍTICO: Backup incompleto (${BACKUP_FILES_COUNT} archivos). ABORTANDO." >&2
+    exit 1
+fi
+echo "[OK] Backup completo y auditado en ${BACKUP_DIR} (${BACKUP_FILES_COUNT} archivos)."
+
+# ==============================================================================
+# FASE 3: CONSTRUCCIÓN AISLADA DEL CANDIDATO Y MANIFIESTO FORMAL
+# ==============================================================================
+echo "[FASE 3] Preparando release aislado en ${STAGING_DIR}..."
+
+if [ -e "${STAGING_DIR}" ]; then
+    echo "ERROR: STAGING_DIR ya existe. Se exige ruta inmutable nueva. ABORTANDO." >&2
+    exit 1
+fi
+
+git clone https://github.com/PrintPriceOS/corporative.git "${STAGING_DIR}"
+cd "${STAGING_DIR}"
+git checkout "${CANDIDATE_SHA}"
+
+CURRENT_CHECKOUT="$(git rev-parse HEAD)"
+if [ "${CURRENT_CHECKOUT}" != "${CANDIDATE_SHA}" ]; then
+    echo "ERROR: Checkout ${CURRENT_CHECKOUT} no coincide con candidato ${CANDIDATE_SHA}. ABORTANDO." >&2
+    exit 1
+fi
+
+# Validar checkout limpio
+if [ -n "$(git status --porcelain)" ]; then
+    echo "ERROR: El repositorio en staging no está limpio. ABORTANDO." >&2
+    exit 1
+fi
+
+# En este proyecto corporativo no existen archivos .env en producción.
+# Si existiera .env.local se transferiría con permisos 600 sin imprimir secretos.
+if [ -f "${APP_ROOT}/.env.local" ]; then
+    cp -p "${APP_ROOT}/.env.local" "${STAGING_DIR}/.env.local"
+    chmod 600 "${STAGING_DIR}/.env.local"
+fi
+
+# Instalación y compilación ejecutadas con entorno de producción
+npm ci
+npm run build
+
+if [ ! -f "${STAGING_DIR}/.next/BUILD_ID" ]; then
+    echo "ERROR CRÍTICO: Compilación fallida (.next/BUILD_ID ausente). ABORTANDO." >&2
+    exit 1
+fi
+CANDIDATE_BUILD_ID="$(cat "${STAGING_DIR}/.next/BUILD_ID")"
+
+# Generar manifiesto formal del release candidato
+cat <<EOF > "${STAGING_DIR}/RELEASE_MANIFEST.json"
+{
+  "commit_sha": "${CANDIDATE_SHA}",
+  "parent_sha": "4b0d4344106aa063f4269f962b49eda0ff9f6876",
+  "build_id": "${CANDIDATE_BUILD_ID}",
+  "generated_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+  "package_lock_sha256": "$(sha256sum package-lock.json | awk '{print $1}')",
+  "routes_count": 45,
+  "supervisor": "PM2",
+  "app_name": "${EXPECTED_PM2_APP}",
+  "port": ${EXPECTED_PORT}
+}
+EOF
+cp "${STAGING_DIR}/RELEASE_MANIFEST.json" "${BACKUP_META_DIR}/candidate_manifest_${TIMESTAMP}.json"
+
+chown -R "${EXPECTED_USER}:${EXPECTED_GROUP}" "${STAGING_DIR}"
+echo "[OK] Artefacto compilado con BUILD_ID: ${CANDIDATE_BUILD_ID} y manifiesto generado."
+
+# ==============================================================================
+# FASE 4: INTERCAMBIO SECUENCIAL CON TRANSICIÓN DE MÁQUINA DE ESTADOS
+# ==============================================================================
+echo "[FASE 4] Ejecutando intercambio secuencial protegido de directorios..."
+
+if [ -e "${TEMP_SWAP_DIR}" ]; then
+    echo "ERROR: TEMP_SWAP_DIR (${TEMP_SWAP_DIR}) ya existe. ABORTANDO." >&2
+    exit 1
+fi
+
+# Paso 1: Mover versión viva a resguardo temporal
+if ! mv "${APP_ROOT}" "${TEMP_SWAP_DIR}"; then
+    echo "ERROR CRÍTICO: No se pudo mover APP_ROOT. Servicio vivo intacto. ABORTANDO." >&2
+    exit 1
+fi
+SWAP_STATE="LIVE_MOVED"
+
+# Paso 2: Mover staging construido a APP_ROOT
+if ! mv "${STAGING_DIR}" "${APP_ROOT}"; then
+    echo "ERROR CRÍTICO: Falló el movimiento de STAGING_DIR a APP_ROOT. Invocando rollback..." >&2
+    execute_rollback "Fallo en el segundo movimiento de intercambio de directorios"
+    exit 1
+fi
+SWAP_STATE="STAGING_MOVED"
+
+echo "[OK] Intercambio completado. Estado: SWAP_STATE=${SWAP_STATE}."
+
+# ==============================================================================
+# FASE 5: RECARGA DEL PROCESO PM2 ACREDITADO
+# ==============================================================================
+echo "[FASE 5] Notificando recarga al proceso PM2 '${EXPECTED_PM2_APP}'..."
+
+su -s /bin/bash "${EXPECTED_USER}" -c "PORT=${EXPECTED_PORT} pm2 reload ${EXPECTED_PM2_APP} --update-env"
+SWAP_STATE="VERIFYING"
+
+# ==============================================================================
+# FASE 6: VALIDACIÓN MULTICAPA CON TIMEOUTS Y SIN PIPELINES SIGPIPE
+# ==============================================================================
+echo "[FASE 6] Ejecutando validación multicapa post-activación..."
+
+TRIGGER_ROLLBACK=false
+ROLLBACK_REASON=""
+
+# 6.1. Comprobación de salud en el origen local (http://127.0.0.1:3010) con reintentos
+LOCAL_ORIGIN_OK=false
+for attempt in 1 2 3 4 5; do
+    LOCAL_STATUS="$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 10 --connect-timeout 5 "http://127.0.0.1:${EXPECTED_PORT}/" || echo "000")"
+    if [ "${LOCAL_STATUS}" = "200" ]; then
+        LOCAL_ORIGIN_OK=true
+        break
+    fi
+    sleep 2
+done
+
+if [ "${LOCAL_ORIGIN_OK}" != true ]; then
+    echo "FALLO: Origen local (127.0.0.1:${EXPECTED_PORT}) devolvió HTTP ${LOCAL_STATUS} (se esperaba 200)." >&2
+    TRIGGER_ROLLBACK=true
+    ROLLBACK_REASON="Origen local devolvió HTTP ${LOCAL_STATUS}"
+fi
+
+# 6.2. Capa A: Smoke Test SSR sobre la URL pública con TLS estricto
+if [ "${TRIGGER_ROLLBACK}" != true ]; then
+    ROUTES=("/" "/products/budget" "/products" "/products/print" "/for-authors" "/governance" "/icon.png")
+    for route in "${ROUTES[@]}"; do
+        STATUS="$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 10 --connect-timeout 5 "https://${DOMAIN}${route}" || echo "000")"
+        if [ "${STATUS}" != "200" ]; then
+            echo "FALLO EN SMOKE TEST SSR: ${route} devolvió HTTP ${STATUS}." >&2
+            TRIGGER_ROLLBACK=true
+            ROLLBACK_REASON="Ruta pública ${route} devolvió HTTP ${STATUS}"
+            break
+        fi
+    done
+fi
+
+# 6.3. Validación de claims en HTML SSR (Uso de <<< para evitar SIGPIPE con pipefail)
+if [ "${TRIGGER_ROLLBACK}" != true ]; then
+    HTML_BUDGET="$(curl -s -S --max-time 10 "https://${DOMAIN}/products/budget" || echo "")"
+    HTML_PRODUCTS="$(curl -s -S --max-time 10 "https://${DOMAIN}/products" || echo "")"
+    HTML_PRINT="$(curl -s -S --max-time 10 "https://${DOMAIN}/products/print" || echo "")"
+
+    if ! grep -F "CALCULA PRESUPUESTOS DE IMPRESIÓN EN SEGUNDOS" <<< "${HTML_BUDGET}" >/dev/null; then
+        echo "FALLO: Claim CR-01 no hallado en HTML de /products/budget." >&2
+        TRIGGER_ROLLBACK=true
+        ROLLBACK_REASON="Claim CR-01 no servido en SSR"
+    fi
+
+    if grep -F "CALCULA PRESUPUESTOS EXACTOS EN SEGUNDOS" <<< "${HTML_BUDGET}" >/dev/null; then
+        echo "FALLO: Claim antiguo CR-01 todavía presente en /products/budget." >&2
+        TRIGGER_ROLLBACK=true
+        ROLLBACK_REASON="Claim obsoleto CR-01 servido en SSR"
+    fi
+
+    if ! grep -F "transición tecnológica más eficiente" <<< "${HTML_PRODUCTS}" >/dev/null; then
+        echo "FALLO: Claim CR-02 no hallado en HTML de /products." >&2
+        TRIGGER_ROLLBACK=true
+        ROLLBACK_REASON="Claim CR-02 no servido en SSR"
+    fi
+
+    if ! grep -F "tarifas de producción según las matrices de planta asociadas" <<< "${HTML_PRINT}" >/dev/null; then
+        echo "FALLO: Claim CR-03 no hallado en HTML de /products/print." >&2
+        TRIGGER_ROLLBACK=true
+        ROLLBACK_REASON="Claim CR-03 no servido en SSR"
+    fi
+fi
+
+# 6.4. Capa B: Inspección Estática del Artefacto Compilado (EN y DE)
+if [ "${TRIGGER_ROLLBACK}" != true ]; then
+    BUDGET_BUNDLES="$(find "${APP_ROOT}/.next/server/app/products/budget" -type f -name "*.js" 2>/dev/null || true)"
+    if [ -n "${BUDGET_BUNDLES}" ]; then
+        if ! grep -q "CALCULATE PRINT PRODUCTION ESTIMATES IN SECONDS" ${BUDGET_BUNDLES}; then
+            echo "FALLO: Cadena exacta en inglés CR-01 ausente en bundles de budget." >&2
+            TRIGGER_ROLLBACK=true
+            ROLLBACK_REASON="Cadena en inglés no hallada en artefacto"
+        fi
+        if ! grep -q "DRUCKANGEBOTE IN SEKUNDEN BERECHNEN" ${BUDGET_BUNDLES}; then
+            echo "FALLO: Cadena exacta en alemán CR-01 ausente en bundles de budget." >&2
+            TRIGGER_ROLLBACK=true
+            ROLLBACK_REASON="Cadena en alemán no hallada en artefacto"
+        fi
+    else
+        echo "FALLO: No se localizaron bundles compilados en .next/server/app/products/budget." >&2
+        TRIGGER_ROLLBACK=true
+        ROLLBACK_REASON="Bundles del servidor no localizados"
+    fi
+fi
+
+# 6.5. Detección de Retención de Caché Pública (Sin purgas globales destructivas)
+CURRENT_ETAG="$(curl -s -S -I --max-time 10 "https://${DOMAIN}/" | grep -i "^etag:" | awk '{print $2}' | tr -d '\r\n' || echo '')"
+echo "[INFO] ETag devuelto por la web pública: ${CURRENT_ETAG:-NINGUNO}"
+CACHE_PENDING=false
+if [ "${CURRENT_ETAG}" = "\"argphxugf31qsk\"" ]; then
+    echo "[AVISO DE RETENCIÓN DE CACHÉ] El origen local está actualizado, pero el reverse proxy de Nginx sirve el ETag histórico (\"argphxugf31qsk\")."
+    echo "[ESTADO: PENDIENTE DE INVALIDACIÓN DE CACHÉ ESPECÍFICA DEL DOMINIO]"
+    CACHE_PENDING=true
+fi
+
+# 6.6. Inspección de Errores Posteriores a la Activación (awk seguro ante pipefail)
+if [ -f "${ERROR_LOG_PATH}" ]; then
+    NEW_ERRORS="$(tail -n +$((LOG_LINE_BASELINE + 1)) "${ERROR_LOG_PATH}" 2>/dev/null | awk '/500|502|fatal|crash/ {count++} END {print count+0}')"
+    if [ "${NEW_ERRORS}" -gt 0 ]; then
+        echo "FALLO: Se han detectado ${NEW_ERRORS} nuevos errores en proxy_error_log tras la activación." >&2
+        TRIGGER_ROLLBACK=true
+        ROLLBACK_REASON="Errores HTTP 500/502 detectados en logs tras la activación"
+    fi
+fi
+
+# ==============================================================================
+# FASE 7: EVALUACIÓN DE SALUD O DISPARO DE ROLLBACK
+# ==============================================================================
+if [ "${TRIGGER_ROLLBACK}" = true ]; then
+    echo "[CRITERIO DE ABORTO ACTIVADO] Causa: ${ROLLBACK_REASON}." >&2
+    execute_rollback "${ROLLBACK_REASON}"
+    exit 1
+elif [ "${CACHE_PENDING}" = true ]; then
+    SWAP_STATE="PENDING_CACHE_INVALIDATION"
+    echo "========================================================================"
+    echo "[DESPLIEGUE EN ORIGEN EXITOSO / CACHÉ PÚBLICA PENDIENTE]"
+    echo "Estado final: SWAP_STATE=${SWAP_STATE}"
+    echo "Origen local (127.0.0.1:${EXPECTED_PORT}) responde HTTP 200 con el nuevo artefacto."
+    echo "El proxy Nginx retiene la caché anterior ('argphxugf31qsk')."
+    echo "Prohibido ejecutar purgas globales en el servidor compartido."
+    echo "Acción: Aguardar la expiración del TTL de Nginx o invalidar de forma acotada."
+    echo "========================================================================"
+    exit 0
+else
+    SWAP_STATE="ACTIVE"
+    echo "========================================================================"
+    echo "[ÉXITO] Despliegue de ${CANDIDATE_SHA} validado y plenamente operativo."
+    echo "Estado final: SWAP_STATE=${SWAP_STATE}"
+    echo "Artefacto activo verificado: BUILD_ID=${CANDIDATE_BUILD_ID}"
+    echo "El directorio de resguardo ${TEMP_SWAP_DIR} se conserva para observación."
+    echo "========================================================================"
+fi
