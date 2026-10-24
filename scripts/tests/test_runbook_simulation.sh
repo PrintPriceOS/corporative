@@ -167,66 +167,137 @@ else
 fi
 
 # ------------------------------------------------------------------------------
-# TEST 6: Detección de retención de caché pública (Nunca acaba en ACTIVE)
 # ------------------------------------------------------------------------------
-echo -n "Test 6: ETag antiguo -> PENDING_CACHE_INVALIDATION (Nunca ACTIVE)... "
-setup_dummy_env
-
-MOCK_ORIGIN_STATUS="200"
-MOCK_PUBLIC_ETAG="\"argphxugf31qsk\"" # ETag antiguo de d5e37f4
-CACHE_PENDING=false
-FINAL_STATE="NONE"
-
-if [ "${MOCK_ORIGIN_STATUS}" = "200" ] && [ "${MOCK_PUBLIC_ETAG}" = "\"argphxugf31qsk\"" ]; then
-    CACHE_PENDING=true
-fi
-
-if [ "${CACHE_PENDING}" = true ]; then
-    FINAL_STATE="PENDING_CACHE_INVALIDATION"
-else
-    FINAL_STATE="ACTIVE"
-fi
-
-if [ "${FINAL_STATE}" = "PENDING_CACHE_INVALIDATION" ] && [ "${FINAL_STATE}" != "ACTIVE" ]; then
-    echo "[PASÓ]"
-else
-    echo "[FALLÓ: state=${FINAL_STATE}]"
-    exit 1
-fi
-
+# TEST 6: Inyección de fallo en recarga PM2 (No debe declarar éxito y debe salir con 2)
 # ------------------------------------------------------------------------------
-# TEST 7: Manejo de señales INT/TERM durante intercambio (Retorno 130 + Rollback)
-# ------------------------------------------------------------------------------
-echo -n "Test 7: Interrupción por señal (SIGINT) -> Exit 130 + Rollback... "
+echo -n "Test 6: Inyección de fallo en recarga PM2 -> ROLLBACK_FAILED (exit 2)... "
 setup_dummy_env
 
 mv "${APP_ROOT}" "${TEMP_SWAP_DIR}"
 SWAP_STATE="LIVE_MOVED"
+export MOCK_PM2_RELOAD_FAILS=true
 
-SIG_CODE=0
-bash -c "
-    export VHOST_DIR='${TEST_SANDBOX}'
-    export APP_ROOT='${APP_ROOT}'
-    export TEMP_SWAP_DIR='${TEMP_SWAP_DIR}'
-    export EXPECTED_USER='${EXPECTED_USER}'
-    export EXPECTED_GROUP='${EXPECTED_GROUP}'
-    export SIMULATION_MODE=true
-    source '${TARGET_SCRIPT}'
-    SWAP_STATE='LIVE_MOVED'
-    signal_trap SIGINT 99
-" >/dev/null 2>&1 || SIG_CODE=$?
+PM2_RET=0
+execute_rollback "Fallo inducido en recarga PM2" || PM2_RET=$?
+export MOCK_PM2_RELOAD_FAILS=false
 
-if [ "${SIG_CODE}" -eq 130 ] && [ -f "${APP_ROOT}/package.json" ]; then
+if [ "${SWAP_STATE}" = "ROLLBACK_FAILED" ] && [ "${PM2_RET}" -eq 2 ]; then
     echo "[PASÓ]"
 else
-    echo "[FALLÓ: code=${SIG_CODE}]"
+    echo "[FALLÓ: ret=${PM2_RET}, state=${SWAP_STATE}]"
     exit 1
 fi
 
 # ------------------------------------------------------------------------------
-# TEST 8: Prevención de SIGPIPE con heredoc/herestring (<<<)
+# TEST 7: Dobles controlables para servicios externos (No fijar 200 incondicionalmente)
 # ------------------------------------------------------------------------------
-echo -n "Test 8: Prevención de SIGPIPE bajo pipefail usando herestrings... "
+echo -n "Test 7: Dobles controlables (500 base o 404 manifest impiden recuperación)... "
+setup_dummy_env
+
+# Probar que manifest 404 en memoria falla la recuperación
+export MOCK_HTTP_STATUS=200
+export MOCK_MANIFEST_STATUS=404
+RET_MOCK=0
+verify_service_recovery "OLD_BUILD_ID_111" >/dev/null 2>&1 || RET_MOCK=$?
+
+if [ "${SWAP_STATE}" = "ROLLBACK_FAILED" ] && [ "${RET_MOCK}" -eq 2 ]; then
+    # Ahora probar que cuando ambos responden 200, la verificación triunfa
+    export MOCK_MANIFEST_STATUS=200
+    SWAP_STATE="VERIFYING"
+    verify_service_recovery "OLD_BUILD_ID_111" >/dev/null 2>&1
+    if [ "${SWAP_STATE}" = "ROLLBACK_DONE" ]; then
+        echo "[PASÓ]"
+    else
+        echo "[FALLÓ en segunda fase: state=${SWAP_STATE}]"
+        exit 1
+    fi
+else
+    echo "[FALLÓ: ret=${RET_MOCK}, state=${SWAP_STATE}]"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 8: Clasificación operativa de release (Llamada al código real classify_release_state)
+# ------------------------------------------------------------------------------
+echo -n "Test 8: classify_release_state (Separación estricta de origen, caché y activo)... "
+
+RES_A="$(classify_release_state false true true true || true)"
+RES_B="$(classify_release_state true true false false || true)"
+RES_C="$(classify_release_state true true true true || true)"
+RES_D="$(classify_release_state true false false false || true)"
+
+if [ "${RES_A}" = "ORIGIN_FAILED" ] && \
+   [ "${RES_B}" = "PENDING_CACHE_INVALIDATION" ] && \
+   [ "${RES_C}" = "ACTIVE" ] && \
+   [ "${RES_D}" = "ORIGIN_FAILED" ]; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: A=${RES_A}, B=${RES_B}, C=${RES_C}, D=${RES_D}]"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 9: Envío de señal SIGINT real a proceso hijo -> Exit 130 + Rollback
+# ------------------------------------------------------------------------------
+echo -n "Test 9: Envío de SIGINT real a proceso de prueba -> Exit 130 + Rollback... "
+setup_dummy_env
+
+mv "${APP_ROOT}" "${TEMP_SWAP_DIR}"
+
+TEST_INT_SCRIPT="${TEST_SANDBOX}/test_sigint_child.sh"
+cat << 'EOF' > "${TEST_INT_SCRIPT}"
+#!/usr/bin/env bash
+source "${1}"
+LIVE_BUILD_ID="OLD_BUILD_ID_111"
+SWAP_STATE="LIVE_MOVED"
+trap 'signal_trap SIGINT $LINENO' INT
+kill -INT $$
+EOF
+chmod +x "${TEST_INT_SCRIPT}"
+
+SIGINT_CODE=0
+bash "${TEST_INT_SCRIPT}" "${TARGET_SCRIPT}" >/dev/null 2>&1 || SIGINT_CODE=$?
+
+if [ "${SIGINT_CODE}" -eq 130 ] && [ -f "${APP_ROOT}/package.json" ]; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: code=${SIGINT_CODE}]"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 10: Envío de señal SIGTERM real a proceso hijo -> Exit 143 + Rollback
+# ------------------------------------------------------------------------------
+echo -n "Test 10: Envío de SIGTERM real a proceso de prueba -> Exit 143 + Rollback... "
+setup_dummy_env
+
+mv "${APP_ROOT}" "${TEMP_SWAP_DIR}"
+
+TEST_TERM_SCRIPT="${TEST_SANDBOX}/test_sigterm_child.sh"
+cat << 'EOF' > "${TEST_TERM_SCRIPT}"
+#!/usr/bin/env bash
+source "${1}"
+LIVE_BUILD_ID="OLD_BUILD_ID_111"
+SWAP_STATE="LIVE_MOVED"
+trap 'signal_trap SIGTERM $LINENO' TERM
+kill -TERM $$
+EOF
+chmod +x "${TEST_TERM_SCRIPT}"
+
+SIGTERM_CODE=0
+bash "${TEST_TERM_SCRIPT}" "${TARGET_SCRIPT}" >/dev/null 2>&1 || SIGTERM_CODE=$?
+
+if [ "${SIGTERM_CODE}" -eq 143 ] && [ -f "${APP_ROOT}/package.json" ]; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: code=${SIGTERM_CODE}]"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 11: Prevención de SIGPIPE con heredoc/herestring (<<<)
+# ------------------------------------------------------------------------------
+echo -n "Test 11: Prevención de SIGPIPE bajo pipefail usando herestrings... "
 (
     set -euo pipefail
     LONG_TEXT=$(head -c 50000 /dev/urandom | base64)
@@ -244,9 +315,9 @@ else
 fi
 
 # ------------------------------------------------------------------------------
-# TEST 9: Conteo limpio de errores en log con awk (sin duplicar ceros)
+# TEST 12: Conteo limpio de errores en log con awk (sin duplicar ceros)
 # ------------------------------------------------------------------------------
-echo -n "Test 9: Conteo limpio de errores con awk (cero duplicaciones)... "
+echo -n "Test 12: Conteo limpio de errores con awk (cero duplicaciones)... "
 MOCK_LOG="${TEST_SANDBOX}/mock_proxy_error.log"
 echo "2026/10/24 10:00:00 [error] 1234#0: connection refused" > "${MOCK_LOG}"
 echo "2026/10/24 10:05:00 [notice] normal restart" >> "${MOCK_LOG}"
@@ -262,5 +333,5 @@ else
 fi
 
 echo "========================================================================"
-echo "TODAS LAS PRUEBAS DE RESILIENCIA Y RECUPERACIÓN COMPLETADAS CON ÉXITO."
+echo "TODAS LAS 12 PRUEBAS DE RESILIENCIA Y RECUPERACIÓN COMPLETADAS CON ÉXITO."
 echo "========================================================================"

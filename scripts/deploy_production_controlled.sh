@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ==============================================================================
 # PRINTPRICE OS — RUNBOOK DE DESPLIEGUE CONTROLADO
-# CANDIDATO: 9105225e22bb82f42302060d5bf1ef2d6216916b
+# CANDIDATO: EXIGIDO POR PARÁMETRO (CANDIDATE_SHA)
 # ESTADO: PREPARADO / NO EJECUTADO (Ejecución bloqueada por defecto)
 # ==============================================================================
 
@@ -11,10 +11,17 @@ set -euo pipefail
 # PARÁMETROS FIJOS ACREDITADOS POR INSPECCIÓN EMPÍRICA EN PLESK
 # ------------------------------------------------------------------------------
 export DOMAIN="${DOMAIN:-printprice.pro}"
-# Versión de la aplicación a desplegar (permite override por primer argumento o variable de entorno)
-export CANDIDATE_SHA="${1:-${CANDIDATE_SHA:-0ff1d8a71d49b96928d35fe01674c156a9f68ff8}}"
-# Versión del script de despliegue (commit del repositorio donde reside el runbook)
-export SCRIPT_VERSION="${SCRIPT_VERSION:-$(git rev-parse HEAD 2>/dev/null || echo "0ff1d8a")}"
+
+# Versión de la aplicación a desplegar: EXIGE UN SHA EXPLÍCITO (sin fallback obsoleto)
+export CANDIDATE_SHA="${1:-${CANDIDATE_SHA:-}}"
+
+# Versión del script de despliegue: Identificada estrictamente desde su propio repositorio
+SCRIPT_SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if ! SCRIPT_VERSION="$(git -C "${SCRIPT_SOURCE_DIR}" rev-parse HEAD 2>/dev/null)"; then
+    echo "ERROR: No se pudo determinar la versión del script desde el repositorio en ${SCRIPT_SOURCE_DIR}." >&2
+    exit 1
+fi
+export SCRIPT_VERSION
 export TIMESTAMP="${TIMESTAMP:-$(date +%Y%m%d_%H%M%S)}"
 
 # Variables de entorno operativo
@@ -45,7 +52,81 @@ ROLLBACK_EXECUTED=false
 ORIGINAL_EXIT_CODE=0
 
 # Registro de la identidad del build previo
-LIVE_BUILD_ID="UNKNOWN"
+# Función común de verificación de recuperación del servicio (en disco y en memoria viva)
+verify_service_recovery() {
+    local expected_build_id="$1"
+
+    if [ "${SIMULATION_MODE:-false}" = "true" ]; then
+        echo "[ROLLBACK: ${SWAP_STATE}] Recargando supervisor PM2 para el usuario ${EXPECTED_USER}..."
+        if [ "${MOCK_PM2_RELOAD_FAILS:-false}" = "true" ]; then
+            echo "[SIMULATION] Inyección de fallo en recarga PM2 activada." >&2
+            SWAP_STATE="ROLLBACK_FAILED"
+            return 2
+        fi
+
+        local local_http="${MOCK_HTTP_STATUS:-200}"
+        local local_manifest="${MOCK_MANIFEST_STATUS:-200}"
+        if [ "${local_http}" != "200" ] || [ "${local_manifest}" != "200" ]; then
+            echo "[SIMULATION ERROR] Doble de prueba reportó fallo en verificación post-rollback." >&2
+            SWAP_STATE="ROLLBACK_FAILED"
+            return 2
+        fi
+
+        SWAP_STATE="ROLLBACK_DONE"
+        echo "[ROLLBACK EXITOSO Y VERIFICADO]"
+        echo "  BUILD_ID restituido y servido en memoria: ${expected_build_id}"
+        echo "  Respuesta HTTP local: 200 OK"
+        echo "  Manifest servido en memoria: 200 OK"
+        return 0
+    fi
+
+    # Entorno real: Recarga efectiva de PM2 y validación en memoria
+    echo "[ROLLBACK: ${SWAP_STATE}] Recargando supervisor PM2 para el usuario ${EXPECTED_USER}..."
+    if ! su -s /bin/bash "${EXPECTED_USER}" -c "PORT=${EXPECTED_PORT} pm2 reload ${EXPECTED_PM2_APP} --update-env"; then
+        echo "[DESASTRE OPERATIVO] Falló la recarga de PM2 para ${EXPECTED_PM2_APP}." >&2
+        SWAP_STATE="ROLLBACK_FAILED"
+        return 2
+    fi
+    sleep 3
+
+    # Verificación en disco
+    local restored_build="UNKNOWN"
+    if [ -f "${APP_ROOT}/.next/BUILD_ID" ]; then
+        restored_build="$(cat "${APP_ROOT}/.next/BUILD_ID")"
+    fi
+
+    # Verificación en memoria (HTTP local y manifest vivo)
+    local local_http="000"
+    local local_manifest="000"
+    local attempts=0
+    while [ "${attempts}" -lt 5 ]; do
+        attempts=$((attempts + 1))
+        local_http="$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 5 --connect-timeout 2 "http://127.0.0.1:${EXPECTED_PORT}/" 2>/dev/null || echo "000")"
+        if [ "${restored_build}" != "UNKNOWN" ]; then
+            local_manifest="$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 5 --connect-timeout 2 "http://127.0.0.1:${EXPECTED_PORT}/_next/static/${restored_build}/_buildManifest.js" 2>/dev/null || echo "000")"
+        fi
+        if [ "${local_http}" = "200" ] && [ "${local_manifest}" = "200" ]; then
+            break
+        fi
+        sleep 1
+    done
+
+    if [ "${restored_build}" = "${expected_build_id}" ] && [ "${local_http}" = "200" ] && [ "${local_manifest}" = "200" ]; then
+        echo "[ROLLBACK EXITOSO Y VERIFICADO]"
+        echo "  BUILD_ID restituido y servido en memoria: ${restored_build}"
+        echo "  Respuesta HTTP local: ${local_http} OK"
+        echo "  Manifest servido en memoria: ${local_manifest} OK"
+        SWAP_STATE="ROLLBACK_DONE"
+        return 0
+    else
+        echo "[DESASTRE OPERATIVO: ROLLBACK INCONCLUSO]" >&2
+        echo "  BUILD_ID: ${restored_build} (esperado ${expected_build_id})" >&2
+        echo "  HTTP Local: ${local_http} (esperado 200)" >&2
+        echo "  Manifest Local: ${local_manifest} (esperado 200)" >&2
+        SWAP_STATE="ROLLBACK_FAILED"
+        return 2
+    fi
+}
 
 execute_rollback() {
     local reason="${1:-Razón no especificada}"
@@ -78,13 +159,17 @@ execute_rollback() {
             fi
             
             if [ ! -d "${APP_ROOT}" ] || [ ! -f "${APP_ROOT}/package.json" ]; then
-                echo "[DESASTRE OPERATIVO] APP_ROOT no es consistente tras restauración." >&2
+                echo "[DESASTRE OPERATIVO] APP_ROOT no es consistente tras restauración en disco." >&2
                 SWAP_STATE="ROLLBACK_FAILED"
                 return 2
             fi
-            echo "[OK] APP_ROOT original restituido y verificado."
-            SWAP_STATE="ROLLBACK_DONE"
-            return 0
+            
+            # Restaurar permisos
+            chown -R "${EXPECTED_USER}:${EXPECTED_GROUP}" "${APP_ROOT}" 2>/dev/null || true
+
+            # Comprobar recuperación efectiva del servicio en memoria y procesos
+            verify_service_recovery "${LIVE_BUILD_ID}"
+            return $?
             ;;
 
         STAGING_MOVED | VERIFYING)
@@ -105,44 +190,9 @@ execute_rollback() {
             # Restaurar propiedad de archivos
             chown -R "${EXPECTED_USER}:${EXPECTED_GROUP}" "${APP_ROOT}" 2>/dev/null || true
 
-            # Recargar supervisor acreditado (omitido en modo simulación de pruebas)
-            echo "[ROLLBACK: ${SWAP_STATE}] Recargando supervisor PM2 para el usuario ${EXPECTED_USER}..."
-            if [ "${SIMULATION_MODE:-false}" != "true" ]; then
-                su -s /bin/bash "${EXPECTED_USER}" -c "PORT=${EXPECTED_PORT} pm2 reload ${EXPECTED_PM2_APP} --update-env" || true
-                sleep 3
-            fi
-
-            # Verificación de salud post-rollback
-            local restored_build="UNKNOWN"
-            if [ -f "${APP_ROOT}/.next/BUILD_ID" ]; then
-                restored_build="$(cat "${APP_ROOT}/.next/BUILD_ID")"
-            fi
-
-            local local_http="000"
-            if [ "${SIMULATION_MODE:-false}" = "true" ]; then
-                local_http="200"
-            else
-                if local_http="$(curl -s -S -o /dev/null -w "%{http_code}" --max-time 10 --connect-timeout 5 "http://127.0.0.1:${EXPECTED_PORT}/" 2>/dev/null)"; then
-                    :
-                else
-                    local_http="000"
-                fi
-                local_http="${local_http:-000}"
-            fi
-
-            if [ "${restored_build}" = "${LIVE_BUILD_ID}" ] && [ "${local_http}" = "200" ]; then
-                echo "[ROLLBACK EXITOSO Y VERIFICADO]"
-                echo "  BUILD_ID restituido: ${restored_build} (coincide con el previo)"
-                echo "  Respuesta HTTP local: ${local_http} OK"
-                SWAP_STATE="ROLLBACK_DONE"
-                return 0
-            else
-                echo "[DESASTRE OPERATIVO: ROLLBACK INCONCLUSO]" >&2
-                echo "  BUILD_ID: ${restored_build} (esperado ${LIVE_BUILD_ID})" >&2
-                echo "  HTTP Local: ${local_http} (esperado 200)" >&2
-                SWAP_STATE="ROLLBACK_FAILED"
-                return 2
-            fi
+            # Comprobar recuperación efectiva del servicio en memoria y procesos
+            verify_service_recovery "${LIVE_BUILD_ID}"
+            return $?
             ;;
 
         *)
@@ -159,9 +209,15 @@ signal_trap() {
     local sig="$1"
     local line="$2"
     echo "[ALERTA] Señal ${sig} capturada en línea ${line}. Abortando de inmediato..." >&2
-    ORIGINAL_EXIT_CODE=130
-    execute_rollback "Interrupción por señal ${sig} en línea ${line}"
-    exit 130
+    local exit_code=1
+    case "${sig}" in
+        SIGINT) exit_code=130 ;;
+        SIGTERM) exit_code=143 ;;
+        *) exit_code=1 ;;
+    esac
+    ORIGINAL_EXIT_CODE="${exit_code}"
+    execute_rollback "Interrupción por señal ${sig} en línea ${line}" || true
+    exit "${exit_code}"
 }
 
 err_trap() {
@@ -185,6 +241,27 @@ exit_trap() {
     elif [ "${exit_code}" -ne 0 ] && [ "${SWAP_STATE}" != "ROLLBACK_DONE" ]; then
         execute_rollback "Salida anormal con código ${exit_code}"
         exit "${ORIGINAL_EXIT_CODE:-1}"
+    fi
+}
+
+# ------------------------------------------------------------------------------
+# CLASIFICACIÓN OPERATIVA DEL ESTADO FINAL DE RELEASE
+# ------------------------------------------------------------------------------
+classify_release_state() {
+    local origin_status_ok="$1"
+    local origin_routes_ok="$2"
+    local cache_status_ok="$3"
+    local cache_content_ok="$4"
+
+    if [ "${origin_status_ok}" != "true" ] || [ "${origin_routes_ok}" != "true" ]; then
+        echo "ORIGIN_FAILED"
+        return 1
+    elif [ "${cache_status_ok}" != "true" ] || [ "${cache_content_ok}" != "true" ]; then
+        echo "PENDING_CACHE_INVALIDATION"
+        return 0
+    else
+        echo "ACTIVE"
+        return 0
     fi
 }
 
