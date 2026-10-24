@@ -229,7 +229,7 @@ verify_service_recovery() {
     local expected_build_id="$1"
 
     echo "[ROLLBACK: ${SWAP_STATE}] Recargando supervisor PM2 para el usuario ${EXPECTED_USER}..."
-    if ! run_pm2_cmd "PORT=${EXPECTED_PORT} ${PM2_BIN} reload ${EXPECTED_PM2_APP} --update-env"; then
+    if ! run_pm2_cmd "RELEASE_ID=${expected_build_id} PORT=${EXPECTED_PORT} ${PM2_BIN} reload ${EXPECTED_PM2_APP} --update-env"; then
         echo "[DESASTRE OPERATIVO] Falló la recarga de PM2 para ${EXPECTED_PM2_APP}." >&2
         SWAP_STATE="ROLLBACK_FAILED"
         return 2
@@ -430,18 +430,19 @@ classify_release_state() {
         return 1
     fi
 
-    # 3. Si el contenido público ya está actualizado y no hay evidencia de contenido previo -> ACTIVE
+    # 3. Origen correcto + público correcto y actualizado => ACTIVE
     if [ "${public_content_ok}" = "true" ] && [ "${cache_stale_evidence}" != "true" ]; then
         echo "ACTIVE"
         return 0
     fi
 
-    # 4. Solo se clasifica PENDING_CACHE_INVALIDATION si existe evidencia de contenido antiguo con origen correcto
-    if [ "${cache_stale_evidence}" = "true" ] || [ "${public_content_ok}" != "true" ]; then
+    # 4. Origen correcto + público HTTP 200 + evidencia positiva de versión antigua => PENDING_CACHE_INVALIDATION
+    if [ "${cache_stale_evidence}" = "true" ]; then
         echo "PENDING_CACHE_INVALIDATION"
         return 0
     fi
 
+    # 5. Contenido público incorrecto sin evidencia de versión antigua => PUBLIC_FAILED
     echo "PUBLIC_FAILED"
     return 1
 }
@@ -618,7 +619,18 @@ except Exception:
         LIVE_PUBLIC_ETAG="$(${CURL_BIN} -s -S -I --max-time 10 "https://${DOMAIN}/" 2>/dev/null | grep -i "^etag:" | awk '{print $2}' | tr -d '\r\n' || echo '')"
     echo "[OK] ETag público previo registrado: ${LIVE_PUBLIC_ETAG:-NINGUNO}"
     LIVE_BUILD_ID="UNKNOWN"
-    if [ -f "${APP_ROOT}/.next/BUILD_ID" ]; then
+    # Consultar si el proceso vivo expone release_id por HTTP
+    LIVE_HTTP_RELEASE="$(${CURL_BIN} -s -S --max-time 3 "http://127.0.0.1:${EXPECTED_PORT}/api/health" 2>/dev/null | ${PYTHON_BIN} -c '
+import sys, json
+try:
+    print(json.loads(sys.stdin.read()).get("release_id", ""))
+except Exception:
+    print("")
+' 2>/dev/null || echo "")"
+
+    if [ -n "${LIVE_HTTP_RELEASE}" ] && [ "${LIVE_HTTP_RELEASE}" != "unknown" ]; then
+        LIVE_BUILD_ID="${LIVE_HTTP_RELEASE}"
+    elif [ -f "${APP_ROOT}/.next/BUILD_ID" ]; then
         LIVE_BUILD_ID="$(cat "${APP_ROOT}/.next/BUILD_ID")"
     fi
     echo "${LIVE_BUILD_ID}" > "${BACKUP_META_DIR}/live_build_id_${TIMESTAMP}.txt"
@@ -753,7 +765,7 @@ EOF
     # ==============================================================================
     echo "[FASE 5] Notificando recarga al proceso PM2 '${EXPECTED_PM2_APP}'..."
 
-    if ! run_pm2_cmd "PORT=${EXPECTED_PORT} ${PM2_BIN} reload ${EXPECTED_PM2_APP} --update-env"; then
+    if ! run_pm2_cmd "RELEASE_ID=${CANDIDATE_BUILD_ID} PORT=${EXPECTED_PORT} ${PM2_BIN} reload ${EXPECTED_PM2_APP} --update-env"; then
         echo "ERROR CRÍTICO: Falló la recarga de PM2 para ${EXPECTED_PM2_APP}." >&2
         execute_rollback "Fallo en comando pm2 reload"
         exit 1
@@ -826,19 +838,37 @@ EOF
         PUBLIC_CONTENT_OK=false
     fi
 
-    # Detección estricta de evidencia de contenido antiguo (sin ETag histórico fijo)
+    # Detección estricta de evidencia de versión antigua (claims, ETag contra origen e identidad explícita)
     if grep -F "CALCULA PRESUPUESTOS EXACTOS EN SEGUNDOS" <<< "${HTML_BUDGET}" >/dev/null; then
         echo "[EVIDENCIA] Claim anterior detectado en HTML público de /products/budget."
         CACHE_STALE_EVIDENCE=true
     fi
 
-    CURRENT_ETAG="$(${CURL_BIN} -s -S -I --max-time 10 "https://${DOMAIN}/" 2>/dev/null | grep -i "^etag:" | awk '{print $2}' | tr -d '\r\n' || echo '')"
-    if [ -n "${CURRENT_ETAG}" ]; then
-        echo "[INFO] ETag devuelto por la web pública: ${CURRENT_ETAG}"
-        if [ -n "${LIVE_PUBLIC_ETAG:-}" ] && [ "${CURRENT_ETAG}" = "${LIVE_PUBLIC_ETAG}" ]; then
-            echo "[EVIDENCIA] Reverse proxy público sirve el ETag pre-despliegue (${CURRENT_ETAG})."
+    # Comparación de ETag contra origen actual para la misma ruta (un ETag pre/post idéntico en página no cambiada es legítimo)
+    ORIGIN_ROOT_ETAG="$(${CURL_BIN} -s -S -I --max-time 5 "http://127.0.0.1:${EXPECTED_PORT}/" 2>/dev/null | grep -i "^etag:" | awk '{print $2}' | tr -d '\r\n' || echo '')"
+    CURRENT_PUBLIC_ETAG="$(${CURL_BIN} -s -S -I --max-time 10 "https://${DOMAIN}/" 2>/dev/null | grep -i "^etag:" | awk '{print $2}' | tr -d '\r\n' || echo '')"
+
+    if [ -n "${CURRENT_PUBLIC_ETAG}" ] && [ -n "${ORIGIN_ROOT_ETAG}" ]; then
+        echo "[INFO] ETag público: ${CURRENT_PUBLIC_ETAG} | ETag origen: ${ORIGIN_ROOT_ETAG}"
+        # Solo se considera evidencia positiva de caché antigua si el público difiere del origen actual Y coincide con el pre-despliegue
+        if [ "${CURRENT_PUBLIC_ETAG}" != "${ORIGIN_ROOT_ETAG}" ] && [ -n "${LIVE_PUBLIC_ETAG:-}" ] && [ "${CURRENT_PUBLIC_ETAG}" = "${LIVE_PUBLIC_ETAG}" ]; then
+            echo "[EVIDENCIA] Reverse proxy público sirve el ETag pre-despliegue (${CURRENT_PUBLIC_ETAG}) desincronizado del origen actual (${ORIGIN_ROOT_ETAG})."
             CACHE_STALE_EVIDENCE=true
         fi
+    fi
+
+    # Comprobación de identidad explícita de release en web pública
+    PUBLIC_SERVED_RELEASE_ID="$(${CURL_BIN} -s -S --max-time 5 "https://${DOMAIN}/api/health" 2>/dev/null | ${PYTHON_BIN} -c '
+import sys, json
+try:
+    print(json.loads(sys.stdin.read()).get("release_id", "unknown"))
+except Exception:
+    print("unknown")
+' 2>/dev/null || echo "unknown")"
+
+    if [ -n "${LIVE_BUILD_ID:-}" ] && [ "${LIVE_BUILD_ID}" != "UNKNOWN" ] && [ "${PUBLIC_SERVED_RELEASE_ID}" = "${LIVE_BUILD_ID}" ] && [ "${PUBLIC_SERVED_RELEASE_ID}" != "${CANDIDATE_BUILD_ID}" ]; then
+        echo "[EVIDENCIA] Endpoint público /api/health sirve la identidad del release previo (${PUBLIC_SERVED_RELEASE_ID}) en vez del candidato (${CANDIDATE_BUILD_ID})."
+        CACHE_STALE_EVIDENCE=true
     fi
 
     # 6.4. Capa B: Inspección Estática del Artefacto Compilado (EN y DE)

@@ -15,7 +15,7 @@ if [ ! -f "${TARGET_SCRIPT}" ]; then
     exit 1
 fi
 
-TEST_SANDBOX="/tmp/runbook_test_sandbox_$$"
+export TEST_SANDBOX="/tmp/runbook_test_sandbox_$$"
 mkdir -p "${TEST_SANDBOX}/bin"
 
 cleanup_sandbox() {
@@ -57,6 +57,7 @@ export GIT_BIN="${TEST_SANDBOX}/bin/git"
 # Instalar mocks de operaciones externas
 cat << 'EOF' > "${TEST_SANDBOX}/bin/pm2"
 #!/usr/bin/env bash
+SANDBOX_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 if [ "${MOCK_PM2_FAILS:-false}" = "true" ]; then
     exit 1
 fi
@@ -76,6 +77,9 @@ JSON
     exit 0
 fi
 if [ "$1" = "reload" ] || [ "$2" = "reload" ]; then
+    if [ -n "${RELEASE_ID:-}" ]; then
+        echo "${RELEASE_ID}" > "${SANDBOX_DIR:-${TEST_SANDBOX}}/last_pm2_release_id.txt"
+    fi
     if [ "${MOCK_PM2_RELOAD_FAILS:-false}" = "true" ]; then
         if [ "${SWAP_STATE:-}" = "STAGING_MOVED" ] || [ "${MOCK_PM2_RELOAD_ALWAYS_FAILS:-false}" = "true" ]; then
             exit 1
@@ -112,6 +116,7 @@ chmod +x "${TEST_SANDBOX}/bin/git"
 
 cat << 'EOF' > "${TEST_SANDBOX}/bin/curl"
 #!/usr/bin/env bash
+SANDBOX_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 IS_HEAD=false
 OUTPUT_FORMAT=""
 URL=""
@@ -146,8 +151,17 @@ done
 if [[ "${URL}" == */api/health ]]; then
     status="${MOCK_HEALTH_STATUS:-200}"
     if [ "${status}" = "200" ]; then
-        current_build="$(cat "${APP_ROOT}/.next/BUILD_ID" 2>/dev/null || echo "UNKNOWN")"
-        served_id="${MOCK_SERVED_RELEASE_ID:-${current_build}}"
+        if [[ "${URL}" == "https://${DOMAIN}/"* ]] && [ -n "${MOCK_PUBLIC_SERVED_RELEASE_ID:-}" ]; then
+            served_id="${MOCK_PUBLIC_SERVED_RELEASE_ID}"
+        elif [ -n "${MOCK_SERVED_RELEASE_ID:-}" ]; then
+            served_id="${MOCK_SERVED_RELEASE_ID}"
+        elif [ -f "${SANDBOX_DIR:-${TEST_SANDBOX}}/last_pm2_release_id.txt" ]; then
+            served_id="$(cat "${SANDBOX_DIR:-${TEST_SANDBOX}}/last_pm2_release_id.txt")"
+        elif [ -f "${APP_ROOT}/.next/BUILD_ID" ]; then
+            served_id="$(cat "${APP_ROOT}/.next/BUILD_ID")"
+        else
+            served_id="UNKNOWN"
+        fi
         body="{\"status\":\"ok\",\"release_id\":\"${served_id}\"}"
     elif [ "${status}" = "404" ]; then
         body="{\"error\":\"Not Found\"}"
@@ -185,6 +199,17 @@ if [[ "${URL}" == "http://127.0.0.1:"*"/products/budget" ]]; then
 fi
 
 if [[ "${URL}" == "http://127.0.0.1:"*"/" ]]; then
+    if [ "${IS_HEAD}" = true ]; then
+        if [ -n "${MOCK_ORIGIN_ROOT_ETAG:-}" ]; then
+            etag="${MOCK_ORIGIN_ROOT_ETAG}"
+        elif [ -f "${APP_ROOT}/.next/BUILD_ID" ]; then
+            etag="etag_$(cat "${APP_ROOT}/.next/BUILD_ID")"
+        else
+            etag="default_etag"
+        fi
+        printf "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nETag: %s\r\n\r\n" "${etag}"
+        exit 0
+    fi
     status="${MOCK_LOCAL_HTTP_STATUS:-200}"
     if [ "${OUTPUT_FORMAT}" = "%{http_code}" ]; then
         printf "%s" "${status}"
@@ -214,7 +239,9 @@ if [[ "${URL}" == "https://${DOMAIN}/"* ]]; then
     fi
 
     if [[ "${URL}" == */products/budget ]]; then
-        if [ "${MOCK_PUBLIC_STALE:-false}" = "true" ]; then
+        if [ "${MOCK_PUBLIC_CORRUPT:-false}" = "true" ]; then
+            printf "<html>Contenido alterado o vacio sin claims conocidos</html>"
+        elif [ "${MOCK_PUBLIC_STALE:-false}" = "true" ]; then
             printf "<html>CALCULA PRESUPUESTOS EXACTOS EN SEGUNDOS</html>"
         else
             printf "<html>CALCULA PRESUPUESTOS DE IMPRESIÓN EN SEGUNDOS</html>"
@@ -290,7 +317,11 @@ setup_dummy_env() {
     export MOCK_LOCAL_BUDGET_FAILS=false
     export MOCK_PUBLIC_HTTP_STATUS=200
     export MOCK_PUBLIC_ETAG=""
+    export MOCK_ORIGIN_ROOT_ETAG=""
+    export MOCK_PUBLIC_SERVED_RELEASE_ID=""
     export MOCK_PUBLIC_STALE=false
+    export MOCK_PUBLIC_CORRUPT=false
+    rm -f "${TEST_SANDBOX}/last_pm2_release_id.txt"
 }
 
 # ------------------------------------------------------------------------------
@@ -496,9 +527,23 @@ else
 fi
 
 # ------------------------------------------------------------------------------
-# TEST 14: Recuperación de servicio: Fallo en recarga PM2 genera ROLLBACK_FAILED (exit 2)
+# TEST 14: classify_release_state: Público incorrecto sin evidencia antigua -> PUBLIC_FAILED (exit 1)
 # ------------------------------------------------------------------------------
-echo -n "Test 14: verify_service_recovery (Fallo PM2 reload -> ROLLBACK_FAILED exit 2)... "
+echo -n "Test 14: classify_release_state (Público incorrecto sin evidencia antigua -> PUBLIC_FAILED exit 1)... "
+RET_PUB_NO_EVID=0
+RES_PUB_NO_EVID="$(classify_release_state true true true false false)" || RET_PUB_NO_EVID=$?
+
+if [ "${RES_PUB_NO_EVID}" = "PUBLIC_FAILED" ] && [ "${RET_PUB_NO_EVID}" -eq 1 ]; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: res=${RES_PUB_NO_EVID}, ret=${RET_PUB_NO_EVID}]"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 15: Recuperación de servicio: Fallo en recarga PM2 genera ROLLBACK_FAILED (exit 2)
+# ------------------------------------------------------------------------------
+echo -n "Test 15: verify_service_recovery (Fallo PM2 reload -> ROLLBACK_FAILED exit 2)... "
 setup_dummy_env
 export MOCK_PM2_RELOAD_FAILS=true
 export MOCK_PM2_RELOAD_ALWAYS_FAILS=true
@@ -515,9 +560,9 @@ else
 fi
 
 # ------------------------------------------------------------------------------
-# TEST 15: Recuperación de servicio: Fallo manifest HTTP local genera exit 2
+# TEST 16: Recuperación de servicio: Fallo manifest HTTP local genera exit 2
 # ------------------------------------------------------------------------------
-echo -n "Test 15: verify_service_recovery (Manifest 404 local -> ROLLBACK_FAILED exit 2)... "
+echo -n "Test 16: verify_service_recovery (Manifest 404 local -> ROLLBACK_FAILED exit 2)... "
 setup_dummy_env
 export MOCK_LOCAL_MANIFEST_STATUS=404
 RET_MANIFEST=0
@@ -532,9 +577,9 @@ else
 fi
 
 # ------------------------------------------------------------------------------
-# TEST 16: Recuperación de servicio: Exitosa con BUILD_ID y manifest verificado
+# TEST 17: Recuperación de servicio: Exitosa con BUILD_ID y manifest verificado
 # ------------------------------------------------------------------------------
-echo -n "Test 16: verify_service_recovery (Exitosa -> ROLLBACK_DONE exit 0)... "
+echo -n "Test 17: verify_service_recovery (Exitosa -> ROLLBACK_DONE exit 0)... "
 setup_dummy_env
 RET_REC_OK=0
 verify_service_recovery "OLD_BUILD_ID_111" > "${TEST_SANDBOX}/test16.log" 2>&1 || RET_REC_OK=$?
@@ -548,9 +593,9 @@ else
 fi
 
 # ------------------------------------------------------------------------------
-# TEST 17: Señal SIGINT a subproceso -> Exit 130 + Rollback
+# TEST 18: Señal SIGINT a subproceso -> Exit 130 + Rollback
 # ------------------------------------------------------------------------------
-echo -n "Test 17: Envío de SIGINT real a subproceso -> Exit 130 + Rollback... "
+echo -n "Test 18: Envío de SIGINT real a subproceso -> Exit 130 + Rollback... "
 setup_dummy_env
 mv "${APP_ROOT}" "${TEMP_SWAP_DIR}"
 
@@ -576,9 +621,9 @@ else
 fi
 
 # ------------------------------------------------------------------------------
-# TEST 18: Señal SIGTERM a subproceso -> Exit 143 + Rollback
+# TEST 19: Señal SIGTERM a subproceso -> Exit 143 + Rollback
 # ------------------------------------------------------------------------------
-echo -n "Test 18: Envío de SIGTERM real a subproceso -> Exit 143 + Rollback... "
+echo -n "Test 19: Envío de SIGTERM real a subproceso -> Exit 143 + Rollback... "
 setup_dummy_env
 mv "${APP_ROOT}" "${TEMP_SWAP_DIR}"
 
@@ -604,9 +649,9 @@ else
 fi
 
 # ------------------------------------------------------------------------------
-# TEST 19: Flujo real run_deployment con dobles: Éxito completo -> ACTIVE (exit 0)
+# TEST 20: Flujo real run_deployment con dobles: Éxito completo -> ACTIVE (exit 0)
 # ------------------------------------------------------------------------------
-echo -n "Test 19: Flujo real run_deployment -> ACTIVE (exit 0)... "
+echo -n "Test 20: Flujo real run_deployment -> ACTIVE (exit 0)... "
 setup_dummy_env
 rm -rf "${STAGING_DIR}" "${BACKUP_DIR}"
 export MOCK_PUBLIC_ETAG=""
@@ -624,9 +669,9 @@ else
 fi
 
 # ------------------------------------------------------------------------------
-# TEST 20: Flujo real run_deployment con dobles: Retención de caché -> PENDING_CACHE_INVALIDATION
+# TEST 21: Flujo real run_deployment con dobles: Retención de caché -> PENDING_CACHE_INVALIDATION
 # ------------------------------------------------------------------------------
-echo -n "Test 20: Flujo real run_deployment -> PENDING_CACHE_INVALIDATION (exit 0)... "
+echo -n "Test 21: Flujo real run_deployment -> PENDING_CACHE_INVALIDATION (exit 0)... "
 setup_dummy_env
 rm -rf "${STAGING_DIR}" "${BACKUP_DIR}"
 export MOCK_PUBLIC_STALE=true
@@ -643,9 +688,9 @@ else
 fi
 
 # ------------------------------------------------------------------------------
-# TEST 21: Flujo real run_deployment: Origen local falla (500) -> Rollback automático
+# TEST 22: Flujo real run_deployment: Origen local falla (500) -> Rollback automático
 # ------------------------------------------------------------------------------
-echo -n "Test 21: Flujo real run_deployment: Origen 500 -> ORIGIN_FAILED -> Rollback (exit 1)... "
+echo -n "Test 22: Flujo real run_deployment: Origen 500 -> ORIGIN_FAILED -> Rollback (exit 1)... "
 setup_dummy_env
 rm -rf "${STAGING_DIR}" "${BACKUP_DIR}"
 export MOCK_LOCAL_HTTP_STATUS=500
@@ -662,9 +707,9 @@ else
 fi
 
 # ------------------------------------------------------------------------------
-# TEST 22: Flujo real run_deployment: Acceso público falla (500) -> PUBLIC_FAILED -> Rollback
+# TEST 23: Flujo real run_deployment: Acceso público falla (500) -> PUBLIC_FAILED -> Rollback
 # ------------------------------------------------------------------------------
-echo -n "Test 22: Flujo real run_deployment: Público 500 -> PUBLIC_FAILED -> Rollback (exit 1)... "
+echo -n "Test 23: Flujo real run_deployment: Público 500 -> PUBLIC_FAILED -> Rollback (exit 1)... "
 setup_dummy_env
 rm -rf "${STAGING_DIR}" "${BACKUP_DIR}"
 export MOCK_PUBLIC_HTTP_STATUS=500
@@ -681,9 +726,9 @@ else
 fi
 
 # ------------------------------------------------------------------------------
-# TEST 23: Flujo real run_deployment: Identidad servida incorrecta -> Rollback automático
+# TEST 24: Flujo real run_deployment: Identidad servida incorrecta -> Rollback automático
 # ------------------------------------------------------------------------------
-echo -n "Test 23: Flujo real run_deployment: Identidad servida incorrecta -> Rollback (exit 1)... "
+echo -n "Test 24: Flujo real run_deployment: Identidad servida incorrecta -> Rollback (exit 1)... "
 setup_dummy_env
 rm -rf "${STAGING_DIR}" "${BACKUP_DIR}"
 export MOCK_SERVED_RELEASE_ID="CORRUPTED_IN_MEMORY_ID"
@@ -700,9 +745,9 @@ else
 fi
 
 # ------------------------------------------------------------------------------
-# TEST 24: Flujo real run_deployment: Fallo en recarga PM2 -> Rollback automático
+# TEST 25: Flujo real run_deployment: Fallo en recarga PM2 -> Rollback automático
 # ------------------------------------------------------------------------------
-echo -n "Test 24: Flujo real run_deployment: Fallo recarga PM2 en Phase 5 -> Rollback (exit 1)... "
+echo -n "Test 25: Flujo real run_deployment: Fallo recarga PM2 en Phase 5 -> Rollback (exit 1)... "
 setup_dummy_env
 rm -rf "${STAGING_DIR}" "${BACKUP_DIR}"
 export MOCK_PM2_RELOAD_FAILS=true
@@ -719,6 +764,73 @@ else
     exit 1
 fi
 
+# ------------------------------------------------------------------------------
+# TEST 26: Flujo real run_deployment: Contenido público incorrecto sin evidencia antigua -> PUBLIC_FAILED + Rollback
+# ------------------------------------------------------------------------------
+echo -n "Test 26: Flujo real run_deployment: Público incorrecto sin evidencia antigua -> PUBLIC_FAILED (exit 1)... "
+setup_dummy_env
+rm -rf "${STAGING_DIR}" "${BACKUP_DIR}"
+export MOCK_PUBLIC_CORRUPT=true
+export MOCK_PUBLIC_STALE=false
+export MOCK_ORIGIN_ROOT_ETAG="etag_new_candidate"
+export MOCK_PUBLIC_ETAG="etag_new_candidate"
+
+DEPLOY_26_RET=0
+( run_deployment "${CANDIDATE_SHA}" ) > "${TEST_SANDBOX}/test26.log" 2>&1 || DEPLOY_26_RET=$?
+export MOCK_PUBLIC_CORRUPT=false
+
+if [ "${DEPLOY_26_RET}" -eq 1 ] && grep -q "PUBLIC_FAILED" "${TEST_SANDBOX}/test26.log" && [ "$(cat "${APP_ROOT}/.next/BUILD_ID")" = "OLD_BUILD_ID_111" ]; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: ret=${DEPLOY_26_RET}]"
+    cat "${TEST_SANDBOX}/test26.log"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 27: Flujo real run_deployment: Página actual con ETag sin cambios entre origen y público -> ACTIVE
+# ------------------------------------------------------------------------------
+echo -n "Test 27: Flujo real run_deployment: Página actual con ETag sin cambios entre origen y público -> ACTIVE (exit 0)... "
+setup_dummy_env
+rm -rf "${STAGING_DIR}" "${BACKUP_DIR}"
+# Pre-despliegue LIVE_PUBLIC_ETAG coincide con el actual porque la página no cambió
+export MOCK_ORIGIN_ROOT_ETAG="etag_static_unchanged"
+export MOCK_PUBLIC_ETAG="etag_static_unchanged"
+export MOCK_PUBLIC_STALE=false
+
+DEPLOY_27_RET=0
+( run_deployment "${CANDIDATE_SHA}" ) > "${TEST_SANDBOX}/test27.log" 2>&1 || DEPLOY_27_RET=$?
+
+if [ "${DEPLOY_27_RET}" -eq 0 ] && grep -q "SWAP_STATE=ACTIVE" "${TEST_SANDBOX}/test27.log" && [ "$(cat "${APP_ROOT}/.next/BUILD_ID")" = "NEW_BUILD_ID_999" ]; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: ret=${DEPLOY_27_RET}]"
+    cat "${TEST_SANDBOX}/test27.log"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 28: Identidad de proceso: Candidato y rollback reciben y sirven su respectiva identidad vía PM2 env
+# ------------------------------------------------------------------------------
+echo -n "Test 28: Identidad de proceso: Candidato y rollback reciben y sirven su respectiva identidad vía PM2 env... "
+setup_dummy_env
+rm -rf "${STAGING_DIR}" "${BACKUP_DIR}"
+# Forzar fallo en fase 6 (public status 500) para comprobar la cadena de recargas y servicio de identidades
+export MOCK_PUBLIC_HTTP_STATUS=500
+
+DEPLOY_28_RET=0
+( run_deployment "${CANDIDATE_SHA}" ) > "${TEST_SANDBOX}/test28.log" 2>&1 || DEPLOY_28_RET=$?
+
+RESTORED_PM2_ID="$(cat "${TEST_SANDBOX}/last_pm2_release_id.txt" 2>/dev/null || echo "NONE")"
+
+if [ "${DEPLOY_28_RET}" -eq 1 ] && [ "${RESTORED_PM2_ID}" = "OLD_BUILD_ID_111" ] &&    grep -q "Identidad de release en memoria viva confirmada (post-reload): 'NEW_BUILD_ID_999' coincide con la esperada" "${TEST_SANDBOX}/test28.log" &&    grep -q "Identidad de release en memoria viva confirmada (post-rollback): 'OLD_BUILD_ID_111' coincide con la esperada" "${TEST_SANDBOX}/test28.log"; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: ret=${DEPLOY_28_RET}, pm2_id=${RESTORED_PM2_ID}]"
+    cat "${TEST_SANDBOX}/test28.log"
+    exit 1
+fi
+
 echo "========================================================================"
-echo "TODAS LAS 24 PRUEBAS DE RESILIENCIA Y RECUPERACIÓN COMPLETADAS CON ÉXITO."
+echo "TODAS LAS 28 PRUEBAS DE RESILIENCIA Y RECUPERACIÓN COMPLETADAS CON ÉXITO."
 echo "========================================================================"

@@ -64,14 +64,31 @@ For governed, zero-downtime production deployment with verified state rollback a
 - **Path**: `scripts/deploy_production_controlled.sh`
 - **Guarantees**:
   1. **Strict Candidate SHA Validation**: Verifies candidate git commit SHA (canonical 40-char hex format) before any filesystem writes. Uses an isolated temporary directory and `git fetch --depth 1` against the remote repository to ensure the commit exists; rejects invalid formats and remote errors immediately with non-zero exit.
-  2. **Supervisor Process & Boot-Loaded Identity**: Verifies subscription user (`printprice.pro_a2w0fsu9yw9`), PM2 process (`printprice-web`), online status, working directory (`pm_cwd` matching `APP_ROOT`), and the actual release version loaded in memory via HTTP (`/api/health`, boot-captured, no secrets). Compares expected identity post-deploy and during recovery; declares explicit verification boundary limits for legacy releases returning 404.
+  2. **Supervisor Process & Explicit Injected Identity**: Sets `RELEASE_ID` explicitly into the process environment when starting or reloading the candidate (`RELEASE_ID=${CANDIDATE_BUILD_ID} PORT=${EXPECTED_PORT} pm2 reload ${EXPECTED_PM2_APP} --update-env`) and restores the previous `RELEASE_ID` on rollback. This prevents depending on file access timing or when Next.js loads modules and reads `.next/BUILD_ID`. Verifies subscription user, PM2 online status, `pm_cwd` matching `APP_ROOT`, and the served identity in memory via HTTP (`/api/health`, boot-captured, no secrets). Maintains documented verification boundary limits for legacy releases returning HTTP 404.
   3. **Zero Alternative Validation Paths in SIMULATION_MODE**: The deployment script runs 100% production validation logic in both testing and production; test environments substitute only external boundary operations (`curl`, `git`, `pm2`).
-  4. **Dynamic Cache Classification & Public Access Safety**: Eliminates fixed historical ETags. `PENDING_CACHE_INVALIDATION` is only classified when there is confirmed evidence of old content/ETag alongside a verified, healthy origin (HTTP 200). Public HTTP 500/502 or timeouts are classified as `PUBLIC_FAILED` (triggers rollback, never success). Handles non-zero returns from `classify_release_state` explicitly under `set -e`.
+  4. **Strict Release Classification & Origin ETag Comparison**:
+     - *Origin OK + Public OK and updated* => `ACTIVE` (exit 0).
+     - *Origin OK + Public HTTP 200 + Positive evidence of old version* => `PENDING_CACHE_INVALIDATION` (exit 0).
+     - *Public content incorrect without old version evidence* => `PUBLIC_FAILED` (triggers rollback, exit 1).
+     - Completely eliminates `OR public_content_ok != true` which allowed declaring cache invalidation without evidence.
+     - Avoids false cache alarms on unchanged pages: compares public ETag with current origin response for the same route. Stale cache is only flagged if public ETag differs from origin and matches pre-deployment ETag, or if public `/api/health` serves previous release identity.
   5. **State Machine Rollback**: Idempotent rollback across `INITIAL`, `LIVE_MOVED`, `STAGING_MOVED`, `VERIFYING`, `ORIGIN_FAILED`, `PUBLIC_FAILED`.
 
 ### Simulation Test Suite
 - **Path**: `scripts/tests/test_runbook_simulation.sh`
-- **Coverage**: 24 end-to-end tests exercising real production script functions in an isolated sandbox with controllable test doubles (happy path ACTIVE, stale cache PENDING_CACHE_INVALIDATION, origin 500 failure rollback, public 500 failure rollback, wrong served identity rollback, PM2 reload failure rollback, early SHA format/remote failure validation, legacy 404 verification boundary, real signal traps SIGINT/SIGTERM, pipefail SIGPIPE prevention).
+- **Coverage**: 28 end-to-end tests exercising real production script functions in an isolated sandbox with controllable test doubles:
+  - Happy path `ACTIVE` (exit 0)
+  - Stale cache detection `PENDING_CACHE_INVALIDATION` (exit 0)
+  - Origin 500 failure rollback (`ORIGIN_FAILED`, exit 1)
+  - Public 500 failure rollback (`PUBLIC_FAILED`, exit 1)
+  - Served identity mismatch rollback (exit 1)
+  - PM2 reload failure rollback (exit 1)
+  - Early SHA format / remote non-existence rejection (exit 1)
+  - Legacy release 404 verification boundary
+  - Real signal traps `SIGINT` (130) and `SIGTERM` (143)
+  - **Regression 1**: Public content incorrect without old version evidence strictly yields `PUBLIC_FAILED` and triggers rollback
+  - **Regression 2**: Unchanged page retaining identical ETag between origin and public proxy classifies as `ACTIVE`
+  - **Regression 3**: Candidate reload and rollback receive and serve respective `RELEASE_ID` via PM2 environment and boot introspection
 - **Execution**:
   ```bash
   bash scripts/tests/test_runbook_simulation.sh
