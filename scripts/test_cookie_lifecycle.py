@@ -3,9 +3,11 @@ import json
 import sys
 from playwright.async_api import async_playwright
 
+TARGET_URL = sys.argv[1] if len(sys.argv) > 1 else "https://printprice.pro"
+
 async def run_cookie_audit():
     results = {
-        "build_target": "http://localhost:3033",
+        "build_target": TARGET_URL,
         "tested_at": "2026-10-24T04:32:00Z",
         "states": {}
     }
@@ -24,7 +26,7 @@ async def run_cookie_audit():
         }))
 
         print("=== Step 1: Fresh Context (Antes de consentir) ===")
-        await page.goto("http://localhost:3033", wait_until="networkidle")
+        await page.goto(TARGET_URL, wait_until="networkidle")
         await asyncio.sleep(2.0) # Wait for 1.2s banner timeout
 
         cookies_s1 = await context.cookies()

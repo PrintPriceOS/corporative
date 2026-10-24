@@ -1,5 +1,5 @@
 {
-  "build_target": "http://localhost:3033",
+  "build_target": "https://printprice.pro",
   "tested_at": "2026-10-24T04:32:00Z",
   "states": {
     "1_before_consent": {
@@ -11,7 +11,41 @@
       "sessionStorage_keys": [],
       "telemetry_history_present": false,
       "consent_stored": false,
-      "external_requests": []
+      "external_requests": [
+        "https://printprice.pro/",
+        "https://printprice.pro/_next/static/media/2a0421e210ae52c2-s.p.02d-f.5otso_q.woff2",
+        "https://printprice.pro/_next/static/media/a343f882a40d2cc9-s.p.0kho-wj7-y-w1.woff2",
+        "https://printprice.pro/_next/static/media/bd61c44353c129b5-s.p.1558nfkaan-be.woff2",
+        "https://printprice.pro/_next/image?url=%2Fassets%2Flogo.png&w=32&q=75",
+        "https://printprice.pro/_next/static/chunks/0vmj0gwloskhl.css",
+        "https://printprice.pro/_next/static/chunks/115dplafwys-z.js",
+        "https://printprice.pro/_next/static/chunks/0pqt~8bl3ukh4.js",
+        "https://printprice.pro/_next/static/chunks/0h4bq73pogmtb.js",
+        "https://printprice.pro/_next/static/chunks/0257pdz1-imal.js",
+        "https://printprice.pro/_next/static/chunks/turbopack-166.4b6xnt0_s.js",
+        "https://printprice.pro/_next/static/chunks/0qc-dhgi4b6be.js",
+        "https://printprice.pro/_next/static/chunks/00vlm.zi-b7wk.js",
+        "https://printprice.pro/_next/static/chunks/110qr7cos54e..js",
+        "https://printprice.pro/_next/static/chunks/0d9y~ee11bp-a.js",
+        "https://printprice.pro/_next/static/chunks/0mjo~a99ik2gu.js",
+        "https://printprice.pro/_next/static/chunks/0o7kv5iraipdj.js",
+        "https://printprice.pro/_next/static/chunks/0dx4r-utjr3tz.js",
+        "https://printprice.pro/_next/static/media/6ab0db14f70d8ed6-s.0ctuso5mgh_i..woff2",
+        "https://printprice.pro/contact?_rsc=1r34m",
+        "https://printprice.pro/?_rsc=1pn8p",
+        "https://printprice.pro/?_rsc=nn07o",
+        "https://printprice.pro/?_rsc=ivliq",
+        "https://printprice.pro/contact?_rsc=1pn8p",
+        "https://printprice.pro/contact?_rsc=1399r",
+        "https://printprice.pro/contact?_rsc=ufrug",
+        "https://printprice.pro/_next/static/chunks/07cygu~o3pqa0.js",
+        "https://printprice.pro/legal/privacy-policy?_rsc=1r34m",
+        "https://printprice.pro/legal/privacy-policy?_rsc=1pn8p",
+        "https://printprice.pro/legal/privacy-policy?_rsc=17wn8",
+        "https://printprice.pro/legal/privacy-policy?_rsc=znvab",
+        "https://printprice.pro/legal/privacy-policy?_rsc=1rquk",
+        "https://printprice.pro/_next/static/chunks/0be4xj9hiupd..js"
+      ]
     },
     "2_rejected": {
       "cookies_count": 0,
@@ -19,20 +53,20 @@
         "ppp_consent_v1_audit",
         "ppp_audit_consent_proof"
       ],
-      "consent_value": "{\"essential\":true,\"analytics\":false,\"timestamp\":\"2026-10-24T02:31:41.422Z\",\"version\":\"v1.1\"}",
+      "consent_value": "{\"essential\":true,\"analytics\":false,\"timestamp\":\"2026-10-24T02:50:26.331Z\",\"version\":\"v1.1\"}",
       "telemetry_history_after_reject_and_scroll": null
     },
     "3_accepted_category": {
-      "consent_value": "{\"essential\":true,\"analytics\":true,\"timestamp\":\"2026-10-24T02:31:43.078Z\",\"version\":\"v1.1\"}",
-      "telemetry_history": "[{\"event\":\"test_interactive_event\",\"system_version\":\"v1.1-corporate\",\"path\":\"/\",\"referrer\":\"\",\"session_id\":\"sid_4bu79xilq\",\"user_type\":\"unknown\",\"timestamp\":\"2026-10-24T02:31:43.602Z\",\"step\":\"opt_in_test\"},{\"event\":\"hero_view\",\"system_version\":\"v1.1-corporate\",\"path\":\"/\",\"referrer\":\"\",\"session_id\":\"sid_4bu79xilq\",\"user_type\":\"unknown\",\"timestamp\":\"2026-10-24T02:31:43.078Z\"},{\"event\":\"page_view\",\"system_version\":\"v1.1-corporate\",\"path\":\"/\",\"referrer\":\"\",\"session_id\":\"sid_4bu79xilq\",\"user_type\":\"unknown\",\"timestamp\":\"2026-10-24T02:31:43.078Z\"}]"
+      "consent_value": "{\"essential\":true,\"analytics\":true,\"timestamp\":\"2026-10-24T02:50:28.011Z\",\"version\":\"v1.1\"}",
+      "telemetry_history": "[{\"event\":\"test_interactive_event\",\"system_version\":\"v1.1-corporate\",\"path\":\"/\",\"referrer\":\"\",\"session_id\":\"sid_x71afn3si\",\"user_type\":\"unknown\",\"timestamp\":\"2026-10-24T02:50:28.529Z\",\"step\":\"opt_in_test\"},{\"event\":\"hero_view\",\"system_version\":\"v1.1-corporate\",\"path\":\"/\",\"referrer\":\"\",\"session_id\":\"sid_x71afn3si\",\"user_type\":\"unknown\",\"timestamp\":\"2026-10-24T02:50:28.011Z\"},{\"event\":\"page_view\",\"system_version\":\"v1.1-corporate\",\"path\":\"/\",\"referrer\":\"\",\"session_id\":\"sid_x71afn3si\",\"user_type\":\"unknown\",\"timestamp\":\"2026-10-24T02:50:28.011Z\"}]"
     },
     "4_revoked": {
-      "consent_value": "{\"essential\":true,\"analytics\":false,\"timestamp\":\"2026-10-24T02:31:44.745Z\",\"version\":\"v1.1\"}",
+      "consent_value": "{\"essential\":true,\"analytics\":false,\"timestamp\":\"2026-10-24T02:50:29.681Z\",\"version\":\"v1.1\"}",
       "telemetry_history_after_revoke": null
     },
     "5_after_reload": {
       "banner_reappeared": false,
-      "consent_value": "{\"essential\":true,\"analytics\":false,\"timestamp\":\"2026-10-24T02:31:44.745Z\",\"version\":\"v1.1\"}",
+      "consent_value": "{\"essential\":true,\"analytics\":false,\"timestamp\":\"2026-10-24T02:50:29.681Z\",\"version\":\"v1.1\"}",
       "telemetry_history": null
     }
   }
