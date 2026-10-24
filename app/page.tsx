@@ -336,7 +336,7 @@ export default function Home() {
           sublabel: `${dict.home.heroCheck1} · ${dict.home.heroCheck2} · ${dict.home.heroCheck3}`,
         }}
         secondaryAction={{
-          label: locale === 'es' ? 'Ver los tres productos ➔' : locale === 'de' ? 'Die drei Produkte ansehen ➔' : 'Explore the 3 products ➔',
+          label: locale === 'es' ? 'Ver productos ➔' : locale === 'de' ? 'Produkte ansehen ➔' : 'View products ➔',
           href: "#productos",
         }}
         rightContent={

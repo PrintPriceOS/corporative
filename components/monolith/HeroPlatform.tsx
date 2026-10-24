@@ -93,16 +93,26 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
         <style>{`
           .hero-actions {
             display: flex;
-            gap: 2rem;
+            flex-direction: column;
+            gap: 1.25rem;
             align-items: flex-start;
             transition: opacity 1s ease;
           }
+          .hero-buttons-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+          }
           @media (max-width: 768px) {
             .hero-actions {
+              width: 100%;
+            }
+            .hero-buttons-row {
               flex-direction: column;
               width: 100%;
             }
-            .hero-actions > * { width: 100%; }
+            .hero-buttons-row > * { width: 100%; }
           }
         `}</style>
         
@@ -211,46 +221,77 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
               ...({} as any) 
             }}
           >
-            {primaryAction && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: 'auto', ...({} as any) }}>
+            <div className="hero-buttons-row">
+              {primaryAction && (
                 <Link 
                     href={primaryAction.href} 
-                    style={{ width: 'inherit' }}
                     data-monolith-action="hero_slogan_engaged"
                     onClick={() => {
                         trackEvent(events.HERO_PRIMARY_CLICK, { label: primaryAction.label });
                         trackEvent(events.DECISION_MADE, { action: "hero_primary_audit" });
                     }}
+                    style={{ textDecoration: 'none' }}
                 >
-                  <Button size="lg" style={{ width: '100%' }}>{primaryAction.label}</Button>
+                  <Button 
+                    size="lg" 
+                    style={{ 
+                      whiteSpace: 'nowrap',
+                      padding: '0.95rem 1.75rem',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      minHeight: '48px',
+                    }}
+                  >
+                    {primaryAction.label}
+                  </Button>
                 </Link>
-                {primaryAction.sublabel && (
-                    <span className="technical-text" style={{ 
-                        fontSize: '0.65rem', 
-                        color: '#8d8d91', // Hardcoded Gray
-                        textTransform: 'uppercase', 
-                        letterSpacing: '0.05em',
-                        opacity: 0.7,
-                        ...({} as any) 
-                    }}>
-                        {primaryAction.sublabel}
-                    </span>
-                )}
-              </div>
-            )}
-            {secondaryAction && (
-              <Link 
-                href={secondaryAction.href} 
-                data-monolith-action={`hero_secondary_explore_${secondaryAction.label}`}
-                onClick={() => {
-                    trackEvent(events.HERO_SECONDARY_CLICK, { label: secondaryAction.label });
-                    trackEvent(events.DECISION_MADE, { action: "hero_secondary_explore" });
-                }}
-              >
-                <Button variant="secondary" size="lg" style={{ width: '100%', color: '#e5e2e3', borderColor: 'rgba(255,255,255,0.1)' }}>{secondaryAction.label}</Button>
-              </Link>
-            )}
+              )}
+              {secondaryAction && (
+                <Link 
+                  href={secondaryAction.href} 
+                  data-monolith-action={`hero_secondary_explore_${secondaryAction.label}`}
+                  onClick={() => {
+                      trackEvent(events.HERO_SECONDARY_CLICK, { label: secondaryAction.label });
+                      trackEvent(events.DECISION_MADE, { action: "hero_secondary_explore" });
+                  }}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <Button 
+                    variant="secondary" 
+                    size="lg" 
+                    style={{ 
+                      whiteSpace: 'nowrap', 
+                      color: '#e5e2e3', 
+                      borderColor: 'rgba(255,255,255,0.15)',
+                      padding: '0.95rem 1.75rem',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      minHeight: '48px',
+                    }}
+                  >
+                    {secondaryAction.label}
+                  </Button>
+                </Link>
+              )}
             </div>
+
+            {primaryAction?.sublabel && (
+              <span className="technical-text" style={{ 
+                  fontSize: '0.65rem', 
+                  color: '#8d8d91', // Hardcoded Gray
+                  textTransform: 'uppercase', 
+                  letterSpacing: '0.05em',
+                  opacity: 0.7,
+                  maxWidth: '560px',
+                  lineHeight: 1.5,
+                  ...({} as any) 
+              }}>
+                  {primaryAction.sublabel}
+              </span>
+            )}
+          </div>
           </div>
           {rightContent && (
             <div style={{ position: 'relative', zIndex: 2 }}>

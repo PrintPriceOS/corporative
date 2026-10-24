@@ -39,7 +39,7 @@ export const es: Translations = {
     heroLabel: 'MOTOR DE PRECISIÓN GRÁFICA',
     heroTitle: 'Tu libro, del archivo al papel.',
     heroSubtitle: 'Calcula el presupuesto, comprueba tus archivos y visualiza el resultado. Conectamos autores, editoriales, imprentas y proveedores de papel.',
-    heroCtaPrimary: 'Calcular presupuesto de libro ➔',
+    heroCtaPrimary: 'Calcular presupuesto ➔',
     heroCtaSecondary: 'Ver cómo funciona ➔',
     heroCheck1: 'Presupuesto técnico inmediato',
     heroCheck2: 'Sin suscripciones forzosas',
