@@ -52,8 +52,8 @@ export default function PrintProductPage() {
           icon: '🏭'
         },
         {
-          title: 'Trazabilidad Técnica Garantizada',
-          desc: 'Cada encargo viaja respaldado por especificaciones auditadas. La imprenta produce exactamente la versión aprobada, sin discrepancias.',
+          title: 'Registro Técnico de Archivo y Pedido',
+          desc: 'Cada encargo documenta las especificaciones acordadas en el pedido y el archivo validado en preflight para el taller.',
           icon: '🔒'
         },
         {
@@ -128,8 +128,8 @@ export default function PrintProductPage() {
           icon: '🏭'
         },
         {
-          title: 'Guaranteed Technical Traceability',
-          desc: 'Every work order is backed by audited specifications. The plant produces the exact verified file with zero prepress surprises.',
+          title: 'Technical File and Order Log',
+          desc: 'Every work order records the agreed order specifications and validated preflight file for the plant.',
           icon: '🔒'
         },
         {
@@ -204,8 +204,8 @@ export default function PrintProductPage() {
           icon: '🏭'
         },
         {
-          title: 'Verlässliche technische Rückverfolgung',
-          desc: 'Jeder Auftrag wird durch auditierte Spezifikationen abgesichert. Die Druckerei produziert exakt die freigegebene Version.',
+          title: 'Technisches Datei- und Auftragsprotokoll',
+          desc: 'Jeder Auftrag dokumentiert die im Auftrag vereinbarten Spezifikationen und die im Preflight validierte Datei für den Betrieb.',
           icon: '🔒'
         },
         {

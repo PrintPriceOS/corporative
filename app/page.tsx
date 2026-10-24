@@ -70,10 +70,10 @@ export default function Home() {
         ? 'Produktions-Marketplace mit Partnerdruckereien'
         : 'Production marketplace with vetted plants',
       description: locale === 'es'
-        ? 'Encuentra la imprenta adecuada y encarga la producción. Conecta las especificaciones presupuestadas y tu archivo validado con talleres adscritos a la red de producción de PrintPrice OS, garantizando que el taller reciba exactamente la versión aprobada.'
+        ? 'Encuentra la imprenta adecuada y encarga la producción. Conecta las especificaciones acordadas en el pedido y tu archivo validado con talleres adscritos a la red de producción de PrintPrice OS, asegurando que el taller reciba la versión comprobada en preflight.'
         : locale === 'de'
-        ? 'Finden Sie den passenden Betrieb und beauftragen Sie die Fertigung. Verbindet kalkulierte Spezifikationen und geprüfte Daten mit Partnerdruckereien im Netzwerk für eine exakte Umsetzung.'
-        : 'Find the right printer and commission production. Connects budgeted specifications and validated files directly with partner plants in the PrintPrice OS network, ensuring the shop prints the exact approved version.',
+        ? 'Finden Sie den passenden Betrieb und beauftragen Sie die Fertigung. Verbindet die im Auftrag vereinbarten Spezifikationen und geprüfte Daten mit Partnerdruckereien im Netzwerk für eine verlässliche Umsetzung.'
+        : 'Find the right printer and commission production. Connects agreed order specifications and validated files directly with partner plants in the PrintPrice OS network, ensuring the shop prints the preflight-verified version.',
       primaryCtaText: locale === 'es' ? 'Configurar y encargar ➔' : locale === 'de' ? 'Projekt konfigurieren ➔' : 'Configure & order ➔',
       primaryCtaHref: 'https://budget.printprice.pro/',
       secondaryCtaText: locale === 'es' ? 'Cómo funciona el marketplace' : locale === 'de' ? 'Marketplace-Ablauf' : 'How the marketplace works',
@@ -185,7 +185,7 @@ export default function Home() {
       traditional: locale === 'es' ? 'Albarán / Email' : locale === 'de' ? 'Lieferschein / E-Mail' : 'Email / Packing slip',
       lulu: locale === 'es' ? 'Número de pedido' : locale === 'de' ? 'Bestellnummer' : 'Order number',
       gelato: locale === 'es' ? 'ID de encargo' : locale === 'de' ? 'Auftrags-ID' : 'Job ID',
-      notes: locale === 'es' ? 'Garantiza que la orden de producción se ejecute con las especificaciones exactas.' : locale === 'de' ? 'Stellt sicher, dass der Auftrag exakt nach Spezifikation gefertigt wird.' : 'Guarantees the job runs against audited specs without drift.',
+      notes: locale === 'es' ? 'Vincula la orden de producción a las especificaciones acordadas en el pedido.' : locale === 'de' ? 'Bindet den Fertigungsauftrag an die im Auftrag vereinbarten Spezifikationen.' : 'Binds the production order to the agreed order specifications.',
     },
   ];
 
@@ -237,7 +237,7 @@ export default function Home() {
       acrobat: locale === 'es' ? 'No aplica' : locale === 'de' ? 'Nicht anwendbar' : 'Not applicable',
       pitstop: locale === 'es' ? 'Mediante integración' : locale === 'de' ? 'Über Integration' : 'Via integration',
       pdftoolbox: locale === 'es' ? 'Mediante integración' : locale === 'de' ? 'Über Integration' : 'Via integration',
-      notes: locale === 'es' ? 'Verificación técnica que garantiza que el impresor recibe exactamente el archivo auditado.' : locale === 'de' ? 'Stellt sicher, dass die Druckerei exakt die geprüfte Datei erhält.' : 'Technical check ensuring plant prints the exact preflighted asset.',
+      notes: locale === 'es' ? 'Verificación técnica que vincula el archivo auditado con la orden del impresor.' : locale === 'de' ? 'Verknüpft die geprüfte Datei mit dem Fertigungsauftrag der Druckerei.' : 'Technical check linking the preflighted asset to the printer order.',
     },
   ];
 
@@ -246,44 +246,68 @@ export default function Home() {
     {
       feature: locale === 'es' ? 'Modelo de servicio' : locale === 'de' ? 'Servicemodell' : 'Service model',
       printprice: locale === 'es' ? 'Directo con talleres' : locale === 'de' ? 'Direkt mit Partnerbetrieben' : 'Direct with partner plants',
-      podPlatforms: locale === 'es' ? 'Plataforma POD integrada' : locale === 'de' ? 'Integrierte POD-Plattform' : 'Integrated POD platform',
-      traditionalBrokers: locale === 'es' ? 'Gestión comercial / Bróker' : locale === 'de' ? 'Handelsvermittlung / Broker' : 'Commercial brokering',
-      notes: locale === 'es' ? 'PrintPrice conecta con plantas industriales adscritas; plataformas POD operan centros de distribución; brókeres subcontratan talleres.' : locale === 'de' ? 'PrintPrice bindet Partnerbetriebe an; POD-Plattformen nutzen Verteilzentren; Broker vergeben Aufträge extern.' : 'PrintPrice coordinates partner plants; POD platforms operate fulfillment networks; brokers subcontract plants.',
+      podPlatforms: locale === 'es' ? 'Red POD distribuida' : locale === 'de' ? 'Verteiltes POD-Netzwerk' : 'Distributed POD network',
+      traditionalBrokers: locale === 'es' ? 'Varía según proveedor' : locale === 'de' ? 'Variiert je nach Anbieter' : 'Varies by provider',
+      notes: locale === 'es'
+        ? 'PrintPrice conecta con plantas industriales adscritas; Lulu y Gelato operan redes globales de centros asociados bajo demanda; la intermediación gráfica tradicional varía entre agencias, brókeres y talleres locales.'
+        : locale === 'de'
+        ? 'PrintPrice bindet Partnerbetriebe an; Lulu und Gelato nutzen globale POD-Fertigungspartner; traditionelle Vermittlung variiert nach Agentur oder Betrieb.'
+        : 'PrintPrice coordinates partner plants; Lulu and Gelato route across distributed POD partner networks; traditional brokering varies by agent or shop.',
     },
     {
       feature: locale === 'es' ? 'Selección de imprenta' : locale === 'de' ? 'Druckereiauswahl' : 'Printer selection',
       printprice: locale === 'es' ? 'Enrutamiento técnico' : locale === 'de' ? 'Technische Zuweisung' : 'Technical routing',
-      podPlatforms: locale === 'es' ? 'Asignación interna POD' : locale === 'de' ? 'Interne POD-Zuweisung' : 'Internal POD assignment',
-      traditionalBrokers: locale === 'es' ? 'Selección manual' : locale === 'de' ? 'Manuelle Vergabe' : 'Manual selection',
-      notes: locale === 'es' ? 'El algoritmo Matchmaker evalúa formato de pliego y máquina idónea; POD asigna por logística; la gestión tradicional asigna por acuerdos comerciales.' : locale === 'de' ? 'Matchmaker wählt nach Bogenformat und Maschineneinsatz; POD nach Versandregion; Broker nach Handelsabkommen.' : 'Matchmaker evaluates sheet format and press fit; POD routes by shipping region; brokers assign via trade agreements.',
+      podPlatforms: locale === 'es' ? 'Asignación automatizada' : locale === 'de' ? 'Automatische Zuweisung' : 'Automated routing',
+      traditionalBrokers: locale === 'es' ? 'Varía según proveedor' : locale === 'de' ? 'Variiert je nach Anbieter' : 'Varies by provider',
+      notes: locale === 'es'
+        ? 'Matchmaker asigna según pliego y máquina adscrita; Gelato y Lulu enrutan internamente según destino de envío y capacidad (fuente: Gelato Help Center / Lulu Guides); en brókeres tradicionales varía entre acuerdos comerciales o selección manual.'
+        : locale === 'de'
+        ? 'Matchmaker wählt nach Bogenformat und Maschineneinsatz; Gelato und Lulu weisen intern nach Lieferort und Kapazität zu; bei traditionellen Brokern je nach Vereinbarung oder manuell.'
+        : 'Matchmaker assigns by sheet geometry and press fit; Gelato and Lulu route internally by shipping destination and plant availability; traditional brokers vary by agreements or manual assignment.',
     },
     {
       feature: locale === 'es' ? 'Presupuestación' : locale === 'de' ? 'Kalkulation & Preis' : 'Pricing & budgeting',
       printprice: locale === 'es' ? 'Inmediata en servidor' : locale === 'de' ? 'Sofortige Server-Kalkulation' : 'Instant server calculation',
-      podPlatforms: locale === 'es' ? 'Tarifa fija unitaria' : locale === 'de' ? 'Einheitstarife' : 'Fixed unit catalog pricing',
-      traditionalBrokers: locale === 'es' ? 'Bajo cotización (24-72h)' : locale === 'de' ? 'Auf Anfrage (24-72 Std.)' : 'On request (24-72h)',
-      notes: locale === 'es' ? 'Budget calcula al instante con costes desglosados de fabricación y papel; POD aplica tarifas unitarias cerradas; la gestión tradicional requiere solicitud manual.' : locale === 'de' ? 'Budget schlüsselt Fertigung und Papier sofort auf; POD nutzt Einheitspreise; Broker benötigen manuelle Angebotserstellung.' : 'Budget itemizes manufacturing and substrate instantly; POD uses unit catalog rates; brokers require manual quoting.',
+      podPlatforms: locale === 'es' ? 'Tarifas de catálogo POD' : locale === 'de' ? 'POD-Katalogtarife' : 'POD catalog rates',
+      traditionalBrokers: locale === 'es' ? 'Varía según proveedor' : locale === 'de' ? 'Variiert je nach Anbieter' : 'Varies by provider',
+      notes: locale === 'es'
+        ? 'Budget desglosa fabricación y papel al instante; Lulu y Gelato aplican tarifas unitarias y tramos de catálogo (fuente: calculadora Lulu / tarifas Gelato); en intermediación tradicional varía desde cotizaciones bajo petición hasta tarifas preacordadas.'
+        : locale === 'de'
+        ? 'Budget schlüsselt Fertigung und Papier sofort auf; Lulu und Gelato nutzen Stücktarife nach Produktkatalog; bei traditionellen Brokern von Angebot auf Anfrage bis zu Rahmenverträgen.'
+        : 'Budget itemizes manufacturing and substrate instantly; Lulu and Gelato publish unit catalog rates; traditional brokering ranges from quotes on request to pre-negotiated rates.',
     },
     {
       feature: locale === 'es' ? 'Preparación de archivos' : locale === 'de' ? 'Dateivorbereitung & Preflight' : 'File preparation & preflight',
-      printprice: locale === 'es' ? 'Preflight determinista' : locale === 'de' ? 'Deterministisches Preflight' : 'Deterministic preflight',
-      podPlatforms: locale === 'es' ? 'Comprobación de medidas' : locale === 'de' ? 'Maßprüfung im Uploader' : 'Format dimensional check',
-      traditionalBrokers: locale === 'es' ? 'Revisión en preimpresión' : locale === 'de' ? 'Manuelle Vorstufenprüfung' : 'Manual prepress check',
-      notes: locale === 'es' ? 'Fix it audita sangrados, resolución y perfiles en navegador; POD valida dimensiones básicas; la imprenta tradicional revisa artes finales en taller.' : locale === 'de' ? 'Fix it prüft Beschnitt, Auflösung und Profile im Browser; POD prüft Maße; Druckereien prüfen manuell in der Vorstufe.' : 'Fix it checks bleeds, DPI, and profiles in-browser; POD checks dimensions; traditional shops review in prepress.',
+      printprice: locale === 'es' ? 'Preflight en navegador' : locale === 'de' ? 'In-Browser Preflight' : 'In-browser preflight',
+      podPlatforms: locale === 'es' ? 'Validación según producto' : locale === 'de' ? 'Produktbezogene Prüfung' : 'Product-specific check',
+      traditionalBrokers: locale === 'es' ? 'Varía según proveedor' : locale === 'de' ? 'Variiert je nach Anbieter' : 'Varies by provider',
+      notes: locale === 'es'
+        ? 'Fix it comprueba sangrados, perfiles y resolución según perfil técnico; Lulu valida formato, sangrías y PDF/X en subida; Gelato revisa dimensiones y resolución en editor o API (fuente: Gelato Design Guidelines / Lulu Book Creation Guide); en intermediación tradicional varía entre taller de preimpresión o portales web.'
+        : locale === 'de'
+        ? 'Fix it prüft Beschnitt, Profile und Auflösung im Browser; Lulu validiert Format, Beschnitt und PDF/X beim Upload; Gelato prüft Maße und Auflösung im Editor/API; bei traditionellen Brokern je nach Vorstufe oder Webportal.'
+        : 'Fix it checks bleeds, profiles, and resolution in-browser; Lulu validates trim, bleed, and PDF/X on upload; Gelato checks dimensions and DPI via editor/API; traditional brokering varies by prepress workflow or web portals.',
     },
     {
       feature: locale === 'es' ? 'Pedido y seguimiento' : locale === 'de' ? 'Bestellung & Tracking' : 'Ordering & tracking',
-      printprice: locale === 'es' ? 'Orden técnica verificada' : locale === 'de' ? 'Verifizierte Arbeitsorder' : 'Verified technical order',
-      podPlatforms: locale === 'es' ? 'Panel de pedidos web' : locale === 'de' ? 'Web-Bestellübersicht' : 'Web dashboard orders',
-      traditionalBrokers: locale === 'es' ? 'Albarán y correo' : locale === 'de' ? 'Lieferschein & E-Mail' : 'Packing slip & email',
-      notes: locale === 'es' ? 'La orden viaja vinculada a las especificaciones y archivo auditado; POD ofrece seguimiento de paquetería; la gestión tradicional comunica por albarán y correo.' : locale === 'de' ? 'Auftrag verbindet geprüfte Datei mit Fertigung; POD bietet Paket-Tracking; Broker kommunizieren per E-Mail und Lieferschein.' : 'Order binds validated file to plant production; POD provides shipment tracking; brokers track via email and delivery slips.',
+      printprice: locale === 'es' ? 'Orden y registro técnico' : locale === 'de' ? 'Auftrag & technisches Protokoll' : 'Order & technical log',
+      podPlatforms: locale === 'es' ? 'Panel de pedidos y tracking' : locale === 'de' ? 'Bestellpanel & Tracking' : 'Order dashboard & tracking',
+      traditionalBrokers: locale === 'es' ? 'Varía según proveedor' : locale === 'de' ? 'Variiert je nach Anbieter' : 'Varies by provider',
+      notes: locale === 'es'
+        ? 'El pedido vincula especificaciones acordadas y archivo validado con la planta; Lulu y Gelato disponen de paneles con seguimiento de paquetería (fuente: Lulu Dashboard / Gelato Order Tracking); en gestión tradicional varía entre portal de cliente, albarán o gestor de cuenta.'
+        : locale === 'de'
+        ? 'Auftrag bindet vereinbarte Spezifikationen und geprüfte Datei an die Fertigung; Lulu und Gelato bieten Tracking-Panels; bei traditionellen Brokern Kundenportale, Lieferschein oder persönliche Betreuung.'
+        : 'Order binds agreed specifications and validated file to plant production; Lulu and Gelato provide dashboards with parcel tracking; traditional brokering uses customer portals, slips, or account managers.',
     },
     {
       feature: locale === 'es' ? 'Integraciones' : locale === 'de' ? 'Schnittstellen & Integration' : 'Integrations',
       printprice: locale === 'es' ? 'API REST y Control Plane' : locale === 'de' ? 'REST-API & Control Plane' : 'REST API & Control Plane',
-      podPlatforms: locale === 'es' ? 'Plugins e-commerce' : locale === 'de' ? 'E-Commerce-Plugins' : 'E-commerce plugins',
-      traditionalBrokers: locale === 'es' ? 'Gestión documental directa' : locale === 'de' ? 'Direkter Dokumentenaustausch' : 'Direct document exchange',
-      notes: locale === 'es' ? 'Control Plane para plantas y API de análisis para flujos editoriales; POD conecta con Shopify/WooCommerce; la gestión tradicional usa FTP o correo.' : locale === 'de' ? 'Control Plane für Druckereien und Preflight-API; POD integriert Shopify/WooCommerce; Broker nutzen FTP oder E-Mail.' : 'Control Plane for plants and Preflight API; POD integrates with Shopify/WooCommerce; brokers exchange via FTP/email.',
+      podPlatforms: locale === 'es' ? 'Plugins e-commerce y API' : locale === 'de' ? 'E-Commerce-Plugins & API' : 'E-commerce plugins & API',
+      traditionalBrokers: locale === 'es' ? 'Varía según proveedor' : locale === 'de' ? 'Variiert je nach Anbieter' : 'Varies by provider',
+      notes: locale === 'es'
+        ? 'Control Plane para plantas y API técnica de preflight; Lulu Direct integra Shopify/WooCommerce y API propia; Gelato conecta tiendas e-commerce y Gelato API (sin incluir GelatoConnect, software de planta independiente); en intermediación tradicional varía entre intercambio de archivos, ERPs o correo.'
+        : locale === 'de'
+        ? 'Control Plane für Druckereien und Preflight-API; Lulu Direct bietet Shopify/WooCommerce-Plugins; Gelato bindet E-Commerce und Gelato API an (ohne GelatoConnect-Betriebssoftware); traditionelle Vermittlung variiert nach Datenaustausch oder E-Mail.'
+        : 'Control Plane for plants and Preflight API; Lulu Direct supports Shopify/WooCommerce and API; Gelato integrates e-commerce stores and Gelato API (excluding separate GelatoConnect plant software); traditional brokering varies by portal, ERP, or email.',
     },
   ];
 
@@ -972,12 +996,12 @@ export default function Home() {
             </>
           )}
 
-          <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+          <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
             {locale === 'es'
-              ? '* Metodología: Datos cotejados a partir de manuales públicos de producto, especificaciones oficiales y documentación técnica (octubre 2026).'
+              ? '* Metodología y fuentes (octubre 2026): Datos contrastados con manuales públicos oficiales: Lulu Book Creation Guide y Lulu Direct API; Gelato Print-on-Demand Help Center y Gelato API (referido a la plataforma POD para creadores, excluyendo GelatoConnect como software de planta independiente); y PrintPrice OS API y Control Plane. Para la categoría general de gestión tradicional, los aspectos no estandarizados se indican como «Varía según proveedor».'
               : locale === 'de'
-              ? '* Methodik: Öffentliche Produktdokumentationen und technische Spezifikationen (Stand: Oktober 2026).'
-              : '* Methodology: Cross-checked against public product documentation and verified specs (as of October 2026).'}
+              ? '* Methodik und Quellen (Oktober 2026): Abgeglichen mit offiziellen Dokumentationen: Lulu Book Creation Guide & Lulu Direct API; Gelato Print-on-Demand Help Center & Gelato API (bezogen auf die POD-Plattform für Ersteller, ohne GelatoConnect-Fertigungssoftware); sowie PrintPrice OS API & Control Plane. Für traditionelle Druckvermittlung wird bei variablen Merkmalen «Variiert je nach Anbieter» ausgewiesen.'
+              : '* Methodology & Sources (October 2026): Cross-referenced with official public manuals: Lulu Book Creation Guide & Lulu Direct API; Gelato Print-on-Demand Help Center & Gelato API (referring to the creator POD platform, excluding GelatoConnect standalone plant software); and PrintPrice OS API & Control Plane. For general traditional brokering, non-standardized traits are indicated as "Varies by provider".'}
           </div>
         </Container>
       </section>

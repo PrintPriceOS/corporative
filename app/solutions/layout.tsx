@@ -3,7 +3,7 @@ import { constructMetadata, getBreadcrumbJsonLd } from '@/lib/seo';
 
 export const metadata: Metadata = constructMetadata({
   title: 'Soluciones de Fabricación Gráfica Editorial y Comercial | PrintPrice Pro',
-  description: 'Flujos de automatización técnica para libros, packaging, folletos comerciales y gran formato industrial con trazabilidad garantizada.',
+  description: 'Flujos de automatización técnica para libros, packaging, folletos comerciales y gran formato industrial con registro técnico de especificaciones.',
   canonical: '/solutions',
 });
 

@@ -135,7 +135,7 @@ export default function PreflightProductPage() {
         },
         {
           q: '¿Cómo se conecta Preflight con el presupuesto (Budget) y la producción?',
-          a: 'Las características técnicas que defines al presupuestar en Budget (tamaño de corte, número de páginas, tipo de papel) configuran automáticamente las reglas del Preflight. Al aprobar el archivo, se genera una orden técnica verificada que garantiza que la imprenta reciba exactamente la versión validada.'
+          a: 'Las características técnicas que defines al presupuestar en Budget (tamaño de corte, número de páginas, tipo de papel) configuran automáticamente las reglas del Preflight. Al aprobar el archivo, se genera una orden técnica que vincula el archivo validado en preflight con la orden del taller.'
         }
       ]
     },
