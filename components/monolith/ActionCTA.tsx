@@ -6,6 +6,7 @@ import { Button } from '../ui/Button';
 import Link from 'next/link';
 import ShapeGrid from '../ui/ShapeGrid';
 import { trackEvent, events } from '@/lib/telemetry';
+import { useLocale } from '@/lib/i18n';
 
 /**
  * ACTION CTA v3.4 - "UNIVERSAL MONOLITH"
@@ -29,7 +30,7 @@ interface ActionCTAProps {
 
 export const ActionCTA: React.FC<ActionCTAProps> = ({
   title = "Ready to optimize your production chain?",
-  description = "Join the nodes of the world's first production operating system. Get exact costs and validate your files in seconds.",
+  description = "Presupuesto técnico estructurado y validación de archivos editoriales conectando autores y editoriales con talleres homologados.",
   buttonLabel = "CALCULATE MY COST",
   buttonHref = "https://budget.printprice.pro/",
   secondaryButtonLabel,
@@ -39,6 +40,8 @@ export const ActionCTA: React.FC<ActionCTAProps> = ({
   footerNote,
   children
 }) => {
+  const { locale } = useLocale();
+
   return (
     <div
       style={{
@@ -210,9 +213,9 @@ export const ActionCTA: React.FC<ActionCTAProps> = ({
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', opacity: 0.5 }} className="technical-text">
-              <span style={{ fontSize: '0.7rem' }}>NODES AVAILABLE: 1,280</span>
+              <span style={{ fontSize: '0.7rem' }}>{locale === 'es' ? 'RED TÉCNICA DE PRODUCCIÓN' : locale === 'de' ? 'TECHNISCHES PRODUKTIONSNETZWERK' : 'TECHNICAL PRODUCTION NETWORK'}</span>
               <span style={{ width: '4px', height: '4px', background: 'currentColor', borderRadius: '50%' }}></span>
-              <span style={{ fontSize: '0.7rem' }}>REGION: GLOBAL EDGE</span>
+              <span style={{ fontSize: '0.7rem' }}>{locale === 'es' ? 'FEDERACIÓN DE TALLERES HOMOLOGADOS' : locale === 'de' ? 'FEDERATION ZERTIFIZIERTER DRUCKEREIEN' : 'CERTIFIED WORKSHOP FEDERATION'}</span>
             </div>
 
             {footerNote && (

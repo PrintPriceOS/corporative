@@ -19,12 +19,12 @@ export default function PackagingSolution() {
       heroBtn: 'Consultar con un especialista ➔',
       features: [
         { icon: 'box', tag: 'Estructura', title: 'Comprensión de Troquel', desc: 'El motor reconoce líneas de corte, hendido, sangrado y perforación para calcular el rendimiento de pliego y tiempo de troquelado.' },
-        { icon: 'specs', tag: 'Material', title: 'Sincronización de Sustratos', desc: 'Costes vinculados a cartoncillos estucados, folding SBS y cartones ondulados con cálculo exacto de mermas de arranque.' },
+        { icon: 'specs', tag: 'Material', title: 'Sincronización de Sustratos', desc: 'Costes vinculados a cartoncillos estucados, folding SBS y cartones ondulados con modelado técnico de mermas de arranque.' },
         { icon: 'shield', tag: 'Preflight', title: 'Control de Calidad Específico', desc: 'Validación técnica de zonas de reserva de barniz, áreas de encolado, códigos de barras legibles y sangrados en pestañas.' },
       ],
       ctaSlogan: 'PRECISIÓN ESTRUCTURAL',
       ctaTitle: 'Ingeniería aplicada al packaging',
-      ctaDesc: 'Calcula con exactitud troqueles, materiales y acabados en estuches y embalajes con PrintPrice OS.',
+      ctaDesc: 'Modela troqueles, materiales y acabados en estuches y embalajes con PrintPrice OS.',
       ctaBtn: 'Hablar con un especialista ➔'
     },
     en: {

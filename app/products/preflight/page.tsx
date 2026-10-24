@@ -897,7 +897,7 @@ export default function PreflightProductPage() {
                     <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
                       <td style={{ padding: '1rem', fontWeight: 700 }}>Forma de acceso</td>
                       <td style={{ padding: '1rem', color: 'var(--accent-primary)' }}>
-                        <strong>Disponible</strong><br />Navegador web (SaaS cloud). Sin registro previo obligatorio.
+                        <strong>Disponible</strong><br />Navegador web (SaaS cloud). Acceso mediante cuenta gratuita o enlace mágico.
                       </td>
                       <td style={{ padding: '1rem' }}>
                         <strong>Disponible</strong><br />Escritorio local (macOS / Windows).

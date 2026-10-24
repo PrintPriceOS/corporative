@@ -245,7 +245,7 @@ export default function ForAuthorsPage() {
               </div>
               <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '1.25rem' }}>
                 <a href="https://budget.printprice.pro/" className="btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>
-                  {locale === 'es' ? 'Encargar producción ➔' : locale === 'de' ? 'Druckauftrag erteilen ➔' : 'Commission printing ➔'}
+                  {locale === 'es' ? 'Calcular producción ➔' : locale === 'de' ? 'Produktion kalkulieren ➔' : 'Calculate production ➔'}
                 </a>
                 <Link href="/products/print" className="btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>
                   {locale === 'es' ? 'Cómo funciona' : locale === 'de' ? 'Ablauf' : 'How it works'}

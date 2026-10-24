@@ -16,15 +16,15 @@ export default function BudgetPage() {
       heroLabel: 'MOTOR DE PRESUPUESTO / PRICE IT',
       heroTitle: 'CALCULA COSTES REALES DE IMPRESIÓN EN SEGUNDOS',
       heroSlogan: ["PRICE IT.", "FIX IT.", "PRINT IT."],
-      heroSub: 'Obtén presupuestos de libros y publicaciones al instante. Sin estimaciones aproximadas: costes de fabricación resueltos en servidor sobre especificaciones técnicas y matrices de taller.',
+      heroSub: 'Obtén presupuestos técnicos de libros y publicaciones al instante. Costes de fabricación calculados en servidor a partir de especificaciones de pliegos, gramajes y matrices de taller.',
       heroCtaPrimary: 'Calcular mi presupuesto de libro ➔',
       heroCtaSecondary: 'Ver características técnicas ↓',
       features: [
         { 
           icon: 'calculator', 
-          tag: 'EXACTITUD TÉCNICA', 
-          title: 'Coste Real al Instante', 
-          desc: 'Sin conjeturas. Cálculo exacto basado en tus especificaciones: pliegos, gramajes, tintas y operaciones de encuadernación.' 
+          tag: 'INGENIERÍA DE COSTES', 
+          title: 'Presupuesto Técnico al Instante', 
+          desc: 'Cálculo estructurado basado en tus especificaciones: pliegos, gramajes, tintas y operaciones de encuadernación conforme a tarifas de planta.' 
         },
         { 
           icon: 'activity', 
@@ -48,15 +48,15 @@ export default function BudgetPage() {
       heroLabel: 'PRICING ENGINE / PRICE IT',
       heroTitle: 'CALCULATE REAL PRINT COSTS IN SECONDS',
       heroSlogan: ["PRICE IT.", "FIX IT.", "PRINT IT."],
-      heroSub: 'Get instant manufacturing budgets for books and print jobs. No guesswork: server-side production pricing resolved against technical specs and real shop matrices.',
+      heroSub: 'Get instant manufacturing budgets for books and print jobs. Server-side production pricing resolved against technical specs and real shop matrices.',
       heroCtaPrimary: 'Calculate my book budget ➔',
       heroCtaSecondary: 'Explore technical capabilities ↓',
       features: [
         { 
           icon: 'calculator', 
-          tag: 'TECHNICAL ACCURACY', 
-          title: 'Instant Production Cost', 
-          desc: 'No rough estimates. Exact pricing based on your physical specifications: sheet layouts, basis weights, inks, and bindery.' 
+          tag: 'COST ENGINEERING', 
+          title: 'Instant Technical Estimate', 
+          desc: 'Structured calculation based on your physical specifications: sheet layouts, basis weights, inks, and bindery according to plant matrices.' 
         },
         { 
           icon: 'activity', 
@@ -80,15 +80,15 @@ export default function BudgetPage() {
       heroLabel: 'KALKULATIONSMOTOR / PRICE IT',
       heroTitle: 'ECHTE DRUCKKOSTEN IN SEKUNDEN BERECHNEN',
       heroSlogan: ["PRICE IT.", "FIX IT.", "PRINT IT."],
-      heroSub: 'Erhalten Sie sofortige Fertigungsangebote für Bücher und Druckwerke. Keine Schätzungen: serverseitige Preiskalkulation nach echten Druckereimatrizen.',
+      heroSub: 'Erhalten Sie sofortige Fertigungsangebote für Bücher und Druckwerke. Serverseitige Preiskalkulation nach verifizierten Druckereimatrizen.',
       heroCtaPrimary: 'Buchangebot berechnen ➔',
       heroCtaSecondary: 'Funktionen ansehen ↓',
       features: [
         { 
           icon: 'calculator', 
-          tag: 'TECHNISCHE GENAUIGKEIT', 
-          title: 'Echte Kosten in Sekunden', 
-          desc: 'Keine Daumenwerte. Exakte Preise nach Ihren Spezifikationen: Bogenformate, Grammaturen, Farbräume und Weiterverarbeitung.' 
+          tag: 'KOSTENINGENIEURWESEN', 
+          title: 'Sofortige technische Vorkalkulation', 
+          desc: 'Strukturierte Berechnung nach Ihren Spezifikationen: Bogenformate, Grammaturen, Farbräume und Weiterverarbeitung nach Betriebstarifen.' 
         },
         { 
           icon: 'activity', 

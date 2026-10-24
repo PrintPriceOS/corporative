@@ -64,7 +64,7 @@ export default function PrintProductPage() {
           icon: CircleDollarSign
         },
         {
-          title: 'Cero Incidencias de Preimpresión',
+          title: 'Prevención de Incidencias de Preimpresión',
           desc: 'Al llegar a máquina, el archivo ya ha sido verificado contra las tolerancias mecánicas reales de la máquina asignada.',
           icon: Zap
         }
@@ -140,7 +140,7 @@ export default function PrintProductPage() {
           icon: CircleDollarSign
         },
         {
-          title: 'Zero Prepress Friction',
+          title: 'Prepress Friction Prevention',
           desc: 'Files arrive at the press pre-validated against machine physical constraints and gripper tolerances.',
           icon: Zap
         }
