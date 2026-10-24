@@ -1,5 +1,6 @@
 import os
 import re
+from pathlib import Path
 
 SEARCH_TERMS = [
     r"\bexact\b",
@@ -19,7 +20,7 @@ SEARCH_TERMS = [
     r"\bEncargar producci[oó]n\b",
 ]
 
-BASE_DIR = r"C:\Users\KIKE\Downloads\corporative"
+BASE_DIR = os.environ.get("REPO_DIR", str(Path(__file__).resolve().parents[1]))
 DIRS_TO_SEARCH = ["app", "components", "lib"]
 
 results = []

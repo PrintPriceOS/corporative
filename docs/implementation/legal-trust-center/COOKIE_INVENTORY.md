@@ -4,7 +4,7 @@
 **Fecha de Auditoría Técnica:** 24 de octubre de 2026  
 **Build Objetivo Auditado:** `http://localhost:3033` (Next.js 16.2.1 Turbopack, compilación de candidato)  
 **Herramienta de Verificación:** Playwright Chromium Headless (`scripts/test_cookie_lifecycle.py`)  
-**Archivo de Evidencias:** [`scripts/cookie_lifecycle_results.json`](file:///c:/Users/KIKE/Downloads/corporative/scripts/cookie_lifecycle_results.json)
+**Archivo de Evidencias:** [`scripts/cookie_lifecycle_results.json`](../../../scripts/cookie_lifecycle_results.json)
 
 ---
 
