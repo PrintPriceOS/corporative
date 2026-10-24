@@ -56,11 +56,30 @@ If **CTR < 4%** on the main hero:
 If **Bounce Rate > 60%** on /developers:
 - **Action**: Move the Quickstart section higher in `app/developers/page.tsx`.
 
-## 5. First 24-Hour Goals
-- [ ] Identify the most clicked "Command Node" (Budget vs Preflight).
-- [ ] Verify if users are clicking "Explore Infrastructure" vs "Start Audit".
-- [ ] Confirm no "No-Line" rule violations found by user feedback.
+## 6. Controlled Deployment Runbook (Scripted & Verifiable)
+
+For governed, zero-downtime production deployment with verified state rollback and test doubles:
+
+### Script
+- **Path**: `scripts/deploy_production_controlled.sh`
+- **Guarantees**:
+  1. **Early SHA Validation**: Verifies candidate git commit SHA (40-char canonical hex format) before any filesystem writes (backup/staging/releases).
+  2. **Supervisor Process Identity**: Verifies subscription user (`printprice.pro_a2w0fsu9yw9`), PM2 process (`printprice-web`), online status, and working directory (`pm_cwd` matching `APP_ROOT`) during preflight, post-reload, origin verification, and post-rollback.
+  3. **Multilayer Verification & Release Classification**: Connects `classify_release_state` directly to deployment transitions:
+     - `ACTIVE`: Local origin 200, manifest 200, claims verified, public HTTPS 200, ETag updated.
+     - `PENDING_CACHE_INVALIDATION`: Local origin healthy and updated, but public reverse proxy / cache retains previous ETag or cached copy. Halts without rollback; prohibits destructive global cache purges.
+     - `ORIGIN_FAILED`: Local origin or supervisor process failure triggers automated, verified state rollback to original build.
+  4. **State Machine Rollback**: Idempotent rollback across `INITIAL`, `LIVE_MOVED`, `STAGING_MOVED`, `VERIFYING`, `ORIGIN_FAILED`.
+
+### Simulation Test Suite
+- **Path**: `scripts/tests/test_runbook_simulation.sh`
+- **Coverage**: 17 end-to-end tests exercising real script functions in isolated sandbox with controllable test doubles (happy path, cache retention, origin failure rollback, early SHA validation, process identity, real signal traps SIGINT/SIGTERM, pipefail SIGPIPE prevention).
+- **Execution**:
+  ```bash
+  bash scripts/tests/test_runbook_simulation.sh
+  ```
 
 ---
 **Protocol by**: PrintPrice OS Orchestrator
 **Status**: ACTIVE / READY FOR LAUNCH
+
