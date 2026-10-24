@@ -1,30 +1,128 @@
+'use client';
+
+import React from 'react';
 import { HeroPlatform } from "@/components/monolith/HeroPlatform";
 import { Section } from "@/components/ui/Section";
-import { Button } from "@/components/ui/Button";
-import Link from "next/link";
 import { ActionCTA } from "@/components/monolith/ActionCTA";
 import { Icon } from "@/components/ui/Icon";
 import { SystemCardHover } from "@/components/ui/effects/SystemCardHover";
-import { constructMetadata } from "@/lib/seo";
-
-export const metadata = constructMetadata({
-  title: "Print Cost Calculator & Estimator",
-  description: "Calculate exact printing costs in seconds with our high-precision Pricing Engine. No guesswork—real production costs for books, packaging, and commercial print.",
-  canonical: "/products/budget"
-});
+import { useLocale } from "@/lib/i18n";
 
 export default function BudgetPage() {
+  const { locale } = useLocale();
+
+  const texts = {
+    es: {
+      heroLabel: 'MOTOR DE PRESUPUESTO / PRICE IT',
+      heroTitle: 'CALCULA COSTES REALES DE IMPRESIÓN EN SEGUNDOS',
+      heroSlogan: ["PRICE IT.", "FIX IT.", "PRINT IT."],
+      heroSub: 'Obtén presupuestos de libros y publicaciones al instante. Sin estimaciones aproximadas: costes de fabricación resueltos en servidor sobre especificaciones técnicas y matrices de taller.',
+      heroCtaPrimary: 'Calcular mi presupuesto de libro ➔',
+      heroCtaSecondary: 'Ver características técnicas ↓',
+      features: [
+        { 
+          icon: 'calculator', 
+          tag: 'EXACTITUD TÉCNICA', 
+          title: 'Coste Real al Instante', 
+          desc: 'Sin conjeturas. Cálculo exacto basado en tus especificaciones: pliegos, gramajes, tintas y operaciones de encuadernación.' 
+        },
+        { 
+          icon: 'activity', 
+          tag: 'CONECTIVIDAD B2B', 
+          title: 'Sincronizado con Talleres', 
+          desc: 'Conectado a las matrices de máquinas de nuestra red de imprentas asociadas y catálogos de proveedores de papel.' 
+        },
+        { 
+          icon: 'factory', 
+          tag: 'COMPLEJIDAD EDITORIAL', 
+          title: 'Proyectos Editoriales Completos', 
+          desc: 'Desde tiradas cortas en rústica fresada PUR hasta grandes volúmenes en tapa dura cosida con acabados especiales.' 
+        },
+      ],
+      ctaSlogan: 'MOTOR DE PRESUPUESTO PRICE IT',
+      ctaTitle: 'Inicia tu primer cálculo de costes',
+      ctaDesc: 'Calcula el presupuesto de tu libro con rigor técnico en segundos. Sin trámites innecesarios.',
+      ctaBtn: 'Calcular presupuesto ahora ➔'
+    },
+    en: {
+      heroLabel: 'PRICING ENGINE / PRICE IT',
+      heroTitle: 'CALCULATE REAL PRINT COSTS IN SECONDS',
+      heroSlogan: ["PRICE IT.", "FIX IT.", "PRINT IT."],
+      heroSub: 'Get instant manufacturing budgets for books and print jobs. No guesswork: server-side production pricing resolved against technical specs and real shop matrices.',
+      heroCtaPrimary: 'Calculate my book budget ➔',
+      heroCtaSecondary: 'Explore technical capabilities ↓',
+      features: [
+        { 
+          icon: 'calculator', 
+          tag: 'TECHNICAL ACCURACY', 
+          title: 'Instant Production Cost', 
+          desc: 'No rough estimates. Exact pricing based on your physical specifications: sheet layouts, basis weights, inks, and bindery.' 
+        },
+        { 
+          icon: 'activity', 
+          tag: 'B2B CONNECTIVITY', 
+          title: 'Connected to Plant Matrices', 
+          desc: 'Directly linked to machine hourly rates and makeready waste tables across partner facilities and paper suppliers.' 
+        },
+        { 
+          icon: 'factory', 
+          tag: 'EDITORIAL COMPLEXITY', 
+          title: 'Complex Multi-Component Books', 
+          desc: 'From short-run digital softcovers with PUR binding to massive offset runs in section-sewn hardcover with foil stamping.' 
+        },
+      ],
+      ctaSlogan: 'PRICE IT PRICING ENGINE',
+      ctaTitle: 'Start your first cost calculation',
+      ctaDesc: 'Determine your print costs with technical exactness in seconds. Without unnecessary paperwork.',
+      ctaBtn: 'Calculate cost now ➔'
+    },
+    de: {
+      heroLabel: 'KALKULATIONSMOTOR / PRICE IT',
+      heroTitle: 'ECHTE DRUCKKOSTEN IN SEKUNDEN BERECHNEN',
+      heroSlogan: ["PRICE IT.", "FIX IT.", "PRINT IT."],
+      heroSub: 'Erhalten Sie sofortige Fertigungsangebote für Bücher und Druckwerke. Keine Schätzungen: serverseitige Preiskalkulation nach echten Druckereimatrizen.',
+      heroCtaPrimary: 'Buchangebot berechnen ➔',
+      heroCtaSecondary: 'Funktionen ansehen ↓',
+      features: [
+        { 
+          icon: 'calculator', 
+          tag: 'TECHNISCHE GENAUIGKEIT', 
+          title: 'Echte Kosten in Sekunden', 
+          desc: 'Keine Daumenwerte. Exakte Preise nach Ihren Spezifikationen: Bogenformate, Grammaturen, Farbräume und Weiterverarbeitung.' 
+        },
+        { 
+          icon: 'activity', 
+          tag: 'B2B-KONNEKTIVITÄT', 
+          title: 'Mit Druckereien vernetzt', 
+          desc: 'Direkt angebunden an Maschinen-Stundensätze und Rüsttabellen unserer Partnerdruckereien und Papierhändler.' 
+        },
+        { 
+          icon: 'factory', 
+          tag: 'VERLAGSKOMPLEXITÄT', 
+          title: 'Anspruchsvolle Buchprojekte', 
+          desc: 'Von Kleinauflagen im Softcover mit PUR-Klebebindung bis zu Großauflagen im fadengehefteten Hardcover mit Veredelung.' 
+        },
+      ],
+      ctaSlogan: 'PRICE IT KALKULATIONSMOTOR',
+      ctaTitle: 'Starten Sie Ihre erste Kalkulation',
+      ctaDesc: 'Berechnen Sie Ihre Druckkosten mit technischer Präzision in wenigen Sekunden.',
+      ctaBtn: 'Jetzt Angebot kalkulieren ➔'
+    }
+  };
+
+  const t = texts[locale] || texts.es;
+
   return (
     <div className="product-page">
-      {/* Product Hero - Monolith Enforcement */}
+      {/* Product Hero */}
       <HeroPlatform 
-        label="PRICING MODULE"
-        title={<>CALCULATE REAL <br/> PRINT COSTS <br/> <span style={{ color: 'var(--accent-primary)' }}>IN SECONDS</span></>}
-        slogan={["PRICE IT.", "FIX IT.", "PRINT IT."]}
+        label={t.heroLabel}
+        title={<><span style={{ color: 'var(--accent-primary)' }}>{t.heroTitle}</span></>}
+        slogan={t.heroSlogan}
         isHeadlineSlogan={false}
-        subheadline="Get exact printing costs in seconds. No estimates. No guesswork. Real production costs instantly — based on your exact specs."
-        primaryAction={{ label: "Calculate my print cost →", href: "https://budget.printprice.pro" }}
-        secondaryAction={{ label: "See how it works →", href: "#features" }}
+        subheadline={t.heroSub}
+        primaryAction={{ label: t.heroCtaPrimary, href: "https://budget.printprice.pro" }}
+        secondaryAction={{ label: t.heroCtaSecondary, href: "#features" }}
         variant="particles"
         rightContent={
           <div style={{ 
@@ -39,7 +137,6 @@ export default function BudgetPage() {
             justifyContent: 'center',
             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
           }}>
-            {/* Real video integration */}
             <video 
               autoPlay 
               muted 
@@ -70,50 +167,49 @@ export default function BudgetPage() {
         }
       />
 
-      {/* Feature Grid - No-Line Rule */}
+      {/* Feature Grid */}
       <Section variant="secondary" id="features">
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
-          gap: '1.4rem', 
-          ...({} as any) 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+          gap: '1.5rem'
         }}>
-          {[
-            { icon: 'calculator', tag: 'ACCURACY', title: 'Exact Cost — Instantly', desc: 'No estimates. Real pricing based on your specifications. Our engine handles material, labor, and overheads automatically.' },
-            { icon: 'activity', tag: 'CONNECTIVITY', title: 'Works with your systems', desc: 'Seamlessly sync with your existing ERP or MIS. Connect your tools and keep your data in sync across the platform.' },
-            { icon: 'factory', tag: 'PRODUCTION', title: 'Handles complex projects', desc: 'From simple books to complex multi-component production — fully calculated and ready for execution.' },
-          ].map((feature, i) => (
-            <div key={i} style={{ gridColumn: 'auto', height: '100%' }}>
+          {t.features.map((feature, i) => (
+            <div key={i} style={{ height: '100%' }}>
               <SystemCardHover borderRadius={0}>
                 <div style={{
-                  padding: 'clamp(2rem, 5vw, 4rem)',
+                  padding: 'clamp(2rem, 5vw, 3.5rem)',
                   position: 'relative',
                   overflow: 'hidden',
-                  height: '100%'
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column'
                 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '3rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem' }}>
                     <div style={{ 
-                        display: 'flex', 
-                        height: '3.5rem', 
-                        width: '3.5rem', 
-                        alignItems: 'center', 
-                        justifyContent: 'center', 
-                        border: '1px solid rgba(255,255,255,0.1)', 
-                        background: 'rgba(255,255,255,0.03)'
+                      display: 'flex', 
+                      height: '3.5rem', 
+                      width: '3.5rem', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      border: '1px solid var(--border-color)', 
+                      background: 'rgba(255,255,255,0.03)'
                     }}>
-                        <Icon name={feature.icon as any} size={28} style={{ color: 'var(--accent-primary)' }} />
+                      <Icon name={feature.icon as any} size={28} style={{ color: 'var(--accent-primary)' }} />
                     </div>
                     <span className="technical-text" style={{ 
-                        fontSize: '0.6rem', 
-                        color: 'var(--accent-primary)', 
-                        opacity: 0.8,
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.2em',
-                        fontWeight: 900
-                    }}>{feature.tag}</span>
+                      fontSize: '0.65rem', 
+                      color: 'var(--accent-primary)', 
+                      opacity: 0.8, 
+                      textTransform: 'uppercase', 
+                      letterSpacing: '0.15em', 
+                      fontWeight: 900 
+                    }}>
+                      {feature.tag}
+                    </span>
                   </div>
-                  <h3 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '1.5rem', letterSpacing: '-0.04em' }}>{feature.title}</h3>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.6, opacity: 0.8 }}>{feature.desc}</p>
+                  <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.03em' }}>{feature.title}</h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6, marginTop: 'auto' }}>{feature.desc}</p>
                 </div>
               </SystemCardHover>
             </div>
@@ -121,12 +217,12 @@ export default function BudgetPage() {
         </div>
       </Section>
 
-      {/* Final CTA - Monolith Authority */}
+      {/* Final CTA */}
       <ActionCTA 
-        slogan="START YOUR PRICING ENGINE"
-        title="Start your first calculation"
-        description="Calculate your print cost now with extreme precision. No credit card required. Accurate in seconds."
-        buttonLabel="Calculate my cost →"
+        slogan={t.ctaSlogan}
+        title={t.ctaTitle}
+        description={t.ctaDesc}
+        buttonLabel={t.ctaBtn}
         buttonHref="https://budget.printprice.pro"
         trackingAction="budget_cta_calculate_final"
       />

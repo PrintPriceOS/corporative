@@ -243,6 +243,8 @@ export const en: Translations = {
     tools: 'Tools',
     resources: 'Resources',
     companyLegal: 'Company & Legal',
+    legalCenter: 'Legal & Trust Center',
+    partnerTerms: 'Partner Terms (Printers)',
     rights: '© 2026 PrintPrice Pro — Print Price Pro SIA',
     cookies: 'Cookie Settings',
   },

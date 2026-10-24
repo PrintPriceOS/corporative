@@ -250,6 +250,8 @@ export interface Translations {
     tools: string;
     resources: string;
     companyLegal: string;
+    legalCenter: string;
+    partnerTerms: string;
     rights: string;
     cookies: string;
   };

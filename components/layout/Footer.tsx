@@ -233,9 +233,15 @@ export const Footer: React.FC = () => {
             <h4 style={headingStyle}>{dict.footer.companyLegal}</h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
               <li><Link href="/contact" style={linkStyle}>{dict.nav.contact}</Link></li>
+              <li>
+                <Link href="/legal" style={{ ...linkStyle, fontWeight: 700, color: 'var(--text-primary)' }}>
+                  {dict.footer.legalCenter}
+                </Link>
+              </li>
               <li><Link href="/legal/terms-of-service" style={linkStyle}>Terms of Service</Link></li>
               <li><Link href="/legal/privacy-policy" style={linkStyle}>Privacy Policy</Link></li>
               <li><Link href="/legal/legal-notice" style={linkStyle}>Legal Notice</Link></li>
+              <li><Link href="/legal/partner-terms" style={linkStyle}>{dict.footer.partnerTerms}</Link></li>
               <li>
                 <button
                   type="button"

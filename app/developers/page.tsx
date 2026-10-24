@@ -1,3 +1,6 @@
+'use client';
+
+import React from 'react';
 import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -7,15 +10,11 @@ import { ActionCTA } from "@/components/monolith/ActionCTA";
 import { Icon } from "@/components/ui/Icon";
 import { SystemCardHover } from "@/components/ui/effects/SystemCardHover";
 import Link from "next/link";
-import { constructMetadata } from "@/lib/seo";
-
-export const metadata = constructMetadata({
-  title: "API for Print Manufacturing & Automation",
-  description: "Integrate budgeting, PDF preflight, and production routing directly into your app. Explore the PrintPrice OS API for automated manufacturing workflows.",
-  canonical: "/developers"
-});
+import { useLocale } from "@/lib/i18n";
 
 export default function DeveloperPortal() {
+  const { locale } = useLocale();
+
   const quickstartCode = `// Initialize SDK
 import { ppos } from '@ppos/sdk';
 
@@ -53,53 +52,151 @@ const audit = await ppos.preflight.verify({
 
 console.log(audit.status.id);`;
 
+  const texts = {
+    es: {
+      heroLabel: 'HERRAMIENTAS PARA DESARROLLADORES',
+      heroTitle: 'CONSTRUYE SOBRE LA API DE IMPRESIÓN',
+      heroSlogan: ["PRESUPUESTA", "VALIDA", "PRODUCE vía API"],
+      heroSub: 'Calcula costes, valida archivos PDF y enruta trabajos a taller directamente por API REST o SDK.',
+      heroCtaPrimary: 'Solicitar acceso API ➔',
+      heroCtaSecondary: 'Ver documentación API ➔',
+      quickstartBadge: 'NODO DE ACTIVACIÓN',
+      quickstartTitle: 'Integración en minutos',
+      quickstartDesc: 'Realiza tu primera llamada de cálculo o validación en minutos. Nuestro SDK permite conectar la inteligencia gráfica de PrintPrice OS en cualquier sistema.',
+      quickstartBtn: 'Comenzar ahora ➔',
+      budgetTitle: 'Cálculo de costes por API',
+      budgetDesc: 'Obtén costes reales basados en especificaciones técnicas de imprenta al instante. Sincroniza tu e-commerce o ERP con nuestro motor de precios.',
+      preflightTitle: 'Validación de archivos automatizada',
+      preflightDesc: 'Ejecuta auditorías preflight antes de enviar a taller. Normaliza geometrías, detecta resoluciones bajas y sangrados insuficientes.',
+      useCasesBadge: 'CASOS DE USO',
+      useCasesTitle: 'Qué puedes construir',
+      cases: [
+        { icon: 'web', title: 'Cotizadores Autónomos', desc: 'Construye portales self-service de presupuestos para tus clientes o equipos editoriales.' },
+        { icon: 'activity', title: 'Agentes de Producción', desc: 'Permite a agentes automatizados gestionar y enrutar pedidos a imprentas adscritas.' },
+        { icon: 'pipeline', title: 'Tuberías de Preflight', desc: 'Valida y normaliza miles de archivos PDF en background antes de la entrada a máquina.' },
+        { icon: 'node', title: 'Enrutamiento a Taller', desc: 'Asigna pedidos a las imprentas más idóneas según maquinaria, papel y ubicación.' }
+      ],
+      ctaActionTitle: '¿Listo para integrar la API?',
+      ctaActionDesc: 'Conecta tu software con los motores deterministas de PrintPrice OS sin fricciones operativas innecesarias.',
+      ctaActionBtn: 'Contactar para acceso API ➔'
+    },
+    en: {
+      heroLabel: 'DEVELOPER TOOLS',
+      heroTitle: 'BUILD ON THE PRINT API',
+      heroSlogan: ["ESTIMATE", "VALIDATE", "PRODUCE via API"],
+      heroSub: 'Calculate costs, validate PDF files, and route production jobs directly via REST API or SDK.',
+      heroCtaPrimary: 'Request API access ➔',
+      heroCtaSecondary: 'View API docs ➔',
+      quickstartBadge: 'ACTIVATION NODE',
+      quickstartTitle: 'Start in minutes',
+      quickstartDesc: 'Make your first pricing or validation call in minutes. Our SDK allows seamless integration of print intelligence into any application or ERP.',
+      quickstartBtn: 'Get started ➔',
+      budgetTitle: 'Estimate cost via API',
+      budgetDesc: 'Get real print costs based on physical specifications instantly. Sync your storefront or internal tools with our precision pricing engine.',
+      preflightTitle: 'Validate files automatically',
+      preflightDesc: 'Run automated preflight checks and detect issues prior to prepress intake. Enforce ISO compliance and normalize page boxes.',
+      useCasesBadge: 'USE CASES',
+      useCasesTitle: 'What you can build',
+      cases: [
+        { icon: 'web', title: 'Automated Quoting', desc: 'Build self-service estimate portals for your clients or internal publishing teams.' },
+        { icon: 'activity', title: 'Production Agents', desc: 'Allow automated systems to calculate, trigger, and route jobs to partner print houses.' },
+        { icon: 'pipeline', title: 'Validation Pipelines', desc: 'Audit and inspect thousands of files in background workers before physical manufacturing.' },
+        { icon: 'node', title: 'Production Routing', desc: 'Orchestrate job delivery to qualified production nodes based on real press capabilities.' }
+      ],
+      ctaActionTitle: 'Ready to integrate the API?',
+      ctaActionDesc: 'Connect your software to the deterministic engines of PrintPrice OS without unnecessary operational overhead.',
+      ctaActionBtn: 'Request API access ➔'
+    },
+    de: {
+      heroLabel: 'ENTWICKLER-WERKZEUGE',
+      heroTitle: 'BAUEN SIE AUF DER DRUCK-API AUF',
+      heroSlogan: ["KALKULIEREN", "PRÜFEN", "PRODUZIEREN via API"],
+      heroSub: 'Berechnen Sie Kosten, validieren Sie PDF-Dateien und leiten Sie Druckaufträge direkt via REST-API oder SDK weiter.',
+      heroCtaPrimary: 'API-Zugang anfragen ➔',
+      heroCtaSecondary: 'API-Dokumentation ansehen ➔',
+      quickstartBadge: 'AKTIVIERUNGS-KNOTEN',
+      quickstartTitle: 'Start in wenigen Minuten',
+      quickstartDesc: 'Führen Sie Ihren ersten Preiskalkulations- oder Preflight-Aufruf in Minuten aus. Unser SDK bindet Druckintelligenz nahtlos in jede Anwendung ein.',
+      quickstartBtn: 'Jetzt starten ➔',
+      budgetTitle: 'Kostenkalkulation via API',
+      budgetDesc: 'Erhalten Sie sofort echte Druckkosten basierend auf technischen Spezifikationen. Synchronisieren Sie Ihren Shop oder Ihr ERP.',
+      preflightTitle: 'Automatische Dateivalidierung',
+      preflightDesc: 'Führen Sie Preflight-Prüfungen vor der Weiterleitung an die Druckerei durch. Erkennen Sie Anschnitt- und Geometriefehler automatisch.',
+      useCasesBadge: 'ANWENDUNGSFÄLLE',
+      useCasesTitle: 'Was Sie entwickeln können',
+      cases: [
+        { icon: 'web', title: 'Automatisierte Angebote', desc: 'Bauen Sie Self-Service-Kalkulationsportale für Ihre Kunden oder Verlagsredaktionen.' },
+        { icon: 'activity', title: 'Produktions-Agenten', desc: 'Automatisierte Systeme übergeben geprüfte Aufträge direkt an angeschlossene Druckereien.' },
+        { icon: 'pipeline', title: 'Preflight-Pipelines', desc: 'Prüfen und normalisieren Sie tausende PDF-Dateien in Hintergrund-Worker-Prozessen.' },
+        { icon: 'node', title: 'Fertigungs-Routing', desc: 'Verteilen Sie Aufträge an die am besten geeigneten Druckereien nach echten Maschinenprofilen.' }
+      ],
+      ctaActionTitle: 'Bereit für die API-Integration?',
+      ctaActionDesc: 'Verbinden Sie Ihre Software mit den deterministischen Motoren von PrintPrice OS ohne administrativen Mehraufwand.',
+      ctaActionBtn: 'API-Zugang anfragen ➔'
+    }
+  };
+
+  const t = texts[locale] || texts.es;
+
   return (
     <div className="developer-portal">
-      {/* Dev Hero - Monolith Refined v1.2 */}
+      {/* Dev Hero */}
       <HeroPlatform 
-        label="DEVELOPER TOOLS"
-        title={<>BUILD ON THE <br/> <span style={{ color: 'var(--accent-primary)' }}>PRINT API</span></>}
-        slogan={["ESTIMATE", "VALIDATE", "PRODUCE via API"]}
+        label={t.heroLabel}
+        title={<><span style={{ color: 'var(--accent-primary)' }}>{t.heroTitle}</span></>}
+        slogan={t.heroSlogan}
         isHeadlineSlogan={false}
-        subheadline="Calculate costs, validate files, and route production — all via API. Integrate pricing, preflight, and production into your system effortlessly."
-        primaryAction={{ label: "Get API access →", href: "/contact" }}
-        secondaryAction={{ label: "View API docs →", href: "https://docs.printprice.pro" }}
+        subheadline={t.heroSub}
+        primaryAction={{ label: t.heroCtaPrimary, href: "/contact" }}
+        secondaryAction={{ label: t.heroCtaSecondary, href: "https://docs.printprice.pro" }}
         variant="particles"
       />
 
-      {/* Quickstart Section - REFINED Activation Node v1.2 */}
+      {/* Quickstart Section */}
       <Section variant="secondary">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(450px, 100%), 1fr))', gap: 'clamp(3rem, 10vw, 8rem)', alignItems: 'center', ...({} as any) }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(450px, 100%), 1fr))', gap: 'clamp(3rem, 8vw, 6rem)', alignItems: 'center' }}>
           <div>
-            <h4 className="technical-text" style={{ fontSize: '0.7rem', color: 'var(--accent-primary)', marginBottom: '1.5rem', letterSpacing: '0.2em', fontWeight: 900 }}>ACTIVATION NODE</h4>
-            <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 800, textTransform: 'uppercase', marginBottom: '2rem', letterSpacing: '-0.04em', lineHeight: 1.1, ...({} as any) }}>Start in seconds</h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', lineHeight: 1.6, marginBottom: '3.5rem', maxWidth: '45ch', ...({} as any) }}>
-              Make your first pricing or validation call in seconds. Our SDK allows for seamless integration of print intelligence into any application.
+            <h4 className="technical-text" style={{ fontSize: '0.75rem', color: 'var(--accent-primary)', marginBottom: '1.25rem', letterSpacing: '0.15em', fontWeight: 900 }}>
+              {t.quickstartBadge}
+            </h4>
+            <h2 style={{ fontSize: 'clamp(2rem, 5vw, 2.75rem)', fontWeight: 800, textTransform: 'uppercase', marginBottom: '1.5rem', letterSpacing: '-0.03em', lineHeight: 1.15 }}>
+              {t.quickstartTitle}
+            </h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', lineHeight: 1.6, marginBottom: '2.5rem', maxWidth: '50ch' }}>
+              {t.quickstartDesc}
             </p>
-            <Link href="https://docs.printprice.pro/quickstart">
-              <Button size="lg">Get Started →</Button>
-            </Link>
+            <a href="https://docs.printprice.pro" className="btn-primary" style={{ padding: '0.875rem 1.75rem' }}>
+              {t.quickstartBtn}
+            </a>
           </div>
           <CodeBlock code={quickstartCode} title="client-init.js" language="javascript" />
         </div>
       </Section>
 
-      {/* API Implementation Grid - Tonal Layering */}
+      {/* API Implementation Grid */}
       <Section variant="primary">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(400px, 100%), 1fr))', gap: 'clamp(4rem, 10vw, 8rem)', ...({} as any) }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(400px, 100%), 1fr))', gap: 'clamp(3rem, 6vw, 5rem)' }}>
           <div>
-            <span className="technical-text" style={{ color: 'var(--accent-primary)', opacity: 0.6, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.5rem', display: 'block', fontWeight: 900 }}>POST /v1/budget</span>
-            <h2 style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-0.04em', marginBottom: '1.5rem', ...({} as any) }}>Estimate cost via API</h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.7, marginBottom: '3rem', maxWidth: '40ch', ...({} as any) }}>
-              Get real print costs based on your specs — instantly. Sync your e-commerce or internal tools with our precision pricing engine.
+            <span className="technical-text" style={{ color: 'var(--accent-primary)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '1rem', display: 'block', fontWeight: 900 }}>
+              POST /v1/budget
+            </span>
+            <h2 style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '-0.03em', marginBottom: '1.25rem' }}>
+              {t.budgetTitle}
+            </h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.6, marginBottom: '2rem', maxWidth: '45ch' }}>
+              {t.budgetDesc}
             </p>
             <CodeBlock code={budgetCode} title="create-estimate.js" language="javascript" />
           </div>
           <div>
-            <span className="technical-text" style={{ color: 'var(--accent-primary)', opacity: 0.6, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.5rem', display: 'block', fontWeight: 900 }}>POST /v1/preflight</span>
-            <h2 style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-0.04em', marginBottom: '1.5rem', ...({} as any) }}>Validate files automatically</h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.7, marginBottom: '3rem', maxWidth: '40ch', ...({} as any) }}>
-              Run preflight checks and fix errors before production. Automate PDF remediation and ensure standards-compliance.
+            <span className="technical-text" style={{ color: 'var(--accent-primary)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '1rem', display: 'block', fontWeight: 900 }}>
+              POST /v1/preflight
+            </span>
+            <h2 style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '-0.03em', marginBottom: '1.25rem' }}>
+              {t.preflightTitle}
+            </h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.6, marginBottom: '2rem', maxWidth: '45ch' }}>
+              {t.preflightDesc}
             </p>
             <CodeBlock code={preflightCode} title="trigger-verification.js" language="javascript" />
           </div>
@@ -108,43 +205,42 @@ console.log(audit.status.id);`;
 
       {/* What You Can Build Section */}
       <Section variant="secondary">
-          <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
-            <h4 className="technical-text" style={{ fontSize: '0.75rem', color: 'var(--accent-primary)', letterSpacing: '0.2em', marginBottom: '1.5rem', fontWeight: 900 }}>USE CASES</h4>
-            <h2 style={{ fontSize: '3rem', fontWeight: 800, letterSpacing: '-0.05em' }}>What you can build</h2>
-          </div>
-          <div style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-              gap: '2rem' 
-          }}>
-              {[
-                  { icon: 'web', title: 'Automated Quoting', desc: 'Build self-service estimate portals for your clients.' },
-                  { icon: 'activity', title: 'AI Production Agents', desc: 'Let autonomous agents trigger and route jobs from prompts.' },
-                  { icon: 'pipeline', title: 'Validation Pipelines', desc: 'Validate and fix thousands of files in background workers.' },
-                  { icon: 'node', title: 'Production Routing', desc: 'Orchestrate job delivery to the best production nodes.' }
-              ].map((caseItem, i) => (
-                  <Link key={i} href={caseItem.title === 'AI Production Agents' ? '/ai-agent' : '#'} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <SystemCardHover borderRadius={0}>
-                        <div style={{ padding: '3rem', height: '100%' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
-                                <Icon name={caseItem.icon as any} size={20} style={{ color: 'var(--accent-primary)' }} />
-                                <div style={{ height: '1px', flex: 1, background: 'var(--border-color)', opacity: 0.3 }}></div>
-                            </div>
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '1rem' }}>{caseItem.title}</h3>
-                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.6 }}>{caseItem.desc}</p>
-                        </div>
-                    </SystemCardHover>
-                  </Link>
-              ))}
-          </div>
+        <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+          <h4 className="technical-text" style={{ fontSize: '0.75rem', color: 'var(--accent-primary)', letterSpacing: '0.15em', marginBottom: '1rem', fontWeight: 900 }}>
+            {t.useCasesBadge}
+          </h4>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-0.04em' }}>
+            {t.useCasesTitle}
+          </h2>
+        </div>
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+          gap: '1.5rem' 
+        }}>
+          {t.cases.map((caseItem, i) => (
+            <div key={i} style={{ height: '100%' }}>
+              <SystemCardHover borderRadius={0}>
+                <div style={{ padding: '2.5rem', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                    <Icon name={caseItem.icon as any} size={22} style={{ color: 'var(--accent-primary)' }} />
+                    <div style={{ height: '1px', flex: 1, background: 'var(--border-color)', opacity: 0.3 }}></div>
+                  </div>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '0.75rem' }}>{caseItem.title}</h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.925rem', lineHeight: 1.6, marginTop: 'auto' }}>{caseItem.desc}</p>
+                </div>
+              </SystemCardHover>
+            </div>
+          ))}
+        </div>
       </Section>
 
-      {/* Ready to Build Section - Monolith Authority */}
+      {/* Ready to Build Section */}
       <ActionCTA 
-        slogan="START BUILDING WITH THE API"
-        title="Ready to Deploy?"
-        description="No setup friction. Live in minutes. Get your API key and start automating your print production lifecycle today."
-        buttonLabel="Get API Access →"
+        slogan="API & SDK PRINTPRICE OS"
+        title={t.ctaActionTitle}
+        description={t.ctaActionDesc}
+        buttonLabel={t.ctaActionBtn}
         buttonHref="/contact"
         trackingAction="developers_cta_access"
       />
