@@ -67,6 +67,7 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
           speed={0.5}
           particleBaseSize={12}
           moveParticlesOnHover={true}
+          particleHoverFactor={1.2}
           alphaParticles={false}
           disableRotation={false}
           pixelRatio={3}

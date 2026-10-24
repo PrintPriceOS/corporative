@@ -134,7 +134,7 @@ const Particles: React.FC<ParticlesProps> = ({
   style
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const mouseRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const mouseRef = useRef<{ x: number; y: number }>({ x: -9999, y: -9999 });
 
   useEffect(() => {
     const container = containerRef.current;
@@ -179,8 +179,13 @@ const Particles: React.FC<ParticlesProps> = ({
       mouseRef.current = { x, y };
     };
 
+    const handleMouseLeave = () => {
+      mouseRef.current = { x: -9999, y: -9999 };
+    };
+
     if (moveParticlesOnHover) {
       window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseleave', handleMouseLeave);
     }
 
     const count = particleCount;
@@ -216,7 +221,7 @@ const Particles: React.FC<ParticlesProps> = ({
         uBaseSize: { value: particleBaseSize * pixelRatio },
         uSizeRandomness: { value: sizeRandomness },
         uAlphaParticles: { value: alphaParticles ? 1 : 0 },
-        uMouse: { value: [0, 0] }
+        uMouse: { value: [-9999, -9999] }
       },
       transparent: true,
       depthTest: false
@@ -224,16 +229,12 @@ const Particles: React.FC<ParticlesProps> = ({
 
     const particles = new Mesh(gl, { mode: gl.POINTS, geometry, program });
 
-    const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     let animationFrameId: number;
     let lastTime = performance.now();
     let elapsed = 0;
 
     const update = (t: number) => {
-      if (!prefersReducedMotion) {
-        animationFrameId = requestAnimationFrame(update);
-      }
+      animationFrameId = requestAnimationFrame(update);
       const delta = t - lastTime;
       lastTime = t;
       elapsed += delta * speed;
@@ -243,15 +244,15 @@ const Particles: React.FC<ParticlesProps> = ({
         program.uniforms.uMouse.value = [mouseRef.current.x, mouseRef.current.y];
       }
       
-      if (moveParticlesOnHover && !prefersReducedMotion) {
-        particles.position.x = -mouseRef.current.x * particleHoverFactor;
-        particles.position.y = -mouseRef.current.y * particleHoverFactor;
+      if (moveParticlesOnHover && mouseRef.current.x > -9000) {
+        particles.position.x += (-mouseRef.current.x * particleHoverFactor - particles.position.x) * 0.08;
+        particles.position.y += (-mouseRef.current.y * particleHoverFactor - particles.position.y) * 0.08;
       } else {
-        particles.position.x = 0;
-        particles.position.y = 0;
+        particles.position.x += (0 - particles.position.x) * 0.05;
+        particles.position.y += (0 - particles.position.y) * 0.05;
       }
 
-      if (!disableRotation && !prefersReducedMotion) {
+      if (!disableRotation) {
         particles.rotation.x = Math.sin(elapsed * 0.0002) * 0.1;
         particles.rotation.y = Math.cos(elapsed * 0.0005) * 0.15;
         particles.rotation.z += 0.01 * speed;
@@ -260,17 +261,13 @@ const Particles: React.FC<ParticlesProps> = ({
       renderer.render({ scene: particles, camera });
     };
 
-    if (prefersReducedMotion) {
-      // Render single static frame for reduced motion users
-      renderer.render({ scene: particles, camera });
-    } else {
-      animationFrameId = requestAnimationFrame(update);
-    }
+    animationFrameId = requestAnimationFrame(update);
 
     return () => {
       resizeObserver.disconnect();
       if (moveParticlesOnHover) {
         window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mouseleave', handleMouseLeave);
       }
       cancelAnimationFrame(animationFrameId);
       if (container.contains(gl.canvas)) {
