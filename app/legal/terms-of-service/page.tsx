@@ -18,82 +18,94 @@ export default function TermsOfServicePage() {
 
   const t = {
     es: {
-      back: '← Volver al Centro Legal y de Confianza',
-      badge: 'CONDICIONES GENERALES DE PLATAFORMA',
-      title: 'Términos de Servicio de PrintPrice Pro',
-      draftNotice: 'BORRADOR PENDIENTE DE APROBACIÓN JURÍDICA / DRAFT PENDING FORMAL LEGAL APPROVAL',
-      draftDesc: 'Este marco regula el acceso técnico a las superficies de software de PrintPrice Pro. Refleja las directrices comerciales confirmadas y se encuentra en fase de validación regulatoria.',
-      version: 'Versión: 2026.1-draft',
-      lastUpdated: 'Última actualización: Octubre 2026',
+      back: '← Volver al Centro Legal',
+      badge: 'DOCUMENTO REGULATORIO / CONDICIONES VIGENTES',
+      title: 'Términos de Servicio (Terms of Service)',
+      lastUpdated: 'Última actualización: 23 de marzo de 2026',
+      version: 'Versión: v1.1',
       printBtn: 'Imprimir / PDF',
-      sec1Title: '1. Objeto y Naturaleza de la Plataforma',
-      sec1Text: 'Print Price Pro SIA ("la Plataforma", "PrintPrice Pro") opera una infraestructura de software y enrutamiento técnico para la industria gráfica que comprende las herramientas PRICE IT (cálculo), FIX IT (preflight), PRINT IT (marketplace de producción), Mockup 3D (visualizador) y Control Plane (gestión para talleres y proveedores). Salvo indicación expresa en contrario, PrintPrice Pro no fabrica materialmente productos impresos ni comercializa papel físico.',
-      sec2Title: '2. Relación de Intermediación y Contratación',
-      sec2Text: 'En las operaciones canalizadas a través de PRINT IT, el contrato de compraventa y confección del producto impreso se perfecciona de forma directa y exclusiva entre el cliente (autor o editorial) y el taller de impresión seleccionado. La imprenta vende y factura directamente al comprador. PrintPrice Pro no es parte de dicho contrato de fabricación ni asume la condición de fabricante.',
-      sec3Title: '3. Estimaciones, Matrices y Precios Deterministas',
-      sec3Text: 'Los costes y viabilidades calculados en PRICE IT se fundamentan en algoritmos deterministas y matrices de costes configuradas por los talleres. Dichas cifras tienen carácter informativo y de optimización técnica hasta que la orden queda formalizada y aceptada con las especificaciones acordadas en el pedido.',
-      sec4Title: '4. Auditoría Preflight y Visualización Mockup 3D',
-      sec4Text: 'El módulo FIX IT ejecuta una comprobación técnica determinista basada en estándares PDF/X e ISO 15930. El módulo Mockup 3D es una herramienta de simulación visual para previsualización digital y marketing, y bajo ningún concepto sustituye a una prueba física de color certificada (proof ISO 12647) ni garantiza el tacto o comportamiento mecánico del sustrato.',
-      sec5Title: '5. Propiedad Intelectual y Licencia Operativa',
-      sec5Text: 'El usuario conserva la plena titularidad y derechos de propiedad intelectual sobre los archivos, maquetas y textos cargados en la plataforma. Al cargarlos, otorga a PrintPrice Pro y al taller adjudicatario una licencia no exclusiva, limitada y estrictamente necesaria para el análisis técnico, preflight y producción del encargo.',
-      sec6Title: '6. Responsabilidad del Usuario sobre los Contenidos',
-      sec6Text: 'El usuario declara disponer de todas las autorizaciones legítimas sobre los contenidos que procesa y garantiza que sus archivos no infringen derechos de terceros ni vulneran la legalidad aplicable (contenidos ilícitos, difamatorios o violaciones de propiedad intelectual).',
-      sec7Title: '7. Limitación de Responsabilidad',
-      sec7Text: 'En la medida permitida por el derecho leton y comunitario, Print Price Pro SIA responde únicamente del funcionamiento diligente de sus sistemas de software. No responde de defectos materiales de impresión, mermas de producción atribuibles al taller ejecutor, retrasos logísticos del transportista ni de inconsistencias derivadas de archivos técnicos defectuosos aportados por el cliente.',
-      sec8Title: '8. Ley Aplicable y Jurisdicción',
-      sec8Text: 'Las presentes condiciones se rigen por la legislación de la República de Letonia. Cualquier controversia que no pueda resolverse amistosamente se someterá a los tribunales competentes de Rīga, Letonia, sin perjuicio de las normas imperativas de protección de los consumidores.',
+      sec1Title: '1. Función de la Plataforma',
+      sec1Text: 'Print Price Pro ("la Plataforma") es un sistema de inteligencia técnica y enrutamiento operativo gestionado por Print Price Pro SIA. La plataforma proporciona estimación de costes, validación técnica de archivos (preflight) y herramientas de enrutamiento a producción.',
+      sec1Note: 'IMPORTANTE: Print Price Pro SIA no es una empresa de impresión, fabricante físico ni vendedora de productos impresos materiales. No poseemos, operamos ni controlamos las instalaciones industriales de impresión que fabrican los pedidos.',
+      sec2Title: '2. Relación de Intermediación Mercantil',
+      sec2Text: 'La plataforma actúa como intermediario tecnológico. Cualquier contrato de producción, pedido de compra o acuerdo para la confección y entrega de productos físicos se establece de forma directa y exclusiva entre el usuario (cliente) y la imprenta ejecutora. Print Price Pro SIA no es parte de dichos contratos de fabricación y no asume responsabilidad directa por su ejecución material.',
+      sec3Title: '3. Precios y Estimaciones',
+      sec3Text: 'Todos los precios, plazos y especificaciones generados por la plataforma tienen carácter indicativo y de optimización técnica. No constituyen una oferta contractual vinculante por parte de Print Price Pro ni de la imprenta hasta su confirmación en el pedido. El precio y condiciones definitivas se rigen por las especificaciones acordadas en el pedido formalizado.',
+      sec4Title: '4. Herramientas Automatizadas de Validación',
+      sec4Text: 'La plataforma utiliza algoritmos y herramientas de software automatizadas para validar archivos de producción y optimizar flujos de trabajo. Si bien aplicamos rigurosos estándares técnicos, el usuario mantiene la responsabilidad final sobre la adecuación de sus contenidos originales.',
+      sec5Title: '5. Responsabilidad del Usuario sobre los Archivos',
+      sec5Text: 'El usuario es el único responsable de la integridad técnica y la legalidad de los archivos que carga en el sistema. La comprobación mediante preflight es una asistencia técnica consultiva y no exime al cliente de verificar que sus archivos cumplen los requisitos de producción acordados.',
+      sec6Title: '6. Limitación de Responsabilidad',
+      sec6Text: 'En la medida permitida por la legislación letona y europea aplicable, Print Price Pro SIA no será responsable de defectos de fabricación imputables a terceros talleres, mermas de impresión de la fábrica, retrasos en la entrega logística o inconsistencias técnicas derivadas de archivos fuente defectuosos facilitados por el cliente.',
+      sec7Title: '7. Derechos de Propiedad Intelectual',
+      sec7Text: 'El usuario conserva la plena titularidad y todos los derechos de autor sobre sus archivos, textos y cubiertas. Al cargarlos en el sistema, otorga a Print Price Pro y a las imprentas asignadas una licencia no exclusiva y limitada estrictamente a los fines operativos de comprobación técnica, cotización y fabricación del encargo solicitado.',
+      sec8Title: '8. Comunicación de Datos a Imprentas',
+      sec8Text: 'Al utilizar los servicios de intermediación, el usuario autoriza expresamente a Print Price Pro a transmitir las especificaciones técnicas del proyecto y los archivos necesarios a las imprentas pertinentes con el fin exclusivo de cotizar y ejecutar el encargo.',
+      sec9Title: '9. Pagos y Régimen Comercial',
+      sec9Text: 'La imprenta factura y cobra directamente al comprador los importes acordados por los trabajos de impresión. Print Price Pro SIA factura periódicamente a las imprentas registradas las comisiones acordadas por los servicios de intermediación en la plataforma.',
+      sec10Title: '10. Ley Aplicable y Jurisdicción',
+      sec10Text: 'Los presentes términos se rigen por las leyes de la República de Letonia. Cualquier controversia se someterá a la jurisdicción de los tribunales competentes de Rīga, Letonia, sin perjuicio de los derechos imperativos reconocidos a los consumidores en la Unión Europea.',
+      footerTag: 'PRINT PRICE PRO / CONDICIONES GENERALES VIGENTES // RĪGA, LETONIA',
     },
     en: {
-      back: '← Return to Legal & Trust Center',
-      badge: 'GENERAL PLATFORM TERMS OF SERVICE',
-      title: 'PrintPrice Pro Terms of Service',
-      draftNotice: 'DRAFT PENDING FORMAL LEGAL APPROVAL / BORRADOR PENDIENTE DE APROBACIÓN JURÍDICA',
-      draftDesc: 'This framework governs technical access to PrintPrice Pro software services. It reflects confirmed business decisions and remains subject to formal legal review.',
-      version: 'Version: 2026.1-draft',
-      lastUpdated: 'Last updated: October 2026',
+      back: '← Return to Legal Center',
+      badge: 'REGULATORY DOCUMENT / CURRENT TERMS',
+      title: 'Terms of Service',
+      lastUpdated: 'Last updated: March 23, 2026',
+      version: 'Version: v1.1',
       printBtn: 'Print / PDF',
-      sec1Title: '1. Scope and Nature of the Platform',
-      sec1Text: 'Print Price Pro SIA ("the Platform", "PrintPrice Pro") operates software infrastructure and routing tools for the print manufacturing sector, comprising PRICE IT (cost engine), FIX IT (preflight), PRINT IT (marketplace), Mockup 3D (visual tool), and Control Plane (workshop operations). Unless explicitly agreed otherwise in writing, PrintPrice Pro does not manufacture physical goods nor sell physical paper.',
-      sec2Title: '2. Intermediation Role & Manufacturing Contracts',
-      sec2Text: 'For transactions routed through PRINT IT, the underlying manufacturing and purchase contract is executed directly between the buyer (author or publisher) and the designated print shop. The printer sells and invoices the customer directly. PrintPrice Pro is not a party to the manufacturing agreement.',
-      sec3Title: '3. Deterministic Pricing and Technical Estimates',
-      sec3Text: 'Estimates generated by PRICE IT are calculated using deterministic algorithms and verified partner matrices. All cost indications serve technical optimization purposes and become binding solely upon order confirmation based on agreed specifications.',
-      sec4Title: '4. Preflight Verification and 3D Mockup Advisory',
-      sec4Text: 'FIX IT performs deterministic preflight checks according to PDF/X and ISO 15930 industry standards. The Mockup 3D tool provides simulated visual rendering for marketing and pre-production evaluation; it does NOT constitute a contractually binding physical color proof (ISO 12647) or guarantee substrate texture.',
-      sec5Title: '5. Intellectual Property and Operational License',
-      sec5Text: 'Users retain 100% intellectual property ownership over all uploaded files, books, and metadata. By uploading assets, the user grants PrintPrice Pro and assigned printing partners a limited, non-exclusive license strictly necessary to analyze, inspect, and fulfill the job.',
-      sec6Title: '6. User Responsibility and Acceptable Use',
-      sec6Text: 'The user warrants that they possess all legal rights and licenses for the uploaded materials and that such content does not infringe upon third-party rights or applicable statutory law.',
-      sec7Title: '7. Limitation of Liability',
-      sec7Text: 'To the fullest extent permitted under Latvian and European law, Print Price Pro SIA is liable only for the deliberate technical delivery of its digital software services. We assume no liability for third-party production defects, transit delays, or errors resulting from flawed source files.',
-      sec8Title: '8. Governing Law and Jurisdiction',
-      sec8Text: 'These Terms of Service are governed by the substantive laws of the Republic of Latvia. Any disputes shall be subject to the exclusive jurisdiction of the competent courts of Rīga, Latvia, subject to mandatory consumer protection provisions.',
+      sec1Title: '1. The Platform Role',
+      sec1Text: 'Print Price Pro ("the Platform") is a production intelligence and matchmaking system operated by Print Price Pro SIA. The Platform provides pricing estimation, file validation (preflight), and manufacturing routing services.',
+      sec1Note: 'IMPORTANT: Print Price Pro SIA is NOT a printing company, physical manufacturer, or seller of physical printed goods. We do not own, operate, or control the industrial printing facilities that fulfill orders.',
+      sec2Title: '2. Intermediary Relationship',
+      sec2Text: 'The Platform acts solely as a technical intermediary. Any production contract, purchase order, or manufacturing agreement is strictly between the User and the independent Print House. Print Price Pro SIA is not a party to these contracts and assumes no direct liability for manufacturing performance.',
+      sec3Title: '3. Pricing & Estimates',
+      sec3Text: 'All prices, lead times, and specifications generated by the Platform are INDICATIVE ONLY. They do not constitute a binding offer from Print Price Pro or the Print House until finalized. Final terms and pricing are governed strictly by the specifications agreed in each confirmed order.',
+      sec4Title: '4. Automated Decision & Preflight Tools',
+      sec4Text: 'The Platform utilizes automated algorithms to inspect production files and optimize routing. While we maintain rigorous technical accuracy, users retain responsibility for their source assets.',
+      sec5Title: '5. User Responsibility',
+      sec5Text: 'Users are solely responsible for the technical integrity and legal compliance of the files they upload. The Platform preflight check is an advisory technical tool and does not relieve the User of their obligation to verify files against production requirements.',
+      sec6Title: '6. Limitation of Liability',
+      sec6Text: 'To the maximum extent permitted by applicable Latvian and European law, Print Price Pro SIA shall not be liable for manufacturing defects caused by third-party print shops, logistical delays, or errors arising from defective source assets supplied by the user.',
+      sec7Title: '7. Intellectual Property & Content Rights',
+      sec7Text: 'The User retains full ownership of all submitted files and content. By uploading assets, the User grants Print Price Pro and assigned print partners a limited, non-exclusive license strictly necessary to validate, quote, and fulfill the production job.',
+      sec8Title: '8. Data Transmission to Printers',
+      sec8Text: 'By utilizing routing services, the User authorizes Print Price Pro to share project specifications and relevant files with selected printing partners for quotation and fulfillment purposes.',
+      sec9Title: '9. Payments and Commercial Terms',
+      sec9Text: 'Print shops invoice and collect payment directly from the buyer for manufacturing jobs. Print Price Pro SIA invoices registered print shops periodically for platform marketplace commissions.',
+      sec10Title: '10. Governing Law & Dispute Resolution',
+      sec10Text: 'These terms are governed by the laws of the Republic of Latvia. Any disputes shall be subject to the jurisdiction of the competent courts of Rīga, Latvia, without prejudice to mandatory European consumer protection laws.',
+      footerTag: 'PRINT PRICE PRO / CURRENT TERMS OF SERVICE // RĪGA, LATVIA',
     },
     de: {
-      back: '← Zurück zum Rechts- und Vertrauenszentrum',
-      badge: 'ALLGEMEINE PLATTFORMBEDINGUNGEN',
-      title: 'PrintPrice Pro Nutzungsbedingungen',
-      draftNotice: 'ENTWURF VORBEHALTLICH RECHTLICHER PRÜFUNG / DRAFT PENDING FORMAL LEGAL APPROVAL',
-      draftDesc: 'Diese Bedingungen regeln den technischen Zugang zu den Softwarediensten von PrintPrice Pro. Sie spiegeln bestätigte Geschäftsentscheidungen wider und stehen unter juristischem Vorbehalt.',
-      version: 'Version: 2026.1-draft',
-      lastUpdated: 'Letzte Aktualisierung: Oktober 2026',
+      back: '← Zurück zum Rechtszentrum',
+      badge: 'RECHTLICHES DOKUMENT / GÜLTIGE NUTZUNGSBEDINGUNGEN',
+      title: 'Nutzungsbedingungen (Terms of Service)',
+      lastUpdated: 'Letzte Aktualisierung: 23. März 2026',
+      version: 'Version: v1.1',
       printBtn: 'Drucken / PDF',
-      sec1Title: '1. Gegenstand und Rolle der Plattform',
-      sec1Text: 'Print Price Pro SIA („die Plattform“, „PrintPrice Pro“) betreibt Software- und Routing-Infrastruktur für die Druckindustrie: PRICE IT (Kalkulationsengine), FIX IT (Preflight), PRINT IT (Marktplatz), Mockup 3D (visuelle Buchvorschau) und Control Plane (Betriebsumgebung). Sofern nicht ausdrücklich schriftlich vereinbart, stellt PrintPrice Pro keine physischen Druckprodukte her und vertreibt kein Rohpapier.',
-      sec2Title: '2. Vermittlungsrolle und Produktionsverträge',
-      sec2Text: 'Bei über PRINT IT vermittelten Aufträgen kommt der Kauf- und Herstellungsvertrag unmittelbar und ausschließlich zwischen dem Besteller (Autor/Verlag) und der ausgewählten Druckerei zustande. Die Druckerei verkauft und fakturiert direkt an den Kunden. PrintPrice Pro ist nicht Vertragspartei des Druckvertrags.',
-      sec3Title: '3. Deterministische Kalkulation und Preisangaben',
-      sec3Text: 'Die in PRICE IT berechneten Beträge basieren auf deterministischen Formeln und hinterlegten Maschinenmatrizen. Alle Preisangaben sind indikativ und werden erst mit den im Auftrag vereinbarten Spezifikationen verbindlich.',
-      sec4Title: '4. Preflight-Prüfung und 3D-Mockup Hinweis',
-      sec4Text: 'FIX IT führt deterministische Prüfungen nach ISO 15930 (PDF/X) durch. Das 3D-Mockup ist ein rein visuelles Werkzeug für Digitalmarketing und stellt keinen farbverbindlichen Kontraktproof (ISO 12647) dar.',
-      sec5Title: '5. Urheberrechte und operative Nutzungslizenz',
-      sec5Text: 'Nutzer behalten sämtliche Rechte an ihren hochgeladenen Dateien und Manuskripten. Dem Betreiber und der ausführenden Druckerei wird lediglich eine auf die Auftragsabwicklung beschränkte Nutzungslizenz eingeräumt.',
-      sec6Title: '6. Verantwortung für Dateiinhalte',
-      sec6Text: 'Der Nutzer versichert, über sämtliche erforderlichen Nutzungs- und Urheberrechte an den Dateien zu verfügen und keine geltenden Rechtsvorschriften oder Rechte Dritter zu verletzen.',
-      sec7Title: '7. Haftungsbeschränkung',
-      sec7Text: 'Print Price Pro SIA haftet nach lettischem und EU-Recht für die ordnungsgemäße Bereitstellung der Software. Eine Haftung für Produktionsfehler der Werkstatt, Transportschäden oder Fehler fehlerhafter Kundendateien ist ausgeschlossen.',
-      sec8Title: '8. Anwendbares Recht und Gerichtsstand',
-      sec8Text: 'Es gilt das Recht der Republik Lettland. Gerichtsstand für alle Streitigkeiten ist, soweit gesetzlich zulässig, Rīga, Lettland.',
+      sec1Title: '1. Rolle der Plattform',
+      sec1Text: 'Print Price Pro („die Plattform“) ist ein System für Produktionsintelligenz und Auftragsvermittlung der Print Price Pro SIA. Die Plattform bietet Preiskalkulation, Druckdatenprüfung (Preflight) und Produktionsrouting.',
+      sec1Note: 'WICHTIG: Print Price Pro SIA ist kein Druckereibetrieb, kein physischer Hersteller und kein Verkäufer von Druckwaren. Wir betreiben keine eigenen Druckmaschinen.',
+      sec2Title: '2. Vermittlungsverhältnis',
+      sec2Text: 'Die Plattform agiert als technischer Vermittler. Druckverträge und Fertigungsaufträge kommen unmittelbar zwischen dem Kunden und der unabhängigen Druckerei zustande.',
+      sec3Title: '3. Preisschätzungen und Berechnungen',
+      sec3Text: 'Alle über die Plattform berechneten Preise und Lieferzeiten sind indikativ. Verbindliche Konditionen richten sich ausschließlich nach den im bestätigten Auftrag vereinbarten Spezifikationen.',
+      sec4Title: '4. Automatisierte Prüfwerkzeuge',
+      sec4Text: 'Die Plattform nutzt deterministische Algorithmen zur Dateiprüfung. Die Vorabprüfung dient der Unterstützung und entbindet den Nutzer nicht von der Prüfung seiner Daten.',
+      sec5Title: '5. Verantwortung für Dateiinhalte',
+      sec5Text: 'Der Nutzer trägt die Verantwortung für die inhaltliche und rechtliche Zulässigkeit der hochgeladenen Druckdaten.',
+      sec6Title: '6. Haftungsbeschränkung',
+      sec6Text: 'Print Price Pro SIA haftet nach Maßgabe des lettischen und europäischen Rechts für die Softwarebereitstellung, nicht jedoch für herstellungsbedingte Druckmängel der Werkstatt.',
+      sec7Title: '7. Geistiges Eigentum',
+      sec7Text: 'Nutzer behalten sämtliche Rechte an ihren hochgeladenen Werken und gewähren lediglich eine zweckgebundene Lizenz zur Auftragsabwicklung.',
+      sec8Title: '8. Datenweitergabe an Druckereien',
+      sec8Text: 'Zur Angebotserstellung und Produktion werden auftragsrelevante Parameter und Dateien sicher an ausgewählte Partnerwerkstätten übermittelt.',
+      sec9Title: '9. Zahlungsabwicklung',
+      sec9Text: 'Die Druckerei rechnet die Fertigung direkt mit dem Besteller ab. Print Price Pro SIA berechnet den Partnerdruckereien vertragliche Vermittlungsprovisionen.',
+      sec10Title: '10. Anwendbares Recht',
+      sec10Text: 'Es gilt das Recht der Republik Lettland. Gerichtsstand ist Rīga, Lettland.',
+      footerTag: 'PRINT PRICE PRO / GÜLTIGE NUTZUNGSBEDINGUNGEN // RĪGA, LETTLAND',
     },
   }[locale];
 
@@ -118,33 +130,6 @@ export default function TermsOfServicePage() {
             >
               {t.back}
             </Link>
-          </div>
-
-          {/* Draft Disclaimer Notice */}
-          <div
-            style={{
-              padding: '1.25rem 1.5rem',
-              borderRadius: 'var(--radius-md)',
-              background: 'rgba(220, 0, 0, 0.06)',
-              border: '1px solid rgba(220, 0, 0, 0.3)',
-              marginBottom: '2.5rem',
-            }}
-          >
-            <div
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
-                fontWeight: 800,
-                color: 'var(--accent-primary)',
-                letterSpacing: '0.08em',
-                marginBottom: '0.4rem',
-              }}
-            >
-              {t.draftNotice}
-            </div>
-            <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-              {t.draftDesc}
-            </p>
           </div>
 
           {/* Header */}
@@ -192,6 +177,18 @@ export default function TermsOfServicePage() {
                 {t.sec1Title}
               </h2>
               <p>{t.sec1Text}</p>
+              <div
+                style={{
+                  marginTop: '1rem',
+                  padding: '1rem 1.25rem',
+                  borderRadius: 'var(--radius-sm)',
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  borderLeft: '3px solid var(--accent-primary)',
+                  fontSize: '0.9rem',
+                }}
+              >
+                {t.sec1Note}
+              </div>
             </section>
 
             <section>
@@ -243,6 +240,20 @@ export default function TermsOfServicePage() {
               <p>{t.sec8Text}</p>
             </section>
 
+            <section>
+              <h2 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1rem' }}>
+                {t.sec9Title}
+              </h2>
+              <p>{t.sec9Text}</p>
+            </section>
+
+            <section>
+              <h2 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1rem' }}>
+                {t.sec10Title}
+              </h2>
+              <p>{t.sec10Text}</p>
+            </section>
+
           </div>
 
           {/* Footer note */}
@@ -261,7 +272,7 @@ export default function TermsOfServicePage() {
               gap: '1rem',
             }}
           >
-            <span>Print Price Pro SIA • Rigorous Print Software</span>
+            <span>{t.footerTag}</span>
             <Link href="/legal" style={{ color: 'var(--accent-primary)', textDecoration: 'none' }}>
               {t.back}
             </Link>

@@ -18,97 +18,103 @@ export default function PartnerTermsPage() {
 
   const t = {
     es: {
-      back: '← Volver al Centro Legal y de Confianza',
-      badge: 'CONDICIONES GENERALES PARA IMPRENTAS Y TALLERES',
-      title: 'Condiciones de Adhesión para Imprentas',
-      draftNotice: 'BORRADOR PENDIENTE DE APROBACIÓN JURÍDICA / DRAFT PENDING FORMAL LEGAL APPROVAL',
-      draftDesc: 'Regula la participación de talleres gráficos en la red de producción PRINT IT y el uso de Control Plane. Refleja las directrices comerciales confirmadas y se encuentra en fase de validación regulatoria.',
-      version: 'Versión: 2026.1-draft',
-      lastUpdated: 'Última actualización: Octubre 2026',
+      back: '← Volver al Centro Legal',
+      badge: 'DOCUMENTO REGULATORIO / CONDICIONES VIGENTES',
+      title: 'Condiciones para Imprentas y Partners',
+      lastUpdated: 'Última actualización: 23 de marzo de 2026',
+      version: 'Versión: v1.1',
       printBtn: 'Imprimir / PDF',
-      sec1Title: '1. Objeto y Condición de Vendedor Directo',
-      sec1Text: 'Print Price Pro SIA («PrintPrice») proporciona infraestructura tecnológica (Control Plane, cálculo algorítmico, preflight y enrutamiento en PRINT IT) para conectar talleres gráficos con compradores profesionales y autores. La Imprenta actúa en todo momento como fabricante industrial independiente y vendedora mercantil directa frente al comprador.',
-      sec2Title: '2. Parámetros Técnicos, Maquinaria y Veracidad',
-      sec2Text: 'La Imprenta se compromete a mantener fielmente calibrados en Control Plane sus formatos de pliego (mínimo/máximo), velocidades efectivas, tecnologías (digital/offset), mermas de arranque y costes horarios de makeready. La exactitud de estos datos es indispensable para la fiabilidad de las cotizaciones.',
-      sec3Title: '3. Aceptación Vinculante de Pedidos',
-      sec3Text: 'Una solicitud u orden enrutada adquiere carácter vinculante para la Imprenta en el momento de su aceptación formal en Control Plane. Una vez aceptado el encargo, la Imprenta queda obligada a fabricar y expedir el producto conforme a las especificaciones acordadas en el pedido y el archivo PDF validado por el preflight.',
-      sec4Title: '4. Calidad, Tolerancias y Subsanación de Defectos',
-      sec4Text: 'La Imprenta responde de los defectos de fabricación imputables a su proceso industrial (fallos de registro, manchas, plegado erróneo o roturas de encuadernación), debiendo proceder a la reimpresión o compensación técnica diligente. La Imprenta no responderá de erratas o fallos en el contenido del archivo si éste fue expresamente aprobado por el cliente tras el informe de preflight.',
-      sec5Title: '5. Régimen Económico: Facturación Directa y Comisión del 4 %',
-      sec5List: [
-        'Cobro directo al cliente: La Imprenta factura y cobra directamente al comprador el importe íntegro del encargo mediante sus propios medios o pasarelas autorizadas.',
-        'Comisión mensual del 4 %: PrintPrice facturará mensualmente a la Imprenta una comisión del 4 % sobre el importe neto de fabricación cobrado respecto de los pedidos originados a través de PRINT IT.',
-        'Aprovisionamiento de papel: La comisión del 4 % NO es aplicable a las partidas de compra de papel o consumibles entre la Imprenta y distribuidores de papel.',
-        'Ausencia de cuotas fijas aprobadas: No existen cuotas mensuales de mantenimiento, costes de alta ni consumos mínimos obligatorios aprobados en este borrador.',
+      sec1Title: '1. Objeto y Alcance del Acuerdo',
+      sec1Text: 'Las presentes Condiciones para Partners regulan la relación comercial entre Print Price Pro SIA («PrintPrice Pro») y la empresa titular de una planta gráfica o taller de impresión («Partner» o «Imprenta») registrada en el sistema de producción de PrintPrice OS.',
+      sec2Title: '2. Naturaleza de la Relación y Fabricante Independiente',
+      sec2Text: 'PrintPrice Pro opera un sistema de software y enrutamiento técnico que conecta demanda verificada con talleres de impresión. PrintPrice Pro NO es el fabricante. La Imprenta actúa en todo momento como el fabricante industrial independiente y el vendedor mercantil directo frente al cliente final.',
+      sec3Title: '3. Parámetros Técnicos y Maquinaria',
+      sec3Text: 'El Partner se compromete a mantener fielmente actualizados en Control Plane sus parámetros de pliego (mínimo/máximo), tecnologías de impresión (offset/digital), mermas técnicas y costes de preparación para garantizar cotizaciones deterministas fiables.',
+      sec4Title: '4. Aceptación Vinculante de Pedidos',
+      sec4Text: 'Los trabajos enrutados adquieren carácter vinculante únicamente cuando la Imprenta los acepta en el flujo de trabajo designado en Control Plane. Una vez aceptado el encargo, la Imprenta queda obligada a fabricar y entregar la obra conforme a las especificaciones acordadas en el pedido.',
+      sec5Title: '5. Calidad, Defectos y Exclusiones',
+      sec5Text: 'La Imprenta es responsable de la calidad de fabricación industrial (fallos de registro, manchas, encuadernación defectuosa). La Imprenta no responderá de erratas o fallos en el contenido del archivo si éste fue expresamente aprobado por el cliente tras el informe de preflight.',
+      sec6Title: '6. Régimen Comercial y Facturación Directa',
+      sec6List: [
+        'Facturación y cobro directo: La Imprenta factura y cobra directamente al comprador el importe íntegro del encargo acordado a través de sus propios medios de cobro.',
+        'Comisión mensual de marketplace: PrintPrice Pro factura mensualmente a la Imprenta una comisión del 4 % por los servicios de intermediación respecto de las transacciones originadas a través de PRINT IT.',
+        'Sin cuotas fijas aprobadas: No existen cuotas mensuales de mantenimiento, costes de alta ni consumos mínimos obligatorios aprobados en estas condiciones vigentes.',
       ],
-      sec6Title: '6. No Elusión (Non-Circumvention) y Confidencialidad',
-      sec6Text: 'La Imprenta se compromete a no eludir la plataforma para desviar transacciones originadas a través de PRINT IT con el fin de evitar la comisión aplicable. Asimismo, tratará con estricta confidencialidad los manuscritos, obras protegidas y archivos de clientes, utilizándolos exclusivamente para la fabricación del pedido.',
       sec7Title: '7. Ausencia de Garantía de Volumen',
-      sec7Text: 'La integración en Control Plane y la red PRINT IT no constituye garantía de volumen mínimo ni exclusividad territorial, distribuyéndose las órdenes según compatibilidad técnica, cercanía geográfica y competitividad objetiva.',
-      sec8Title: '8. Ley Aplicable y Jurisdicción',
-      sec8Text: 'Estas condiciones se rigen por el derecho sustantivo de la República de Letonia, sometiéndose cualquier discrepancia a la jurisdicción exclusiva de los tribunales de Rīga, Letonia.',
+      sec7Text: 'La admisión en la red no constituye una garantía de volumen mínimo de pedidos ni otorga exclusividad territorial.',
+      sec8Title: '8. No Elusión (Non-Circumvention) y Confidencialidad',
+      sec8Text: 'El Partner no eludirá la plataforma para desviar transacciones originadas a través de PRINT IT. Asimismo, mantendrá la más estricta confidencialidad sobre los archivos y obras recibidas, utilizándolos exclusivamente para la fabricación del pedido.',
+      sec9Title: '9. Protección de Datos',
+      sec9Text: 'Las partes tratarán los datos personales conforme a la normativa aplicable (RGPD). Cuando la Imprenta facture y envíe directamente al comprador, actúa como responsable independiente para sus propios fines fiscales y de entrega.',
+      sec10Title: '10. Ley Aplicable y Jurisdicción',
+      sec10Text: 'Estas condiciones se rigen por la legislación de la República de Letonia. Cualquier controversia se someterá a la jurisdicción exclusiva de los tribunales de Rīga, Letonia.',
+      footerTag: 'PRINT PRICE PRO / CONDICIONES DE PARTNERS VIGENTES // RĪGA, LETONIA',
     },
     en: {
-      back: '← Return to Legal & Trust Center',
-      badge: 'GENERAL TERMS FOR PRINT HOUSES & PRODUCTION NODES',
-      title: 'Partner Terms for Print Houses',
-      draftNotice: 'DRAFT PENDING FORMAL LEGAL APPROVAL / BORRADOR PENDIENTE DE APROBACIÓN JURÍDICA',
-      draftDesc: 'Governs print workshop participation in the PRINT IT marketplace and use of Control Plane. Reflects confirmed business decisions and remains subject to formal legal review.',
-      version: 'Version: 2026.1-draft',
-      lastUpdated: 'Last updated: October 2026',
+      back: '← Return to Legal Center',
+      badge: 'REGULATORY DOCUMENT / CURRENT TERMS',
+      title: 'Partner Terms (Print Houses)',
+      lastUpdated: 'Last updated: March 23, 2026',
+      version: 'Version: v1.1',
       printBtn: 'Print / PDF',
-      sec1Title: '1. Scope and Direct Seller Status',
-      sec1Text: 'Print Price Pro SIA ("PrintPrice") provides technical routing and operational infrastructure (Control Plane, deterministic pricing, preflight inspection, and PRINT IT marketplace matchmaking). The Print House acts at all times as the independent industrial manufacturer and direct seller to the customer.',
-      sec2Title: '2. Technical Parameters, Machine Fleet & Accuracy',
-      sec2Text: 'The Print House commits to maintaining accurate parameters in Control Plane regarding sheet sizes, speeds, press types (digital/offset), makeready waste rates, and hourly rates. Accurate profiles are required to maintain algorithmic estimation integrity.',
-      sec3Title: '3. Binding Job Acceptance',
-      sec3Text: 'Routed production orders become contractually binding upon formal acceptance within Control Plane. Once accepted, the Print House is obligated to produce and dispatch the books in strict accordance with the agreed specifications and preflight-validated PDF assets.',
-      sec4Title: '4. Quality, Defect Remediation & Exclusions',
-      sec4Text: 'The Print House is responsible for industrial manufacturing non-conformities (registration flaws, ink defects, improper folding, binding failures). The Print House is not responsible for typos or low-resolution image flaws pre-existing in customer assets once signed off following preflight validation.',
-      sec5Title: '5. Commercial Model: Direct Billing & 4% Platform Fee',
-      sec5List: [
-        'Direct customer billing: The Print House invoices and collects production amounts directly from the buyer through its own payment accounts.',
-        'Monthly 4% fee: PrintPrice invoices the Print House monthly for a 4% marketplace commission on the net manufacturing turnover collected for jobs originated via PRINT IT.',
-        'Paper procurement exclusion: The 4% platform fee does NOT apply to raw paper purchases or paper merchant transactions.',
-        'Zero approved recurring fixed fees: No mandatory monthly maintenance fees, sign-up fees, or minimum volume commitments are approved under this draft.',
+      sec1Title: '1. Scope of the Agreement',
+      sec1Text: 'These Partner Terms govern the commercial relationship between Print Price Pro SIA ("PrintPrice Pro") and the printing company or production node ("Partner" or "Print House") registered in PrintPrice OS.',
+      sec2Title: '2. Nature of the Relationship & Independent Manufacturer',
+      sec2Text: 'PrintPrice Pro operates an orchestration and routing software system connecting validated demand with qualified partners. PrintPrice Pro is NOT the manufacturer. The Partner remains at all times the independent industrial manufacturing entity and the direct seller to the customer.',
+      sec3Title: '3. Technical Fleet Parameters',
+      sec3Text: 'The Partner commits to maintaining accurate press specs, sheet sizes, digital/offset capabilities, and makeready waste rates in Control Plane to ensure deterministic quotation integrity.',
+      sec4Title: '4. Binding Job Acceptance',
+      sec4Text: 'Routed jobs become binding only when accepted through the designated workflow in Control Plane. Once accepted, the Partner is responsible for manufacturing and fulfillment according to the agreed order specifications.',
+      sec5Title: '5. Quality, Defects & Exclusions',
+      sec5Text: 'The Partner is responsible for manufacturing quality (registration flaws, improper folding, binding defects). The Partner is not liable for typographical errors or pre-existing image flaws in client files approved after preflight inspection.',
+      sec6Title: '6. Commercial Terms & Direct Billing',
+      sec6List: [
+        'Direct customer billing: The Partner invoices and collects payment directly from the customer for manufacturing orders.',
+        'Monthly 4% fee: PrintPrice Pro invoices the Partner monthly for a 4% marketplace commission on net manufacturing revenue collected for jobs originated via PRINT IT.',
+        'Zero approved recurring fixed fees: No mandatory monthly maintenance fees, sign-up fees, or minimum volume commitments are approved under these current terms.',
       ],
-      sec6Title: '6. Non-Circumvention and Asset Confidentiality',
-      sec6Text: 'The Print House agrees not to circumvent the platform to divert business originated through PRINT IT to bypass agreed fees. Furthermore, all customer manuscripts, cover art, and business data must be treated under strict confidentiality and used exclusively for fulfilling the specific job.',
       sec7Title: '7. No Volume Guarantee',
-      sec7Text: 'Registration in Control Plane does not guarantee any minimum order volume or geographical exclusivity; routing is determined algorithmically by technical fit and logistical suitability.',
-      sec8Title: '8. Governing Law and Jurisdiction',
-      sec8Text: 'These terms are governed by the laws of the Republic of Latvia. Any legal dispute shall be submitted to the exclusive jurisdiction of the competent courts of Rīga, Latvia.',
+      sec7Text: 'Admission to the production network does not guarantee any minimum order volume or geographical exclusivity.',
+      sec8Title: '8. Non-Circumvention & Confidentiality',
+      sec8Text: 'The Partner shall not circumvent PrintPrice Pro to avoid agreed fees for transactions originated via PRINT IT. All customer manuscripts and print files must be kept strictly confidential and used solely for fulfilling the specific job.',
+      sec9Title: '9. Data Protection',
+      sec9Text: 'Parties comply with applicable data protection laws (GDPR). When the Partner directly bills and ships to the customer, it acts as an independent data controller for its own invoicing and delivery operations.',
+      sec10Title: '10. Governing Law & Jurisdiction',
+      sec10Text: 'These terms are governed by the laws of the Republic of Latvia. Any dispute shall be subject to the exclusive jurisdiction of the competent courts of Rīga, Latvia.',
+      footerTag: 'PRINT PRICE PRO / CURRENT PARTNER TERMS // RĪGA, LATVIA',
     },
     de: {
-      back: '← Zurück zum Rechts- und Vertrauenszentrum',
-      badge: 'ALLGEMEINE BEDINGUNGEN FÜR DRUCKEREIEN',
+      back: '← Zurück zum Rechtszentrum',
+      badge: 'RECHTLICHES DOKUMENT / GÜLTIGE BEDINGUNGEN',
       title: 'Partnerbedingungen für Druckereien',
-      draftNotice: 'ENTWURF VORBEHALTLICH RECHTLICHER PRÜFUNG / DRAFT PENDING FORMAL LEGAL APPROVAL',
-      draftDesc: 'Regelt die Einbindung von Druckbetrieben in PRINT IT und die Nutzung von Control Plane. Basiert auf bestätigten kaufmännischen Entscheidungen.',
-      version: 'Version: 2026.1-draft',
-      lastUpdated: 'Letzte Aktualisierung: Oktober 2026',
+      lastUpdated: 'Letzte Aktualisierung: 23. März 2026',
+      version: 'Version: v1.1',
       printBtn: 'Drucken / PDF',
-      sec1Title: '1. Vertragsgegenstand und Direkthersteller-Status',
-      sec1Text: 'Print Price Pro SIA („PrintPrice“) stellt technologische Software (Control Plane, Preflight, Routing) bereit. Die Druckerei agiert jederzeit als unabhängiger industrieller Hersteller und direkter kaufmännischer Verkäufer gegenüber dem Kunden.',
-      sec2Title: '2. Technische Maschinenprofile und Datenwahrheit',
-      sec2Text: 'Die Druckerei verpflichtet sich zur wahrheitsgetreuen Pflege ihrer Bogenformate, Maschinengeschwindigkeiten, Rüstzeiten und Stundensätze in Control Plane.',
-      sec3Title: '3. Verbindliche Auftragsannahme',
-      sec3Text: 'Ein vermittelter Auftrag wird mit der Annahme in Control Plane verbindlich. Die Druckerei ist verpflichtet, das Werk gemäß den im Auftrag vereinbarten Spezifikationen und den geprüften PDF-Daten herzustellen.',
-      sec4Title: '4. Qualitätsmängel und Nachbesserung',
-      sec4Text: 'Die Druckerei haftet für herstellungsbedingte Mängel (Passerfehler, Farbabweichungen, mangelhafte Bindung). Für Fehler in den vom Kunden freigegebenen Quelldateien haftet die Werkstatt nicht.',
-      sec5Title: '5. Vergütung: Direktabrechnung und 4 % Plattformprovision',
-      sec5List: [
-        'Direktabrechnung: Die Druckerei stellt dem Besteller den Fertigungsbetrag direkt in Rechnung und vereinnahmt diesen unmittelbar.',
-        'Monatliche 4 % Provision: PrintPrice stellt der Druckerei monatlich eine Provision von 4 % auf den vereinnahmten Netto-Fertigungsumsatz für über PRINT IT vermittelte Aufträge in Rechnung.',
-        'Keine Provision auf Papier: Die Provision fällt NICHT auf den Rohpapiereinkauf an.',
+      sec1Title: '1. Vertragsgegenstand',
+      sec1Text: 'Diese Partnerbedingungen regeln das Geschäftsverhältnis zwischen Print Price Pro SIA („PrintPrice Pro“) und der im Netzwerk registrierten Druckerei („Partner“ oder „Druckerei“).',
+      sec2Title: '2. Rolle und Direkthersteller-Status',
+      sec2Text: 'PrintPrice Pro betreibt Routing- und Kalkulationssoftware. PrintPrice Pro ist nicht der Hersteller. Die Druckerei bleibt jederzeit unabhängiger industrieller Hersteller und direkter Verkäufer gegenüber dem Kunden.',
+      sec3Title: '3. Technische Maschinenparameter',
+      sec3Text: 'Der Partner pflegt seine Maschinenprofile, Bogenformate und Rüstzeiten wahrheitsgetreu in Control Plane.',
+      sec4Title: '4. Verbindliche Auftragsannahme',
+      sec4Text: 'Vermittelte Aufträge werden verbindlich, sobald die Druckerei diese in Control Plane annimmt. Nach Annahme ist die Druckerei zur fristgerechten Fertigung gemäß den vereinbarten Spezifikationen verpflichtet.',
+      sec5Title: '5. Qualität und Mängelhaftung',
+      sec5Text: 'Die Druckerei haftet für herstellungsbedingte Mängel. Für Druckfehler in freigegebenen Kundendateien haftet die Druckerei nicht.',
+      sec6Title: '6. Vergütung und Direktabrechnung',
+      sec6List: [
+        'Direktabrechnung: Die Druckerei rechnet direkt mit dem Besteller ab und vereinnahmt den Rechnungsbetrag.',
+        'Monatliche 4 % Provision: PrintPrice Pro stellt der Druckerei monatlich 4 % Marktplatzprovision für über PRINT IT vermittelte Aufträge in Rechnung.',
         'Keine fixen Monatsgebühren: Es bestehen keine genehmigten monatlichen Grundgebühren oder Mindestumsatzpflichten.',
       ],
-      sec6Title: '6. Umgehungsverbot und Vertraulichkeit',
-      sec6Text: 'Die Druckerei verpflichtet sich, keine über PRINT IT angebahnten Kundenbeziehungen zur Umgehung der Plattformprovision zu verlagern. Kundendateien sind streng vertraulich zu behandeln.',
       sec7Title: '7. Kein Mindestvolumen',
       sec7Text: 'Die Aufnahme in das Netzwerk begründet keinen Anspruch auf ein Mindestauftragsvolumen.',
-      sec8Title: '8. Anwendbares Recht und Gerichtsstand',
-      sec8Text: 'Es gilt das Recht der Republik Lettland. Ausschließlicher Gerichtsstand ist Rīga, Lettland.',
+      sec8Title: '8. Umgehungsverbot und Vertraulichkeit',
+      sec8Text: 'Der Partner verpflichtet sich, keine über PRINT IT angebahnten Aufträge zur Umgehung der Provision zu verlagern. Kundendaten sind streng vertraulich zu behandeln.',
+      sec9Title: '9. Datenschutz',
+      sec9Text: 'Die Parteien beachten die DSGVO. Bei Direktfakturierung agiert die Druckerei für ihre eigenen Abrechnungs- und Lieferprozesse als eigenständiger Verantwortlicher.',
+      sec10Title: '10. Anwendbares Recht',
+      sec10Text: 'Es gilt das Recht der Republik Lettland. Gerichtsstand ist Rīga, Lettland.',
+      footerTag: 'PRINT PRICE PRO / GÜLTIGE PARTNERBEDINGUNGEN // RĪGA, LETTLAND',
     },
   }[locale];
 
@@ -133,33 +139,6 @@ export default function PartnerTermsPage() {
             >
               {t.back}
             </Link>
-          </div>
-
-          {/* Draft Disclaimer Notice */}
-          <div
-            style={{
-              padding: '1.25rem 1.5rem',
-              borderRadius: 'var(--radius-md)',
-              background: 'rgba(220, 0, 0, 0.06)',
-              border: '1px solid rgba(220, 0, 0, 0.3)',
-              marginBottom: '2.5rem',
-            }}
-          >
-            <div
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
-                fontWeight: 800,
-                color: 'var(--accent-primary)',
-                letterSpacing: '0.08em',
-                marginBottom: '0.4rem',
-              }}
-            >
-              {t.draftNotice}
-            </div>
-            <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-              {t.draftDesc}
-            </p>
           </div>
 
           {/* Header */}
@@ -234,18 +213,18 @@ export default function PartnerTermsPage() {
               <h2 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1rem' }}>
                 {t.sec5Title}
               </h2>
-              <ul style={{ paddingLeft: '1.5rem', margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                {t.sec5List.map((item, idx) => (
-                  <li key={idx}>{item}</li>
-                ))}
-              </ul>
+              <p>{t.sec5Text}</p>
             </section>
 
             <section>
               <h2 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1rem' }}>
                 {t.sec6Title}
               </h2>
-              <p>{t.sec6Text}</p>
+              <ul style={{ paddingLeft: '1.5rem', margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                {t.sec6List.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
             </section>
 
             <section>
@@ -260,6 +239,20 @@ export default function PartnerTermsPage() {
                 {t.sec8Title}
               </h2>
               <p>{t.sec8Text}</p>
+            </section>
+
+            <section>
+              <h2 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1rem' }}>
+                {t.sec9Title}
+              </h2>
+              <p>{t.sec9Text}</p>
+            </section>
+
+            <section>
+              <h2 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1rem' }}>
+                {t.sec10Title}
+              </h2>
+              <p>{t.sec10Text}</p>
             </section>
 
           </div>
@@ -280,7 +273,7 @@ export default function PartnerTermsPage() {
               gap: '1rem',
             }}
           >
-            <span>Print Price Pro SIA • Partner & Node Governance</span>
+            <span>{t.footerTag}</span>
             <Link href="/legal" style={{ color: 'var(--accent-primary)', textDecoration: 'none' }}>
               {t.back}
             </Link>

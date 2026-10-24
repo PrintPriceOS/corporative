@@ -24,112 +24,112 @@ export default function PrivacyPolicyPage() {
 
   const t = {
     es: {
-      back: '← Volver al Centro Legal y de Confianza',
-      badge: 'POLÍTICA DE PRIVACIDAD Y PROTECCIÓN DE DATOS (RGPD)',
-      title: 'Política de Privacidad de PrintPrice Pro',
-      draftNotice: 'BORRADOR PENDIENTE DE APROBACIÓN JURÍDICA / DRAFT PENDING FORMAL LEGAL APPROVAL',
-      draftDesc: 'Documento marco conforme al Reglamento General de Protección de Datos (RGPD UE 2016/679) y la normativa letona de protección de datos. En proceso de dictamen formal.',
-      version: 'Versión: 2026.1-draft',
-      lastUpdated: 'Última actualización: Octubre 2026',
+      back: '← Volver al Centro Legal',
+      badge: 'DOCUMENTO REGULATORIO / POLÍTICA VIGENTE',
+      title: 'Política de Privacidad (RGPD)',
+      lastUpdated: 'Última actualización: 23 de marzo de 2026',
+      version: 'Versión: v1.1',
       printBtn: 'Imprimir / PDF',
-      cookiesBtn: 'Configurar Cookies',
-      sec1Title: '1. Responsable del Tratamiento de los Datos',
-      sec1Text: 'El responsable del tratamiento de los datos personales recopilados a través de este portal y sus aplicaciones es:',
-      companyInfo: 'Print Price Pro SIA (Reg. Mercantil: 40203631570, IVA: LV40203631570), con domicilio social en Bruņinieku iela 60-8, Latgales priekšpilsēta, Rīga, LV-1009, Letonia. Contacto de privacidad:',
-      sec2Title: '2. Categorías de Datos Objeto de Tratamiento',
+      cookiesBtn: 'Preferencias de cookies',
+      sec1Title: '1. Responsable del Tratamiento',
+      sec1Text: 'El responsable del tratamiento de los datos personales tratados a través de esta plataforma es:',
+      companyInfo: 'Print Price Pro SIA (Reg. Mercantil: 40203631570, IVA: LV40203631570), con domicilio social en Bruņinieku iela 60-8, Latgales priekšpilsēta, Rīga, LV-1009, Letonia.',
+      privacyContact: 'Contacto de privacidad y protección de datos:',
+      sec2Title: '2. Categorías de Datos que Tratamos',
       sec2List: [
-        'Datos identificativos y de contacto (nombre, correo profesional, empresa, teléfono y dirección fiscal).',
-        'Datos técnicos del encargo editorial (dimensiones, paginación, tipo de papel, encuadernación y acabados).',
-        'Archivos técnicos de impresión (archivos PDF de interior y cubierta facilitados para preflight o producción).',
-        'Datos técnicos de navegación y telemetría (dirección IP anonimizada, navegador, resolución y registros de error).',
+        'Datos identificativos y de contacto: Nombre, empresa, dirección de correo electrónico, teléfono y dirección de facturación/envío.',
+        'Datos técnicos del proyecto editorial: Formatos, paginación, tipo de encuadernación, gramajes y especificaciones acordadas.',
+        'Archivos técnicos de impresión: Archivos PDF facilitados voluntariamente para preflight o producción gráfica.',
+        'Datos de navegación y telemetría técnica: Dirección IP anonimizada, tipo de navegador y eventos de interacción técnica (sujetos a consentimiento para telemetría opcional).',
       ],
-      sec3Title: '3. Finalidades y Bases Jurídicas del Tratamiento',
-      sec3Text: 'Tratamos sus datos personales exclusivamente bajo las siguientes bases legitimadoras:',
+      sec3Title: '3. Bases Jurídicas del Tratamiento',
+      sec3Text: 'Tratamos sus datos personales bajo las siguientes bases jurídicas reconocidas por el RGPD (Reglamento UE 2016/679):',
       sec3List: [
-        'Ejecución contractual o medidas precontractuales (Art. 6.1.b RGPD): cálculo de presupuestos en PRICE IT, validación técnica en FIX IT y enrutamiento a talleres en PRINT IT.',
-        'Interés legítimo (Art. 6.1.f RGPD): garantizar la seguridad informática de la plataforma, prevenir fraudes y optimizar el rendimiento técnico.',
-        'Consentimiento expreso (Art. 6.1.a RGPD): activación de cookies analíticas no esenciales o suscripción voluntaria a boletines informativos.',
+        'Ejecución del contrato o aplicación de medidas precontractuales (Art. 6.1.b RGPD): Cálculo de presupuestos, validación técnica de archivos en preflight y enrutamiento a talleres de impresión.',
+        'Interés legítimo (Art. 6.1.f RGPD): Seguridad de la red, prevención de fraudes y mantenimiento de la infraestructura técnica de la plataforma.',
+        'Consentimiento informado (Art. 6.1.a RGPD): Uso de cookies analíticas y telemetría técnica opcional.',
       ],
-      sec4Title: '4. Telemetría y Decisiones Automatizadas',
-      sec4Text: 'Nuestros sistemas emplean herramientas deterministas de verificación de archivos y telemetría de rendimiento técnico. PrintPrice Pro NO realiza elaboración de perfiles comerciales invasivos ni toma decisiones automatizadas que produzcan efectos jurídicos sobre los usuarios en el sentido del artículo 22 del RGPD.',
-      sec5Title: '5. Destinatarios y Subencargados del Tratamiento',
-      sec5Text: 'Para la ejecución del servicio, los datos técnicos del encargo se comparten de forma segura con el taller de impresión seleccionado para su cotización o fabricación. Asimismo, empleamos proveedores de infraestructura en la Unión Europea (alojamiento en centros de datos con certificación ISO 27001 en Alemania / Finlandia). En el caso de la herramienta complementaria Mockup 3D, el procesamiento visual se realiza en servidores de Google Cloud ubicados en la UE sin que los archivos se utilicen para entrenar modelos de IA.',
-      sec6Title: '6. Plazos de Conservación de los Datos',
-      sec6Text: 'Los datos de presupuestos y pedidos se conservan durante los plazos fiscales y mercantiles exigidos por la legislación letona. Los archivos PDF cargados temporalmente para comprobación rápida en FIX IT o generación de mockups se purgan automáticamente transcurridos los periodos técnicos de retención.',
-      sec7Title: '7. Derechos del Interesado y Autoridad de Control',
-      sec7Text: 'Usted puede ejercitar en cualquier momento sus derechos de acceso, rectificación, supresión, limitación del tratamiento, portabilidad y oposición mediante solicitud a privacy@printprice.pro. Si considera que sus derechos han sido vulnerados, puede presentar una reclamación ante la Inspección Estatal de Datos de Letonia (Datu valsts inspekcija — DVI, dvi.gov.lv) o ante la autoridad de protección de datos de su país de residencia en la UE.',
+      sec4Title: '4. Telemetría Técnica y Decisiones Automatizadas',
+      sec4Text: 'La plataforma utiliza telemetría técnica para monitorizar la velocidad de cálculo y optimizar la usabilidad del sistema. El sistema NO realiza elaboración de perfiles comerciales invasivos ni adopta decisiones basadas únicamente en el tratamiento automatizado que produzcan efectos jurídicos sobre los usuarios con arreglo al artículo 22 del RGPD.',
+      sec5Title: '5. Comunicación de Datos a Terceros',
+      sec5Text: 'Para la cotización y fabricación de pedidos, los datos técnicos del encargo se comunican de forma segura a las imprentas independientes seleccionadas. Asimismo, la infraestructura técnica de servidores opera en centros de datos ubicados en la Unión Europea.',
+      sec6Title: '6. Plazos de Conservación',
+      sec6Text: 'Los datos mercantiles y de pedidos se conservan durante los periodos legalmente exigidos por la legislación letona. Los archivos PDF cargados temporalmente para comprobaciones de preflight se purgan automáticamente tras concluir el procesamiento operativo.',
+      sec7Title: '7. Derechos del Usuario y Autoridad de Control',
+      sec7Text: 'Puede ejercer sus derechos de acceso, rectificación, supresión, limitación, portabilidad y oposición contactando con privacy@printprice.pro. Asimismo, tiene derecho a formular una reclamación ante la Inspección Estatal de Datos de Letonia (Datu valsts inspekcija — DVI, www.dvi.gov.lv) o ante la autoridad de control de su residencia en la Unión Europea.',
+      footerTag: 'PRINT PRICE PRO / POLÍTICA DE PRIVACIDAD VIGENTE // RĪGA, LETONIA',
     },
     en: {
-      back: '← Return to Legal & Trust Center',
-      badge: 'PRIVACY POLICY & DATA PROTECTION (GDPR)',
-      title: 'PrintPrice Pro Privacy Policy',
-      draftNotice: 'DRAFT PENDING FORMAL LEGAL APPROVAL / BORRADOR PENDIENTE DE APROBACIÓN JURÍDICA',
-      draftDesc: 'Comprehensive privacy framework in accordance with Regulation (EU) 2016/679 (GDPR) and Latvian data protection laws. Subject to formal legal certification.',
-      version: 'Version: 2026.1-draft',
-      lastUpdated: 'Last updated: October 2026',
+      back: '← Return to Legal Center',
+      badge: 'REGULATORY DOCUMENT / CURRENT POLICY',
+      title: 'Privacy Policy (GDPR)',
+      lastUpdated: 'Last updated: March 23, 2026',
+      version: 'Version: v1.1',
       printBtn: 'Print / PDF',
-      cookiesBtn: 'Cookie Settings',
-      sec1Title: '1. Data Controller Identification',
-      sec1Text: 'The controller responsible for processing personal data across this website and associated applications is:',
-      companyInfo: 'Print Price Pro SIA (Reg. No. 40203631570, VAT: LV40203631570), with registered address at Bruņinieku iela 60-8, Latgales priekšpilsēta, Rīga, LV-1009, Latvia. Dedicated privacy contact:',
-      sec2Title: '2. Categories of Personal Data Processed',
+      cookiesBtn: 'Cookie preferences',
+      sec1Title: '1. Data Controller',
+      sec1Text: 'The controller responsible for processing personal data across this platform is:',
+      companyInfo: 'Print Price Pro SIA (Commercial Reg. No.: 40203631570, VAT ID: LV40203631570), Bruņinieku iela 60-8, Latgales priekšpilsēta, Rīga, LV-1009, Latvia.',
+      privacyContact: 'Data privacy contact:',
+      sec2Title: '2. Categories of Data Processed',
       sec2List: [
-        'Contact and identification data (name, business email, company name, phone, billing address).',
-        'Job specification data (book formats, page count, binding choice, substrate specs).',
-        'Uploaded print assets (interior and cover PDF files provided for preflight validation or routing).',
-        'Technical telemetry data (anonymized IP addresses, browser agent, resolution, and error logs).',
+        'Identity & contact details: Name, business email, organization, phone number, and delivery/billing address.',
+        'Technical project specifications: Trim size, page count, binding type, substrate weights, and production parameters.',
+        'Uploaded print assets: PDF files submitted for preflight inspection or production routing.',
+        'Technical telemetry: Anonymized IP addresses, browser agent, and system interaction logs (strictly subject to consent for non-essential telemetry).',
       ],
-      sec3Title: '3. Purposes and Legal Bases for Processing',
-      sec3Text: 'We process personal data strictly in accordance with recognized GDPR legal bases:',
+      sec3Title: '3. Legal Bases for Processing',
+      sec3Text: 'We process personal data under recognized GDPR legal grounds (Regulation EU 2016/679):',
       sec3List: [
-        'Contract performance or pre-contractual steps (Art. 6(1)(b) GDPR): generating estimates in PRICE IT, preflight auditing in FIX IT, and marketplace routing in PRINT IT.',
-        'Legitimate interest (Art. 6(1)(f) GDPR): maintaining platform infrastructure security, detecting abuse, and optimizing server performance.',
-        'Explicit consent (Art. 6(1)(a) GDPR): activating non-essential analytical cookies or opting into newsletter updates.',
+        'Performance of contract or pre-contractual steps (Art. 6(1)(b) GDPR): Generating price estimates, validating PDF assets, and routing orders to production.',
+        'Legitimate interest (Art. 6(1)(f) GDPR): Maintaining infrastructure security, preventing abuse, and optimizing server performance.',
+        'Consent (Art. 6(1)(a) GDPR): Non-essential analytics and technical telemetry preferences.',
       ],
-      sec4Title: '4. Telemetry and Automated Processing',
-      sec4Text: 'Our platform uses deterministic file validation and performance telemetry. PrintPrice Pro does NOT engage in invasive behavioral profiling or automated decisions producing legal effects pursuant to Article 22 GDPR.',
-      sec5Title: '5. Data Recipients and Subprocessors',
-      sec5Text: 'Technical specifications are transmitted securely to selected printing houses solely for order execution. Core infrastructure is hosted in ISO 27001 certified data centers within the EU (Frankfurt / Helsinki). Visual processing for the optional 3D Mockup tool utilizes Google Cloud Vertex AI instances in the EU with explicit zero-training commitments.',
-      sec6Title: '6. Data Retention Policies',
-      sec6Text: 'Commercial records and invoices are retained pursuant to statutory Latvian commercial retention periods. Temporary PDF files uploaded for preflight inspection are purged automatically after operational processing.',
+      sec4Title: '4. Telemetry and Automated Decisions',
+      sec4Text: 'Platform telemetry evaluates calculation speeds and UX performance. PrintPrice Pro does NOT engage in invasive profiling or automated decision-making that produces legal effects concerning users under Article 22 GDPR.',
+      sec5Title: '5. Data Sharing with Third Parties',
+      sec5Text: 'To fulfill quotation and production requests, relevant project specifications are securely transmitted to designated print partners. Platform infrastructure is hosted in data centers within the European Union.',
+      sec6Title: '6. Retention Periods',
+      sec6Text: 'Commercial records are stored pursuant to statutory Latvian commercial retention requirements. Temporary PDF files uploaded for preflight inspection are purged automatically after technical processing.',
       sec7Title: '7. Data Subject Rights & Supervisory Authority',
-      sec7Text: 'You may exercise your rights of access, rectification, erasure, restriction, objection, and portability by emailing privacy@printprice.pro. You also have the right to lodge a complaint with the Latvian Data State Inspectorate (Datu valsts inspekcija — DVI, dvi.gov.lv) or your local EU supervisory authority.',
+      sec7Text: 'You may exercise your rights of access, rectification, erasure, restriction, objection, and portability by emailing privacy@printprice.pro. You also have the right to lodge a complaint with the Latvian Data State Inspectorate (Datu valsts inspekcija — DVI, www.dvi.gov.lv) or your local EU supervisory authority.',
+      footerTag: 'PRINT PRICE PRO / IN-FORCE PRIVACY POLICY // RĪGA, LATVIA',
     },
     de: {
-      back: '← Zurück zum Rechts- und Vertrauenszentrum',
-      badge: 'DATENSCHUTZERKLÄRUNG (DSGVO)',
-      title: 'PrintPrice Pro Datenschutzerklärung',
-      draftNotice: 'ENTWURF VORBEHALTLICH RECHTLICHER PRÜFUNG / DRAFT PENDING FORMAL LEGAL APPROVAL',
-      draftDesc: 'Datenschutzrahmenwerk gemäß Verordnung (EU) 2016/679 (DSGVO) und dem Recht der Republik Lettland. Veröffentlicht unter juristischem Vorbehalt.',
-      version: 'Version: 2026.1-draft',
-      lastUpdated: 'Letzte Aktualisierung: Oktober 2026',
+      back: '← Zurück zum Rechtszentrum',
+      badge: 'RECHTLICHES DOKUMENT / GÜLTIGE DATENSCHUTZERKLÄRUNG',
+      title: 'Datenschutzerklärung (DSGVO)',
+      lastUpdated: 'Letzte Aktualisierung: 23. März 2026',
+      version: 'Version: v1.1',
       printBtn: 'Drucken / PDF',
       cookiesBtn: 'Cookie-Einstellungen',
       sec1Title: '1. Verantwortliche Stelle',
-      sec1Text: 'Verantwortlicher für die Datenverarbeitung auf dieser Website und den verbundenen Systemen ist:',
-      companyInfo: 'Print Price Pro SIA (Reg.-Nr. 40203631570, USt-IdNr. LV40203631570), Bruņinieku iela 60-8, Latgales priekšpilsēta, Rīga, LV-1009, Lettland. Datenschutz-Kontakt:',
+      sec1Text: 'Verantwortlicher für die Datenverarbeitung auf dieser Plattform ist:',
+      companyInfo: 'Print Price Pro SIA (Reg.-Nr.: 40203631570, USt-IdNr.: LV40203631570), Bruņinieku iela 60-8, Latgales priekšpilsēta, Rīga, LV-1009, Lettland.',
+      privacyContact: 'Datenschutz-Kontakt:',
       sec2Title: '2. Kategorien verarbeiteter Daten',
       sec2List: [
-        'Kontaktdaten (Name, geschäftliche E-Mail, Unternehmen, Anschrift).',
-        'Technische Auftragsdaten (Buchformate, Seitenzahlen, Papiersorten, Bindung).',
-        'Druckdaten und Dateien (PDF-Dateien für Preflight-Prüfung oder Produktionsausführung).',
-        'Technische Telemetriedaten (anonymisierte IP-Adressen, Browser-Typ, Systemdiagnosen).',
+        'Kontaktdaten: Name, geschäftliche E-Mail, Unternehmen, Telefon und Rechnungsanschrift.',
+        'Auftragsdaten: Buchformate, Seitenzahlen, Bindungsarten und Papierspezifikationen.',
+        'Druckdaten: Hochgeladene PDF-Dateien zur Preflight-Prüfung oder Fertigung.',
+        'Telemetriedaten: Anonymisierte IP-Adressen und Systemdiagnosen (nur bei Einwilligung für optionale Analytik).',
       ],
-      sec3Title: '3. Zwecke und Rechtsgrundlagen der Verarbeitung',
-      sec3Text: 'Die Verarbeitung personenbezogener Daten erfolgt ausschließlich auf folgenden Rechtsgrundlagen:',
+      sec3Title: '3. Rechtsgrundlagen',
+      sec3Text: 'Die Verarbeitung erfolgt nach Art. 6 Abs. 1 DSGVO:',
       sec3List: [
-        'Vertragserfüllung oder vorvertragliche Maßnahmen (Art. 6 Abs. 1 lit. b DSGVO): Kalkulation in PRICE IT, Preflight in FIX IT, Auftragsrouting in PRINT IT.',
-        'Berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO): Gewährleistung der Plattformsicherheit und Fehleranalyse.',
-        'Einwilligung (Art. 6 Abs. 1 lit. a DSGVO): Aktivierung optionaler Analyse-Cookies.',
+        'Vertragserfüllung oder vorvertragliche Maßnahmen (Art. 6 Abs. 1 lit. b DSGVO): Preiskalkulation, Druckdatenprüfung und Auftragsvermittlung.',
+        'Berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO): Plattformsicherheit und Fehlerprävention.',
+        'Einwilligung (Art. 6 Abs. 1 lit. a DSGVO): Optionale Analyse-Cookies.',
       ],
       sec4Title: '4. Telemetrie und automatisierte Entscheidungen',
-      sec4Text: 'Unsere Systeme arbeiten deterministisch. Es findet keine automatisierte Entscheidungsfindung mit rechtlicher Wirkung im Sinne von Art. 22 DSGVO statt.',
-      sec5Title: '5. Empfänger und Auftragsverarbeiter',
-      sec5Text: 'Auftragsdaten werden sicher an die ausgewählte Druckerei weitergeleitet. Serverinfrastrukturen werden ausschließlich in zertifizierten Rechenzentren innerhalb der Europäischen Union betrieben.',
-      sec6Title: '6. Speicherdauer',
-      sec6Text: 'Buchhalterische Daten werden nach gesetzlichen Fristen aufbewahrt. Für reine Preflight-Tests hochgeladene PDF-Dateien werden nach der technischen Analyse automatisch bereinigt.',
+      sec4Text: 'Es findet keine automatisierte Entscheidungsfindung mit rechtlicher Wirkung im Sinne von Art. 22 DSGVO statt.',
+      sec5Title: '5. Datenweitergabe an Partner',
+      sec5Text: 'Auftragsdaten werden zweckgebunden an die ausführende Druckerei übermittelt. Server werden innerhalb der Europäischen Union betrieben.',
+      sec6Title: '6. Aufbewahrungsfristen',
+      sec6Text: 'Buchhalterische Daten unterliegen den gesetzlichen Fristen. Für reine Preflight-Tests hochgeladene PDF-Dateien werden nach der technischen Analyse automatisch gelöscht.',
       sec7Title: '7. Betroffenenrechte und Aufsichtsbehörde',
-      sec7Text: 'Sie haben das Recht auf Auskunft, Berichtigung, Löschung und Datenübertragbarkeit via privacy@printprice.pro sowie das Beschwerderecht bei der lettischen Datenschutzbehörde (Datu valsts inspekcija — DVI, dvi.gov.lv).',
+      sec7Text: 'Sie haben das Recht auf Auskunft, Berichtigung und Löschung via privacy@printprice.pro sowie das Beschwerderecht bei der lettischen Aufsichtsbehörde (Datu valsts inspekcija — DVI, www.dvi.gov.lv).',
+      footerTag: 'PRINT PRICE PRO / GÜLTIGE DATENSCHUTZERKLÄRUNG // RĪGA, LETTLAND',
     },
   }[locale];
 
@@ -154,33 +154,6 @@ export default function PrivacyPolicyPage() {
             >
               {t.back}
             </Link>
-          </div>
-
-          {/* Draft Disclaimer Notice */}
-          <div
-            style={{
-              padding: '1.25rem 1.5rem',
-              borderRadius: 'var(--radius-md)',
-              background: 'rgba(220, 0, 0, 0.06)',
-              border: '1px solid rgba(220, 0, 0, 0.3)',
-              marginBottom: '2.5rem',
-            }}
-          >
-            <div
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
-                fontWeight: 800,
-                color: 'var(--accent-primary)',
-                letterSpacing: '0.08em',
-                marginBottom: '0.4rem',
-              }}
-            >
-              {t.draftNotice}
-            </div>
-            <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-              {t.draftDesc}
-            </p>
           </div>
 
           {/* Header */}
@@ -248,9 +221,12 @@ export default function PrivacyPolicyPage() {
                 }}
               >
                 <p style={{ margin: 0, marginBottom: '0.5rem' }}>{t.companyInfo}</p>
-                <a href="mailto:privacy@printprice.pro" style={{ color: 'var(--accent-primary)', textDecoration: 'none', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
-                  privacy@printprice.pro
-                </a>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <span>{t.privacyContact}</span>
+                  <a href="mailto:privacy@printprice.pro" style={{ color: 'var(--accent-primary)', textDecoration: 'none', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
+                    privacy@printprice.pro
+                  </a>
+                </div>
               </div>
             </section>
 
@@ -323,7 +299,7 @@ export default function PrivacyPolicyPage() {
               gap: '1rem',
             }}
           >
-            <span>Print Price Pro SIA • GDPR & Privacy Governance</span>
+            <span>{t.footerTag}</span>
             <Link href="/legal" style={{ color: 'var(--accent-primary)', textDecoration: 'none' }}>
               {t.back}
             </Link>

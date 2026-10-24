@@ -7,7 +7,7 @@ import sys
 sys.stdout.reconfigure(encoding='utf-8', errors='replace', line_buffering=True)
 sys.stderr.reconfigure(encoding='utf-8', errors='replace', line_buffering=True)
 
-BASE_URL = "http://localhost:3010"
+BASE_URL = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:3033"
 
 ROUTES = [
     {"path": "/", "name": "Home", "intent": "General Platform Overview & Slogan"},
@@ -25,6 +25,7 @@ ROUTES = [
     {"path": "/company", "name": "Company", "intent": "Engineering philosophy, deterministic principles, and team"},
     {"path": "/contact", "name": "Contact", "intent": "General inquiries and customer support"},
     {"path": "/contact/partner", "name": "Contact Partner", "intent": "Commercial onboarding for printhouses and paper mills"},
+    {"path": "/legal", "name": "Legal Trust Center", "intent": "Approved legal documents and compliance trust overview"},
     {"path": "/legal/terms-of-service", "name": "Terms of Service", "intent": "Platform service terms and manufacturing boundaries"},
     {"path": "/legal/privacy-policy", "name": "Privacy Policy", "intent": "GDPR compliance, data handling, and cookies"},
     {"path": "/legal/legal-notice", "name": "Legal Notice", "intent": "Statutory corporate imprint and fiscal identification"},

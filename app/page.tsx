@@ -65,10 +65,10 @@ export default function Home() {
       pillar: '03 / PRINT IT',
       title: 'Print it',
       tagline: locale === 'es'
-        ? 'Marketplace de producción con talleres homologados'
+        ? 'Marketplace de producción con talleres de la red'
         : locale === 'de'
         ? 'Produktions-Marketplace mit Partnerdruckereien'
-        : 'Production marketplace with vetted plants',
+        : 'Production marketplace with partner print shops',
       description: locale === 'es'
         ? 'Encuentra la imprenta adecuada y encarga la producción. Conecta las especificaciones acordadas en el pedido y tu archivo validado con talleres adscritos a la red de producción de PrintPrice OS, asegurando que el taller reciba la versión comprobada en preflight.'
         : locale === 'de'
@@ -81,10 +81,10 @@ export default function Home() {
       icon: '🏭',
       badge: 'PRINT IT',
       disclaimer: locale === 'es'
-        ? '* La solicitud de producción para compradores se inicia a través de Budget conectando con talleres homologados de la red. Control Plane está reservado a la operativa interna de imprentas.'
+        ? '* La solicitud de producción para compradores se inicia a través de Budget conectando con talleres de la red. Control Plane está reservado a la operativa interna de imprentas.'
         : locale === 'de'
         ? '* Auftragserteilung erfolgt über das Budget-Modul an Partnerbetriebe im Netzwerk. Control Plane ist der internen Druckerei-Betriebsführung vorbehalten.'
-        : '* Buyer production requests are initiated via Budget connecting with vetted partner plants in the network. Control Plane is strictly the printer operational backend.',
+        : '* Buyer production requests are initiated via Budget connecting with partner plants in the network. Control Plane is strictly the printer operational backend.',
     },
   ];
 
@@ -1033,10 +1033,10 @@ export default function Home() {
                     ? 'Worin unterscheiden sich Price it, Fix it und Print it?'
                     : 'What is the difference between Price it, Fix it, and Print it?',
                   a: locale === 'es'
-                    ? 'Son los tres productos principales de PrintPrice Pro: Price it es el calculador para presupuestar el coste real de producción; Fix it es el motor de preflight para auditar y preparar tu PDF antes de máquina; y Print it es el marketplace para encargar la fabricación física a imprentas homologadas.'
+                    ? 'Son los tres productos principales de PrintPrice Pro: Price it es el calculador para presupuestar el coste real de producción; Fix it es el motor de preflight para auditar y preparar tu PDF antes de máquina; y Print it es el marketplace para encargar la fabricación física a imprentas asociadas de la red.'
                     : locale === 'de'
-                    ? 'Dies sind die drei Kernprodukte: Price it kalkuliert Produktionskosten; Fix it führt das PDF-Preflight vor dem Maschinengang durch; Print it ist der Marketplace zur Auftragsvergabe an zertifizierte Druckbetriebe.'
-                    : 'They are the three core products: Price it calculates true production costs; Fix it audits and prepares PDFs before print; Print it is the marketplace connecting jobs to vetted plants.',
+                    ? 'Dies sind die drei Kernprodukte: Price it kalkuliert Produktionskosten; Fix it führt das PDF-Preflight vor dem Maschinengang durch; Print it ist der Marketplace zur Auftragsvergabe an Partner-Druckbetriebe im Netzwerk.'
+                    : 'They are the three core products: Price it calculates true production costs; Fix it audits and prepares PDFs before print; Print it is the marketplace connecting jobs to network print shops.',
                 },
                 {
                   q: locale === 'es'

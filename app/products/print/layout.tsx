@@ -3,7 +3,7 @@ import { constructMetadata, getBreadcrumbJsonLd, getSoftwareApplicationJsonLd } 
 
 export const metadata: Metadata = constructMetadata({
   title: 'Marketplace de Impresión y Fabricación Gráfica | PrintPrice Pro',
-  description: 'Encuentra la imprenta industrial homologada para tu libro o catálogo. Enrutamiento algorítmico (Matchmaker) según pliegos, maquinaria y evidencia técnica inmutable.',
+  description: 'Encuentra la imprenta industrial adecuada para tu libro o catálogo. Enrutamiento algorítmico (Matchmaker) según pliegos, maquinaria y evidencia técnica inmutable.',
   canonical: '/products/print',
 });
 
@@ -15,7 +15,7 @@ const breadcrumbs = getBreadcrumbJsonLd([
 
 const softwareApp = getSoftwareApplicationJsonLd({
   name: 'PrintPrice Print Marketplace',
-  description: 'Marketplace y motor de enrutamiento algorítmico hacia talleres gráficos homologados para la fabricación editorial e industrial.',
+  description: 'Marketplace y motor de enrutamiento algorítmico hacia talleres gráficos de la red para la fabricación editorial e industrial.',
   path: '/products/print',
 });
 

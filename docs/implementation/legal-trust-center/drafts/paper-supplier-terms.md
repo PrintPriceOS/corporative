@@ -60,6 +60,6 @@ c) **Disponibilidad y Stock:** Estado logístico de suministro (entrega inmediat
 ---
 
 ### 7. Régimen Económico y Conservación del Histórico
-7.1. **Ausencia de comisiones del 4 % en papel:** Se ratifica expresamente que la comisión del 4 % aplicable al marketplace de impresión **no se aplica automáticamente al aprovisionamiento de papel**. Cualquier régimen de tarifas para proveedores de papel se regirá por acuerdos comerciales formalmente aprobados.
+7.1. **Régimen de tarifas de papel (Pendiente de definición comercial):** El régimen económico y las posibles tarifas aplicables a los proveedores y distribuidores de papel en la plataforma no están fijados en este documento ni se asimilan automáticamente al marketplace de impresión. Quedan expresamente pendientes de definición comercial por la dirección de PrintPrice.
 
 7.2. **Preservación del histórico de pedidos:** Las fichas técnicas y órdenes de aprovisionamiento vinculadas a pedidos históricos se mantendrán inmutables en los registros del sistema para respaldar cualquier auditoría o reclamación de calidad.

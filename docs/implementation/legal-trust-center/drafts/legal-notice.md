@@ -24,7 +24,7 @@ En cumplimiento de la legislación aplicable de la Unión Europea y de la Repúb
 El sitio web `printprice.pro` y sus subdominios asociados constituyen la plataforma corporativa e informativa de PrintPrice OS, un entorno tecnológico modular para la industria gráfica que comprende:
 1. **PRICE IT (budget.printprice.pro):** Motor determinista de cálculo de costes de fabricación de libros y packaging.
 2. **FIX IT (preflight.printprice.pro):** Motor determinista de auditoría técnica y verificación de archivos PDF.
-3. **PRINT IT (print.printprice.pro):** Entorno de marketplace que conecta solicitudes de impresión verificadas con imprentas industriales homologadas.
+3. **PRINT IT (print.printprice.pro):** Entorno de marketplace que conecta solicitudes de impresión verificadas con imprentas industriales asociadas de la red.
 4. **Mockup (mockup.printprice.pro):** Herramienta complementaria de asistencia visual 3D para marketing digital.
 5. **Control Plane (control.printprice.pro):** Espacio operativo para imprentas y distribuidores de papel.
 

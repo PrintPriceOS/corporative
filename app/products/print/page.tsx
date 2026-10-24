@@ -14,7 +14,7 @@ export default function PrintProductPage() {
     es: {
       label: 'PRINT IT / MARKETPLACE DE FABRICACIÓN GRÁFICA',
       title: 'Encuentra la imprenta adecuada y encarga tu producción.',
-      subheadline: 'Enrutamiento algorítmico hacia talleres homologados según maquinaria real, pliegos técnicos y especificaciones verificadas.',
+      subheadline: 'Enrutamiento algorítmico hacia talleres de la red según maquinaria real, pliegos técnicos y especificaciones verificadas.',
       ctaPrimary: 'Configurar y encargar en Budget →',
       ctaSecondary: 'Cómo funciona el Matchmaker',
       slogan: ['PRICE IT.', 'FIX IT.', 'PRINT IT.'],
@@ -35,7 +35,7 @@ export default function PrintProductPage() {
         {
           step: '03',
           title: 'Asignación algorítmica (Print it)',
-          desc: 'El motor Matchmaker evalúa las plantas de impresión homologadas y selecciona el taller más eficiente según el pliego y tipo de máquina.'
+          desc: 'El motor Matchmaker evalúa las plantas de impresión asociadas y selecciona el taller más eficiente según el pliego y tipo de máquina.'
         },
         {
           step: '04',
@@ -47,7 +47,7 @@ export default function PrintProductPage() {
       pillarsTitle: 'Por qué encargar producción con PrintPrice OS',
       pillars: [
         {
-          title: 'Red Homologada de Talleres',
+          title: 'Red de Talleres Industriales',
           desc: 'Trabajamos con imprentas industriales y especializadas en artes gráficas con maquinaria offset y digital auditada.',
           icon: '🏭'
         },
@@ -75,7 +75,7 @@ export default function PrintProductPage() {
       faqs: [
         {
           q: '¿Cómo elijo la imprenta que producirá mi libro?',
-          a: 'Al cotizar en Budget, el motor Matchmaker compara tu proyecto contra los parques de maquinaria de las imprentas homologadas (tamaños de pliego, horas disponibles, costes de encuadernación) y selecciona la opción más competitiva en calidad y plazo.'
+          a: 'Al cotizar en Budget, el motor Matchmaker compara tu proyecto contra los parques de maquinaria de las imprentas de la red (tamaños de pliego, horas disponibles, costes de encuadernación) y selecciona la opción más competitiva en calidad y plazo.'
         },
         {
           q: '¿Qué garantía tengo de que el archivo no sufrirá alteraciones en el taller?',

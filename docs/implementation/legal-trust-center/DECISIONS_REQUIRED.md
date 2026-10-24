@@ -1,47 +1,44 @@
-# Decisiones Comerciales Pendientes de Aprobación Formal
+# Decisiones Comerciales Pendientes de Definición y Aprobación
 ## PrintPrice Pro — Cuestionario Ejecutivo de Negocio
 
-**Fecha:** 24 de octubre de 2026  
-**Destinatario:** Dirección Comercial y Consejo de Administración (Print Price Pro SIA)
+**Fecha de Actualización:** 24 de octubre de 2026  
+**Destinatario:** Dirección y Liderazgo Comercial de PrintPrice Pro  
+**Estado:** Documento Interno de Consulta
 
 ---
 
-### Resumen de Decisiones Ya Confirmadas (Invariables)
-- **Eliminación definitiva** de períodos de prueba gratuitos de 14, 21 o cualquier otra duración.
-- **Flujo de pago:** La imprenta vende y cobra directamente al comprador.
-- **Comisión Marketplace:** Se fija en el **4 %** por transacciones formalizadas en PRINT IT.
-- **Liquidación:** Facturación mensual emitida por PrintPrice a cada imprenta.
-- **Productos:** PRICE IT (cálculo), FIX IT (preflight), PRINT IT (marketplace). Mockup es función complementaria y Control Plane es el espacio operativo para talleres y proveedores.
+### 1. Decisiones Comerciales Ya Confirmadas (Base Firme)
+- **Eliminación Total de Pruebas Gratuitas:** Supresión absoluta de periodos de prueba temporales (14, 21 días u otras duraciones) en todo el ecosistema.
+- **Comisión de Marketplace:** Decisión comercial en firme: **comisión del 4 %** sobre transacciones originadas a través de PRINT IT.
+- **Venta y Cobro Directo por la Imprenta:** La imprenta vende y cobra directamente al comprador el importe íntegro del pedido.
+- **Liquidación Periódica:** PrintPrice consolida y factura mensualmente sus comisiones a las imprentas registradas.
 
 ---
 
-### Cuestionario de Decisiones Imprescindibles para Cierre Comercial Definitivo
+### 2. Decisiones Comerciales Mínimas Pendientes de Definición
 
-#### 1. Precisión Operativa de la Comisión del 4 %
-*Propuesta redactada en los borradores como pendiente de aprobación:*
-- **1.1. Base exacta de cálculo:**  
-  *Propuesta:* Importe neto de fabricación efectivamente cobrado por la imprenta, deducidos los descuentos comerciales aplicados y excluyendo explícitamente el IVA y los costes de transporte facturados de forma desglosada.  
-  *¿Se aprueba esta definición de base neta?* `[ SÍ / MODIFICAR ]`
-- **1.2. Calendario de emisión y vencimiento:**  
-  *Propuesta:* Emisión de la factura mensual de comisiones dentro de los primeros 5 días hábiles del mes natural siguiente, con plazo de pago a 15 días naturales mediante transferencia bancaria.  
-  *¿Se aprueba este calendario?* `[ SÍ / MODIFICAR ]`
-- **1.3. Tratamiento de devoluciones y reembolsos:**  
-  *Propuesta:* En caso de cancelación o devolución justificada aceptada por la imprenta, la comisión imputable se compensa mediante factura rectificativa o nota de abono en la siguiente liquidación mensual.  
-  *¿Se aprueba este tratamiento?* `[ SÍ / MODIFICAR ]`
-- **1.4. Divisa y tipo de cambio:**  
-  *Propuesta:* La facturación de comisiones se emite en Euros (€). Para transacciones pactadas en otra divisa, se aplicará el tipo de cambio oficial del Banco Central Europeo (BCE) de la fecha del cobro.  
-  *¿Se aprueba el euro como divisa única de liquidación de comisiones?* `[ SÍ / MODIFICAR ]`
+#### A. Precisión Operativa de la Comisión del 4 %
+1. **Base imponible exacta:**  
+   - Determinar si la base sobre la que se aplica el 4 % se limita al coste de fabricación industrial o si computa/excluye costes de embalaje y suplementos técnicos específicos.
+2. **Tratamiento de portes y logística:**  
+   - Definir si los costes de transporte y envío facturados de forma desglosada al cliente quedan excluidos de la base de comisión del 4 %.
+3. **Régimen de impuestos y territorialidad:**  
+   - Aplicación de IVA en facturación de comisiones: entidad letona emitiendo a imprentas comunitarias (inversión de sujeto pasivo / *reverse charge* B2B) vs. operaciones locales o extracomunitarias.
+4. **Devoluciones, cancelaciones y anticipos:**  
+   - Protocolo de regularización de la comisión devengada cuando se produzcan cancelaciones de mutuo acuerdo, entregas parciales o reembolsos justificados entre imprenta y cliente.
+5. **Vencimiento, plazos de pago y divisas:**  
+   - Días de emisión de la factura mensual, plazo de pago concedido a los talleres y gestión de tipos de cambio oficiales del BCE para transacciones formalizadas fuera de la zona euro.
 
-#### 2. Modelo Económico de Suscripciones y Consumos Técnicos (No Aprobados)
-*Actualmente no están aprobados precios de suscripción fija ni tarifas de créditos de preflight.*
-- **2.1. Política transitoria:** ¿Se ratifica que el acceso inicial a la plataforma y herramientas opera sin cuotas fijas de alta ni cuotas mínimas mensuales obligatorias mientras no se aprueben expresamente tarifas de suscripción?  
-  `[ CONFIRMAR / PENDIENTE ]`
+#### B. Régimen y Tarifas para Proveedores de Papel
+1. **Modelo comercial de Paper Supplier Hub:**  
+   - Se ha retirado cualquier compromiso previo de gratuidad o «0 % de comisión». Queda pendiente de definición si los distribuidores de papel operarán mediante comisión sobre transacciones de sustrato, cuota de federación técnica de catálogo o esquema transitorio sin coste.
 
-#### 3. Régimen Económico de Paper Suppliers
-- **3.1. Modelo para distribuidores de papel:** Se ha confirmado que la comisión del 4 % **no** aplica automáticamente al aprovisionamiento de papel.  
-  *¿Se ratifica que la publicación del catálogo maestro es gratuita durante la fase de lanzamiento o se prevé una tarifa de federación técnica separada?*  
-  `[ GRATUITO EN LANZAMIENTO / TARIFA SEPARADA A DEFINIR ]`
+#### C. Modelo de Suscripciones y Créditos de Software
+1. **Uso de Control Plane para clientes propios de taller:**  
+   - Definir si el acceso al software para gestionar la cartera propia de la imprenta (sin intermediación de PRINT IT) adoptará un plan de suscripción recurrente, cuota por pliego procesado o acceso básico incluido.
+2. **Tarificación de FIX IT (Preflight):**  
+   - Definir si las inspecciones forenses avanzadas o las APIs por volumen funcionarán mediante paquetes de créditos consumibles, suscripción para desarrolladores o acceso abierto en fase de lanzamiento.
 
-#### 4. Idioma Contractual Prevalente
-- **4.1. Prevalencia lingüística:** En caso de divergencia interpretativa entre las versiones en Español (ES), Inglés (EN) y Alemán (DE), ¿se designa el Inglés o el Español como idioma de referencia contractual para relaciones B2B internacionales, o se mantiene pendiente de dictamen jurídico?  
-  *Propuesta actual en borradores:* Mantenido como decisión pendiente de dictamen jurídico.
+#### D. Idioma Prevalente de Contratación
+1. **Prevalencia lingüística internacional:**  
+   - Determinación del idioma de referencia jurídica (inglés, español o letón) en caso de discrepancias interpretativas en contratos comerciales B2B transfronterizos.

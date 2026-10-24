@@ -49,10 +49,10 @@ export default function ProductsHubPage() {
       slogan: 'PRINT IT.',
       badge: locale === 'es' ? 'MATCHMAKER INDUSTRIAL' : locale === 'de' ? 'INDUSTRIELLES MATCHING' : 'INDUSTRIAL MATCHING',
       description: locale === 'es'
-        ? 'Encuentra la imprenta industrial homologada para tu proyecto. Enrutamiento algorítmico según maquinaria real, pliegos y especificaciones acordadas en el pedido.'
+        ? 'Encuentra la imprenta industrial adecuada para tu proyecto. Enrutamiento algorítmico según maquinaria real, pliegos y especificaciones acordadas en el pedido.'
         : locale === 'de'
         ? 'Finden Sie den optimalen Druckbetrieb für Ihr Projekt. Algorithmische Zuweisung nach realen Maschinenprofilen, Bogenformaten und den im Auftrag vereinbarten Spezifikationen.'
-        : 'Find the optimal vetted printing plant for your job. Algorithmic routing based on real press machinery, sheet sizes, and agreed order specifications.',
+        : 'Find the optimal print shop for your job. Algorithmic routing based on real press machinery, sheet sizes, and agreed order specifications.',
       href: '/products/print',
       internalHref: '/products/print',
       cta: locale === 'es' ? 'Explorar Marketplace ➔' : locale === 'de' ? 'Marketplace erkunden ➔' : 'Explore Marketplace ➔',
@@ -107,10 +107,10 @@ export default function ProductsHubPage() {
         isHeadlineSlogan={true}
         subheadline={
           locale === 'es'
-            ? 'Los tres pilares para hacer realidad tu producción gráfica: calcula el coste real, prepara tu archivo con rigor forense y encarga la fabricación a talleres homologados.'
+            ? 'Los tres pilares para hacer realidad tu producción gráfica: calcula el coste real, prepara tu archivo con rigor forense y encarga la fabricación a talleres de la red.'
             : locale === 'de'
-            ? 'Die drei Säulen für Ihre Druckproduktion: Exakte Kostenkalkulation, forensische Druckdatenprüfung und Fertigung bei zertifizierten Partnerbetrieben.'
-            : 'The three pillars of print manufacturing: calculate true costs, forensically prepare print files, and commission production with vetted plants.'
+            ? 'Die drei Säulen für Ihre Druckproduktion: Exakte Kostenkalkulation, forensische Druckdatenprüfung und Fertigung bei Partnerdruckereien im Netzwerk.'
+            : 'The three pillars of print manufacturing: calculate true costs, forensically prepare print files, and commission production with network print shops.'
         }
         variant="particles"
       />

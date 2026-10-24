@@ -56,23 +56,23 @@ export default function PreflightProductPage() {
       checksTitle: 'Qué comprueba el motor de PrintPrice Preflight',
       checksSubtitle: 'Evaluación determinista basada en estándares ISO y políticas reales de fabricación según perfil.',
       checks: [
-        { name: 'Cajas de Página (Geometry)', desc: 'Normalización de MediaBox, TrimBox y BleedBox para asegurar dimensiones exactas de corte.' },
-        { name: 'Sangrado Perimetral (Bleed)', desc: 'Detección de sangrado según el perfil de producción (por ejemplo, 3 mm habituales en libros estándar) para evitar filos blancos al guillotinar.' },
-        { name: 'Resolución de Imágenes (DPI)', desc: 'Cálculo de la resolución efectiva según el tipo de tirada (por ejemplo, 300 DPI recomendados en color comercial o 150-200 DPI en gran formato).' },
-        { name: 'Fuentes Tipográficas', desc: 'Verificación de fuentes no incrustadas, subconjuntos parciales y fuentes sintéticas susceptibles de sustitución.' },
-        { name: 'Espacios de Color y Tintas', desc: 'Verificación del espacio cromático adecuado según perfil de máquina (CMYK, escala de grises o tintas directas según especificación técnica).' },
-        { name: 'Límite de Tinta (TAC / TIC)', desc: 'Medición de la cobertura total de tinta para evitar manchas, repintados y retrasos de secado en máquina.' },
-        { name: 'Transparencias y Capas', desc: 'Identificación de modos de fusión, máscaras suaves y transparencias complejas que requieran acoplamiento.' },
-        { name: 'Estándares PDF/X', desc: 'Comprobación de conformidad con normas ISO (PDF/X-1a, PDF/X-4) para compatibilidad con RIPs industriales.' }
+        { name: 'Cajas de Página (Geometry)', desc: 'Normalización y verificación geométrica de MediaBox, TrimBox y BleedBox para corte exacto.' },
+        { name: 'Sangrado según Perfil', desc: 'Comprobación de sangrado parametrizado según producto y encuadernación (ej. 3 mm en rústica, 5 mm en tapa dura, 0 mm en pliegos técnicos), evitando requisitos universales rígidos.' },
+        { name: 'Resolución Efectiva (DPI)', desc: 'Cálculo de la resolución efectiva según tecnología de destino (300 DPI recomendados en color comercial, 150-200 DPI en gran formato o 600-1200 DPI en líneas).' },
+        { name: 'Fuentes Tipográficas', desc: 'Detección de fuentes no incrustadas, subconjuntos incompletos o fuentes sintéticas propensas a sustitución.' },
+        { name: 'Espacios de Color y Tintas', desc: 'Evaluación del espacio cromático (CMYK, escala de grises, RGB con perfil ICC o tintas directas) según la tecnología de la máquina de destino.' },
+        { name: 'Límite de Tinta (TAC / TIC)', desc: 'Medición de la cobertura total de tinta para evitar repintados y problemas de secado según el papel.' },
+        { name: 'Transparencias y Capas', desc: 'Identificación de modos de fusión, máscaras suaves y transparencias complejas que requieran gestión en preimpresión.' },
+        { name: 'Conformidad con Perfiles PDF/X', desc: 'Comprobación determinista de primitivas según directrices ISO (PDF/X-1a, PDF/X-4). La inspección técnica orientativa no sustituye la certificación completa del RIP del taller.' }
       ],
 
-      // How it works
-      workflowTitle: 'Cómo funciona el análisis',
+      // How it works: Detectar, Corregir y Revalidar
+      workflowTitle: 'Cómo funciona el análisis: Detectar, Corregir y Revalidar',
       workflowSteps: [
-        { step: '01', title: 'Sube tu archivo PDF', desc: 'Carga tu documento directamente en el navegador o envíalo a través de la API REST sin instalar aplicaciones locales.' },
-        { step: '02', title: 'Inspección forense', desc: 'El motor analiza de forma determinista la geometría, vectores, imágenes, tipografías y metadatos del archivo.' },
-        { step: '03', title: 'Informe comprensible', desc: 'Recibes un desglose interactivo clasificado por páginas afectadas, nivel de riesgo y recomendaciones claras.' },
-        { step: '04', title: 'Corrección y entrega', desc: 'Aplica correcciones automáticas compatibles o descarga el diagnóstico para ajustar tu documento en tu programa de maquetación.' }
+        { step: '01', title: 'Carga y perfil de producción', desc: 'Sube tu PDF y selecciona el perfil de destino (tipo de encuadernación, soporte y tecnología de impresión).' },
+        { step: '02', title: 'Detectar (Auditoría Forense)', desc: 'Inspección determinista de cajas de página, fuentes, resolución efectiva, espacios de color y tintas.' },
+        { step: '03', title: 'Corregir (Remediación Segura)', desc: 'Aplica ajustes automáticos no destructivos compatibles (normalización de cajas, perfiles de color) sin alterar contenidos.' },
+        { step: '04', title: 'Revalidar (Verificación del Resultado)', desc: 'Segunda pasada forense sobre el archivo corregido para confirmar que cumple los parámetros antes de enviar al taller.' }
       ],
 
       // Corrections & limits
@@ -180,22 +180,23 @@ export default function PreflightProductPage() {
       checksTitle: 'What PrintPrice Preflight checks',
       checksSubtitle: 'Deterministic evaluation based on ISO standards and real manufacturing constraints by profile.',
       checks: [
-        { name: 'Page Boxes (Geometry)', desc: 'Normalized verification of MediaBox, TrimBox, and BleedBox to ensure exact trim sizes.' },
-        { name: 'Perimeter Bleed', desc: 'Checks bleed according to selected profile (e.g. standard 3mm bleed in commercial book printing) to prevent unprinted white slivers.' },
-        { name: 'Effective Image DPI', desc: 'Calculates the real effective resolution based on press profile (e.g. 300 DPI recommended for commercial color or 150-200 DPI in large format).' },
-        { name: 'Font Embedding', desc: 'Detects non-embedded fonts, partial subsets, and Type 3 fonts prone to press substitution.' },
-        { name: 'Color Spaces & Inks', desc: 'Verifies appropriate color gamut based on machine profile (CMYK, grayscale, or specific spot inks).' },
-        { name: 'Total Ink Coverage (TAC)', desc: 'Measures total ink limit to prevent ink smudging, set-off, and drying issues on press.' },
-        { name: 'Transparencies & Layers', desc: 'Identifies blend modes, soft masks, and complex transparency groups requiring flattening.' },
-        { name: 'PDF/X Standards', desc: 'Verifies conformance with ISO standards (PDF/X-1a, PDF/X-4) for industrial RIP compatibility.' }
+        { name: 'Page Boxes (Geometry)', desc: 'Normalized verification of MediaBox, TrimBox, and BleedBox to ensure exact trim dimensions.' },
+        { name: 'Profile-Specific Bleed', desc: 'Checks bleed according to product profile and binding (e.g. 3mm for softcover, 5mm for cased hardcover, 0mm for technical sheet layouts), avoiding rigid universal rules.' },
+        { name: 'Effective Image DPI', desc: 'Calculates actual effective resolution relative to output technology (300 DPI for commercial process, 150-200 DPI for large format, or 600-1200 DPI for monochrome line art).' },
+        { name: 'Font Embedding', desc: 'Detects non-embedded fonts, partial subsets, and synthetic fonts prone to press substitution.' },
+        { name: 'Color Gamut & Inks', desc: 'Evaluates color space (CMYK, grayscale, RGB with ICC profile, or spot/Pantone inks) according to target press specifications.' },
+        { name: 'Total Ink Coverage (TAC)', desc: 'Measures ink limit against substrate absorption thresholds to prevent offset smudging and drying delays.' },
+        { name: 'Transparencies & Layers', desc: 'Identifies blend modes, soft masks, and complex transparency groups requiring prepress handling.' },
+        { name: 'PDF/X Profile Conformance', desc: 'Deterministic primitive inspection against ISO PDF/X guidelines (PDF/X-1a, PDF/X-4). Technical analysis does not replace full target RIP hardware certification.' }
       ],
 
-      workflowTitle: 'How the analysis works',
+      // How it works: Detect, Correct & Revalidate
+      workflowTitle: 'How the analysis works: Detect, Correct & Revalidate',
       workflowSteps: [
-        { step: '01', title: 'Upload your PDF', desc: 'Drag and drop your file in the browser or submit via REST API without installing local software.' },
-        { step: '02', title: 'Forensic inspection', desc: 'The cloud engine deterministically inspects geometry, vectors, raster assets, typography, and metadata.' },
-        { step: '03', title: 'Clear diagnostics', desc: 'Receive an interactive visual report grouped by affected pages, risk severity, and action items.' },
-        { step: '04', title: 'Remediation & print', desc: 'Apply safe automated fixes or download the diagnostic summary to make adjustments in your design tool.' }
+        { step: '01', title: 'Upload & Profile Selection', desc: 'Drop your file and select target specifications (binding, stock, and printing technology).' },
+        { step: '02', title: 'Detect (Forensic Audit)', desc: 'Deterministic inspection of page geometry, fonts, effective DPI, color spaces, and ink limits.' },
+        { step: '03', title: 'Correct (Safe Remediation)', desc: 'Apply non-destructive adjustments (page box geometry normalization, standard ICC profile embedding).' },
+        { step: '04', title: 'Revalidate (Result Verification)', desc: 'Second forensic pass on the output file to verify full compliance before transmitting to the press.' }
       ],
 
       limitsTitle: 'Available fixes and technical limits',
@@ -300,21 +301,22 @@ export default function PreflightProductPage() {
       checksSubtitle: 'Deterministische Prüfung basierend auf ISO-Standards und profilabhängigen Fertigungsregeln.',
       checks: [
         { name: 'Seitenboxen (Geometrie)', desc: 'Normalisierte Prüfung von MediaBox, TrimBox und BleedBox für exakte Endformate.' },
-        { name: 'Umlaufender Beschnitt (Bleed)', desc: 'Prüfung des Beschnitts nach Produktionsprofil (z. B. übliche 3 mm im Buchdruck) zur Vermeidung von Blitzern beim Schneiden.' },
-        { name: 'Effektive Bildauflösung (DPI)', desc: 'Ermittlung der tatsächlichen Auflösung im Verhältnis zum Profilrichtwert (z. B. 300 DPI im Farbdruck oder 150-200 DPI im Großformat).' },
+        { name: 'Profilspezifischer Beschnitt', desc: 'Prüfung des Beschnitts nach Produktart und Bindung (z. B. 3 mm bei Softcover, 5 mm bei Hardcover, 0 mm bei technischen Montagebögen) statt starrer Universalwerte.' },
+        { name: 'Effektive Bildauflösung (DPI)', desc: 'Ermittlung der tatsächlichen Auflösung im Verhältnis zur Drucktechnologie (300 DPI im Akzidenzdruck, 150-200 DPI im Großformat oder 600-1200 DPI bei Strichgrafik).' },
         { name: 'Schrifteinbettung', desc: 'Prüfung auf nicht eingebettete Schriftarten, unvollständige Subsets und ersetzungsgefährdete Schriften.' },
-        { name: 'Farbräume & Sonderfarben', desc: 'Prüfung des Farbraums passend zum Maschinenprofil (CMYK, Graustufen oder definierte Schmuckfarben).' },
-        { name: 'Gesamtfarbauftrag (TAC / TIC)', desc: 'Messung des maximalen Farbauftrags zur Vermeidung von Ablegen, Verwischen und Trocknungsverzögerungen.' },
-        { name: 'Transparenzen & Ebenen', desc: 'Identifikation von Füllmethoden, Soft-Masks und Transparenzgruppen, die Verflachung erfordern.' },
-        { name: 'PDF/X-Standards', desc: 'Konformitätsprüfung nach ISO-Normen (PDF/X-1a, PDF/X-4) für maximale RIP-Kompatibilität.' }
+        { name: 'Farbräume & Druckfarben', desc: 'Prüfung des Farbraums (CMYK, Graustufen, RGB mit ICC-Profil oder Schmuckfarben) passend zur Zielmaschine.' },
+        { name: 'Gesamtfarbauftrag (TAC / TIC)', desc: 'Messung des maximalen Farbauftrags zur Vermeidung von Ablegen und Trocknungsverzögerungen nach Papiersorte.' },
+        { name: 'Transparenzen & Ebenen', desc: 'Identifikation von Füllmethoden, Soft-Masks und Transparenzgruppen für die Druckvorstufe.' },
+        { name: 'PDF/X-Konformitätsprüfung', desc: 'Deterministische Prüfung gegen ISO PDF/X-Vorgaben (PDF/X-1a, PDF/X-4). Die Vorprüfung ersetzt nicht die vollständige RIP-Hardwarezertifizierung der Druckerei.' }
       ],
 
-      workflowTitle: 'So funktioniert die Prüfung',
+      // How it works: Erkennen, Korrigieren und Revalidieren
+      workflowTitle: 'Funktionsweise der Prüfung: Erkennen, Korrigieren und Revalidieren',
       workflowSteps: [
-        { step: '01', title: 'PDF-Datei hochladen', desc: 'Laden Sie Ihre Datei direkt im Browser hoch oder senden Sie sie über die REST-API – ganz ohne lokale Software.' },
-        { step: '02', title: 'Forensische Analyse', desc: 'Die Cloud-Engine prüft Geometrie, Vektoren, Bilder, Schriften und Metadaten deterministisch.' },
-        { step: '03', title: 'Verständlicher Bericht', desc: 'Sie erhalten einen interaktiven Bericht mit Risikoscore, betroffenen Seitenzahlen und Handlungsempfehlungen.' },
-        { step: '04', title: 'Korrektur & Freigabe', desc: 'Wenden Sie sichere Reparaturen an oder nutzen Sie die Hinweise, um die Datei in Ihrem Layoutprogramm anzupassen.' }
+        { step: '01', title: 'Upload & Profilauswahl', desc: 'Laden Sie Ihre Datei hoch und wählen Sie das Zielprofil (Bindungsart, Papier und Drucktechnologie).' },
+        { step: '02', title: 'Erkennen (Forensische Analyse)', desc: 'Deterministische Prüfung von Seitenboxen, Schriften, DPI-Werten, Farbräumen und Farbauftrag.' },
+        { step: '03', title: 'Korrigieren (Sichere Reparatur)', desc: 'Anwendung nicht-destruktiver Reparaturen (Normalisierung von Seitenboxen, Einbettung von Standard-ICC-Profilen).' },
+        { step: '04', title: 'Revalidieren (Ergebnisprüfung)', desc: 'Zweiter forensischer Prüflauf zur Bestätigung der Konformität vor der Übermittlung an die Druckerei.' }
       ],
 
       limitsTitle: 'Verfügbare Reparaturen und technische Grenzen',

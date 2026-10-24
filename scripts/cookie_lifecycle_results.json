@@ -1,0 +1,39 @@
+{
+  "build_target": "http://localhost:3033",
+  "tested_at": "2026-10-24T04:32:00Z",
+  "states": {
+    "1_before_consent": {
+      "banner_visible": true,
+      "cookies_count": 0,
+      "cookies": [],
+      "localStorage_keys": [],
+      "localStorage_data": {},
+      "sessionStorage_keys": [],
+      "telemetry_history_present": false,
+      "consent_stored": false,
+      "external_requests": []
+    },
+    "2_rejected": {
+      "cookies_count": 0,
+      "localStorage_keys": [
+        "ppp_consent_v1_audit",
+        "ppp_audit_consent_proof"
+      ],
+      "consent_value": "{\"essential\":true,\"analytics\":false,\"timestamp\":\"2026-10-24T02:31:41.422Z\",\"version\":\"v1.1\"}",
+      "telemetry_history_after_reject_and_scroll": null
+    },
+    "3_accepted_category": {
+      "consent_value": "{\"essential\":true,\"analytics\":true,\"timestamp\":\"2026-10-24T02:31:43.078Z\",\"version\":\"v1.1\"}",
+      "telemetry_history": "[{\"event\":\"test_interactive_event\",\"system_version\":\"v1.1-corporate\",\"path\":\"/\",\"referrer\":\"\",\"session_id\":\"sid_4bu79xilq\",\"user_type\":\"unknown\",\"timestamp\":\"2026-10-24T02:31:43.602Z\",\"step\":\"opt_in_test\"},{\"event\":\"hero_view\",\"system_version\":\"v1.1-corporate\",\"path\":\"/\",\"referrer\":\"\",\"session_id\":\"sid_4bu79xilq\",\"user_type\":\"unknown\",\"timestamp\":\"2026-10-24T02:31:43.078Z\"},{\"event\":\"page_view\",\"system_version\":\"v1.1-corporate\",\"path\":\"/\",\"referrer\":\"\",\"session_id\":\"sid_4bu79xilq\",\"user_type\":\"unknown\",\"timestamp\":\"2026-10-24T02:31:43.078Z\"}]"
+    },
+    "4_revoked": {
+      "consent_value": "{\"essential\":true,\"analytics\":false,\"timestamp\":\"2026-10-24T02:31:44.745Z\",\"version\":\"v1.1\"}",
+      "telemetry_history_after_revoke": null
+    },
+    "5_after_reload": {
+      "banner_reappeared": false,
+      "consent_value": "{\"essential\":true,\"analytics\":false,\"timestamp\":\"2026-10-24T02:31:44.745Z\",\"version\":\"v1.1\"}",
+      "telemetry_history": null
+    }
+  }
+}

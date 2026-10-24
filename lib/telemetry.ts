@@ -83,17 +83,24 @@ export const events = {
   INTENT_FORM_COMPLETED: "intent_form_completed",
 };
 
+import { hasAnalyticsConsent } from './consent';
+
 // PERSISTENCE ENGINES
 const MAX_HISTORY = 100;
 const MAX_RESULTS = 20;
 
 function persistEvent(event: TelemetryEvent) {
     if (typeof window === 'undefined') return;
-    const historyRaw = localStorage.getItem('ppos_telemetry_history') || '[]';
-    const history = JSON.parse(historyRaw);
-    history.unshift(event);
-    if (history.length > MAX_HISTORY) history.pop();
-    localStorage.setItem('ppos_telemetry_history', JSON.stringify(history));
+    if (!hasAnalyticsConsent()) return; // Enforce consent: do not persist without analytics consent
+    try {
+      const historyRaw = localStorage.getItem('ppos_telemetry_history') || '[]';
+      const history = JSON.parse(historyRaw);
+      history.unshift(event);
+      if (history.length > MAX_HISTORY) history.pop();
+      localStorage.setItem('ppos_telemetry_history', JSON.stringify(history));
+    } catch {
+      // Storage access or parsing error
+    }
 }
 
 /** 
@@ -127,12 +134,13 @@ export function getProjectHistory(): ProjectResult[] {
 // MAIN TRACKING ENGINE
 export function trackEvent(eventName: string, payload: Record<string, any> = {}) {
   if (typeof window === 'undefined') return;
+  if (!hasAnalyticsConsent()) return; // Enforce consent: do not record analytical telemetry
 
   const latency = Math.round(performance.now() - ( (window as any)._ppos_load || pageLoadStartTime));
 
   const telemetryData: TelemetryEvent = {
     event: eventName,
-    system_version: "v2.5-certified-monolith",
+    system_version: "v1.1-corporate",
     path: window.location.pathname,
     referrer: document.referrer,
     session_id: getSessionId(),
@@ -146,7 +154,6 @@ export function trackEvent(eventName: string, payload: Record<string, any> = {})
   }
 
   persistEvent(telemetryData);
-  console.log(`[MONOLITH_TELEMETRY]`, telemetryData);
 }
 
 if (typeof window !== 'undefined') {

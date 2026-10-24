@@ -47,7 +47,7 @@ export default function PlatformPage() {
         { 
           category: 'MARKETPLACE',
           name: 'Marketplace Gráfico (Print It)', 
-          description: 'Conecta con imprentas homologadas en Europa con cobro directo de taller.', 
+          description: 'Conecta con imprentas asociadas en Europa con cobro directo de taller.', 
           code: 'print.printprice.pro', 
           status: 'RED B2B', 
           priority: true,

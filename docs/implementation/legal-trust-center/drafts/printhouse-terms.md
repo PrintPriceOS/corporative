@@ -56,11 +56,9 @@ b) En caso de defecto de fabricación acreditado, la Imprenta deberá proceder c
 ### 6. Régimen Económico y Comisión del 4 %
 6.1. **Cobro Directo al Cliente:** La Imprenta factura y cobra directamente al comprador el importe íntegro del encargo acordado a través de sus propios medios de cobro o pasarelas habilitadas.
 
-6.2. **Comisión de Plataforma (Propuesta sujeta a aprobación comercial definitiva):**
+6.2. **Comisión de Plataforma (Decisión comercial confirmada):**
 - PrintPrice facturará mensualmente a la Imprenta una comisión del **4 %** por los servicios de marketplace respecto de las transacciones originadas a través de PRINT IT.
-- **Base de cálculo:** Importe neto de fabricación efectivamente cobrado por la imprenta, una vez deducidos los descuentos comerciales aplicados y excluyendo expresamente el IVA y los portes logísticos facturados de forma desglosada.
-- **Periodicidad:** Facturación mensual consolidada durante los primeros 5 días hábiles del mes natural siguiente, con desglose individualizado por número de pedido y base imponible.
-- **Ajustes y devoluciones:** Los abonos o cancelaciones justificados se computarán en la siguiente liquidación mensual.
+- **Base de cálculo y parámetros pendientes de formalización:** Los criterios exactos de cálculo (inclusión o exclusión de costes logísticos de transporte, desglose de impuestos directos, devengo, calendario de vencimiento, tratamiento de divisas y liquidación de abonos o devoluciones) se encuentran actualmente en definición comercial y se formalizarán en el anexo de liquidación correspondiente sin constituir en este borrador una cláusula cerrada.
 
 6.3. **Clientes Propios de Taller:** La gestión de clientes propios que la Imprenta introduzca directamente en Control Plane para su operativa interna no devengará la comisión del 4 % de intermediación comercial.
 

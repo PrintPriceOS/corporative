@@ -3,7 +3,7 @@ import { constructMetadata, getBreadcrumbJsonLd } from '@/lib/seo';
 
 export const metadata: Metadata = constructMetadata({
   title: 'Únete a la Red de Partners de Impresión | PrintPrice Pro',
-  description: 'Forma parte de la red homologada de talleres gráficos y distribuidores de papel en Europa. Recibe trabajos verificados y listos para producción con PrintPrice OS.',
+  description: 'Forma parte de la red de talleres gráficos asociados y distribuidores de papel en Europa. Recibe trabajos verificados y listos para producción con PrintPrice OS.',
   canonical: '/contact/partner',
 });
 

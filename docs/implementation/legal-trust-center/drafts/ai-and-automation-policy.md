@@ -18,23 +18,33 @@ graph LR
     E --> G[Asistentes Técnicos Documentales]
 ```
 
-1. **Sistemas Deterministas (Cálculo, Preflight e Imposición):**
-   - No utilizan redes neuronales generativas ni conjeturas estadísticas.
-   - Siguen algoritmos matemáticos y especificaciones formales ISO (ISO 15930, PDF/X).
-   - Ante los mismos datos de entrada y el mismo archivo, el resultado computacional es siempre exactamente idéntico.
-2. **Herramientas Asistidas con IA (Mockup 3D):**
-   - Utilizan modelos de visión por computador y renderizado generativo ambiental (Google Cloud Vertex AI en centros de datos de la UE) para proyectar perspectivas comerciales e iluminación de estudio.
-   - Es una función complementaria de marketing visual.
+1. **Sistemas Basados en Reglas y Algoritmos (Cálculo, Preflight e Imposición):**
+   - El motor de cotización (Price It) y el pipeline de verificación preliminar (Fix It) operan sobre reglas matemáticas, perfiles de máquina y estándares técnicos (como especificaciones ISO de artes gráficas).
+   - Ante los mismos parámetros de entrada y archivos idénticos, la ejecución sigue una lógica formal predecible. No obstante, no se utiliza la afirmación categórica «100 % determinista» como garantía comercial absoluta, dado que el comportamiento en runtime puede verse condicionado por parsers de terceros, librerías gráficas o versiones de intérpretes.
+2. **Componentes con Asistencia o Integración de Modelos de IA:**
+   - **Mockup 3D (`mockup.printprice.pro`):** Servicio web independiente para la proyección visual y perspectiva de portadas. *Estado del proveedor:* Se atribuyó preliminarmente a Google Cloud Vertex AI, pero dicha afirmación se encuentra **NO VERIFICADA** en el repositorio corporativo al tratarse de un subdominio externo. Se retira toda garantía pública de localización o exclusión de entrenamiento hasta su acreditación contractual.
+   - **Prototipo de Asistente IA (`/ai-agent`):** La plataforma contiene en desarrollo un prototipo de asistente conversacional para la resolución de dudas técnicas, interconectado mediante un proxy de prueba (`/api/v1/agents`), lo que desmiente que «Solo Mockup utiliza IA».
 
 ---
 
-### 2. Compromisos Inviolables de Privacidad y Propiedad Intelectual en IA
-1. **Cero Entrenamiento con Archivos de Clientes:**
-   Print Price Pro SIA garantiza que **los archivos cargados por los usuarios (manuscritos, maquetas, imágenes de cubierta o documentos PDF) no se utilizan para entrenar, reentrenar ni optimizar modelos fundacionales de inteligencia artificial** de PrintPrice ni de sus proveedores tecnológicos.
-2. **Preservación Permanente del Archivo Original:**
-   Los archivos originales aportados por el usuario se conservan intactos. Si una herramienta propone una optimización (por ejemplo, generación de sangrado perimetral asistido), dicha corrección se genera como una nueva variante identificada que **requiere siempre la aprobación humana explícita del usuario antes de sustituir cualquier elemento en la orden de producción**.
-3. **No Aceptación Tácita de Pedidos ni Pagos:**
-   La visualización de un resultado o maqueta generada por IA nunca desencadena automáticamente un pedido vinculante, un cargo en cuenta ni una modificación irreversible de la orden de taller sin la confirmación consciente del usuario.
+### 2. Matriz de Tratamiento por Dimensiones Técnicas (Auditoría Interna)
+Para garantizar la máxima transparencia exigida por el marco de IA y privacidad, se distinguen rigurosamente cinco dimensiones técnicas:
+
+| Dimensión | Sistemas de Reglas (Price It / Fix It) | Servicio Mockup 3D | Asistente `/ai-agent` (Prototipo) |
+| :--- | :--- | :--- | :--- |
+| **Almacenamiento** | Servidores Hetzner / AWS en la UE (Alemania/Finlandia). Archivos PDF temporales en volúmenes transitorios. | Almacenamiento efímero de la imagen de cubierta en el servicio de renderizado. | Sin persistencia de prompts ni historiales conversacionales en BD del control plane corporativo. |
+| **Inferencia** | Algoritmos de cálculo matemático e imposición en CPUs de infraestructura europea. | Generación de visualización 3D. **NO VERIFICADO:** Proveedor, modelo y endpoint exacto de backend. | Proxy hacia endpoint mock/experimental de prueba. |
+| **Logs Técnicos** | Registros de auditoría con IDs de cotización, marcas de tiempo y hashes técnicos. | Logs de acceso HTTP estándar sin retención de imágenes en logs. | Registros de depuración de peticiones HTTP en consola. |
+| **Conservación** | Purga programada de archivos PDF temporales tras la generación del informe de preflight. | Las imágenes procesadas se descartan tras generar el render de salida. | Los estados de sesión se mantienen en memoria del navegador del usuario. |
+| **Entrenamiento** | **No aplica:** No se utilizan modelos de aprendizaje automático. | **NO VERIFICADO:** No se dispone de contrato de servicio que certifique ausencia de entrenamiento en el proveedor externo. | **No aplica:** Prototipo sin fine-tuning ni ingesta de datos de clientes para entrenamiento. |
+
+---
+
+### 3. Principios de Salvaguarda y No Aceptación Tácita
+1. **Preservación Permanente del Archivo Original:**
+   Los archivos originales aportados por el usuario se conservan intactos. Si una herramienta propone una optimización (por ejemplo, generación de sangrado asistido), dicha corrección se genera como una nueva variante identificada que **requiere siempre la aprobación humana explícita del usuario antes de sustituir cualquier elemento en la orden de producción**.
+2. **No Aceptación Tácita de Pedidos ni Pagos:**
+   La visualización de un resultado o maqueta generada por cualquier herramienta nunca desencadena automáticamente un pedido vinculante, un cargo en cuenta ni una modificación irreversible de la orden de taller sin la confirmación consciente del usuario.
 
 ---
 

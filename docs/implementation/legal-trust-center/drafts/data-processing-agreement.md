@@ -12,7 +12,11 @@
 - **El Responsable del Tratamiento:** La Imprenta, Taller o Cliente Profesional que utiliza la plataforma Control Plane para gestionar datos de sus propios clientes o de terceros (en adelante, «el Cliente» o «el Responsable»).
 - **El Encargado del Tratamiento:** **Print Price Pro SIA**, sociedad letona con número de registro 40203631570 y domicilio en Bruņinieku iela 60-8, Rīga, LV-1009, Letonia (en adelante, «PrintPrice» o «el Encargado»).
 
-1.2. **Finalidad y Alcance:** El presente DPA aplica exclusivamente a los supuestos en los que PrintPrice procesa datos personales por cuenta del Cliente en el marco de la prestación de servicios SaaS en Control Plane (por ejemplo, cuando la imprenta almacena datos de contacto de sus propios clientes, presupuestos internos o artes finales de terceros).
+1.2. **Finalidad y Alcance:** El presente DPA aplica a los supuestos en los que PrintPrice procesa datos personales por cuenta del Cliente en el marco de la prestación de servicios SaaS en Control Plane (por ejemplo, cuando la imprenta almacena datos de contacto de sus propios clientes, presupuestos internos o artes finales de terceros).
+
+1.3. **Delimitación de Aplicabilidad (Art. 28 RGPD vs. Responsables Independientes):**
+- **Aplicación obligatoria (Responsable – Encargado):** Este DPA es jurídicamente preceptivo e indisponible en todas aquellas operaciones en las que el Cliente Profesional o Imprenta actúe como Responsable del tratamiento y utilice la infraestructura de Control Plane para alojar, procesar o calcular datos personales de sus propios clientes o empleados. En tal supuesto, el DPA no es opcional sino de suscripción obligatoria conforme al Art. 28 del RGPD.
+- **No imposición indiscriminada (Responsables independientes):** El DPA no se impone de forma automática o indiscriminada en aquellas transacciones del marketplace PRINT IT donde la imprenta y el comprador final conciertan directamente la compraventa de libros físicos, actuando cada uno como Responsable independiente del tratamiento para sus propios fines de entrega, facturación y cumplimiento tributario.
 
 ---
 

@@ -48,6 +48,15 @@ export const setConsent = (state: Partial<ConsentState>) => {
     ...newState
   }));
   
+  // If analytics consent is rejected or revoked, purge optional telemetry history immediately
+  if (!newState.analytics) {
+    try {
+      localStorage.removeItem('ppos_telemetry_history');
+    } catch {
+      // ignore
+    }
+  }
+
   // Trigger custom event for components to react
   window.dispatchEvent(new CustomEvent('ppp_consent_updated', { detail: newState }));
 };

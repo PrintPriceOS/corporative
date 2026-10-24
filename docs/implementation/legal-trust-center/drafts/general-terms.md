@@ -77,7 +77,10 @@ c) Retrasos imputables a las empresas de transporte de mercancías o a incidenci
 ### 8. Suspensión, Resolución y Modificaciones
 8.1. **Suspensión motivada:** PrintPrice podrá suspender el acceso a la cuenta de cualquier usuario que vulnere de manera grave o reiterada las presentes Condiciones, realice ataques técnicos contra la infraestructura, intente eludir los mecanismos de comisión o publique contenidos manifiestamente ilícitos.
 
-8.2. **Modificación de las Condiciones:** Cualquier modificación sustancial de las presentes Condiciones será comunicada a los usuarios profesionales con un preaviso mínimo de 15 días conforme al Reglamento P2B (Reglamento UE 2019/1150).
+8.2. **Modificación de las Condiciones y Preaviso P2B:**
+- **Plazo estándar de 15 días:** Conforme al Art. 3.2 del Reglamento (UE) 2019/1150 (P2B), cualquier modificación sustancial de las presentes Condiciones será comunicada en soporte duradero a los usuarios profesionales con un preaviso mínimo de 15 días antes de su entrada en vigor. Durante este plazo, el usuario profesional podrá resolver el contrato sin penalización.
+- **Plazos superiores por adaptación técnica:** El plazo de preaviso será razonable y superior a 15 días (hasta 30 días o el plazo necesario) cuando los cambios propuestos exijan a las imprentas o partners comerciales acometer adaptaciones técnicas u operativas en sus sistemas.
+- **Excepciones al preaviso:** PrintPrice podrá aplicar modificaciones inmediatas sin preaviso en los supuestos legalmente previstos: exigencia legal o regulatoria imperativa, o necesidad de hacer frente a riesgos imprevistos e inminentes de ciberseguridad, fraude o fallos graves de la infraestructura.
 
 ---
 

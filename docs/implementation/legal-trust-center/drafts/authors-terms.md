@@ -7,7 +7,7 @@
 ---
 
 ### 1. ¿Quiénes somos y qué papel cumple PrintPrice?
-1.1. Estas condiciones están redactadas de forma sencilla y clara para que conozcas con total transparencia tus derechos al imprimir tu libro personal, proyecto autoeditado o encargo particular.
+1.1. Estas condiciones regulan el uso de las herramientas de PrintPrice para autores, creadores independientes y particulares. **Diferenciación de condición jurídica:** No todos los autores actúan bajo la misma condición legal. Estas condiciones distinguen con rigor cuándo el usuario actúa en calidad de consumidor particular (B2C, al amparo del Art. 2.1 de la Directiva 2011/83/UE y la normativa de protección de los consumidores) y cuándo actúa como profesional independiente o entidad comercial (B2B, en cuyo caso aplican las normas generales de contratación mercantil y las Condiciones para Profesionales y Editoriales).
 
 1.2. **Print Price Pro SIA** (en adelante «PrintPrice») es la empresa tecnológica que pone a tu disposición la web `printprice.pro` y las herramientas para:
 - Calcular el coste de tu libro en segundos (Price it).
@@ -39,12 +39,13 @@ Cuando realizas un pedido de impresión a través de PRINT IT, **quien te vende 
 
 ---
 
-### 4. Cancelaciones y Derecho de Desistimiento
-La ley europea protege a los consumidores con un derecho general de desistimiento de 14 días, pero establece reglas especiales para productos hechos a medida:
+### 4. Cancelaciones, Excepción Legal de Desistimiento y Contenido Digital
+El marco normativo europeo protege a los consumidores con un derecho general de desistimiento de 14 días para contratos a distancia, pero establece excepciones imperativas para productos personalizados y servicios digitales:
 
-1. **Antes de que comience la fabricación:** Si has realizado el pedido pero la imprenta aún no ha iniciado la fase física de producción (planchas, papel cortado o impresión), podrás solicitar la cancelación y el reembolso de las cantidades abonadas.
-2. **Productos personalizados (Excepción del art. 16.c Directiva 2011/83/UE):** Dado que tu libro se imprime de forma totalmente personalizada con tus propios textos y archivos y no tiene salida comercial para terceros, **el derecho de desistimiento de 14 días no será aplicable una vez que la imprenta haya comenzado la impresión física en máquina**, lo cual se te advertirá expresamente antes de pagar.
-3. **Servicios de software independientes:** Si contratas un análisis técnico digital puntual que se ejecuta de inmediato, aceptas que el servicio comience de inmediato con renuncia a desistimiento una vez prestado.
+1. **Antes del inicio de la fabricación física:** Si has realizado el pedido pero la imprenta aún no ha iniciado la fase física de producción (adquisición de papel específico, preparación de planchas o impresión en máquina), podrás solicitar la cancelación y el reembolso íntegro o proporcional según los trabajos de preproducción efectivamente devengados.
+2. **Bienes confeccionados según especificaciones o claramente personalizados (Excepción del Art. 16.c Directiva 2011/83/UE):** Dado que tu libro se imprime de forma individualizada con tus propios textos y archivos y carece de valor comercial para terceros, **el derecho legal de desistimiento de 14 días no resulta aplicable una vez iniciada la producción física en máquina**, circunstancia que se informará expresamente antes de confirmar la compra. **Esta excepción legal no perjudica, menoscaba ni restringe en ningún caso tus derechos legales de garantía por faltas de conformidad, defectos industriales de impresión o encuadernación, o anomalías imputables a la imprenta.**
+3. **Servicios de análisis y herramientas SaaS:** Conforme al Art. 16(a) de la Directiva 2011/83/UE, en caso de contratar análisis técnicos o verificaciones digitales bajo demanda, el derecho de desistimiento decae una vez que el servicio haya sido completamente ejecutado, mediando tu consentimiento previo expreso y tu confirmación informada de la pérdida de dicho derecho.
+4. **Suministro de contenido digital no en soporte material:** Conforme al Art. 16(m) de la Directiva 2011/83/UE, la generación o descarga inmediata de archivos digitales (maquetas 3D, informes de preflight o variantes) conlleva la pérdida del derecho de desistimiento desde el momento en que se inicia la descarga o procesamiento digital con tu consentimiento expreso y conocimiento de dicha pérdida.
 
 ---
 

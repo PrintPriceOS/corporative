@@ -1,40 +1,69 @@
-# Matriz de Uso de Inteligencia Artificial y Motores Deterministas
-## PrintPrice Pro — Clasificación Técnica, Proveedores y Garantías de Supervisión
+# Matriz de Uso de Inteligencia Artificial, Sistemas Deterministas y Evidencia Técnica
+## PrintPrice Pro — Auditoría Técnica de Afirmaciones, Proveedores y Garantías de Supervisión
 
-**Fecha de Elaboración:** 24 de octubre de 2026  
-**Entidad Operadora:** Print Price Pro SIA (Reg. 40203631570, Letonia)
-
----
-
-### 1. Clasificación Funcional: Determinismo vs. IA
-
-| Función / Módulo | Naturaleza Tecnológica | ¿Utiliza Modelos de IA Generativa o LLM? | Proveedor de Computación | Datos Transferidos | Finalidad y Límites Técnicos |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **PRICE IT (Calculador de Presupuestos)** | **100 % DETERMINISTA** | **NO** | Servidores propios en la UE. | Parámetros técnicos del libro (formato, páginas, gramajes, tintas). | Algoritmos matemáticos de imposición en pliego, cálculo de hojas consumidas, mermas de arranque y matrices de tarifas horarias de máquina. El resultado es exacto y reproducible. |
-| **FIX IT (Preflight de PDF)** | **100 % DETERMINISTA** | **NO** | Servidores propios en la UE. | Archivo PDF del usuario, metadatos sintácticos, fuentes, cajas de página y perfiles de color. | Análisis forense estricto basado en estándares internacionales ISO (ISO 15930 / PDF/X). Inspecciona geometría (`MediaBox`, `TrimBox`, `BleedBox`), resolución de mapas de bits (DPI) y espacios de color (CMYK vs RGB). **No realiza conjeturas probabilísticas ni modificaciones no autorizadas.** |
-| **MOCKUP (Generador de Maquetas 3D)** | **ASISTENCIA VISUAL CON IA** | **SÍ** (Modelos de visión y renderizado ambiental) | Google Cloud Vertex AI (Bélgica / Frankfurt, UE). | Archivo de imagen de cubierta (JPEG/PNG/PDF plano) y parámetros visuales de grosor. | Genera perspectivas 3D, sombras y ambientación de estudio comercial a partir de la cubierta 2D. Se utiliza como **función complementaria de marketing**. |
-| **ROUTER DE CONTACTO (`/contact`)** | **REGLAS HEURÍSTICAS LOCALES** | **NO** | Navegador del cliente (JavaScript local). | Histórico de páginas visitadas en la sesión almacenado en `localStorage`. | Algoritmo determinista de puntuación condicional según el historial de navegación para sugerir el formulario idóneo (autor, editorial, imprenta o desarrollador). No procesa texto libre con IA generativa. |
-| **AGENTES Y ASISTENTES TÉCNICOS** | **SISTEMAS ASISTIDOS (EN DESARROLLO/BETA)** | **SÍ** (LLMs supervisados) | Infraestructura controlada en la UE. | Consultas técnicas del usuario. | Asistencia interpretativa de documentación técnica y soporte de consulta. No autorizan pedidos, pagos ni modificaciones de archivos sin aprobación humana explícita. |
+**Fecha de Auditoría:** 24 de octubre de 2026  
+**Entidad Operadora:** Print Price Pro SIA (Reg. 40203631570, Rīga, Letonia)  
+**Estado:** Documento Interno de Auditoría y Verificación Técnica
 
 ---
 
-### 2. Políticas de Entrenamiento, Confidencialidad y Retención
+### 1. Auditoría de Afirmaciones Clave: Estado de Evidencia
 
-1. **Garantía Estricta: Cero Entrenamiento con Archivos de Usuarios:**
-   - La configuración de API corporativa con los proveedores de computación de visión (Google Cloud Enterprise / Vertex AI) opera bajo el marco de **privacidad de datos empresariales de la UE**.
-   - Los archivos subidos por los usuarios para preflight, cálculo o mockups **NO se utilizan para entrenar, reentrenar ni mejorar modelos fundacionales de IA**.
-2. **Preservación Inviolable de los Archivos Originales:**
-   - Cuando un motor de preflight o normalización técnica propone una corrección (por ejemplo, añadir sangrado por espejo o convertir fuentes a contornos), el archivo original del usuario se conserva intacto de forma permanente.
-   - Cualquier archivo corregido se genera como una nueva variante identificada, y **nunca sustituye al original sin la aprobación humana explícita y documentada del usuario**.
-3. **No Aceptación Tácita de Acciones Críticas:**
-   - La mera interacción con el sistema o la visualización de un resultado no autoriza transferencias de fondos, pedidos vinculantes ni cambios destructivos en las órdenes de taller. Cada acción mercantil requiere una confirmación consciente y voluntaria por parte del usuario.
+Conforme a la revisión de exactitud técnica y gobernanza, se auditan las cinco afirmaciones previas contrastándolas contra el código fuente, la configuración no secreta y los contratos acreditados en el repositorio:
+
+| Afirmación Previa | Estado de Verificación | Evidencia Técnica en el Repositorio | Dictamen y Acción de Gobernanza |
+| :--- | :--- | :--- | :--- |
+| **1. «100 % determinista»** | **PARCIALMENTE VERIFICADO** | Los algoritmos matemáticos de imposición en pliego (`PRICE IT`) y los analizadores sintácticos de geometría PDF (`FIX IT`) son deterministas. No obstante, la plataforma incluye heurísticas de corrección automática y una superficie prototipo de agente autónomo (`/ai-agent`). | **Retirar la afirmación absoluta como garantía global.** Especificar con precisión qué módulos operan bajo reglas matemáticas deterministas (cálculo e inspección geométrica) y cuáles emplean heurísticas o interfaces de asistencia. |
+| **2. «Solo Mockup utiliza IA»** | **REFUTADO POR EL CÓDIGO** | En el repositorio existe una superficie dedicada al prototipo de agente autónomo de producción en [`app/ai-agent/page.tsx`](file:///c:/Users/KIKE/Downloads/corporative/app/ai-agent/page.tsx) y su proxy de enrutamiento en [`app/api/v1/[[...path]]/route.ts`](file:///c:/Users/KIKE/Downloads/corporative/app/api/v1/%5B%5B...path%5D%5D/route.ts) (`scopes: ["agents:execute"]`). | **Corregido.** Reconocer la existencia del módulo experimental de Agente de Producción (`/ai-agent`) y describir su alcance actual como prototipo asistido bajo supervisión humana. |
+| **3. «Google Cloud Vertex AI»** | **NO VERIFICADO** | No existen claves API, dependencias del SDK de Google Cloud (`@google-cloud/vertexai`), variables de entorno ni endpoints de Vertex AI configurados en este repositorio corporativo. La página de Mockup enlaza a la aplicación externa `https://mockup.printprice.pro/`. | **Retirar la garantía pública de Google Cloud Vertex AI.** Clasificar como **NO VERIFICADO** en documentación interna mientras no se aporte el contrato y la arquitectura de infraestructura del subdominio de maquetas. |
+| **4. «Procesamiento exclusivamente en la UE»** | **NO VERIFICADO (para IA)** | La infraestructura de la web corporativa se ejecuta en servidores de la UE, pero la ubicación geográfica exacta de los centros de inferencia de servicios externos de renderizado o modelos generativos no está acreditada en este repositorio. | **Retirar la garantía pública territorial sobre inferencia de IA.** Mantener la declaración territorial exclusivamente para la infraestructura corporativa verificada y marcar los servicios externos como **NO VERIFICADO**. |
+| **5. «No se entrenan modelos públicos»** | **NO VERIFICADO** | No se dispone en el repositorio de los acuerdos de procesamiento de datos (DPA / Enterprise Terms) suscritos con proveedores de modelos generativos que certifiquen contractualmente el compromiso de no entrenamiento (*zero data retention / no training*). | **Retirar la garantía contractual pública.** Exigir la aportación del DPA corporativo con el proveedor de IA antes de restablecer esta declaración en documentos vinculantes. |
+
+---
+
+### 2. Desglose de Operaciones por Dimensión Técnica
+
+Para cada componente del sistema, se diferencian estrictamente las fases de tratamiento:
+
+#### A. PRICE IT (Motor de Cálculo de Costes)
+- **Almacenamiento:** Temporal en memoria durante la sesión; resultados guardados en `localStorage` (`ppos_project_results`) únicamente si el usuario los guarda explícitamente.
+- **Inferencia:** No aplica (cálculo algebraico determinista de pliegos, tintas y horas de máquina).
+- **Logs:** Registros técnicos de tiempo de cómputo en consola y telemetría de rendimiento sujeta a consentimiento.
+- **Conservación:** Purgado al cerrar la sesión salvo guardado voluntario del proyecto.
+- **Entrenamiento:** No aplica.
+
+#### B. FIX IT (Preflight de Archivos PDF)
+- **Almacenamiento:** Archivos PDF cargados temporalmente en el volumen de procesamiento para parseo sintáctico de primitivas.
+- **Inferencia:** No aplica (análisis determinista contra reglas ISO 15930 / PDF/X y perfiles de máquina).
+- **Logs:** Identificadores anónimos de trabajo (`job_id`), severidad de alertas y códigos de regla infringida.
+- **Conservación:** Purgado automático programado de los archivos temporales tras la generación del informe.
+- **Entrenamiento:** Ningún archivo de cliente se utiliza para entrenamiento de modelos.
+
+#### C. MOCKUP 3D (Visualizador Complementario)
+- **Almacenamiento:** Imagen de cubierta procesada para mapeo de textura en cliente (WebGL / Three.js) y transferencia al servicio de renderizado de `https://mockup.printprice.pro/`.
+- **Inferencia:** **NO VERIFICADO EN ESTE REPOSITORIO** (referencia externa a modelos de renderizado asistido).
+- **Logs:** Registros de sesión y parámetros geométricos del lomo.
+- **Conservación:** **NO VERIFICADO** en el repositorio del subdominio de maqueta.
+- **Entrenamiento:** **NO VERIFICADO** contractualmente en este repositorio.
+
+#### D. AI AGENT CORE (`/ai-agent`)
+- **Almacenamiento:** Prototipo de especificaciones de ejecución (`execution_id`, `trace_id`).
+- **Inferencia:** Actualmente modelada en interfaz y mock proxy en `/api/v1/agents`. No realiza llamadas directas a LLMs desde el código cliente.
+- **Logs:** Trazabilidad de pasos simulados (`budget_estimate`, `preflight_validation`, `production_routing`).
+- **Conservación:** Datos estáticos de ejemplo en cliente.
+- **Entrenamiento:** No aplica en el estado actual de prototipo corporativo.
+
+#### E. ROUTER DE INTENCIÓN DE CONTACTO (`/contact`)
+- **Almacenamiento:** Lectura local de `localStorage` (`ppos_telemetry_history`).
+- **Inferencia:** No aplica (heurística ponderada basada en pesos numéricos de rutas visitadas).
+- **Logs:** Evento anónimo de intención sugerida.
+- **Conservación:** Local en el navegador del usuario, purgado al borrar datos de navegación o revocar cookies.
+- **Entrenamiento:** No aplica.
 
 ---
 
 ### 3. Delimitación de Responsabilidad y Avisos Contextuales
 
-#### A. Advertencia Legal Obligatoria sobre Preflight
-> **Aviso Técnico:** PrintPrice Preflight (Fix It) realiza una comprobación determinista basada en perfiles de producción estándar o en el perfil particular configurado por una imprenta adscrita. El informe técnico indica las anomalías detectadas en la estructura digital del PDF. Dicha comprobación **no constituye una garantía universal de fidelidad física de impresión**, ni exime al diseñador, editorial o autor de revisar exhaustivamente sus contenidos, pruebas de galera y textos antes de autorizar la fabricación física.
-
-#### B. Advertencia Legal Obligatoria sobre Maquetas 3D (Mockup)
-> **Aviso Técnico:** Las maquetas 3D generadas por Mockup son representaciones digitales orientativas para marketing, previsualización en pantalla y comercio electrónico. **No constituyen una prueba física contractual de color (contract proof), ni una muestra real del acabado táctil del papel, barniz o grosor exacto del lomo encuadernado.** Las dimensiones físicas definitivas se rigen por la ficha técnica del pedido acordado en taller.
+1. **Aviso de Preflight:** Las comprobaciones técnicas señalan discrepancias respecto al perfil configurado; no constituyen certificación absoluta PDF/X universal para todos los RIPs del mercado.
+2. **Aviso de Mockup 3D:** Representación gráfica orientativa para marketing y comercio digital; no sustituye a la prueba contractual física de color (ISO 12647) ni asegura la textura física del papel.
+3. **Supervisión Humana Obligatoria:** Ningún sistema automatizado o asistido puede formalizar pedidos, autorizar cargos bancarios ni sobreescribir archivos originales sin la validación expresa del usuario.

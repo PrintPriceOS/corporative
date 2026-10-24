@@ -111,14 +111,15 @@
       "name": "Price It (Budget)",
       "intent": "Book printing cost calculator",
       "http_status": 200,
-      "title": "Print Cost Calculator &amp; Estimator | PrintPrice Pro",
-      "description": "Calculate exact printing costs in seconds with our high-precision Pricing Engine. No guesswork—real production costs for books, packaging, and commercial print.",
+      "title": "Calculador de Costes de Impresión (Price It) | PrintPrice Pro",
+      "description": "Calcula presupuestos de impresión de libros en segundos con matrices de máquinas reales. Desglose técnico de papel, encuadernación y acabados.",
       "canonical": "https://printprice.pro/products/budget",
       "canonical_valid": true,
-      "h1": "CALCULATE REAL PRINT COSTS IN SECONDS",
+      "h1": "CALCULA COSTES REALES DE IMPRESIÓN EN SEGUNDOS",
       "json_ld_types": [
         "Organization",
         "WebSite",
+        "BreadcrumbList",
         "BreadcrumbList"
       ],
       "indexable": true
@@ -148,7 +149,7 @@
       "intent": "Industrial print production marketplace",
       "http_status": 200,
       "title": "Marketplace de Impresión y Fabricación Gráfica | PrintPrice Pro",
-      "description": "Encuentra la imprenta industrial homologada para tu libro o catálogo. Enrutamiento algorítmico (Matchmaker) según pliegos, maquinaria y evidencia técnica inmutable.",
+      "description": "Encuentra la imprenta industrial adecuada para tu libro o catálogo. Enrutamiento algorítmico (Matchmaker) según pliegos, maquinaria y evidencia técnica inmutable.",
       "canonical": "https://printprice.pro/products/print",
       "canonical_valid": true,
       "h1": "Encuentra la imprenta adecuada y encarga tu producción.",
@@ -170,7 +171,7 @@
       "description": "Descubre los motores técnicos que componen PrintPrice OS: cálculo de imposición, validación preflight y enrutamiento algorítmico de producción.",
       "canonical": "https://printprice.pro/platform",
       "canonical_valid": true,
-      "h1": "FROM COST TO PRODUCTION IN ONE PLATFORM",
+      "h1": "DEL PRESUPUESTO A LA PRODUCCIÓN EN UNA SOLA PLATAFORMA",
       "json_ld_types": [
         "Organization",
         "WebSite",
@@ -188,7 +189,7 @@
       "description": "Flujos de automatización técnica para libros, packaging, folletos comerciales y gran formato industrial con registro técnico de especificaciones.",
       "canonical": "https://printprice.pro/solutions",
       "canonical_valid": true,
-      "h1": "BUILT FOR EVERY PRINT PRODUCTION",
+      "h1": "DISEÑADO PARA CADA ENTORNO PRODUCTIVO",
       "json_ld_types": [
         "Organization",
         "WebSite",
@@ -201,14 +202,15 @@
       "name": "Developers",
       "intent": "REST APIs, webhooks, and integration contracts",
       "http_status": 200,
-      "title": "API for Print Manufacturing &amp; Automation | PrintPrice Pro",
-      "description": "Integrate budgeting, PDF preflight, and production routing directly into your app. Explore the PrintPrice OS API for automated manufacturing workflows.",
+      "title": "API para Fabricación Gráfica y Automatización | PrintPrice Pro",
+      "description": "Integra presupuesto, preflight PDF y enrutamiento de producción directamente en tu aplicación. Explora la API de PrintPrice OS.",
       "canonical": "https://printprice.pro/developers",
       "canonical_valid": true,
-      "h1": "BUILD ON THE PRINT API",
+      "h1": "CONSTRUYE SOBRE LA API DE IMPRESIÓN",
       "json_ld_types": [
         "Organization",
-        "WebSite"
+        "WebSite",
+        "BreadcrumbList"
       ],
       "indexable": true
     },
@@ -218,13 +220,14 @@
       "intent": "Engineering philosophy, deterministic principles, and team",
       "http_status": 200,
       "title": "Sobre PrintPrice Pro | Misión y Principios de Ingeniería",
-      "description": "Conoce los principios de ingeniería detrás de PrintPrice OS: determinación de costes, evidencias inmutables y conectividad industrial.",
+      "description": "Conoce los principios de ingeniería detrás de PrintPrice OS: determinación de costes, evidencias verificables y conectividad industrial.",
       "canonical": "https://printprice.pro/company",
       "canonical_valid": true,
-      "h1": "ENGINEERING PRODUCTION CERTAINTY",
+      "h1": "INGENIERÍA Y CERTEZA PRODUCTIVA",
       "json_ld_types": [
         "Organization",
-        "WebSite"
+        "WebSite",
+        "BreadcrumbList"
       ],
       "indexable": true
     },
@@ -237,7 +240,7 @@
       "description": "Ponte en contacto con nuestro equipo técnico de ingeniería gráfica y operaciones. Asistencia en cotizaciones e integración de imprentas.",
       "canonical": "https://printprice.pro/contact",
       "canonical_valid": true,
-      "h1": "START WITH THE RIGHT WORKFLOW",
+      "h1": "COMIENZA CON EL FLUJO ADECUADO",
       "json_ld_types": [
         "Organization",
         "WebSite"
@@ -250,10 +253,27 @@
       "intent": "Commercial onboarding for printhouses and paper mills",
       "http_status": 200,
       "title": "Únete a la Red de Partners de Impresión | PrintPrice Pro",
-      "description": "Forma parte de la red homologada de talleres gráficos y distribuidores de papel en Europa. Recibe trabajos verificados y listos para producción con PrintPrice OS.",
+      "description": "Forma parte de la red de talleres gráficos asociados y distribuidores de papel en Europa. Recibe trabajos verificados y listos para producción con PrintPrice OS.",
       "canonical": "https://printprice.pro/contact/partner",
       "canonical_valid": true,
       "h1": "Conecta tu taller a la red de producción de PrintPrice OS.",
+      "json_ld_types": [
+        "Organization",
+        "WebSite",
+        "BreadcrumbList"
+      ],
+      "indexable": true
+    },
+    {
+      "path": "/legal",
+      "name": "Legal Trust Center",
+      "intent": "Approved legal documents and compliance trust overview",
+      "http_status": 200,
+      "title": "Centro Legal y de Confianza | PrintPrice Pro",
+      "description": "Marco contractual, privacidad, cookies, inteligencia artificial y derechos de usuarios y profesionales en PrintPrice OS. Información transparente por perfil.",
+      "canonical": "https://printprice.pro/legal",
+      "canonical_valid": true,
+      "h1": "Marco Regulatorio y Documentación Legal Vigente",
       "json_ld_types": [
         "Organization",
         "WebSite",
@@ -270,10 +290,11 @@
       "description": "Condiciones de contratación, uso de la plataforma, delimitación de responsabilidades y términos de fabricación.",
       "canonical": "https://printprice.pro/legal/terms-of-service",
       "canonical_valid": true,
-      "h1": "Terms of Service",
+      "h1": "Términos de Servicio (Terms of Service)",
       "json_ld_types": [
         "Organization",
         "WebSite",
+        "BreadcrumbList",
         "BreadcrumbList"
       ],
       "indexable": true
@@ -287,10 +308,11 @@
       "description": "Tratamiento de datos personales, bases jurídicas, derechos de los usuarios y política de cookies de Print Price Pro SIA.",
       "canonical": "https://printprice.pro/legal/privacy-policy",
       "canonical_valid": true,
-      "h1": "Privacy Policy (GDPR)",
+      "h1": "Política de Privacidad (RGPD)",
       "json_ld_types": [
         "Organization",
         "WebSite",
+        "BreadcrumbList",
         "BreadcrumbList"
       ],
       "indexable": true
@@ -304,10 +326,11 @@
       "description": "Datos registrales, CIF/NIF intracomunitario, domicilio social y responsabilidad editorial de Print Price Pro SIA.",
       "canonical": "https://printprice.pro/legal/legal-notice",
       "canonical_valid": true,
-      "h1": "Legal Notice (Imprint)",
+      "h1": "Aviso Legal (Imprint)",
       "json_ld_types": [
         "Organization",
         "WebSite",
+        "BreadcrumbList",
         "BreadcrumbList"
       ],
       "indexable": true
@@ -321,10 +344,11 @@
       "description": "Estándares de calidad de fabricación, SLAs de entrega y protocolo de resolución técnica con hash de evidencia.",
       "canonical": "https://printprice.pro/legal/partner-terms",
       "canonical_valid": true,
-      "h1": "Partner Terms",
+      "h1": "Condiciones para Imprentas y Partners",
       "json_ld_types": [
         "Organization",
         "WebSite",
+        "BreadcrumbList",
         "BreadcrumbList"
       ],
       "indexable": true

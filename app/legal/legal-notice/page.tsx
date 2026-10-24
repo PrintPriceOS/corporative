@@ -18,100 +18,94 @@ export default function LegalNoticePage() {
 
   const t = {
     es: {
-      back: '← Volver al Centro Legal y de Confianza',
-      badge: 'AVISO LEGAL Y DATOS IDENTIFICATIVOS (IMPRINT)',
-      title: 'Aviso Legal e Información Corporativa',
-      draftNotice: 'BORRADOR PENDIENTE DE APROBACIÓN JURÍDICA / DRAFT PENDING FORMAL LEGAL APPROVAL',
-      draftDesc: 'Este documento refleja la información corporativa e identificativa real de la entidad titular conforme a la legislación letona y de la UE. Publicado para máxima transparencia técnica.',
-      version: 'Versión: 2026.1-draft',
-      lastUpdated: 'Última actualización: Octubre 2026',
+      back: '← Volver al Centro Legal',
+      badge: 'DOCUMENTO REGULATORIO / VIGENTE',
+      title: 'Aviso Legal (Imprint)',
+      lastUpdated: 'Última actualización: 23 de marzo de 2026',
+      version: 'Versión: v1.1',
       printBtn: 'Imprimir / PDF',
-      sec1Title: '1. Identificación del Titular del Sitio Web',
-      sec1Text: 'En cumplimiento de la legislación aplicable de la Unión Europea y de la República de Letonia (Ley de la Sociedad de la Información — Informācijas sabiedrības pakalpojumu likums), se informa a los usuarios de los datos identificativos y de contacto de la entidad titular de la plataforma PrintPrice Pro:',
+      sec1Title: 'Identidad de la Compañía',
       companyName: 'Denominación Social:',
       legalForm: 'Forma Jurídica:',
-      legalFormVal: 'Sociedad de Responsabilidad Limitada (Sabiedrība ar ierobežotu atbildību — SIA), constituida conforme al derecho de la República de Letonia.',
+      legalFormVal: 'Sociedad de Responsabilidad Limitada (SIA), constituida bajo la legislación de la República de Letonia.',
       regNumber: 'Número de Registro Mercantil:',
-      regNumberVal: '40203631570 (Registro de Empresas de la República de Letonia / Latvijas Republikas Uzņēmumu reģistrs).',
-      vatId: 'Número de Identificación Fiscal / IVA (VAT ID):',
+      regNumberVal: '40203631570 (Registro de Empresas de Letonia)',
+      vatId: 'Número de IVA (VAT ID):',
       vatIdVal: 'LV40203631570',
       address: 'Domicilio Social:',
       addressVal: 'Bruņinieku iela 60-8, Latgales priekšpilsēta, Rīga, LV-1009, Letonia.',
-      emailContact: 'Correo Electrónico de Contacto General:',
-      emailPrivacy: 'Correo Electrónico de Privacidad y RGPD:',
-      sec2Title: '2. Objeto y Alcance del Sitio Web',
-      sec2Text: 'El sitio web printprice.pro y sus subdominios asociados constituyen la plataforma corporativa e informativa de PrintPrice OS, un entorno tecnológico modular para la industria gráfica que comprende: PRICE IT (cálculo de costes determinista), FIX IT (preflight determinista), PRINT IT (marketplace de producción gráfica), Mockup 3D (visualizador complementario de libros) y Control Plane (espacio operativo para talleres y proveedores de papel).',
-      sec2Note: 'Print Price Pro SIA opera exclusivamente como proveedor tecnológico de software y enrutamiento técnico. Salvo estipulación expresa en contrario, Print Price Pro SIA no actúa como fabricante material de productos impresos ni como distribuidor físico de papel.',
-      sec3Title: '3. Propiedad Intelectual e Industrial',
-      sec3Text: 'Todos los contenidos de la plataforma (códigos fuente, especificaciones de cálculo, marcas, logotipos, arquitecturas y textos técnicos) son propiedad exclusiva de Print Price Pro SIA o se explotan bajo autorización legítima. Queda prohibida su reproducción o explotación no autorizada.',
-      sec4Title: '4. Responsabilidad sobre Contenidos y Enlaces Externos',
-      sec4Text: 'Print Price Pro SIA vela por la exactitud de la información técnica disponible. Sin embargo, los cálculos y especificaciones indicativas quedan supeditados a la confirmación técnica y contractual de cada pedido con el taller ejecutor. La plataforma no se responsabiliza del contenido de sitios web de terceros enlazados.',
-      sec5Title: '5. Legislación Aplicable y Resolución de Conflictos',
-      sec5Text: 'El presente aviso se rige por el derecho de la República de Letonia. Para reclamaciones en el ámbito de consumo europeo, los usuarios pueden acudir al Centro de Protección de los Derechos de los Consumidores de Letonia (PTAC — ptac.gov.lv) o a la plataforma ODR de la Comisión Europea.',
+      repBy: 'Representada por:',
+      repByVal: 'Dirección de la Sociedad',
+      contact: 'Contacto:',
+      emailGeneral: 'Correo general:',
+      emailPrivacy: 'Correo de privacidad:',
+      sec2Title: 'Responsabilidad sobre los Contenidos',
+      sec2Text: 'Print Price Pro SIA vela con la máxima diligencia por la exactitud de los contenidos técnicos de esta plataforma. No obstante, las estimaciones y cálculos generados por las herramientas informáticas tienen carácter orientativo y están sujetos a las especificaciones acordadas en cada pedido con el taller ejecutor.',
+      sec3Title: 'Enlaces Externos',
+      sec3Text: 'Nuestro sitio web contiene enlaces a sitios web de terceros (imprentas independientes, fabricantes de papel y proveedores logísticos). No tenemos influencia directa sobre los contenidos de dichos sitios externos ni asumimos responsabilidad por su disponibilidad o exactitud.',
+      sec4Title: 'Propiedad Intelectual',
+      sec4Text: 'La plataforma, su código, algoritmos y documentación técnica son propiedad intelectual de Print Price Pro SIA y están protegidos por la legislación internacional de propiedad industrial e intelectual.',
+      footerTag: 'PRINT PRICE PRO / DOCUMENTO VIGENTE // RĪGA, LETONIA',
     },
     en: {
-      back: '← Return to Legal & Trust Center',
-      badge: 'LEGAL NOTICE & COMPANY IMPRINT',
-      title: 'Legal Notice & Corporate Information',
-      draftNotice: 'DRAFT PENDING FORMAL LEGAL APPROVAL / BORRADOR PENDIENTE DE APROBACIÓN JURÍDICA',
-      draftDesc: 'This document reflects the corporate identity and regulatory information of the operating entity under Latvian and EU law. Published for transparent technical governance.',
-      version: 'Version: 2026.1-draft',
-      lastUpdated: 'Last updated: October 2026',
+      back: '← Return to Legal Center',
+      badge: 'REGULATORY DOCUMENT / CURRENT',
+      title: 'Legal Notice (Imprint)',
+      lastUpdated: 'Last updated: March 23, 2026',
+      version: 'Version: v1.1',
       printBtn: 'Print / PDF',
-      sec1Title: '1. Identification of the Website Operator',
-      sec1Text: 'In compliance with applicable European Union and Republic of Latvia legislation (Information Society Services Law — Informācijas sabiedrības pakalpojumu likums), the identifying information of the corporate entity operating PrintPrice Pro is provided below:',
+      sec1Title: 'Company Identity',
       companyName: 'Company Name:',
       legalForm: 'Legal Form:',
-      legalFormVal: 'Limited Liability Company (Sabiedrība ar ierobežotu atbildību — SIA), organized under the laws of the Republic of Latvia.',
+      legalFormVal: 'Limited Liability Company (SIA), organized under the laws of the Republic of Latvia.',
       regNumber: 'Commercial Registration Number:',
-      regNumberVal: '40203631570 (Enterprise Register of the Republic of Latvia / Latvijas Republikas Uzņēmumu reģistrs).',
+      regNumberVal: '40203631570 (Enterprise Register of Latvia)',
       vatId: 'VAT Registration Number (VAT ID):',
       vatIdVal: 'LV40203631570',
       address: 'Registered Address:',
       addressVal: 'Bruņinieku iela 60-8, Latgales priekšpilsēta, Rīga, LV-1009, Latvia.',
-      emailContact: 'General Inquiries Email:',
-      emailPrivacy: 'Data Privacy & GDPR Email:',
-      sec2Title: '2. Purpose and Scope of the Platform',
-      sec2Text: 'The website printprice.pro and its subdomains provide the corporate and technical interface of PrintPrice OS, comprising: PRICE IT (deterministic cost engine), FIX IT (deterministic preflight inspection), PRINT IT (print matchmaking marketplace), Mockup 3D (visual preview tool for digital promotion), and Control Plane (operating environment for print shops and paper distributors).',
-      sec2Note: 'Print Price Pro SIA operates strictly as a software and connectivity technology provider. Unless explicitly agreed otherwise in writing, Print Price Pro SIA does not act as a physical manufacturer of printed products nor as a paper merchant.',
-      sec3Title: '3. Intellectual and Industrial Property',
-      sec3Text: 'All platform content, design systems, algorithms, source code, logos, and technical documentation are the exclusive intellectual property of Print Price Pro SIA or licensed from third parties. Unauthorized reproduction or reverse engineering is prohibited.',
-      sec4Title: '4. Liability for Technical Content and Outbound Links',
-      sec4Text: 'While Print Price Pro SIA ensures rigorous software performance, all calculations and estimates are indicative and subject to agreed order specifications. Print Price Pro SIA assumes no liability for external third-party links or content.',
-      sec5Title: '5. Governing Law and Dispute Resolution',
-      sec5Text: 'This Legal Notice is governed by the laws of the Republic of Latvia. Consumers within the European Union may submit disputes to the Latvian Consumer Rights Protection Centre (PTAC — ptac.gov.lv) or the European Commission Online Dispute Resolution platform.',
+      repBy: 'Represented by:',
+      repByVal: 'Management Board',
+      contact: 'Contact:',
+      emailGeneral: 'General inquiries:',
+      emailPrivacy: 'Data privacy:',
+      sec2Title: 'Responsibility for Content',
+      sec2Text: 'While Print Price Pro SIA exercises diligence in maintaining platform accuracy, all calculations and estimates generated by software tools are indicative and subject to agreed order specifications with the fulfilling workshop.',
+      sec3Title: 'External Links',
+      sec3Text: 'Our website contains links to third-party websites (independent printing houses, paper suppliers, and carriers). We exercise no control over third-party content and assume no liability for their availability, accuracy, or legal compliance.',
+      sec4Title: 'Intellectual Property',
+      sec4Text: 'The platform, its codebase, algorithms, and technical documentation are the intellectual property of Print Price Pro SIA, protected under international copyright and industrial property laws.',
+      footerTag: 'PRINT PRICE PRO / IN-FORCE REGULATORY DOCUMENT // RĪGA, LATVIA',
     },
     de: {
-      back: '← Zurück zum Rechts- und Vertrauenszentrum',
-      badge: 'IMPRESSUM UND UNTERNEHMENSANGABEN',
-      title: 'Impressum und rechtliche Hinweise',
-      draftNotice: 'ENTWURF VORBEHALTLICH RECHTLICHER PRÜFUNG / DRAFT PENDING FORMAL LEGAL APPROVAL',
-      draftDesc: 'Dieses Dokument enthält die satzungsmäßigen und rechtlichen Angaben des Betreibers gemäß lettischem und EU-Recht. Veröffentlicht im Sinne maximaler Transparenz.',
-      version: 'Version: 2026.1-draft',
-      lastUpdated: 'Letzte Aktualisierung: Oktober 2026',
+      back: '← Zurück zum Rechtszentrum',
+      badge: 'RECHTLICHES DOKUMENT / GÜLTIG',
+      title: 'Impressum (Legal Notice)',
+      lastUpdated: 'Letzte Aktualisierung: 23. März 2026',
+      version: 'Version: v1.1',
       printBtn: 'Drucken / PDF',
-      sec1Title: '1. Angaben gemäß Teledienstrecht / Betreiberidentität',
-      sec1Text: 'Gemäß den Vorschriften der Europäischen Union und der Republik Lettland (Gesetz über die Dienste der Informationsgesellschaft — Informācijas sabiedrības pakalpojumu likums) werden folgende Betreiberangaben mitgeteilt:',
-      companyName: 'Firmenname / Handelsbezeichnung:',
+      sec1Title: 'Unternehmensidentität',
+      companyName: 'Firmenname:',
       legalForm: 'Rechtsform:',
-      legalFormVal: 'Gesellschaft mit beschränkter Haftung (Sabiedrība ar ierobežotu atbildību — SIA), gegründet nach dem Recht der Republik Lettland.',
+      legalFormVal: 'Gesellschaft mit beschränkter Haftung (SIA) nach dem Recht der Republik Lettland.',
       regNumber: 'Handelsregisternummer:',
-      regNumberVal: '40203631570 (Unternehmensregister der Republik Lettland / Latvijas Republikas Uzņēmumu reģistrs).',
+      regNumberVal: '40203631570 (Unternehmensregister Lettland)',
       vatId: 'Umsatzsteuer-Identifikationsnummer (USt-IdNr.):',
       vatIdVal: 'LV40203631570',
       address: 'Sitz der Gesellschaft:',
       addressVal: 'Bruņinieku iela 60-8, Latgales priekšpilsēta, Rīga, LV-1009, Lettland.',
-      emailContact: 'Allgemeiner Kontakt per E-Mail:',
-      emailPrivacy: 'Datenschutz & DSGVO E-Mail:',
-      sec2Title: '2. Gegenstand und Umfang der Plattform',
-      sec2Text: 'Die Website printprice.pro sowie verbundene Subdomänen bilden die Betriebs- und Informationsschnittstelle von PrintPrice OS: PRICE IT (deterministische Kalkulation), FIX IT (deterministisches Preflight), PRINT IT (Produktions-Marktplatz), Mockup 3D (visuelle Buchvorschau) und Control Plane (Betriebsumgebung für Werkstätten und Papierlieferanten).',
-      sec2Note: 'Print Price Pro SIA agiert ausschließlich als technologischer Softwareanbieter. Print Price Pro SIA ist, sofern nicht ausdrücklich schriftlich vereinbart, weder physischer Druckhersteller noch Papierhändler.',
-      sec3Title: '3. Geistiges Eigentum und Urheberrecht',
-      sec3Text: 'Sämtliche Inhalte der Plattform (Quellcode, Kalkulationsmatrizen, Marken, Logos und technische Dokumentationen) sind ausschließliches geistiges Eigentum der Print Price Pro SIA oder lizenziert.',
-      sec4Title: '4. Haftung für Inhalte und externe Links',
-      sec4Text: 'Trotz sorgfältiger technischer Pflege sind automatisierte Berechnungen indikativ und verbindlich erst mit der Auftragsbestätigung. Für Inhalte verlinkter externer Dritter wird keine Haftung übernommen.',
-      sec5Title: '5. Anwendbares Recht und Streitbeilegung',
-      sec5Text: 'Es gilt das Recht der Republik Lettland. Verbraucher in der Europäischen Union können sich an das lettische Verbraucherschutzzentrum (PTAC — ptac.gov.lv) wenden.',
+      repBy: 'Vertreten durch:',
+      repByVal: 'Geschäftsführung',
+      contact: 'Kontakt:',
+      emailGeneral: 'Allgemeine Anfragen:',
+      emailPrivacy: 'Datenschutz:',
+      sec2Title: 'Haftung für Inhalte',
+      sec2Text: 'Print Price Pro SIA pflegt die Plattform mit technischer Sorgfalt. Alle automatisierten Berechnungen sind indikativ und werden mit den im Auftrag vereinbarten Spezifikationen verbindlich.',
+      sec3Title: 'Externe Links',
+      sec3Text: 'Unsere Website enthält Verknüpfungen zu externen Websites Dritter. Auf deren Inhalte haben wir keinen Einfluss und übernehmen dafür keine Gewähr.',
+      sec4Title: 'Urheberrecht und geistiges Eigentum',
+      sec4Text: 'Die Plattform, Quellcodes, Algorithmen und technischen Inhalte sind geistiges Eigentum der Print Price Pro SIA und urheberrechtlich geschützt.',
+      footerTag: 'PRINT PRICE PRO / GÜLTIGES DOKUMENT // RĪGA, LETTLAND',
     },
   }[locale];
 
@@ -136,33 +130,6 @@ export default function LegalNoticePage() {
             >
               {t.back}
             </Link>
-          </div>
-
-          {/* Draft Disclaimer Notice */}
-          <div
-            style={{
-              padding: '1.25rem 1.5rem',
-              borderRadius: 'var(--radius-md)',
-              background: 'rgba(220, 0, 0, 0.06)',
-              border: '1px solid rgba(220, 0, 0, 0.3)',
-              marginBottom: '2.5rem',
-            }}
-          >
-            <div
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
-                fontWeight: 800,
-                color: 'var(--accent-primary)',
-                letterSpacing: '0.08em',
-                marginBottom: '0.4rem',
-              }}
-            >
-              {t.draftNotice}
-            </div>
-            <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-              {t.draftDesc}
-            </p>
           </div>
 
           {/* Header */}
@@ -209,7 +176,6 @@ export default function LegalNoticePage() {
               <h2 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1rem' }}>
                 {t.sec1Title}
               </h2>
-              <p style={{ marginBottom: '1.25rem' }}>{t.sec1Text}</p>
               
               <div
                 style={{
@@ -244,7 +210,11 @@ export default function LegalNoticePage() {
                   <span>{t.addressVal}</span>
                 </div>
                 <div>
-                  <strong style={{ color: 'var(--text-primary)' }}>{t.emailContact} </strong>
+                  <strong style={{ color: 'var(--text-primary)' }}>{t.repBy} </strong>
+                  <span>{t.repByVal}</span>
+                </div>
+                <div>
+                  <strong style={{ color: 'var(--text-primary)' }}>{t.emailGeneral} </strong>
                   <a href="mailto:info@printprice.pro" style={{ color: 'var(--accent-primary)', textDecoration: 'none' }}>
                     info@printprice.pro
                   </a>
@@ -262,18 +232,7 @@ export default function LegalNoticePage() {
               <h2 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1rem' }}>
                 {t.sec2Title}
               </h2>
-              <p style={{ marginBottom: '1rem' }}>{t.sec2Text}</p>
-              <div
-                style={{
-                  padding: '1rem 1.25rem',
-                  borderRadius: 'var(--radius-sm)',
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  borderLeft: '3px solid var(--accent-primary)',
-                  fontSize: '0.9rem',
-                }}
-              >
-                {t.sec2Note}
-              </div>
+              <p>{t.sec2Text}</p>
             </section>
 
             <section>
@@ -288,13 +247,6 @@ export default function LegalNoticePage() {
                 {t.sec4Title}
               </h2>
               <p>{t.sec4Text}</p>
-            </section>
-
-            <section>
-              <h2 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1rem' }}>
-                {t.sec5Title}
-              </h2>
-              <p>{t.sec5Text}</p>
             </section>
 
           </div>
@@ -315,7 +267,7 @@ export default function LegalNoticePage() {
               gap: '1rem',
             }}
           >
-            <span>Print Price Pro SIA • Legal & Trust Governance</span>
+            <span>{t.footerTag}</span>
             <Link href="/legal" style={{ color: 'var(--accent-primary)', textDecoration: 'none' }}>
               {t.back}
             </Link>

@@ -1,39 +1,61 @@
 # Matriz Contractual y Modelo de Negocio por Flujo Operativo
 ## PrintPrice Pro — Asignación de Roles, Facturación, Cobro y Responsabilidades
 
-**Fecha:** 24 de octubre de 2026  
-**Entidad Operadora:** Print Price Pro SIA (Reg. 40203631570, Letonia)
+**Fecha de Actualización:** 24 de octubre de 2026  
+**Entidad Operadora:** Print Price Pro SIA (Reg. 40203631570, Rīga, Letonia)  
+**Estado:** Documento de Trabajo Interno y Especificación de Flujos
 
 ---
 
 ### 1. Los Seis Flujos Operativos del Ecosistema
 
-| Parámetro | 1. Uso de PRICE IT | 2. Uso de FIX IT | 3. Uso de Mockup | 4. Compra en PRINT IT (Marketplace) | 5. Clientes Propios de Imprenta | 6. Aprovisionamiento de Papel |
+| Parámetro | 1. PRICE IT | 2. FIX IT | 3. Mockup 3D | 4. PRINT IT (Marketplace) | 5. Clientes Propios de Taller | 6. Aprovisionamiento de Papel |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Descripción del Flujo** | Estimación y cálculo de costes de libro y packaging. | Auditoría y verificación determinista de archivos PDF. | Generación de vistas 3D de cubierta para marketing. | Encargo de fabricación de libros a través del marketplace. | Gestión interna de presupuestos y pedidos propios de taller. | Conexión de catálogo maestro y solicitudes de cotización (RFQ). |
-| **Quién presta el servicio digital** | Print Price Pro SIA. | Print Price Pro SIA. | Print Price Pro SIA. | Print Price Pro SIA (servicio de plataforma/matchmaking). | Print Price Pro SIA (proveedor SaaS de consola técnica). | Print Price Pro SIA (plataforma de federación de catálogo). |
-| **Quién vende el producto final** | N/A (servicio de cálculo informativo). | N/A (servicio de software técnico). | N/A (servicio visual complementario). | **La Imprenta Seleccionada** (obra física impresa). | **La Imprenta** (sus propios productos a sus clientes). | **El Distribuidor/Fabricante de Papel** (materia prima). |
-| **Quién contrata con el usuario** | Print Price Pro SIA (términos de uso de software). | Print Price Pro SIA (términos de servicio técnico). | Print Price Pro SIA (términos de servicio visual). | **El Comprador con la Imprenta** (contrato de obra) y con PrintPrice (términos de plataforma). | La Imprenta con su cliente final (relación directa privada). | La Imprenta con el Proveedor de Papel (compraventa mercantil). |
-| **Quién factura al usuario/cliente** | Print Price Pro SIA (cuando apliquen tarifas aprobadas). | Print Price Pro SIA (cuando apliquen créditos/suscripción aprobados). | Print Price Pro SIA (cuando apliquen cuotas aprobadas). | **La Imprenta** factura el total de la producción y transporte convenido al cliente. | **La Imprenta** factura directamente a su cliente. | **El Proveedor de Papel** factura directamente a la Imprenta. |
-| **Quién cobra al usuario/cliente** | Print Price Pro SIA. | Print Price Pro SIA. | Print Price Pro SIA. | **La Imprenta cobra directamente al cliente** (mediante sus pasarelas o medios autorizados). | **La Imprenta cobra a su cliente.** | **El Proveedor de Papel cobra a la Imprenta.** |
-| **Relación de cobro de PrintPrice** | Acceso base directo sin compromisos fijos no aprobados. | Tarifas por consumo técnico (pendientes de aprobación comercial). | Función complementaria. | **PrintPrice factura mensualmente una comisión del 4 %** a la imprenta sobre la base neta cobrada. | Tarifa SaaS de Control Plane (pendiente de aprobación comercial). | Tarifa de catálogo/federación (no aplica automáticamente el 4 %). |
-| **Quién fabrica o suministra** | N/A (proceso computacional). | N/A (procesamiento forense de software). | N/A (renderizado digital). | **La Imprenta Seleccionada** en sus instalaciones productivas. | **La Imprenta.** | **El Proveedor de Papel.** |
-| **Quién atiende reclamaciones de producto** | PrintPrice (sobre cálculo o disponibilidad técnica). | PrintPrice (sobre reporte técnico de preflight). | PrintPrice (sobre render de previsualización). | **La Imprenta**, como fabricante directo y vendedor de la obra física. | **La Imprenta.** | **El Proveedor de Papel.** |
-| **Quién atiende reclamaciones de plataforma** | PrintPrice Pro SIA. | PrintPrice Pro SIA. | PrintPrice Pro SIA. | PrintPrice Pro SIA (funcionamiento del portal, matching y registros). | PrintPrice Pro SIA (soporte de software y uptime de consola). | PrintPrice Pro SIA (disponibilidad técnica del catálogo federado). |
-| **Datos que se comparten** | Parámetros de libro (páginas, tintas, papel, encuadernación), IP y telemetría anónima. | Archivo PDF del usuario, metadatos, fuentes incrustadas, perfiles ICC e informe de errores. | Imagen de cubierta aportada, geometría de lomo, parámetros de perspectiva. | Especificaciones del pedido, datos de contacto del cliente, dirección de entrega y PDF aprobado a la imprenta adjudicataria. | Datos gestionados exclusivamente bajo la cuenta aislada de la imprenta (PrintPrice actúa como encargado del tratamiento — DPA). | Fichas técnicas de sustratos, tarifas por volumen, zonas de transporte y consultas RFQ entre imprenta y proveedor. |
-| **Con quién se comparten los datos** | Servidores de cálculo en la UE. | Motor de preflight determinista en la UE. | Motor de visualización (subencargado Google Cloud / Gemini Vertex AI en la UE). | Con la **Imprenta asignada** para fabricar y remitir el encargo. | Quedan confinados en el tenant aislado de la imprenta. | Entre la imprenta que solicita cotización y el distribuidor que responde. |
+| **Descripción** | Estimación algorítmica de costes de libros y packaging. | Verificación forense y diagnóstico de archivos PDF. | Generación de perspectivas 3D de cubierta para marketing. | Enrutamiento de pedidos a imprentas de la red. | Gestión de clientes y órdenes propias del taller en Control Plane. | Conexión técnica de catálogo maestro de papel y consultas RFQ. |
+| **Prestador digital** | Print Price Pro SIA | Print Price Pro SIA | Print Price Pro SIA | Print Price Pro SIA (plataforma de software y matchmaking) | Print Price Pro SIA (software SaaS B2B) | Print Price Pro SIA (plataforma técnica de catálogo) |
+| **Vendedor de la obra/producto** | N/A (cálculo informativo) | N/A (software técnico) | N/A (asistencia visual) | **La Imprenta Seleccionada** (fabricante y vendedora mercantil directa) | **La Imprenta** (sus propios productos) | **El Distribuidor de Papel** (sustrato material) |
+| **Quién contrata con el cliente** | PrintPrice (uso de software) | PrintPrice (servicio técnico) | PrintPrice (servicio de visualización) | **El Cliente con la Imprenta** (contrato de obra) y con PrintPrice (términos de plataforma) | La Imprenta con su cliente final | La Imprenta con el Proveedor de Papel |
+| **Facturación al cliente final** | N/A (acceso libre / SaaS) | N/A (en definición) | N/A | **La Imprenta factura directamente al cliente** por la fabricación | **La Imprenta** factura directamente a su cliente | **El Proveedor de Papel** factura a la Imprenta |
+| **Cobro al cliente final** | N/A | N/A | N/A | **La Imprenta cobra directamente al cliente** mediante sus pasarelas o medios autorizados | **La Imprenta cobra a su cliente** | **El Proveedor de Papel cobra a la Imprenta** |
+| **Régimen económico de PrintPrice** | Sin cuotas fijas aprobadas | Modelo de créditos en definición comercial | Función complementaria | **Comisión comercial confirmada del 4 %** facturada mensualmente a la imprenta | Tarifa SaaS de consola técnica (pendiente de aprobación comercial) | **PENDIENTE DE DEFINICIÓN COMERCIAL** (no se asume compromiso de 0 %) |
+| **Responsabilidad de producto** | PrintPrice (cálculo de software) | PrintPrice (criterios de preflight) | PrintPrice (fidelidad del render) | **La Imprenta**, como fabricante industrial y vendedora directa | **La Imprenta** | **El Proveedor de Papel** |
+| **Responsabilidad de plataforma** | PrintPrice Pro SIA | PrintPrice Pro SIA | PrintPrice Pro SIA | PrintPrice Pro SIA (uptime, algoritmos, mediación técnica) | PrintPrice Pro SIA (uptime de consola, soporte B2B) | PrintPrice Pro SIA (disponibilidad técnica del catálogo) |
+| **Destinatarios de datos** | Servidores en la UE | Motor de preflight en la UE | Módulo de maquetas | Con la **Imprenta asignada** para cotizar y fabricar el pedido | Tenant aislado de la imprenta | Entre la imprenta y el distribuidor de papel consultado |
 
 ---
 
-### 2. Principios Contractuales Invariantes
+### 2. Decisiones Comerciales Confirmadas vs. Puntos Pendientes
 
-1. **La Imprenta como Fabricante y Vendedor en PRINT IT:**
-   PrintPrice Pro no asume la posición jurídica de fabricante ni de vendedor final de la obra física impresa. La imprenta es el comerciante que asume las obligaciones de fabricación conforme al pedido, entrega, garantía legal y gestión de incidencias de producción.
-2. **Facturación y Devengo de la Comisión del 4 %:**
-   - La comisión de PrintPrice se devenga exclusivamente cuando el pedido tramitado a través del marketplace ha sido formalizado y cobrado por la imprenta.
-   - La base de cálculo de la comisión es el **importe neto de fabricación cobrado** (excluyendo IVA y portes logísticos desglosados).
-   - PrintPrice emite mensualmente a cada imprenta asociada una factura comprensiva con el desglose detallado de pedidos transaccionados.
-3. **Aprovisionamiento de Papel:**
-   - El 4 % de comisión del marketplace de impresión **no se aplica automáticamente al aprovisionamiento de papel**. Cualquier régimen económico para Paper Suppliers requerirá una decisión comercial aprobada de forma expresa y separada.
-4. **Clientes Propios de Taller en Control Plane:**
-   - Cuando una imprenta introduce y gestiona a sus propios clientes en Control Plane, dichos clientes no provienen del marketplace de PrintPrice. Por tanto, no devengan la comisión del 4 % de intermediación comercial. La relación entre PrintPrice y la imprenta en este caso es estrictamente de proveedor tecnológico de software B2B (encargado del tratamiento conforme al RGPD).
+#### A. Decisiones Comerciales Confirmadas por la Dirección
+1. **Comisión del 4 % en PRINT IT:** Se establece una comisión del 4 % para las transacciones originadas a través del marketplace de producción gráfica.
+2. **Cobro Directo por la Imprenta:** La imprenta asociada factura y cobra el 100 % del encargo directamente al cliente. PrintPrice Pro no actúa como cobrador ni revendedor material.
+3. **Facturación Mensual de Comisiones:** PrintPrice Pro consolida y factura periódicamente de forma mensual sus comisiones a las imprentas registradas.
+4. **Eliminación Total de Períodos de Prueba (Trials):** No existen pruebas gratuitas de 14 ni 21 días en ninguna superficie comercial o de producto.
+
+#### B. Elementos Comerciales Pendientes de Definición
+1. **Base Exacta de Cálculo de la Comisión:** Pendiente de definir si la base imponible del 4 % incluye o excluye costes de embalaje, portes logísticos desglosados y suplementos específicos.
+2. **Régimen Fiscal y de Divisas:** Reglas de IVA intracomunitario (operador letón B2B con inversión de sujeto pasivo vs. operaciones locales letonas) y tratamiento de divisas fuera de la zona euro.
+3. **Devoluciones, Cancelaciones y Ajustes:** Mecanismo de regularización o abono de la comisión ante rescisiones justificadas o reembolsos entre imprenta y cliente.
+4. **Tarifas y Régimen de Papel:** **Eliminado cualquier compromiso de «0 % comisión en papel».** El modelo económico para distribuidores en Paper Supplier Hub (comisiones por transacción, tarifas por referencia activa o gratuidad) está **pendiente de definición por el liderazgo comercial**.
+5. **Suscripciones de Software y Créditos:** Definición pendiente de cuotas de acceso a Control Plane para carteras de clientes propios de taller y tarificación por lotes de créditos en FIX IT (Preflight).
+
+---
+
+### 3. Delimitación Jurídica por Tipología de Usuario y Contrato
+
+#### A. Autores Particulares vs. Operadores Económicos (B2B)
+- **No clasificación automática:** Un autor puede actuar como **consumidor** (persona física que encarga ejemplares para uso personal sin actividad mercantil) o como **profesional / autoeditor** (actividad económica, fiscalmente dado de alta, venta comercial de ejemplares).
+- **Excepción Legal de Desistimiento (Art. 16.c Directiva 2011/83/UE):** En obras físicas confeccionadas conforme a las especificaciones técnicas del cliente o claramente personalizadas (impresión bajo demanda de libros), la ley excluye el derecho de desistimiento de 14 días una vez iniciada la producción. **Dicha excepción legal no limita ni perjudica en ningún caso las acciones legales del consumidor por faltas de conformidad, defectos industriales de encuadernación o incumplimientos del taller.**
+- **Diferenciación de Servicios y Contenidos Digitales:** Las herramientas SaaS (preflight online) y los activos digitales (maquetas o informes descargables) se rigen por las reglas específicas de servicios y contenido digital de la Directiva de Derechos de los Consumidores (consentimiento previo para ejecución inmediata y pérdida del derecho de desistimiento tras la completa ejecución).
+
+#### B. Acuerdos de Tratamiento de Datos (DPA / Art. 28 RGPD)
+- **Cuándo Aplica Obligatoriamente:** Cuando PrintPrice Pro o una imprenta actúe como *encargado del tratamiento* procesando datos personales por cuenta y bajo instrucciones documentadas de un cliente responsable (por ejemplo, cuando una editorial facilita bases de datos de destinatarios para envíos individualizados o una imprenta aloja su cartera de clientes en Control Plane).
+- **Cuándo NO se Impone Indiscriminadamente:** Cuando la imprenta concierta la compraventa mercantil directa con el comprador y emite su propia factura, actúa como **responsable independiente del tratamiento** para sus obligaciones contables, fiscales y de expedición física.
+
+#### C. Preaviso y Normativa P2B (Reglamento UE 2019/1150)
+- **Plazo Estándar de 15 Días:** Cualquier modificación sustancial de las condiciones aplicables a las imprentas o proveedores profesionales en la plataforma requerirá un preaviso mínimo de 15 días en un soporte duradero.
+- **Plazos Mayores:** Se concederán plazos razonablemente más amplios cuando los cambios exijan adaptaciones técnicas complejas en los sistemas de las imprentas.
+- **Excepciones Legales al Preaviso:** No será preceptivo el preaviso de 15 días cuando la modificación obedezca a una obligación legal o regulatoria de obligado cumplimiento inmediato, o para afrontar riesgos imprevistos e inminentes de ciberseguridad, fraude o malware.
+
+#### D. Terminología: Retirada de «Taller Homologado»
+- Al no existir en la actualidad un proceso formal acreditado de homologación o certificación industrial de terceros, se prohíbe el término «taller homologado». Se utilizarán denominaciones precisas: **«imprenta asociada»**, **«taller de la red»** o **«partner de producción»**.
