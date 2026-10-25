@@ -76,3 +76,86 @@ export function auditLeadQuality(data: any) {
 
     return true;
 }
+
+// 5. CLIENT IP & RATE LIMITING HELPERS
+const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour
+const MAX_SUBMISSIONS_PER_IP = 5;
+const ipSubmissions = new Map<string, { count: number; timestamp: number }>();
+
+export function isValidIp(ip: string): boolean {
+    if (!ip || typeof ip !== 'string') return false;
+    const ipv4Regex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    if (ipv4Regex.test(ip)) return true;
+    const ipv6Regex = /^[a-fA-F0-9:]{2,39}$/;
+    if (ipv6Regex.test(ip) && ip.includes(':')) return true;
+    return false;
+}
+
+export interface HeaderReader {
+    get(name: string): string | null;
+}
+
+/**
+ * Resolves client identifier strictly from trusted reverse proxy headers.
+ * Avoids indiscriminate trust in arbitrary X-Forwarded-For headers.
+ * Returns null if the client IP cannot be ascertained from trusted sources.
+ */
+export function resolveTrustedClientIp(headerList: HeaderReader): string | null {
+    // 1. Cloudflare edge IP if running behind Cloudflare CDN
+    const cfIp = headerList.get('cf-connecting-ip')?.trim();
+    if (cfIp && isValidIp(cfIp)) {
+        return cfIp;
+    }
+
+    // 2. Nginx / Plesk reverse proxy setting X-Real-IP from $remote_addr
+    const realIp = headerList.get('x-real-ip')?.trim();
+    if (realIp && isValidIp(realIp)) {
+        return realIp;
+    }
+
+    // 3. X-Forwarded-For: only inspect leftmost candidate if present and structurally valid
+    const xff = headerList.get('x-forwarded-for');
+    if (xff) {
+        const candidate = xff.split(',')[0]?.trim();
+        if (candidate && isValidIp(candidate)) {
+            return candidate;
+        }
+    }
+
+    return null;
+}
+
+export function isRateLimited(ip: string | null): boolean {
+    // CRITICAL: Never lump unresolvable requests into a shared 'unknown' bucket.
+    if (!ip) return false;
+
+    const now = Date.now();
+    const entry = ipSubmissions.get(ip);
+
+    if (entry && (now - entry.timestamp) > RATE_LIMIT_WINDOW) {
+        ipSubmissions.delete(ip);
+        return false;
+    }
+
+    if (entry && entry.count >= MAX_SUBMISSIONS_PER_IP) {
+        return true;
+    }
+
+    return false;
+}
+
+export function recordSubmissionAttempt(ip: string | null) {
+    if (!ip) return;
+    const now = Date.now();
+    const entry = ipSubmissions.get(ip);
+    if (entry && (now - entry.timestamp) < RATE_LIMIT_WINDOW) {
+        entry.count += 1;
+    } else {
+        ipSubmissions.set(ip, { count: 1, timestamp: now });
+    }
+}
+
+export function resetRateLimitStore() {
+    ipSubmissions.clear();
+}
+
