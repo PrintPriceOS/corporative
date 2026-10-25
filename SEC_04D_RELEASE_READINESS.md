@@ -1,9 +1,9 @@
-# SEC-04D — Release Candidate y Dictamen de Preparación (Go / No-Go)
+# SEC-04D.1 — Release Candidate y Dictamen de Preparación Definitivo (Go / No-Go)
 
 **Repositorio:** `PrintPriceOS/corporative`  
 **Rama:** `feat/comparisons-evidence-and-legal-policy-review`  
-**Commit de referencia inicial:** `da6d782e1c640c64a60fac9bef7ebeee62f581f7`  
-**Commit Release Candidate (SHA inmutable):** `ad42f9e421a1170d306b3a9cfa8cfa103328e352`  
+**Commit de referencia SEC-04D inicial:** `ad42f9e421a1170d306b3a9cfa8cfa103328e352`  
+**Commit Release Candidate Evaluado (SHA inmutable):** `91e8f7cfaa50f0ef0494f5c79c8a692a9bfef947`  
 **Fecha de emisión:** 25 de Octubre de 2026  
 **Auditor:** Antigravity (Google DeepMind)  
 
@@ -11,239 +11,232 @@
 
 ## 1. Dictamen de Ingeniería y Decisión Ejecutiva
 
-### Dictamen Técnico de Ingeniería: **GO**
-El código fuente, la arquitectura de seguridad perimetral, la inicialización en procesos reales de Node.js / Next.js 16.2.1, la integración de Redis 7.0.15 con scripts Lua atómicos y la estricta acreditación de proxy inverso cumplen todos los estándares de seguridad, aislamiento de tenants, tolerancia a fallos y honestidad operativa sin excepciones.
+### Dictamen Técnico de Ingeniería: **GO DEFINITIVO**
+Ambos bloqueos identificados en SEC-04D han sido subsanados y validados con evidencia reproducible en el entorno de staging Plesk con servicios reales:
+1. **Bloqueo 1 (Fail-open en producción)**: Resuelto taxativamente en el código. En producción (`NODE_ENV=production`), `createRateLimitStore()` impone siempre `failPolicy: 'closed'` con desprecio estricto de cualquier opción recibida, manteniendo `forceMemory` e `inMemoryFallback` bloqueados con excepción.
+2. **Bloqueo 2 (Server Actions verificadas E2E)**: Resuelto en el build real de Next.js 16.2.1 compilado con Turbopack. La validación atraviesa Nginx real, acredita la identidad, evalúa la Server Action en el proceso interno de Next.js, conecta con Redis 7.0.15 real, admite los primeros 5 intentos, bloquea atómicamente el sexto, comprueba la denegación controlada ante pérdida de Redis (fail-closed) y verifica que el mecanismo de diagnóstico responde HTTP 404 en producción estándar.
 
 ### Autorización Operativa de Despliegue: **BLOQUEADO (NO-GO OPERATIVO TEMPORAL)**
 > [!IMPORTANT]
 > **SEPARACIÓN EXPRESA ENTRE CALIFICACIÓN TÉCNICA Y AUTORIZACIÓN DE DESPLIEGUE:**  
-> A pesar de que el dictamen técnico es **GO**, **el despliegue en el entorno productivo (`printprice.pro`) permanece rigurosamente BLOQUEADO**. Ningún archivo ha sido desplegado a producción ni se modificará la configuración de Plesk sin la orden explícita y formal del operador responsable.
+> A pesar de que el dictamen técnico es **GO**, **el despliegue en el entorno productivo (`printprice.pro`) permanece rigurosamente BLOQUEADO**. Ningún archivo ha sido desplegado a producción (`/var/www/vhosts/printprice.pro/httpdocs` permanece inalterado en el commit `8a333d7`) ni se modificará la configuración de Plesk sin la orden explícita y formal del operador responsable.
 
 ---
 
-## 2. Resolución de Bloqueos y Remediaciones SEC-04D
+## 2. Remediación de los Dos Bloqueos Finales (SEC-04D.1)
 
-### 2.1 Prohibición Estricta de `forceMemory` en Producción
-Se modificó [`lib/redisRateLimitStore.ts`](file:///c:/Users/KIKE/Downloads/corporative/lib/redisRateLimitStore.ts) para blindar la factoría frente a configuraciones erróneas o intentos de forzar memoria en producción:
+### 2.1 Bloqueo 1 — Imposición Incondicional de `failPolicy: 'closed'` en Producción
+
+En [`lib/redisRateLimitStore.ts`](file:///c:/Users/KIKE/Downloads/corporative/lib/redisRateLimitStore.ts), se garantizó que cuando `NODE_ENV=production`, `failPolicy` queda fijado rígidamente en `'closed'`, ignorando cualquier parámetro que intente habilitar `failPolicy: 'open'`:
 
 ```typescript
-// 1. Strict production safeguard: In-memory store is NEVER permitted in production under any circumstance
-if (isProduction && (options?.forceMemory || options?.inMemoryFallback)) {
-    console.error('[SECURITY][RATE_LIMIT_STORE] In-memory rate limiting (forceMemory/inMemoryFallback) is strictly prohibited in production.');
-    throw new Error('[PPOS RateLimit] In-memory rate limiting (forceMemory/inMemoryFallback) is strictly prohibited in production.');
-}
+// Constructor de RedisRateLimitStore:
+const isProduction = typeof process !== 'undefined' && process.env?.NODE_ENV === 'production';
+this.failPolicy = isProduction ? 'closed' : (options?.failPolicy ?? 'open');
 
-// 2. Production with missing Redis configuration: fail closed
-if (isProduction && !redisUrl) {
-    console.error('[SECURITY][RATE_LIMIT_STORE] Production requires REDIS_URL or PPOS_REDIS_URL. Missing configuration.');
-    throw new Error('REDIS_URL must be configured in production environment for multi-process quota consistency.');
-}
+// Factory createRateLimitStore():
+const effectiveFailPolicy: 'closed' | 'open' = isProduction ? 'closed' : (options?.failPolicy ?? 'open');
+return new RedisRateLimitStore(client, {
+    prefix: options?.prefix,
+    windowMs: options?.windowMs,
+    failPolicy: effectiveFailPolicy
+});
 ```
-- **Comprobación**: Se añadieron aserciones unitarias en [`scripts/test_create_rate_limit_store.mjs`](file:///c:/Users/KIKE/Downloads/corporative/scripts/test_create_rate_limit_store.mjs) (Test 4) verificando que `createRateLimitStore({ forceMemory: true })` en `NODE_ENV=production` lanza una excepción explícita que impide la degradación a memoria.
 
-### 2.2 Eliminación de Secretos Literales en Scripts de Prueba
-En [`scripts/test_real_nginx_e2e_acceptance.mjs`](file:///c:/Users/KIKE/Downloads/corporative/scripts/test_real_nginx_e2e_acceptance.mjs) y [`scripts/test_real_nextjs_nginx_redis_e2e.mjs`](file:///c:/Users/KIKE/Downloads/corporative/scripts/test_real_nextjs_nginx_redis_e2e.mjs), se sustituyó cualquier token literal estático por generación criptográfica dinámica:
-```javascript
-const EPHEMERAL_PROXY_SECRET = process.env.PPOS_PROXY_SECRET || `sec04d_${crypto.randomBytes(24).toString('hex')}`;
+#### Reglas de comportamiento verificadas:
+- `options.failPolicy: 'open'` solicitado en producción **no produce admisión** ante fallos de Redis (`allowed: false, reason: 'REDIS_ERROR'`).
+- `forceMemory` e `inMemoryFallback` en producción lanzan de inmediato una excepción explícita impidiendo cualquier degradación en memoria.
+- Redis desconectado impide admitir nuevas solicitudes (fail-closed).
+- En desarrollo (`NODE_ENV=development` o no fijado), se respetan las opciones explícitas (`failPolicy: 'open'` admite degradación controlada con `allowed: true, reason: 'ALLOWED'`).
+
+Evidencia en [`scripts/test_create_rate_limit_store.mjs`](file:///c:/Users/KIKE/Downloads/corporative/scripts/test_create_rate_limit_store.mjs):
+```text
+  ✓ [TEST 4] En producción, forceMemory e inMemoryFallback son bloqueados taxativamente con excepción
+  ✓ [TEST 5] Redis caído con failPolicy=closed deniega admisión controladamente (REDIS_ERROR) sin abrir la puerta
+  ✓ [TEST 6] failPolicy: 'open' solicitado en producción es ignorado e impone estrictamente fail-closed (allowed: false)
+  ✓ [TEST 7] Desarrollo conserva opciones explícitas: failPolicy: 'open' permite admisión degradada controlada
+  ✓ [TEST 8] Tráfico no acreditado con Redis caído aplica fail-closed riguroso
+  ✓ [TEST 9] Concurrencia en InMemoryRateLimitStore: admite exactamente 5 y bloquea 5
+🎉 TODAS LAS PRUEBAS DE LA FACTORÍA SUPERADAS (9 verificaciones)
 ```
-El secreto efímero se transmite exclusivamente al entorno de ejecución en memoria de los subprocesos y al archivo de configuración temporal de Nginx, eliminándose de disco y memoria al terminar el test sin dejar rastro en el repositorio Git.
-
-### 2.3 Trazabilidad Exacta de Commits en Documentación
-Se actualizó [`SEC_04C_3_FINAL_ACCEPTANCE.md`](file:///c:/Users/KIKE/Downloads/corporative/SEC_04C_3_FINAL_ACCEPTANCE.md) para reflejar con precisión matemática la genealogía de commits:
-- **Commit de código probado y certificado:** `683d8fa05535244cefc2f0e04f99a8a1cacb3873`
-- **Commit de publicación del informe:** `da6d782e1c640c64a60fac9bef7ebeee62f581f7`
 
 ---
 
-## 3. Evidencia de Integración sobre el Build Real de Next.js 16.2.1
+### 2.2 Bloqueo 2 — Validación E2E de Server Actions en Proceso Real Next.js
 
-Se diseñó e implementó [`scripts/test_real_nextjs_nginx_redis_e2e.mjs`](file:///c:/Users/KIKE/Downloads/corporative/scripts/test_real_nextjs_nginx_redis_e2e.mjs), validando la arquitectura completa en el servidor de staging Plesk (`cool-shtern.212-227-79-67`):
+Para verificar la ejecución de Server Actions dentro del proceso real de Next.js sin reactivar el formulario público huérfano (`submitPartnerOnboarding` permanece desacoplado de las páginas públicas), se implementó:
+
+1. **Server Action en Proceso ([`lib/actions.ts`](file:///c:/Users/KIKE/Downloads/corporative/lib/actions.ts))**:
+   ```typescript
+   'use server';
+   export async function checkActionRateLimit(): Promise<{
+     accredited: boolean;
+     resolvedIp: string | null;
+     allowed: boolean;
+     admissionReason?: string;
+     count: number;
+     storeType: string;
+   }> {
+     const headerList = await headers();
+     const clientIp = resolveTrustedClientIp(headerList);
+     const clientFingerprint = clientIp ? null : computeClientFingerprint(headerList);
+     const admission = await checkAndRecordRateLimit(clientIp, clientFingerprint);
+     const store = getActiveRateLimitStore();
+
+     return {
+       accredited: clientIp !== null,
+       resolvedIp: clientIp,
+       allowed: admission.allowed,
+       admissionReason: admission.reason,
+       count: admission.count,
+       storeType: store.storeType || store.constructor.name
+     };
+   }
+   ```
+2. **Propiedad `storeType` inmune a minificación de producción**:
+   Tanto [`InMemoryRateLimitStore`](file:///c:/Users/KIKE/Downloads/corporative/lib/inMemoryRateLimitStore.ts) como [`RedisRateLimitStore`](file:///c:/Users/KIKE/Downloads/corporative/lib/redisRateLimitStore.ts) declaran explícitamente `readonly storeType: string`, evitando que la ofuscación de nombres de clase (`store.constructor.name` -> `'a'`) altere las validaciones de tipo en producción.
+3. **Mecanismo Diagnóstico Condicional ([`app/api/diagnostic/rate-limit/route.ts`](file:///c:/Users/KIKE/Downloads/corporative/app/api/diagnostic/rate-limit/route.ts))**:
+   Protegido estrictamente por variable de entorno:
+   ```typescript
+   if (process.env.ENABLE_TEST_DIAGNOSTICS !== 'true') {
+     return new NextResponse(null, { status: 404 });
+   }
+   ```
+   En cualquier entorno de producción donde `ENABLE_TEST_DIAGNOSTICS` no esté explícitamente fijado a `'true'`, el endpoint devuelve de inmediato `HTTP 404 Not Found`.
+
+---
+
+## 3. Evidencia Reproducible en Staging Plesk Real
+
+Se ejecutó la prueba completa [`scripts/test_real_nextjs_nginx_redis_e2e.mjs`](file:///c:/Users/KIKE/Downloads/corporative/scripts/test_real_nextjs_nginx_redis_e2e.mjs) en el servidor Plesk (`cool-shtern.212-227-79-67`):
 
 ```
-[Cliente HTTP de Prueba]
-        │
-        ▼ (puerto 3890 - Loopback Nginx Staging)
-[Nginx Real en Staging]
+[Petición Externa de Prueba]
+           │
+           ▼ (puerto 3890 - Loopback Nginx Real)
+[Nginx Staging Real (/etc/nginx/conf.d/sec04d_test_nextjs_proxy.conf)]
   - proxy_pass http://127.0.0.1:3892;
-  - proxy_set_header X-PPOS-Proxy-Secret "<secreto_efímero>";
   - proxy_set_header X-Real-IP $remote_addr;
-        │
-        ▼ (puerto 3892 - Loopback HTTP)
-[Servidor Real Next.js 16.2.1 (server.js)]
-  - Middleware proxy.ts: WAF, CSP, normalización canónica
-  - Rutas reales de producción: /api/health, /api/v1/[[...path]]
-  - Entorno de Server Actions con RedisRateLimitStore atómico
-        │
-        ▼ (puerto 6379)
-[Redis Real 7.0.15]
-  - Scripts atómicos Lua PEXPIRE / INCR / PTTL
+  - proxy_set_header X-PPOS-Proxy-Secret "<secreto_efímero_56_bytes>";
+           │
+           ▼ (puerto 3892 - Loopback HTTP)
+[Servidor Real Next.js 16.2.1 en Producción (server.js con Turbopack)]
+  - PID: 3739104
+  - Server Action: checkActionRateLimit() ejecutada en runtime Next.js
+  - Almacén activo: RedisRateLimitStore con scripts Lua atómicos
+           │
+           ▼ (puerto 6379)
+[Redis 7.0.15 Real de Staging]
 ```
 
-### Registro de Ejecución Certificado en Staging
+### Registro de Ejecución Certificado en Staging (Terminal Plesk)
 ```text
-═════════════════════════════════════════════════════════════════════════════
-🚀 SEC-04D: PRUEBA E2E CON BUILD REAL DE NEXT.JS 16.2.1, NGINX Y REDIS
+root@cool-shtern:/tmp/sec04d1_test_env/repo# npx tsx scripts/test_real_nextjs_nginx_redis_e2e.mjs
+🚀 SEC-04D.1: VALIDACIÓN E2E REAL: SERVER ACTIONS + NGINX REAL + REDIS REAL
    Host Nginx: 127.0.0.1:3890
    Host Next.js Real: 127.0.0.1:3892
    Host Redis Real: redis://127.0.0.1:6379
-   Secreto de Proxy: Efímero (sec04d_8a91c2... longitud: 55)
+   Secreto de Proxy: Efímero (sec04d1_ae4820... longitud: 56)
 ═════════════════════════════════════════════════════════════════════════════
 
 [Paso 1] Verificando build de Next.js en .next/...
-  ✓ Build de producción localizado (BUILD_ID: n5qJqQcWq9_w0_3V)
+  ✓ Build de producción localizado (BUILD_ID: C4asLmfcVXOvni6ZCzlld)
 
 [Paso 2] Configurando vhost en Nginx (/etc/nginx/conf.d/)...
 nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
 nginx: configuration file /etc/nginx/nginx.conf test is successful
   ✓ Vhost Nginx desplegado y recargado con éxito.
 
-[Paso 3] Arrancando servidor real de Next.js (server.js)...
-  [Next.js stdout] > Servidor Next.js listo en puerto 3892 (RELEASE_ID: sec04d-release-n5qJqQcW)
-  ✓ Servidor Next.js 16.2.1 listo y respondiendo en puerto 3892.
+[Paso 3] Arrancando Next.js en modo producción con diagnóstico de pruebas activo...
+  [Next.js stdout] > Servidor Next.js listo en puerto 3892 (RELEASE_ID: sec04d1-release-1792931444858)
+  ✓ Next.js activo en PID: 3739104
 
-[Escenario 1] Petición GET /api/health a través de Nginx...
-  ✓ [SEC04D-1] Build real de Next.js responde a través de Nginx con release_id y cabeceras de seguridad CSP
+[Criterio 1 & 2] Petición a través de Nginx y verificación de acreditación...
+  ✓ [SEC04D1-1] Petición atraviesa Nginx con éxito y Next.js acredita identidad (127.0.0.1) vía Server Action
 
-[Escenario 2] Verificando bloqueo WAF de proxy.ts a través de Nginx...
-  ✓ [SEC04D-2] Capa WAF en proxy.ts intercepta y bloquea patrones maliciosos a través de Nginx (HTTP 403)
+[Criterio 3] Verificando que la Server Action utiliza RedisRateLimitStore...
+  ✓ [SEC04D1-2] La Server Action inicializa y utiliza RedisRateLimitStore con Redis 7.0.15
 
-[Escenario 3] Verificando Gateway API /v1/ a través de Nginx...
-  ✓ [SEC04D-3] Gateway API en Next.js autentica credenciales y autoriza scopes a través de Nginx (HTTP 200)
+[Criterio 4] Consumiendo intentos 2 al 5 a través de Nginx en la Server Action...
+  ✓ [SEC04D1-3] Los primeros 5 intentos son admitidos correctamente por Redis a través de Nginx (HTTP 200)
 
-[Escenario 4] Validando inicialización del almacén Redis en proceso Server Actions...
-  ✓ [SEC04D-4] Prohibición estricta de forceMemory en producción ratificada en proceso de Server Actions
-  ✓ [SEC04D-5] Almacén Redis Real evalúa scripts Lua atómicos en producción y bloquea intento 6 (IP_LIMIT)
+[Criterio 5] Ejecutando intento 6 a través de Nginx...
+  ✓ [SEC04D1-4] Intento 6 bloqueado atómicamente por la Server Action en Next.js (HTTP 429, IP_LIMIT)
 
-[Escenario 5] Validando rechazo de secreto erróneo o ausente...
-  ✓ [SEC04D-6] Confianza del proxy inmune a falsificación de secreto efímero (IP devuelta: null)
+[Criterio 6] Reiniciando Next.js con Redis caído (fail-closed)...
+  [Next.js stdout] > Servidor Next.js listo en puerto 3892 (RELEASE_ID: sec04d1-release-1792931446812)
+  [Next.js stderr] [SECURITY][REDIS_CONNECTION] Redis client connection error: connect ECONNREFUSED 127.0.0.1:49999
+  [Next.js stderr] [SECURITY][REDIS_STORE] Admission check failed: Reached the max retries per request limit
+  ✓ [SEC04D1-5] Pérdida de Redis provoca denegación controlada fail-closed en Next.js (HTTP 429, REDIS_ERROR)
 
-[LIMPIEZA] Deteniendo servidor Next.js (PID: 3723481)...
+[Criterio 7] Reiniciando Next.js en producción estándar (ENABLE_TEST_DIAGNOSTICS=false)...
+  [Next.js stdout] > Servidor Next.js listo en puerto 3892 (RELEASE_ID: sec04d1-release-1792931448842)
+  ✓ [SEC04D1-6] Mecanismo de diagnóstico estrictamente inaccesible (HTTP 404) en producción estándar
+
+[LIMPIEZA] Deteniendo servidor Next.js (PID: 3739192)...
   ✓ Servidor Next.js detenido.
 [LIMPIEZA] Eliminando /etc/nginx/conf.d/sec04d_test_nextjs_proxy.conf...
   ✓ Nginx recargado tras limpieza de vhost de prueba.
 [LIMPIEZA] Eliminadas 1 claves de prueba en Redis.
 
 ═════════════════════════════════════════════════════════════════════════════
-🎉 PRUEBA DE INTEGRACIÓN REAL NEXT.JS + NGINX + REDIS EXITOSA: 6/6 SUPERADOS
+🎉 PRUEBA SEC-04D.1 SUPERADA: TODOS LOS CRITERIOS VERIFICADOS
 ═════════════════════════════════════════════════════════════════════════════
 ```
 
 ---
 
-## 4. Auditoría de Estado Limpio del Servidor Plesk
+## 4. Estado Limpio del Servidor e Inalterabilidad de Producción
 
-Se realizó una auditoría directa en la consola del servidor compartido (`cool-shtern.212-227-79-67`):
-
-1. **Vhosts temporales de Nginx**:
-   - `ls -la /etc/nginx/conf.d/` -> Únicamente existen los archivos del sistema Plesk (`00-*.conf`). Ningún vhost de test (`sec04c*`, `sec04d*`) permanece en disco.
-   - `nginx -t` -> Sintaxis correcta, verificación exitosa.
-2. **Procesos en ejecución**:
-   - `ps aux | grep -E "tsx|test_real|server.js" | grep -v grep` -> Cero procesos residuales de pruebas.
-3. **Claves en Redis**:
-   - `redis-cli keys "*sec04*"` y `redis-cli keys "*test*"` -> Vacío (`(empty array)`).
-4. **Vhost público de producción**:
-   - `/var/www/vhosts/system/printprice.pro/conf/nginx.conf` conserva intacta su configuración oficial previa.
-5. **Directorio de código productivo**:
-   - `/var/www/vhosts/printprice.pro/httpdocs` permanece en el commit `8a333d7` (versión actualmente en servicio), sin modificaciones ni despliegue del candidato.
+Tras la ejecución de las pruebas, se verificó formalmente el estado del servidor Plesk:
+```bash
+root@cool-shtern:/tmp# ls -la /etc/nginx/conf.d/ && nginx -t && redis-cli keys "*sec04*" && git -C /var/www/vhosts/printprice.pro/httpdocs log -n 1 --oneline && git -C /var/www/vhosts/printprice.pro/httpdocs status
+total 32
+drwxr-xr-x  2 root root 4096 Oct 25 12:30 .
+drwxr-xr-x 10 root root 4096 Oct 22 00:57 ..
+-rw-r--r--  1 root root  949 Mar 19  2026 api.printprice.pro.conf.disabled
+-rw-------  1 root root  171 Feb  3  2025 brotli.conf
+-rw-r--r--  1 root root  147 Jul 17  2025 fixssl.conf
+-rw-r--r--  1 root root  147 Jul 17  2025 fixssl.conf.default
+lrwxrwxrwx  1 root root   45 Mar 17  2026 phusion-passenger.conf -> ../modules.available.d/phusion-passenger.conf
+-rw-r--r--  1 root root  475 Feb  3  2025 ssl.conf
+-rw-------  1 root nginx 391 Oct 23 14:14 zz010_psa_nginx.conf
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+(empty array)
+8a333d7 (HEAD, origin/feat/public-experience-i18n-quality) fix(ux): complete rigorous comparison tables with verified sources and neutral claims
+HEAD detached at 8a333d7
+nothing to commit, working tree clean
+```
+- **Vhosts temporales**: Cero archivos residuales en `/etc/nginx/conf.d/`.
+- **Sintaxis Nginx**: Válida y funcional.
+- **Claves Redis**: Cero claves residuales de test.
+- **Código en producción (`/var/www/vhosts/printprice.pro/httpdocs`)**:
+  - Permanece intacto en el commit `8a333d7`.
+  - Ninguna línea de código del candidato SEC-04D.1 ha sido copiada ni desplegada en producción.
 
 ---
 
-## 5. Matriz de Decisión Go / No-Go
+## 5. Matriz de Decisión Go / No-Go Definitiva
 
 | Criterio de Aceptación | Estado | Evidencia y Justificación Técnica | Decisión |
 | :--- | :---: | :--- | :---: |
-| **1. Prohibición de memoria en producción** | CUMPLIDO | `createRateLimitStore` lanza excepción si se solicita `forceMemory` en producción. 7/7 tests unitarios PASS. | **GO** |
-| **2. Secreto efímero y no persistido** | CUMPLIDO | Generación criptográfica aleatoria de 24-32 bytes en tiempo de ejecución. Cero secretos en Git. | **GO** |
-| **3. Build real Next.js 16.2.1 + Nginx + Redis** | CUMPLIDO | Servidor `server.js` ejecutado en modo producción con Turbopack; 6/6 escenarios E2E superados. | **GO** |
-| **4. Inicialización Server Actions & Proxy Trust** | CUMPLIDO | Conexión probada a Redis 7.0.15; Lua scripts atómicos ejecutados; `submitPartnerOnboarding` verificado. | **GO** |
-| **5. Honestidad de Onboarding y Control Plane** | CUMPLIDO | `submitPartnerOnboarding` mantiene `INTEGRATION_PENDING` y enlaza a `https://control.printprice.pro/printhouse/register`. | **GO** |
-| **6. Servidor compartido limpio y sin residuos** | CUMPLIDO | Cero vhosts temporales, claves Redis purgadas, cero procesos colgados, producción intacta. | **GO** |
-| **7. Suite de regresión y tipos** | CUMPLIDO | `npx tsc --noEmit` (0 errores), `npm run build` (0 errores), 30/30 tests de honestidad PASS. | **GO** |
-| **8. Autorización Operativa de Despliegue** | **BLOQUEADO** | Restricción de seguridad activa: prohibido desplegar a producción sin autorización formal. | **NO-GO (OP)** |
+| **1. Fail-open imposible en producción** | CUMPLIDO | `createRateLimitStore()` impone `failPolicy: 'closed'` incondicionalmente. `forceMemory` bloqueado con error. 9/9 tests PASS. | **GO** |
+| **2. Server Actions verificadas E2E en Next.js** | CUMPLIDO | Ejecutado en proceso real de Next.js 16.2.1 sobre Nginx y Redis 7.0.15; los 7 criterios superados. | **GO** |
+| **3. Acreditación de identidad vía Nginx** | CUMPLIDO | `127.0.0.1` acreditada mediante cabeceras de Nginx con secreto efímero (56 bytes); sin exposición de secretos. | **GO** |
+| **4. Almacén Redis 7.0.15 y scripts Lua** | CUMPLIDO | `RedisRateLimitStore` atómico; intentos 1-5 admitidos (HTTP 200); intento 6 bloqueado (HTTP 429, `IP_LIMIT`). | **GO** |
+| **5. Tolerancia a fallos fail-closed** | CUMPLIDO | Caída simulada de Redis genera denegación controlada (`HTTP 429, REDIS_ERROR`) sin admitir peticiones. | **GO** |
+| **6. Mecanismos de diagnóstico protegidos** | CUMPLIDO | `/api/diagnostic/rate-limit` devuelve `HTTP 404` en producción estándar (`ENABLE_TEST_DIAGNOSTICS != 'true'`). | **GO** |
+| **7. Servidor Staging limpio y sin residuos** | CUMPLIDO | Vhost eliminado, Nginx recargado, Redis limpio, procesos terminados. | **GO** |
+| **8. Producción inalterada** | CUMPLIDO | Directorio `/var/www/vhosts/printprice.pro/httpdocs` conservado en commit `8a333d7` sin modificar. | **GO** |
+| **9. Autorización Operativa de Despliegue** | **BLOQUEADO** | Restricción de seguridad activa: prohibido desplegar a producción sin autorización formal. | **NO-GO (OP)** |
 
 ---
 
-## 6. Procedimiento Seguro de Despliegue y Rollback (Para Ejecución Autorizada)
-
-### Fase A: Preparación y Backup
-1. **Generación de Secreto Seguro de Producción**:
-   ```bash
-   PROD_SECRET=$(openssl rand -hex 32)
-   ```
-2. **Creación del include protegido en Nginx (fuera de Git)**:
-   ```bash
-   cat <<EOF > /var/www/vhosts/system/printprice.pro/conf/vhost_proxy_secret.inc
-   proxy_set_header X-PPOS-Proxy-Secret "$PROD_SECRET";
-   EOF
-   chmod 600 /var/www/vhosts/system/printprice.pro/conf/vhost_proxy_secret.inc
-   chown root:root /var/www/vhosts/system/printprice.pro/conf/vhost_proxy_secret.inc
-   ```
-3. **Backup del estado productivo actual**:
-   ```bash
-   cd /var/www/vhosts/printprice.pro/httpdocs
-   CURRENT_COMMIT=$(git rev-parse HEAD)
-   echo "Commit actual de producción: $CURRENT_COMMIT" > /root/pre_sec04d_backup.txt
-   ```
-
-### Fase B: Despliegue del Candidato
-1. **Actualización de código al SHA inmutable**:
-   ```bash
-   git fetch origin
-   git checkout ad42f9e421a1170d306b3a9cfa8cfa103328e352
-   npm install --production=false
-   npm run build
-   ```
-2. **Configuración de variables de entorno en producción**:
-   Asegurar que el servicio de producción (`pm2` o demonio de `server.js`) contiene:
-   - `PPOS_PROXY_SECRET="$PROD_SECRET"`
-   - `PPOS_REDIS_URL="redis://127.0.0.1:6379"`
-   - `NODE_ENV="production"`
-3. **Inclusión de directiva en Nginx y recarga**:
-   Añadir en las directivas adicionales de Nginx en Plesk:
-   ```nginx
-   include /var/www/vhosts/system/printprice.pro/conf/vhost_proxy_secret.inc;
-   ```
-   Validar y recargar:
-   ```bash
-   nginx -t && nginx -s reload
-   ```
-4. **Reinicio escalonado del servicio Node**:
-   ```bash
-   # Reiniciar el servicio Node.js en localhost:3010
-   passenger-config restart-app /var/www/vhosts/printprice.pro/httpdocs # (o restart de PM2/systemd)
-   ```
-
-### Fase C: Smoke Tests Inmediatos
-1. `curl -kI https://printprice.pro/api/health` -> Verificar HTTP 200 y cabeceras CSP.
-2. `curl -kI "https://printprice.pro/api/health?q=<script>alert(1)</script>"` -> Verificar HTTP 403 (bloqueo WAF).
-3. `curl -k https://printprice.pro/for-printhouses | grep "control.printprice.pro/printhouse/register"` -> Verificar enlace canónico.
-
-### Fase D: Protocolo de Rollback Inmediato (ante incidencias)
-1. **Restauración de código previo**:
-   ```bash
-   cd /var/www/vhosts/printprice.pro/httpdocs
-   git checkout 8a333d7 # o commit registrado en backup.txt
-   npm run build
-   ```
-2. **Retirada de la directiva de Nginx**:
-   Comentar o retirar la directiva `include ... vhost_proxy_secret.inc` y ejecutar:
-   ```bash
-   nginx -t && nginx -s reload
-   ```
-3. **Reinicio de la aplicación**:
-   Reiniciar los procesos Node para aplicar la versión anterior.
-
----
-
-## 7. SHA Final Inmutable y Certificación
+## 6. SHA Final Inmutable y Trazabilidad
 
 - **Rama:** `feat/comparisons-evidence-and-legal-policy-review`
-- **SHA Candidato Definitivo de Código:** `ad42f9e421a1170d306b3a9cfa8cfa103328e352`
-- **Commit de Incorporación del Informe:** `8be018a42e5d95759efc0d935f8e562149bfe3e4`
-- **Verificación remota:**
-  ```text
-  $ git ls-remote origin refs/heads/feat/comparisons-evidence-and-legal-policy-review
-  8be018a42e5d95759efc0d935f8e562149bfe3e4    refs/heads/feat/comparisons-evidence-and-legal-policy-review
-  ```
+- **SHA Candidato Definitivo de Código (Evaluado en Staging):** `91e8f7cfaa50f0ef0494f5c79c8a692a9bfef947`
 - **Conclusión de la Auditoría:**  
-  El candidato `ad42f9e421a1170d306b3a9cfa8cfa103328e352` reúne todas las garantías de seguridad técnica, robustez arquitectónica y fidelidad corporativa para su paso a producción. No obstante, en estricto acatamiento de las reglas de gobierno, **el despliegue no se ejecutará hasta contar con la autorización operativa correspondiente**.
+  Ambos bloqueos de SEC-04D quedan formal y técnicamente **RESUELTOS Y SUPERADOS**. El dictamen técnico de ingeniería es **GO DEFINITIVO**.  
+  De conformidad con la política de seguridad operativa, **la producción se mantiene estrictamente sin cambios y el despliegue permanece bloqueado** a la espera de la autorización explícita del operador responsable.
