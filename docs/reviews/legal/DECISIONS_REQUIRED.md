@@ -14,7 +14,7 @@ A fecha 25 de octubre de 2026, el **propietario de la plataforma ha aprobado for
 1. **Base imponible de la comisión del 4 %:** Se fija estrictamente en el **4 % sobre el importe neto de impresión y acabados**, excluyendo expresamente impuestos y costes de transporte debidamente desglosados.
 2. **Generación sobre cobros efectivos y facturación mensual posterior:** La comisión se genera sobre los **importes efectivamente cobrados por la imprenta**, procediendo PrintPrice a su facturación mensual posterior agrupada. En supuestos de **cobros parciales**, la comisión aplica exclusivamente sobre la parte cobrada que corresponda a los conceptos sujetos a comisión (impresión y acabados).
 3. **Tratamiento de devoluciones:** **No se devenga ni cobra comisión sobre importes devueltos al cliente.** En caso de haberse facturado previamente la comisión, se practicará el ajuste corrector (abono/nota de crédito) en la liquidación mensual inmediatamente posterior.
-4. **Tratamiento de impagos:** **No se cobra comisión sobre cantidades impagadas** por los clientes finales.
+4. **Tratamiento de impagos y cobros pendientes:** **No se cobra comisión sobre cantidades no efectivamente cobradas.** Si posteriormente se cobran, generarán la comisión correspondiente en el ciclo mensual aplicable.
 5. **Obligación de registro y conciliación por la imprenta:** Dado que la imprenta factura y cobra directamente al cliente, la imprenta asume la obligación de registrar verazmente en la plataforma todos los cobros y devoluciones vinculados a cada pedido para hacer posible la conciliación mensual.  
    *(Aviso técnico de rigor: El mecanismo específico y panel para este registro y conciliación en el Control Plane consta como **[PENDIENTE DE DEFINICIÓN TÉCNICA E IMPLEMENTACIÓN EN CONTROL PLANE; NO PRESENTAR COMO FUNCIONALIDAD YA IMPLEMENTADA]**).*
 
@@ -53,7 +53,7 @@ A efectos de coherencia contractual y contable en todos los borradores, rigen lo
 | **Decisión Comercial (Aprobada Propietario 25/10/2026)** | **Base de comisión del 4 %** | 4 % sobre neto de impresión y acabados, excluyendo transporte desglosado e impuestos. | `02_terminos_generales_uso.md`, `05_condiciones_adhesion_imprentas.md` | **No bloquea su revisión interna** (aprobada). |
 | **Decisión Comercial (Aprobada Propietario 25/10/2026)** | **Devengo sobre cobros efectivos** | Comisión generada sobre cobro real. En cobro parcial, aplica a la parte proporcional cobrada sujeta. | `02_terminos_generales_uso.md`, `05_condiciones_adhesion_imprentas.md` | **No bloquea su revisión interna** (aprobada). |
 | **Decisión Comercial (Aprobada Propietario 25/10/2026)** | **Exclusión de devoluciones e impagos** | Cero comisión sobre importes devueltos o impagados; ajuste en ciclo posterior si ya se facturó. | `03_condiciones_autores_particulares.md`, `05_condiciones_adhesion_imprentas.md` | **No bloquea su revisión interna** (aprobada). |
-| **Dato Operativo (Equipo Técnico)** | **Detalles operativos de comisiones** | Pendiente definir: documentación justificativa, conciliación, vencimiento de factura y no desglosados. | `02_terminos_generales_uso.md`, `05_condiciones_adhesion_imprentas.md` | **No bloquea su revisión interna**; bloquea cobro efectivo. |
+| **Dato Operativo (Equipo Técnico)** | **Detalles operativos de comisiones** | Pendiente definir: documentación justificativa, conciliación, día de emisión/cierre, vencimiento y no desglosados. | `02_terminos_generales_uso.md`, `05_condiciones_adhesion_imprentas.md` | **No bloquea su revisión interna**; bloquea cobro efectivo. |
 | **Decisión Comercial (Pendiente Propietario)** | **Modelo web vs API REST** | Decidir si se mantiene cálculo web libre y se tarifica por volumen en API REST empresarial. | `01_aviso_legal.md`, `02_terminos_generales_uso.md`, `04_condiciones_editoriales_profesionales.md` | **No bloquea su revisión interna**. |
 | **Decisión Comercial (Pendiente Propietario)** | **Monetización de papeleras (Paper Hub)** | Decidir entre cuota anual de suscripción técnica por catálogo o comisión porcentual sobre volumen. | `06_condiciones_proveedores_papel.md` | **No bloquea su revisión interna**. |
 | **Decisión Comercial (Pendiente Propietario)** | **Objetivo de SLA (99,5 % API)** | Decidir si se ofrece meta comercial de disponibilidad del 99,5 % para editoriales o si se omite. | `04_condiciones_editoriales_profesionales.md` | **No bloquea su revisión interna**. |
@@ -87,7 +87,7 @@ A efectos de coherencia contractual y contable en todos los borradores, rigen lo
 - **Estado:** **APROBADO POR EL PROPIETARIO (25/10/2026)**.
 - **Alcance:** 
   - **Devoluciones:** No se cobra comisión sobre importes devueltos al comprador. Si la comisión ya fue incluida en una liquidación mensual anterior, se practicará el ajuste proporcional correspondiente (abono/nota de crédito) en la liquidación inmediatamente posterior.
-  - **Impagos:** No se cobra comisión sobre importes que resulten impagados por el cliente.
+  - **Impagos y cobros pendientes:** No se cobra comisión sobre cantidades no efectivamente cobradas. Si posteriormente se cobran, generarán la comisión correspondiente en el ciclo mensual aplicable.
 - **Documentos actualizados:** `03_condiciones_autores_particulares.md`, `05_condiciones_adhesion_imprentas.md`.
 - **¿Bloquea su revisión interna?:** No bloquea su revisión interna.
 
@@ -99,7 +99,7 @@ A pesar de la aprobación de los principios comerciales anteriores, constan como
 
 1. **Documentación justificativa:** Definir los requisitos de soporte documental exigibles a las imprentas para acreditar devoluciones, cobros parciales o impagos (p. ej., facturas rectificativas, justificantes de transferencia bancaria de devolución o comunicaciones fehacientes de mora).
 2. **Mecanismo técnico de registro y conciliación en Control Plane:** Diseñar y desarrollar en el panel de taller el flujo para que la imprenta declare los cobros efectivos y devoluciones por cada pedido, así como el protocolo de cotejo periódico frente a las órdenes de marketplace. *(No presentar como funcionalidad ya implementada)*.
-3. **Plazo y vencimiento de la factura mensual de comisiones:** Fijar el vencimiento exigible para el pago de la factura emitida por PrintPrice (p. ej., a 15, 30 días naturales desde emisión o mediante cargo recurrente SEPA B2B).
+3. **Día de emisión/cierre y vencimiento de la factura mensual:** Fijar el día exacto de emisión/cierre del ciclo mensual de facturación de PrintPrice, así como el plazo de vencimiento exigible para el pago de dicha factura (p. ej., a 15, 30 días naturales desde emisión o mediante cargo recurrente SEPA B2B).
 4. **Tratamiento de conceptos no desglosados:** Establecer la regla de liquidación aplicable si una imprenta emite un pedido o factura global sin desglose explícito de los costes de transporte respecto a la producción.
 
 ---
