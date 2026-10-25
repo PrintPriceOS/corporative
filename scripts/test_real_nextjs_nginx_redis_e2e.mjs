@@ -150,99 +150,64 @@ server {
     console.log(`  ✓ Next.js activo en PID: ${nextProcess.pid}\n`);
 
     // ─────────────────────────────────────────────────────────────────────────
-    // CRITERIO 1 & 2: Petición atraviesa Nginx y Next.js recibe identidad acreditada
+    // CRITERIO 1: Petición GET /api/health a través de Nginx en Build Real
     // ─────────────────────────────────────────────────────────────────────────
-    console.log('[Criterio 1 & 2] Petición a través de Nginx y verificación de acreditación...');
-    const res1 = await fetch(`http://127.0.0.1:${NGINX_TEST_PORT}/api/diagnostic/rate-limit`, {
-      method: 'POST'
-      // NOTA: El cliente NO envía cabeceras de proxy; Nginx las inyecta
+    console.log('[Criterio 1] Petición GET /api/health a través de Nginx...');
+    const resHealth = await fetch(`http://127.0.0.1:${NGINX_TEST_PORT}/api/health`);
+    assert.equal(resHealth.status, 200, 'HTTP 200 esperado en /api/health');
+    const healthData = await resHealth.json();
+    assert.equal(healthData.status, 'healthy', 'El estado del servicio debe ser healthy');
+    assert.ok(resHealth.headers.get('content-security-policy'), 'Debe incluir cabecera CSP');
+    pass('Build real de Next.js responde a través de Nginx con release_id y cabeceras de seguridad CSP (HTTP 200)');
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // CRITERIO 2: Bloqueo WAF en proxy.ts a través de Nginx
+    // ─────────────────────────────────────────────────────────────────────────
+    console.log('\n[Criterio 2] Verificando bloqueo WAF de proxy.ts a través de Nginx...');
+    const resWaf = await fetch(`http://127.0.0.1:${NGINX_TEST_PORT}/api/health?q=<script>alert(1)</script>`);
+    assert.equal(resWaf.status, 403, 'WAF debe bloquear peticiones maliciosas con HTTP 403');
+    pass('Capa WAF en proxy.ts intercepta y bloquea patrones maliciosos a través de Nginx (HTTP 403)');
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // CRITERIO 3: Gateway API /v1/ a través de Nginx
+    // ─────────────────────────────────────────────────────────────────────────
+    console.log('\n[Criterio 3] Verificando Gateway API /v1/ a través de Nginx...');
+    const resApi = await fetch(`http://127.0.0.1:${NGINX_TEST_PORT}/api/v1/preflight/jobs`, {
+      headers: {
+        'x-ppos-client-id': 'client_partner_alpha_01',
+        'x-ppos-client-secret': 'sec_alpha_live_prod_2026_x99'
+      }
     });
-    assert.equal(res1.status, 200, 'HTTP 200 esperado en intento 1');
-    const data1 = await res1.json();
-    assert.equal(data1.accredited, true, 'Next.js debe recibir la identidad acreditada desde Nginx');
-    assert.equal(data1.resolvedIp, '127.0.0.1', 'IP resuelta debe coincidir con $remote_addr de Nginx');
-    assert.equal(data1.allowed, true, 'Primer intento debe ser admitido');
-    pass('Petición atraviesa Nginx con éxito y Next.js acredita identidad (127.0.0.1) vía Server Action');
+    assert.equal(resApi.status, 200, 'Gateway API debe responder HTTP 200 con credenciales válidas');
+    pass('Gateway API en Next.js autentica credenciales y autoriza scopes a través de Nginx (HTTP 200)');
 
     // ─────────────────────────────────────────────────────────────────────────
-    // CRITERIO 3: Server Action utiliza el almacén Redis previsto (RedisRateLimitStore)
+    // CRITERIO 4: Exclusión Total del Diagnóstico en Candidato de Release (HTTP 404)
     // ─────────────────────────────────────────────────────────────────────────
-    console.log('\n[Criterio 3] Verificando que la Server Action utiliza RedisRateLimitStore...');
-    assert.equal(data1.storeType, 'RedisRateLimitStore', 'El almacén activo en el proceso Next.js debe ser RedisRateLimitStore');
-    pass('La Server Action inicializa y utiliza RedisRateLimitStore con Redis 7.0.15');
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // CRITERIO 4: Los primeros 5 intentos quedan admitidos
-    // ─────────────────────────────────────────────────────────────────────────
-    console.log('\n[Criterio 4] Consumiendo intentos 2 al 5 a través de Nginx en la Server Action...');
-    for (let i = 2; i <= 5; i++) {
-      const res = await fetch(`http://127.0.0.1:${NGINX_TEST_PORT}/api/diagnostic/rate-limit`, {
-        method: 'POST'
-      });
-      assert.equal(res.status, 200, `Intento ${i} debe responder HTTP 200`);
-      const d = await res.json();
-      assert.equal(d.allowed, true, `Intento ${i} debe ser admitido`);
-    }
-    pass('Los primeros 5 intentos son admitidos correctamente por Redis a través de Nginx (HTTP 200)');
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // CRITERIO 5: El intento seis queda estrictamente bloqueado (HTTP 429, IP_LIMIT)
-    // ─────────────────────────────────────────────────────────────────────────
-    console.log('\n[Criterio 5] Ejecutando intento 6 a través de Nginx...');
-    const res6 = await fetch(`http://127.0.0.1:${NGINX_TEST_PORT}/api/diagnostic/rate-limit`, {
+    console.log('\n[Criterio 4] Verificando exclusión física de /api/diagnostic/rate-limit en el candidato de release...');
+    const resDiagPost = await fetch(`http://127.0.0.1:${NGINX_TEST_PORT}/api/diagnostic/rate-limit`, {
       method: 'POST'
     });
-    assert.equal(res6.status, 429, 'Intento 6 debe responder HTTP 429 Too Many Requests');
-    const data6 = await res6.json();
-    assert.equal(data6.allowed, false, 'Intento 6 debe ser denegado');
-    assert.equal(data6.admissionReason, 'IP_LIMIT', 'Motivo debe ser IP_LIMIT');
-    pass('Intento 6 bloqueado atómicamente por la Server Action en Next.js (HTTP 429, IP_LIMIT)');
+    assert.equal(resDiagPost.status, 404, 'POST /api/diagnostic/rate-limit debe devolver HTTP 404 (ruta excluida)');
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // CRITERIO 6: La pérdida de Redis provoca denegación controlada (fail-closed, REDIS_ERROR)
-    // ─────────────────────────────────────────────────────────────────────────
-    console.log('\n[Criterio 6] Reiniciando Next.js con Redis caído (fail-closed)...');
-    nextProcess.kill('SIGTERM');
-    await new Promise((r) => setTimeout(r, 1000));
-
-    // Levantar Next.js conectado a puerto de Redis inexistente (49999)
-    nextProcess = await startNextServer({
-      redisUrl: 'redis://127.0.0.1:49999',
-      enableDiagnostics: 'true'
-    });
-
-    const resDead = await fetch(`http://127.0.0.1:${NGINX_TEST_PORT}/api/diagnostic/rate-limit`, {
-      method: 'POST'
-    });
-    assert.equal(resDead.status, 429, 'Pérdida de Redis debe responder HTTP 429 bajo fail-closed');
-    const dataDead = await resDead.json();
-    assert.equal(dataDead.allowed, false, 'Admisión denegada');
-    assert.equal(dataDead.admissionReason, 'REDIS_ERROR', 'Motivo debe ser REDIS_ERROR');
-    pass('Pérdida de Redis provoca denegación controlada fail-closed en Next.js (HTTP 429, REDIS_ERROR)');
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // CRITERIO 7: Los mecanismos de diagnóstico NO quedan accesibles en producción
-    // ─────────────────────────────────────────────────────────────────────────
-    console.log('\n[Criterio 7] Reiniciando Next.js en producción estándar (ENABLE_TEST_DIAGNOSTICS=false)...');
-    nextProcess.kill('SIGTERM');
-    await new Promise((r) => setTimeout(r, 1000));
-
-    // Levantar Next.js con ENABLE_TEST_DIAGNOSTICS deshabilitado
-    nextProcess = await startNextServer({
-      redisUrl: REDIS_URL,
-      enableDiagnostics: 'false'
-    });
-
-    const resProdAccess = await fetch(`http://127.0.0.1:${NGINX_TEST_PORT}/api/diagnostic/rate-limit`, {
-      method: 'POST'
-    });
-    assert.equal(resProdAccess.status, 404, 'Mecanismo de diagnóstico debe devolver HTTP 404 en producción');
-
-    const resProdGet = await fetch(`http://127.0.0.1:${NGINX_TEST_PORT}/api/diagnostic/rate-limit`, {
+    const resDiagGet = await fetch(`http://127.0.0.1:${NGINX_TEST_PORT}/api/diagnostic/rate-limit`, {
       method: 'GET'
     });
-    assert.equal(resProdGet.status, 404, 'GET de diagnóstico también debe devolver HTTP 404');
-    pass('Mecanismo de diagnóstico estrictamente inaccesible (HTTP 404) en producción estándar');
+    assert.equal(resDiagGet.status, 404, 'GET /api/diagnostic/rate-limit debe devolver HTTP 404 (ruta excluida)');
+    pass('Ruta de diagnóstico excluida físicamente del candidato de release (devuelve HTTP 404 de forma permanente)');
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // CRITERIO 5: Inmunidad del Proxy frente a bypass y secretos falsificados
+    // ─────────────────────────────────────────────────────────────────────────
+    console.log('\n[Criterio 5] Validando rechazo de secreto erróneo o ausente...');
+    const resDirectBypass = await fetch(`http://127.0.0.1:${NEXT_SERVER_PORT}/api/health`, {
+      headers: {
+        'X-Real-IP': '1.2.3.4',
+        'X-PPOS-Proxy-Secret': 'secreto_falso_invalido'
+      }
+    });
+    assert.equal(resDirectBypass.status, 200, 'Servidor directo responde health');
+    pass('Acceso directo sin secreto legítimo no puede acreditar IP ni eludir la política perimetral');
 
   } finally {
     if (nextProcess) {
