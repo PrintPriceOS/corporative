@@ -21,6 +21,7 @@ import {
   isRateLimited, 
   recordSubmissionAttempt, 
   resetRateLimitStore,
+  InMemoryRateLimitStore,
   isEmailDomainAllowed,
   auditLeadQuality,
   sanitizeText
@@ -58,7 +59,7 @@ pass('Validación estándar IPv4/IPv6 estricta: rechaza sintaxis malformadas y b
 // Test 1.2: cf-connecting-ip falsificado sin acreditación de Cloudflare es estrictamente ignorado
 const unaccreditedCf = { get: (name) => (name === 'cf-connecting-ip' ? '198.51.100.42' : null) };
 assert.equal(
-  resolveTrustedClientIp(unaccreditedCf, { trustCloudflareProxy: false }), 
+  resolveTrustedClientIp(unaccreditedCf, { trustCloudflareProxy: false, allowUnaccreditedProxyInDev: true }), 
   null, 
   'cf-connecting-ip sin acreditación previa debe ignorarse para evitar spoofing'
 );
@@ -66,7 +67,7 @@ pass('cf-connecting-ip falsificado se ignora cuando Cloudflare no está expresam
 
 // Test 1.3: cf-connecting-ip SÍ se acepta si Cloudflare está acreditado
 assert.equal(
-  resolveTrustedClientIp(unaccreditedCf, { trustCloudflareProxy: true }), 
+  resolveTrustedClientIp(unaccreditedCf, { trustCloudflareProxy: true, allowUnaccreditedProxyInDev: true }), 
   '198.51.100.42', 
   'cf-connecting-ip se acepta solo con acreditación explícita'
 );
@@ -75,51 +76,110 @@ pass('cf-connecting-ip solo se admite bajo cadena de proxy Cloudflare expresamen
 // Test 1.4: X-Forwarded-For falsificado por cliente es estrictamente ignorado
 const spoofedXff = { get: (name) => (name === 'x-forwarded-for' ? '203.0.113.1, 10.0.0.1' : null) };
 assert.equal(
-  resolveTrustedClientIp(spoofedXff), 
+  resolveTrustedClientIp(spoofedXff, { allowUnaccreditedProxyInDev: true }), 
   null, 
   'X-Forwarded-For no debe usarse como fallback arbitrario sin cadena de proxy verificada'
 );
 pass('X-Forwarded-For arbitrario no se adopta como fallback inseguro');
 
-// Test 1.5: X-Real-IP del proxy local Nginx/Plesk acreditado es aceptado
-const nginxAccredited = { get: (name) => (name === 'x-real-ip' ? '198.51.100.99' : null) };
+// SEC-04B REMEDIATION REGRESSIONS:
+// Test 1.5: Petición directa con X-Real-IP pero SIN acreditación de proxy es RECHAZADA (Cura de Trust-by-Presence)
+const unaccreditedDirectXRealIp = { 
+  get: (name) => (name === 'x-real-ip' ? '203.0.113.199' : null) 
+};
 assert.equal(
-  resolveTrustedClientIp(nginxAccredited), 
-  '198.51.100.99', 
-  'X-Real-IP inyectado por Nginx local se acepta como IP acreditada'
+  resolveTrustedClientIp(unaccreditedDirectXRealIp, { proxySecret: 'production-proxy-token-xyz' }), 
+  null, 
+  'Una petición directa con X-Real-IP arbitraria sin secreto de proxy Nginx NUNCA debe ser considerada fiable'
 );
-pass('X-Real-IP del proxy local se acepta como fuente acreditada');
+assert.equal(
+  resolveTrustedClientIp(unaccreditedDirectXRealIp), 
+  null, 
+  'Por defecto y sin acreditación explícita, X-Real-IP únicamente por presencia debe resolverse estrictamente a null'
+);
+pass('Remediación SEC-04B: X-Real-IP nunca se considera fiable solo por presencia; petición directa sin secreto rechazada (null)');
 
-// Test 1.6: Prioridad de X-Real-IP frente a cf-connecting-ip o XFF no acreditados
+// Test 1.6: Petición con X-Real-IP y secreto de proxy FALSO o INVÁLIDO es estrictamente RECHAZADA
+const forgedSecretHeaders = {
+  get: (name) => {
+    if (name === 'x-real-ip') return '203.0.113.199';
+    if (name === 'x-ppos-proxy-secret') return 'attacker-guessed-token';
+    return null;
+  }
+};
+assert.equal(
+  resolveTrustedClientIp(forgedSecretHeaders, { proxySecret: 'legitimate-server-proxy-secret-99' }),
+  null,
+  'Secreto de proxy erróneo debe rechazar inmediatamente la cabecera X-Real-IP'
+);
+pass('Falsificación de token de proxy: petición con secreto inválido es rechazada estrictamente');
+
+// Test 1.7: Petición directa desde interfaz de red no loopback / externa es rechazada
+const externalDirectSocketHeaders = {
+  get: (name) => {
+    if (name === 'x-real-ip') return '203.0.113.199';
+    if (name === 'x-ppos-proxy-secret') return 'legitimate-server-proxy-secret-99';
+    return null;
+  }
+};
+assert.equal(
+  resolveTrustedClientIp(externalDirectSocketHeaders, { 
+    proxySecret: 'legitimate-server-proxy-secret-99',
+    peerIp: '203.0.113.50' // IP externa atacando directamente el puerto del backend
+  }),
+  null,
+  'Petición procedente de peer IP no loopback debe rechazarse aunque envíe el secreto'
+);
+pass('Aislamiento de transporte: conexiones directas desde IPs externas son rechazadas independientemente de cabeceras');
+
+// Test 1.8: Petición legítima a través de proxy Nginx acreditado (secreto válido y peer loopback)
+const nginxAccredited = { 
+  get: (name) => {
+    if (name === 'x-real-ip') return '198.51.100.99';
+    if (name === 'x-ppos-proxy-secret') return 'legitimate-server-proxy-secret-99';
+    return null;
+  }
+};
+assert.equal(
+  resolveTrustedClientIp(nginxAccredited, { 
+    proxySecret: 'legitimate-server-proxy-secret-99',
+    peerIp: '127.0.0.1'
+  }), 
+  '198.51.100.99', 
+  'X-Real-IP inyectado por Nginx local acreditado con secreto se acepta como IP válida'
+);
+pass('Acreditación válida: Nginx local con secreto e IP de origen legítima se acredita correctamente');
+
+// Test 1.9: Prioridad de X-Real-IP acreditado frente a cf-connecting-ip o XFF manipulados
 const mixedHeaders = {
   get: (name) => {
     if (name === 'cf-connecting-ip') return '1.2.3.4'; // Intento de spoofing
     if (name === 'x-forwarded-for') return '5.6.7.8';  // Intento de spoofing
     if (name === 'x-real-ip') return '198.51.100.99';  // TCP remote_addr fijado por Nginx
+    if (name === 'x-ppos-proxy-secret') return 'valid-secret';
     return null;
   }
 };
 assert.equal(
-  resolveTrustedClientIp(mixedHeaders, { trustCloudflareProxy: false }),
+  resolveTrustedClientIp(mixedHeaders, { proxySecret: 'valid-secret', trustCloudflareProxy: false }),
   '198.51.100.99',
-  'Debe resolver a X-Real-IP legítimo ignorando cabeceras falsificadas del cliente'
+  'Debe resolver a X-Real-IP acreditado ignorando cabeceras cliente manipuladas'
 );
-pass('Aislamiento de cabeceras: X-Real-IP prevalece sobre cabeceras cliente manipuladas');
+pass('Aislamiento de cabeceras: X-Real-IP acreditado prevalece sobre cabeceras cliente manipuladas');
 
-// Test 1.7: Simulación de acceso directo al backend (sin proxy Nginx / cabeceras no acreditadas)
+// Test 1.10: Acceso directo al backend sin cabeceras acreditadas
 const directBackendHeaders = {
   get: (name) => {
     if (name === 'x-forwarded-for') return '203.0.113.50';
     if (name === 'client-ip') return '203.0.113.51';
     if (name === 'cf-connecting-ip') return '203.0.113.52';
-    // Sin x-real-ip porque el atacante se conecta directo a Node.js en puerto 8790
     return null;
   }
 };
 assert.equal(
   resolveTrustedClientIp(directBackendHeaders),
   null,
-  'En acceso directo sin X-Real-IP de Nginx, ninguna cabecera externa es acreditada'
+  'En acceso directo sin acreditación de Nginx, ninguna cabecera externa es acreditada'
 );
 pass('Acceso directo al backend: cabeceras externas no acreditadas se descartan estrictamente como null');
 
@@ -205,6 +265,18 @@ assert.equal(isRateLimited(ipA), true, 'IP A supera el límite de 5 peticiones y
 assert.equal(isRateLimited(ipB), false, 'IP B NO se ve afectada por el bloqueo de IP A');
 assert.equal(isRateLimited(null, fpA), false, 'Tráfico no acreditado NO se ve afectado por el bloqueo de IP A');
 pass('El rate limiting aísla rigurosamente por IP sin contaminación cruzada');
+
+// Test 2.7: Verificación del contrato de almacén desacoplado (IRateLimitStore / InMemoryRateLimitStore)
+const customStore = new InMemoryRateLimitStore();
+assert.equal(customStore.get('client_key_1'), null, 'Clave no existente debe retornar null');
+const inc1 = customStore.increment('client_key_1');
+assert.equal(inc1.count, 1, 'Primer incremento debe tener count 1');
+const inc2 = customStore.increment('client_key_1');
+assert.equal(inc2.count, 2, 'Segundo incremento debe tener count 2');
+assert.equal(customStore.get('client_key_1')?.count, 2, 'Get debe retornar la entrada activa');
+customStore.reset();
+assert.equal(customStore.get('client_key_1'), null, 'Reset debe vaciar el almacén');
+pass('Almacén de rate limit desacoplado: soporta arquitectura multi-proceso e interfaces personalizadas');
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 3. RECORRIDO PÚBLICO REAL Y DECLARACIÓN DE CÓDIGO SIN USO

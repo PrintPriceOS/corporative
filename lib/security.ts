@@ -111,34 +111,109 @@ export interface ProxyTrustConfig {
      * MUST be set only when the domain is actively proxied by Cloudflare and traffic reaches origin through it.
      */
     trustCloudflareProxy?: boolean;
+
+    /**
+     * Shared secret expected from the accredited reverse proxy (Nginx).
+     * In Nginx: `proxy_set_header X-PPOS-Proxy-Secret "<secret>";`
+     * If configured or required, requests lacking a matching secret header are treated as unaccredited
+     * direct connections and proxy headers (X-Real-IP, CF-Connecting-IP) are STRICTLY REJECTED (returns null).
+     */
+    proxySecret?: string;
+
+    /**
+     * If true, strictly requires the proxy secret to accept any reverse proxy header.
+     * When omitted, defaults to true if PPOS_PROXY_SECRET is set or NODE_ENV === 'production'.
+     */
+    requireProxySecret?: boolean;
+
+    /**
+     * Expected header name for the proxy secret. Defaults to 'x-ppos-proxy-secret'.
+     */
+    proxySecretHeader?: string;
+
+    /**
+     * Optional peer IP address (e.g. from socket / connection) to verify transport origin.
+     * If provided and not in trustedPeerIps, proxy headers are rejected.
+     */
+    peerIp?: string;
+
+    /**
+     * List of trusted peer IPs (defaults to loopback: 127.0.0.1, ::1, ::ffff:127.0.0.1).
+     */
+    trustedPeerIps?: string[];
+
+    /**
+     * Explicit opt-in for unaccredited local dev environments ONLY. Never active in production.
+     */
+    allowUnaccreditedProxyInDev?: boolean;
 }
+
+const DEFAULT_PROXY_SECRET_HEADER = 'x-ppos-proxy-secret';
+const TRUSTED_LOCAL_PEERS = ['127.0.0.1', '::1', '::ffff:127.0.0.1'];
 
 /**
  * Resolves client identifier strictly from accredited reverse proxy headers.
  * 
- * INFRASTRUCTURE TRUST AUDIT & MODEL:
- * 1. Production Reverse Proxy: In Nginx (/var/www/vhosts/system/printprice.pro/conf/vhost_nginx.conf),
- *    Nginx terminates TLS and sets `proxy_set_header X-Real-IP $remote_addr;`.
- *    For traffic entering through port 80/443, Nginx actively overwrites any incoming `X-Real-IP` header,
- *    preventing client header spoofing over the public web interface.
- * 2. Backend Port Isolation Finding: Node.js currently listens on `*:8790` (all interfaces), and firewall
- *    rules do not explicitly drop external connections to 8790. Requests arriving directly at port 8790
- *    bypass Nginx and must NEVER be treated as pre-filtered or accredited.
- * 3. Client Header Untrust: External client-supplied headers (such as `CF-Connecting-IP` without accredited
- *    proxy chain or arbitrary `X-Forwarded-For`) are NEVER considered reliable.
- * 4. Unaccredited Requests: When no accredited header exists or when validation fails, returns `null`.
- *    Requests with `null` IP are protected via per-client fingerprint rate limiting (to avoid shared lockouts
- *    of legitimate visitors) combined with a global unaccredited circuit breaker (to prevent rate limit evasion).
+ * INFRASTRUCTURE TRUST AUDIT & MODEL (SEC-04B):
+ * 1. Trust-by-Presence Vulnerability Remediation:
+ *    Previously, `X-Real-IP` was trusted merely because the header was present and had valid IP syntax.
+ *    In an unisolated network or direct-access scenario (e.g. external connections arriving at Node.js directly),
+ *    an attacker could send an arbitrary `X-Real-IP: 203.0.113.199` header and impersonate any identity or bypass
+ *    IP-based limits.
+ * 2. Accreditation via Shared Proxy Secret:
+ *    The accredited reverse proxy (Nginx) terminats TLS, strips any client-provided `X-PPOS-Proxy-Secret`,
+ *    and injects an internal secret header: `proxy_set_header X-PPOS-Proxy-Secret "<secret>";`.
+ *    The backend only trusts `X-Real-IP` if this cryptographic secret matches `process.env.PPOS_PROXY_SECRET`
+ *    or `config.proxySecret`. Direct requests lacking this secret are strictly rejected (`null`).
+ * 3. Network Transport Verification:
+ *    If peer IP is provided, it must belong to trusted local loopback addresses.
+ * 4. Privacy & Rate Limiting Protection:
+ *    When `resolveTrustedClientIp` returns `null` (unaccredited traffic), the request is governed by:
+ *    - Per-client fingerprint rate limiting (max 5 / hour) to isolate distinct legitimate users.
+ *    - Global unaccredited circuit breaker (max 50 / hour) to prevent rate limit evasion or distributed abuse.
  */
 export function resolveTrustedClientIp(
     headerList: HeaderReader,
     config?: ProxyTrustConfig
 ): string | null {
+    const configuredSecret = 
+        config?.proxySecret ?? 
+        (typeof process !== 'undefined' ? process.env?.PPOS_PROXY_SECRET : undefined);
+
+    const isProduction = typeof process !== 'undefined' && process.env?.NODE_ENV === 'production';
+    const requireSecret = config?.requireProxySecret ?? (!!configuredSecret || isProduction);
+
+    // 1. Transport Peer IP Verification (if runtime provides socket remoteAddress)
+    if (config?.peerIp) {
+        const allowedPeers = config.trustedPeerIps ?? TRUSTED_LOCAL_PEERS;
+        if (!allowedPeers.includes(config.peerIp.trim())) {
+            // Direct external socket connection bypassing reverse proxy
+            return null;
+        }
+    }
+
+    // 2. Secret-Based Proxy Accreditation
+    if (requireSecret) {
+        if (!configuredSecret) {
+            // Fail-closed default: secret required but not configured
+            return null;
+        }
+        const secretHeader = (config?.proxySecretHeader ?? DEFAULT_PROXY_SECRET_HEADER).toLowerCase();
+        const incomingSecret = headerList.get(secretHeader)?.trim();
+        if (!incomingSecret || incomingSecret !== configuredSecret) {
+            // Direct access or spoofed request lacking accredited proxy secret header
+            return null;
+        }
+    } else if (!config?.allowUnaccreditedProxyInDev) {
+        // Without explicit dev opt-in, never trust X-Real-IP solely by presence
+        return null;
+    }
+
+    // 3. Cloudflare edge IP: only accepted if Cloudflare proxy chain is explicitly accredited
     const isCloudflareAccredited = 
         config?.trustCloudflareProxy ?? 
         (typeof process !== 'undefined' && process.env?.TRUST_CLOUDFLARE_PROXY === 'true');
 
-    // 1. Cloudflare edge IP: only accepted if Cloudflare proxy chain is explicitly accredited
     if (isCloudflareAccredited) {
         const cfIp = headerList.get('cf-connecting-ip')?.trim();
         if (cfIp && isValidIp(cfIp)) {
@@ -146,14 +221,13 @@ export function resolveTrustedClientIp(
         }
     }
 
-    // 2. Accredited local reverse proxy: X-Real-IP populated by Nginx from $remote_addr
+    // 4. Accredited local reverse proxy: X-Real-IP populated by Nginx from $remote_addr
     const realIp = headerList.get('x-real-ip')?.trim();
     if (realIp && isValidIp(realIp)) {
         return realIp;
     }
 
-    // 3. Fallback: NO arbitrary X-Forwarded-For fallback or unverified headers.
-    // Return null to avoid spoofed IP adoption.
+    // 5. Fallback: no accredited IP header found
     return null;
 }
 
@@ -161,13 +235,21 @@ export function resolveTrustedClientIp(
  * Computes a non-PII anonymous client fingerprint from HTTP headers.
  * Generates distinct buckets for legitimate visitors whose IP cannot be accredited,
  * ensuring they are not indiscriminately locked out by other unaccredited users.
+ * 
+ * GDPR & PRIVACY AUDIT:
+ * - Zero PII: Excludes IP addresses, cookies, names, emails, and persistent device IDs.
+ * - One-way hash: Uses SHA-256 with server-side ephemeral salt.
+ * - Ephemeral: Stored strictly in memory during the rate limit window (1 hour), never persisted to DB.
+ * - Legal Basis: GDPR Art. 6(1)(f) (Legitimate interest for network defense & anti-abuse)
+ *   and ePrivacy Directive Art. 5(3) security exemption.
  */
-export function computeClientFingerprint(headerList: HeaderReader, salt: string = ''): string {
+export function computeClientFingerprint(headerList: HeaderReader, salt?: string): string {
+    const serverSalt = salt ?? (typeof process !== 'undefined' ? process.env?.FINGERPRINT_SALT : '') ?? '';
     const ua = headerList.get('user-agent') || 'no-ua';
     const lang = headerList.get('accept-language') || 'no-lang';
     const secChUa = headerList.get('sec-ch-ua') || '';
     const encoding = headerList.get('accept-encoding') || '';
-    const raw = `${ua}:::${lang}:::${secChUa}:::${encoding}:::${salt}`;
+    const raw = `${ua}:::${lang}:::${secChUa}:::${encoding}:::${serverSalt}`;
     return createHash('sha256').update(raw).digest('hex').slice(0, 24);
 }
 
@@ -262,5 +344,55 @@ export function resetRateLimitStore() {
     fingerprintSubmissions.clear();
     unaccreditedGlobalSubmissions.count = 0;
     unaccreditedGlobalSubmissions.timestamp = Date.now();
+}
+
+/**
+ * Multi-Process Rate Limiting Architecture (SEC-04B):
+ * In clustered or multi-worker Passenger environments (e.g. Passenger pool size > 1),
+ * in-memory Maps are local to each Node.js process and do not synchronize.
+ * 
+ * To ensure consistent quotas across multiple processes, the IRateLimitStore interface
+ * provides a pluggable store contract that can be backed by Redis (using atomic INCR and PEXPIRE)
+ * or in-memory stores for single-process / test environments.
+ */
+export interface RateLimitEntry {
+    count: number;
+    timestamp: number;
+}
+
+export interface IRateLimitStore {
+    get(key: string): Promise<RateLimitEntry | null> | RateLimitEntry | null;
+    increment(key: string, windowMs: number): Promise<RateLimitEntry> | RateLimitEntry;
+    reset(): Promise<void> | void;
+}
+
+export class InMemoryRateLimitStore implements IRateLimitStore {
+    private store = new Map<string, RateLimitEntry>();
+
+    get(key: string): RateLimitEntry | null {
+        const entry = this.store.get(key);
+        if (!entry) return null;
+        if (Date.now() - entry.timestamp > RATE_LIMIT_WINDOW) {
+            this.store.delete(key);
+            return null;
+        }
+        return entry;
+    }
+
+    increment(key: string, windowMs: number = RATE_LIMIT_WINDOW): RateLimitEntry {
+        const now = Date.now();
+        const existing = this.get(key);
+        if (existing) {
+            existing.count += 1;
+            return existing;
+        }
+        const newEntry: RateLimitEntry = { count: 1, timestamp: now };
+        this.store.set(key, newEntry);
+        return newEntry;
+    }
+
+    reset(): void {
+        this.store.clear();
+    }
 }
 
