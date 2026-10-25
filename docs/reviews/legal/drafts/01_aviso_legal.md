@@ -21,7 +21,7 @@ En cumplimiento de la legislación aplicable de la Unión Europea y de la Repúb
 - **Correo Electrónico para Privacidad y Protección de Datos:** privacy@printprice.pro *(Operativo en servidor de dominio)*
 - **Correo Electrónico para Reclamaciones e Incidencias:** claims@printprice.pro *(Operativo en servidor de dominio)*
 - **Sitio Web Oficial:** https://printprice.pro
-- **Alojamiento Web e Infraestructura Corporativa:** Servidor administrado bajo entorno Linux / Plesk alojado en IONOS SE (Alemania / Unión Europea) con IP pública `212.227.79.67` en Fráncfort am Main. Los servicios externos, destinatarios, accesos de soporte administrativo y evaluación de transferencias internacionales fuera del EEE constan como **[PENDIENTE DE INVENTARIO TÉCNICO COMPLETO Y DPA CON PROVEEDORES]** (no se deduce ausencia de transferencias únicamente de la ubicación de la IP de alojamiento).
+- **Alojamiento Web e Infraestructura Corporativa:** Servidor administrado bajo entorno Linux / Plesk alojado en IONOS SE (Alemania / Unión Europea) con IP pública `212.227.79.67` en Alemania (ubicación concreta en centro de datos de Fráncfort am Main clasificada como **[PENDIENTE DE EVIDENCIA CONTRACTUAL U OPERATIVA]**). Los servicios externos, destinatarios, accesos de soporte administrativo y evaluación de transferencias internacionales fuera del EEE constan como **[PENDIENTE DE INVENTARIO TÉCNICO COMPLETO Y DPA CON PROVEEDORES]** (no se deduce ausencia de transferencias únicamente de la ubicación de la IP de alojamiento).
 
 ---
 

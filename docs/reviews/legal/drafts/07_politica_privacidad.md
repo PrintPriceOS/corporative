@@ -45,19 +45,20 @@ Para una estricta transparencia conforme al RGPD, se desglosa el mapa de infraes
 
 4.1. **Proveedor y Ubicación del Alojamiento:**
 - **Proveedor:** IONOS SE (Elgendorfer Str. 57, 56410 Montabaur, Alemania).
-- **Ubicación física:** Servidor dedicado / VPS administrado mediante panel Plesk Obsidian, con dirección IP pública `212.227.79.67` en Fráncfort am Main (Alemania / Unión Europea).
+- **Ubicación física:** Servidor dedicado / VPS administrado mediante panel Plesk Obsidian, con dirección IP pública `212.227.79.67` en Alemania / Unión Europea. La localización concreta en centro de datos de Fráncfort am Main consta como **[PENDIENTE DE EVIDENCIA CONTRACTUAL U OPERATIVA]**.
 - **Estado de evidencia:** Comprobada la resolución de red de la web corporativa hacia dicha IP. La suscripción de contrato de hosting con DPA formal y la verificación del alcance de copias de seguridad constan como **[PENDIENTE DE AUDITORÍA CONTRACTUAL Y TÉCNICA EN PLESK]**.
 
 4.2. **Servicios Externos y Destinatarios:**
 - **Imprentas asociadas:** Únicamente la imprenta adjudicataria seleccionada por el cliente recibe los archivos de producción y datos de entrega para confeccionar la tirada contratada.
 - **Servicio de correo corporativo:** Operado sobre la infraestructura del servidor dedicado en Alemania para notificaciones de soporte y pedidos (@printprice.pro).
 - **Google LLC (Google Gemini Developer API):** Servicio externo de inferencia lingüística consumido vía REST en Control Plane (`calibrationAssistantService.js`) para asistencia en la calibración comercial de presupuestos. No trata archivos de preflight de clientes. **[PENDIENTE DE FORMALIZACIÓN CONTRACTUAL Y DPA EVALUANDO CONDICIONES DE RETENCIÓN]**.
-- **Cloudflare, Inc.:** Orígenes autorizados en cabeceras de Content Security Policy (CSP) en `proxy.ts`. El formulario de onboarding incluye un elemento visual placeholder de Turnstile sin integración activa.
+- **Cloudflare, Inc.:** Orígenes autorizados en cabeceras de Content Security Policy (CSP) en `proxy.ts`. El formulario de onboarding incluye un elemento visual placeholder de Turnstile sin integración activa **[PENDIENTE DE RETIRADA EN FRONTEND]**.
 - **Pasarelas de pago y entidades financieras:** **[PENDIENTE DE CONTRATACIÓN Y DEFINICIÓN OPERATIVA]**. El cobro de producción lo realiza directamente cada imprenta; la liquidación de comisiones del 4 % se gestionará mediante SEPA B2B o transferencia bancaria europea.
 - **Administraciones públicas:** Únicamente por imperativo legal (p. ej. reporte tributario DAC7 ante la *Valsts ieņēmumu dienests* — VID de Letonia).
 
 4.3. **Accesos de Soporte, Subencargados y Transferencias Internacionales:**
 - **Accesos administrativos y logs de servidor:** El acceso al servidor mediante SSH y panel Plesk Obsidian está restringido al personal técnico de administración de sistemas. Los formularios enviados al servidor (Server Action de onboarding) imprimen en consola datos como correos y nombres de empresa; su persistencia y rotación en los registros del supervisor de procesos constan como **[PENDIENTE DE AUDITORÍA OPERATIVA EN SERVIDOR]**.
+- **Correspondencia de versiones desplegadas:** El cotejo exacto entre los Git commit SHAs inspeccionados en local y las versiones en ejecución activa en producción consta como **[PENDIENTE OPERATIVO]**.
 - **Criterio riguroso sobre transferencias internacionales:** **No se deduce "cero transferencias" exclusivamente de una dirección IP, geolocalización o de capturas de red del navegador del cliente.** Las llamadas a la API de Gemini en Control Plane constituyen transferencias internacionales fuera del EEE que deben quedar formalmente amparadas en las Cláusulas Contractuales Tipo (SCC) aprobadas por la Comisión Europea y en los acuerdos corporativos correspondientes.
 
 ---

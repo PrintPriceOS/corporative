@@ -164,12 +164,13 @@ A pesar de la aprobación de los principios comerciales anteriores, constan como
 - **¿Bloquea su revisión interna?:** **Desbloqueado para redacción técnica veraz**; SÍ bloquea asegurar ausencia en backups.
 
 ### 6.2. Auditoría de Infraestructura, Copias de Seguridad y Transferencias
-- **Estado:** Comprobada la resolución de red de la web corporativa hacia la IP `212.227.79.67` (IONOS SE, Fráncfort, Alemania).
+- **Estado:** Comprobada la resolución de red de la web corporativa hacia la IP `212.227.79.67` (IONOS SE, Alemania / UE). La localización física concreta en centro de datos de Fráncfort am Main consta como **[PENDIENTE DE EVIDENCIA CONTRACTUAL U OPERATIVA]**. Asimismo, la correspondencia entre los Git commit SHAs inspeccionados en local y las versiones desplegadas en producción consta como **[PENDIENTE OPERATIVO]**.
 - **Criterio rector:** No deducir «cero transferencias» de una dirección IP, geolocalización o capturas de red del navegador del cliente.
 - **Evidencia requerida:**
-  1. Contrato formal de hosting con DPA europeo vinculante suscrito con IONOS SE.
-  2. Configuración de copias de seguridad remotas (ubicación geográfica del servidor de backup y cifrado en reposo).
+  1. Contrato formal de hosting con DPA europeo vinculante suscrito con IONOS SE (precisando centro de datos específico).
+  2. Configuración de copias de seguridad remotas (alcance, retención y posibles exclusiones de almacenamiento temporal).
   3. Inventario de accesos de soporte administrativo (SSH / Plesk) y herramientas de telemetría de servidor.
+  4. Cotejo de tags y hashes de versiones activas en producción para cada microservicio frente a los repositorios locales.
 - **Documentos afectados:** `07_politica_privacidad.md`, `11_registro_subencargados_proveedores.md`.
 - **¿Bloquea su revisión interna?:** **No bloquea su revisión interna**; SÍ bloquea declarar ausencia total de transferencias en producción.
 
@@ -183,6 +184,12 @@ A pesar de la aprobación de los principios comerciales anteriores, constan como
 - **Estado:** **[PROPUESTAS OPERATIVAS NO APROBADAS - SUJETAS A ESPECIFICACIONES DE TALLER]**.
 - **Evidencia requerida:** Recabar las especificaciones técnicas particulares de los talleres que se adhieran al marketplace para contrastar si las tolerancias mecánicas de ±1,5 mm y sobreproducción de ±3–5 % concuerdan con sus condiciones reales de taller.
 - **Documentos afectados:** `03_condiciones_autores_particulares.md`, `04_condiciones_editoriales_profesionales.md`.
+- **¿Bloquea su revisión interna?:** **No bloquea su revisión interna**.
+
+### 6.5. Corrección de Frontend: Retirada de Elemento Decorativo Turnstile
+- **Estado:** **[PENDIENTE DE CORRECCIÓN EN FRONTEND]**.
+- **Acción requerida:** Retirar de `components/monolith/PartnerOnboardingFlow.tsx` el elemento decorativo estático «Cloudflare Turnstile Verified» al carecer de una verificación funcional activa que justifique su presencia. No implementar Turnstile por iniciativa propia.
+- **Documentos afectados:** `CURRENT_STATE_AND_GAPS.md`, `AUDIT_FILE_PROCESSING_AND_PROVIDERS.md`.
 - **¿Bloquea su revisión interna?:** **No bloquea su revisión interna**.
 
 ---

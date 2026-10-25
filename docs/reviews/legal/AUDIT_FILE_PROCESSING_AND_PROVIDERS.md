@@ -1,6 +1,6 @@
 # Auditoría Técnica de Tratamiento Real de Archivos, Ciclo de Vida y Proveedores Externos
 
-**Versión:** v2.0 (Revisión de Rigor Metodológico y Grado de Certeza)  
+**Versión:** v2.1 (Ajustes de Rigor Metodológico, Despliegue y Grado de Certeza)  
 **Fecha de emisión:** 25 de octubre de 2026  
 **Repositorio principal:** `PrintPriceOS/corporative`  
 **Rama de trabajo:** `feat/comparisons-evidence-and-legal-policy-review`  
@@ -23,6 +23,8 @@ Todas las afirmaciones de esta auditoría se fundamentan en la inspección direc
 | **`ppos-control-plane`** | `PrintPriceOS/ppos-control-plane` | `44598a32f1713b9a6344f6d376ed0a4dbaa93b43` | Archivos seguidos limpios (`main`) | [Commit 44598a3](https://github.com/PrintPriceOS/ppos-control-plane/commit/44598a32f1713b9a6344f6d376ed0a4dbaa93b43) |
 | **`ppos-pricing-engine`** | `PrintPriceOS/ppos-pricing-engine` | `261e369a6c2239c70bf0b1cf2e7e6471d3642541` | Limpio (`main`) | [Commit 261e369](https://github.com/PrintPriceOS/ppos-pricing-engine/commit/261e369a6c2239c70bf0b1cf2e7e6471d3642541) |
 
+*Aviso de correspondencia operativa:* La correspondencia unívoca entre los commits Git inspeccionados localmente y los artefactos binarios o código en ejecución activa en cada servicio del servidor de producción se registra como **[PENDIENTE DE VERIFICACIÓN OPERATIVA EN DESPLIEGUE]**.
+
 ---
 
 ### 1.2. Taxonomía de Certeza y Grado de Evidencia
@@ -30,7 +32,8 @@ Todas las afirmaciones de esta auditoría se fundamentan en la inspección direc
 Para evitar atribuciones infundadas o sobreestimaciones de seguridad, los hechos de este informe se clasifican estrictamente en cuatro categorías:
 
 1. **[CÓDIGO OBSERVADO]:** Lógica, consultas SQL, middleware, controladores y estructuras de datos explícitamente presentes en el código fuente versionado.
-2. **[CONFIGURACIÓN DE PRODUCCIÓN COMPROBADA]:** Parámetros directamente verificados en la instancia activa en producción (p. ej., resolución DNS del dominio a IP `212.227.79.67` en IONOS SE Fráncfort, panel Plesk Obsidian 18.0.81).  
+2. **[CONFIGURACIÓN DE PRODUCCIÓN COMPROBADA]:** Parámetros directamente verificados en la instancia activa en producción (p. ej., resolución DNS del dominio a IP `212.227.79.67` en Alemania asignada a IONOS SE, panel Plesk Obsidian 18.0.81).  
+   *Aviso sobre localización física:* La localización concreta del centro de datos en Fráncfort am Main consta como **[PENDIENTE DE EVIDENCIA CONTRACTUAL U OPERATIVA]** (la resolución de red y whois acreditan el operador IONOS SE y país Alemania, pero no su ciudad/datacenter concreto sin contrato o factura).  
    *Aviso metodológico:* Los archivos de plantilla o staging (`.env.example`, `.env.staging.example`, `docker-compose.staging.yml`) **no** se describen como configuración de producción activa.
 3. **[PRUEBA EJECUTADA]:** Comportamiento verificado mediante la ejecución de suites de test automatizadas o simulaciones reproducibles (p. ej., pruebas de almacenamiento local en Playwright).
 4. **[HIPÓTESIS O PENDIENTE]:** Circunstancias operativas, contractuales o de infraestructura cuya verificación requiere acceso administrativo o contractual aún no disponible.
@@ -73,7 +76,7 @@ La purga de archivos la gestiona la clase `StorageCleanupWorker` en `ppos-prefli
    - **Timestamp de referencia (`created_at`):** El contador de 24 horas comienza cuando se crea el registro del trabajo en la base de datos (al inicio de la carga), **no** cuando concluye el procesamiento ni cuando el usuario recibe el enlace de descarga. Si el análisis o reparación tarda varios minutos, la ventana de descarga disponible posterior al procesamiento es inferior a 24 horas.
    - **Estados incluidos:** Únicamente trabajos en estado `'COMPLETED'` o `'FAILED'`. Los estados `'PROCESSING'`, `'QUEUED'`, o variantes no entran en la selección.
    - **Ventana real de borrado (24 a 25+ horas):** Al ejecutarse el worker a intervalos de 1 hora, un trabajo que cumpla las 24 horas inmediatamente después de un pase no será procesado hasta la siguiente iteración (hasta 59 minutos después). Por tanto, el umbral de 24 horas no representa un plazo exacto ni un máximo garantizado de permanencia.
-   - **Terminología inapropiada:** No procede calificar este umbral en documentos legales o comerciales como «improrrogable», «irrecuperable» o «máximo garantizado».
+   - **Terminología inapropiada:** No procede calificar este umbral en documentos legales o comerciales como «improrrogable», «irrecuperable», «sin conservación indefinida» ni «máximo garantizado».
 
 4. **Métodos reales de borrado físico y en base de datos:**
    - Para cada trabajo seleccionado en el bucle:
@@ -118,22 +121,28 @@ Para evitar confusiones en los compromisos legales, se distingue con rigor entre
 
 | Proveedor / Destinatario | Dependencia / Módulo | Estado de Integración | Destino en CSP | Transmisión Verificada | Función y Evaluación |
 | :--- | :--- | :--- | :---: | :---: | :--- |
-| **IONOS SE** (Alemania) | Infraestructura de hosting | Activo en producción | N/A | **SÍ** | **[CONFIGURACIÓN DE PRODUCCIÓN COMPROBADA]:** Servidor en Fráncfort am Main (IP `212.227.79.67`). Aloja el sistema y correo. Requiere formalizar DPA europeo. |
+| **IONOS SE** (Alemania) | Infraestructura de hosting | Activo en producción | N/A | **SÍ** | **[CONFIGURACIÓN DE PRODUCCIÓN COMPROBADA]:** Alojamiento en servidor con IP pública `212.227.79.67` asignada a IONOS SE (Alemania / UE). La ubicación física concreta en centros de datos de Fráncfort am Main consta como **[PENDIENTE DE CONTRATO O EVIDENCIA OPERATIVA CONCRETA]**. Requiere formalizar DPA europeo. |
 | **Google LLC** (Gemini API) | `axios` (REST) en `ppos-control-plane` (`aiProviderAdapter.js`) | Integrado para asistente B2B (`calibrationAssistantService.js`). Requiere `GEMINI_API_KEY`. | No (llamada backend) | No verificada en este ciclo (requiere credencial activa) | **[CÓDIGO OBSERVADO]:** Llama al endpoint `https://generativelanguage.googleapis.com/v1beta/` (Google AI Studio / Gemini Developer API), **no** a Google Cloud Vertex AI.<br>*Distinción técnica y contractual:* En Gemini Developer API de pago, Google no entrena con datos del cliente, pero puede aplicar retenciones operativas temporales (distintas de la retención cero). No se debe imponer una contratación concreta (como Vertex AI) sin evaluar el servicio y contrato efectivamente utilizados. Fix it (Preflight) **no** utiliza este servicio. |
-| **Cloudflare, Inc.** | Cabeceras en `proxy.ts` | Parcial / UI Placeholder | `https://static.cloudflareinsights.com`<br>`https://challenges.cloudflare.com` | **NO** | **[CÓDIGO OBSERVADO]:** Autorizado en directivas CSP (`script-src`, `frame-src`). En `PartnerOnboardingFlow.tsx:631` existe únicamente un elemento decorativo estático (`Cloudflare Turnstile Verified`) con el comentario explícito: *«Real Turnstile would inject here. This is the PPOS v2.5 UI placeholder»*. No hay widget activo transmitiendo datos. |
+| **Cloudflare, Inc.** | Cabeceras en `proxy.ts` | Parcial / UI Placeholder | `https://static.cloudflareinsights.com`<br>`https://challenges.cloudflare.com` | **NO** | **[CÓDIGO OBSERVADO]:** Autorizado en directivas CSP (`script-src`, `frame-src`). En `PartnerOnboardingFlow.tsx:631` existe únicamente un elemento decorativo estático (`Cloudflare Turnstile Verified`) con el comentario explícito: *«Real Turnstile would inject here. This is the PPOS v2.5 UI placeholder»*. No hay widget activo transmitiendo datos.<br>**[PENDIENTE DE CORRECCIÓN EN FRONTEND]:** Retirar dicho indicador decorativo, ya que no existe una verificación funcional que justifique mostrarlo. No debe implementarse Turnstile por iniciativa propia. |
 | **Report-URI** (`report-uri.com`) | Ninguna en código | No configurado | No | **NO** | **[CÓDIGO OBSERVADO]:** Servicio externo independiente de recolección de reportes de seguridad web (no perteneciente a Cloudflare). No está configurado en las directivas CSP de `proxy.ts`. No debe asociarse a Cloudflare ni a la configuración actual sin evidencia. |
 | **Stripe, Inc.** | SDK Stripe en `ppos-control-plane` (`adminBilling.js`) | Integrado en backend | No (llamada backend) | **NO** | **[CÓDIGO OBSERVADO]:** Implementación con comportamiento fail-closed (deshabilitado si falta configuración o si `PAYMENT_EXECUTION_ENABLED=false`). |
 | **Imprentas Asociadas de la Red** | Modelo de marketplace de Print it | Comercial | N/A | Condicionado a pedido | Destinatarios comerciales que reciben los archivos de fabricación y datos de envío únicamente tras la compra efectiva. |
 
 ---
 
-### 4.2. Delimitación de Ausencia de IA en Preflight (Fix it)
+### 4.2. Delimitación de Ausencia de IA en Preflight frente a Garantías Generales
 
-- **Alcance de la conclusión:** La afirmación de ausencia de modelos de aprendizaje automático, redes neuronales o llamadas externas se circunscribe estrictamente al código y recorrido de ejecución analizados en `ppos-preflight-service`, `ppos-preflight-worker` y `ppos-preflight-engine`.
-- **Componentes analizados en dicho flujo:**
-  - Binarios CLI ejecutados localmente: `gs` (Ghostscript), `qpdf`, `mutool`, `pdfinfo`, `pdffonts`, `pdfimages`, `exiftool`.
-  - Librerías JavaScript de manipulación: `pdf-lib`, `pdfjs-dist`.
-  - Operativa: La inspección y reparación geométrica, corrección de sangrado, remapeo de espacios de color e incrustación de perfiles ICC se resuelven mediante parámetros deterministas de dichas herramientas locales, sin invocación de endpoints remotos ni modelos predictivos.
+1. **Conclusión restringida al recorrido de código inspeccionado:**
+   - En el código fuente y flujo de ejecución analizados de `ppos-preflight-service`, `ppos-preflight-worker` y `ppos-preflight-engine`, las operaciones de validación y reparación se sustentan exclusivamente en herramientas locales deterministas (`gs`, `qpdf`, `mutool`, `pdfinfo`, `pdffonts`, `pdfimages`, `exiftool`) y librerías JavaScript de parsing (`pdf-lib`, `pdfjs-dist`).
+   - En este recorrido concreto no se observan modelos predictivos, redes neuronales ni llamadas de red salientes a servicios de inferencia.
+
+2. **Diferenciación frente a garantías generales de «no entrenamiento» o «no transmisión a terceros»:**
+   - La ausencia de llamadas en el código local de Preflight no equivale por sí sola a una garantía universal aplicable a todo el ecosistema de producción ni sustituye los títulos jurídicos necesarios para formular garantías públicas.
+   - Declarar con validez legal garantías generales sobre ausencia de entrenamiento o no cesión a terceros requiere **evidencia adicional**, en particular:
+     - Cotejo operativo de que la versión desplegada en producción coincide exactamente con el código inspeccionado.
+     - Auditoría del tráfico de red y procesos activos en el servidor de producción.
+     - Términos contractuales y Acuerdos de Encargo de Tratamiento (DPA) suscritos con los proveedores de hosting y conectividad.
+     - En el ámbito B2B de Control Plane (donde sí se consume la API de Gemini), acuerdos contractuales formales que regulen la retención operativa y excluyan el entrenamiento.
 
 ---
 
@@ -170,16 +179,16 @@ Las siguientes redacciones están formuladas para su valoración interna y event
 
 ### 6.1. Ciclo de Vida y Tratamiento Temporal de Archivos (Preflight / Fix it)
 
-*Sustituye la afirmación de «borrado automático tras la descarga o generación del informe» y «entornos volátiles».*
+*Sustituye la afirmación de «borrado automático tras la descarga o generación del informe» y «entornos volátiles». Se retira expresamente cualquier mención a «sin conservación indefinida» o equivalentes, sin sustituirla por otra garantía de borrado, manteniendo explícitos los límites del worker y los pendientes de backups documentados en las secciones 2 y 3.*
 
 * **Español (ES):**  
-  «Los documentos PDF cargados para verificación técnica se almacenan de forma temporal en el servidor con el fin exclusivo de permitir el análisis forense, la aplicación de reparaciones y la puesta a disposición de los informes y archivos resultantes para su descarga. El sistema ejecuta rutinas periódicas de saneamiento automatizado para la eliminación programada de dichos archivos y sus registros asociados, sin conservación indefinida. Los archivos no se transfieren a terceros ajenos a la prestación técnica solicitada.»
+  «Los documentos PDF cargados para verificación técnica se almacenan de forma temporal en el servidor con el fin exclusivo de permitir el análisis forense, la aplicación de reparaciones y la puesta a disposición de los informes y archivos resultantes para su descarga. El sistema ejecuta rutinas periódicas de saneamiento automatizado para la eliminación programada de dichos archivos y sus registros asociados. Los archivos no se transfieren a terceros ajenos a la prestación técnica solicitada en el recorrido técnico analizado.»
 
 * **Inglés (EN):**  
-  "PDF documents uploaded for technical verification are stored temporarily on the server solely to enable preflight analysis, automated corrections, and the retrieval of resulting reports and files. The system runs routine automated cleanup processes for scheduled deletion of these files and related records, without indefinite retention. Files are not shared with third parties beyond the requested technical service."
+  "PDF documents uploaded for technical verification are stored temporarily on the server solely to enable preflight analysis, automated corrections, and the retrieval of resulting reports and files. The system runs routine automated cleanup processes for scheduled deletion of these files and related records. Files are not transferred to third parties outside the technical processing path inspected."
 
 * **Alemán (DE):**  
-  "Zur technischen Prüfung hochgeladene PDF-Dokumente werden temporär auf dem Server gespeichert, ausschließlich um die Druckdatenprüfung, automatische Korrekturen sowie den Abruf von Prüfberichten und Ergebnisdateien zu ermöglichen. Das System führt regelmäßige, automatisierte Bereinigungsroutinen zur planmäßigen Löschung dieser Dateien und zugehörigen Datensätze durch, ohne unbefristete Aufbewahrung. Dateien werden nicht an Dritte außerhalb der angeforderten technischen Verarbeitung weitergegeben."
+  "Zur technischen Prüfung hochgeladene PDF-Dokumente werden temporär auf dem Server gespeichert, ausschließlich um die Druckdatenprüfung, automatische Korrekturen sowie den Abruf von Prüfberichten und Ergebnisdateien zu ermöglichen. Das System führt regelmäßige, automatisierte Bereinigungsroutinen zur planmäßigen Löschung dieser Dateien und zugehörigen Datensätze durch. Dateien werden im analysierten technischen Verarbeitungspfad nicht an Dritte weitergegeben."
 
 ---
 
@@ -203,13 +212,13 @@ Las siguientes redacciones están formuladas para su valoración interna y event
 *Sustituye declaraciones genéricas o absolutas sobre IA en todo el ecosistema.*
 
 * **Español (ES):**  
-  «Las comprobaciones técnicas y correcciones de archivos en Fix it se fundamentan en herramientas deterministas de código abierto y reglas de ingeniería gráfica, sin emplear modelos de lenguaje ni redes neuronales para modificar el contenido de sus obras. Los documentos aportados para la comprobación gráfica no se destinan al entrenamiento de modelos de inteligencia artificial.»
+  «Las comprobaciones técnicas y correcciones de archivos en Fix it se fundamentan en herramientas deterministas de código abierto y reglas de ingeniería gráfica, sin emplear modelos de lenguaje ni redes neuronales para modificar el contenido de sus obras. Los documentos aportados para la comprobación gráfica no se destinan al entrenamiento de modelos de inteligencia artificial en el flujo técnico verificado.»
 
 * **Inglés (EN):**  
-  "Technical preflight checks and corrections in Fix it rely on deterministic open-source tools and graphic engineering standards, without using language models or neural networks to alter manuscript content. Documents submitted for preflight inspection are not used to train artificial intelligence models."
+  "Technical preflight checks and corrections in Fix it rely on deterministic open-source tools and graphic engineering standards, without using language models or neural networks to alter manuscript content. Documents submitted for preflight inspection are not used to train artificial intelligence models in the verified technical pipeline."
 
 * **Alemán (DE):**  
-  "Die technische Prüfung und Korrektur in Fix it basiert auf deterministischen Open-Source-Werkzeugen und Standards der Druckvorstufe, ohne Sprachmodelle oder neuronale Netze zur inhaltlichen Veränderung Ihrer Werke einzusetzen. Zur Druckdatenprüfung eingereichte Dokumente werden nicht für das Training von KI-Modellen verwendet."
+  "Die technische Prüfung und Korrektur in Fix it basiert auf deterministischen Open-Source-Werkzeugen und Standards der Druckvorstufe, ohne Sprachmodelle oder neuronale Netze zur inhaltlichen Veränderung Ihrer Werke einzusetzen. Zur Druckdatenprüfung eingereichte Dokumente werden in der verifizierten technischen Pipeline nicht für das Training von KI-Modellen verwendet."
 
 ---
 
@@ -217,9 +226,11 @@ Las siguientes redacciones están formuladas para su valoración interna y event
 
 | Área de Revisión | Hecho Verificado (Evidencia de Código o Configuración) | Pendiente Concreto (Aspecto Operativo o Jurídico) | Clasificación de Certeza |
 | :--- | :--- | :--- | :---: |
-| **Ciclo de vida Preflight** | `StorageCleanupWorker` consulta cada 1 hora trabajos en estado `COMPLETED` o `FAILED` con `created_at < NOW() - 24h` y ejecuta `deleteJobStorage()` y borrado en BD. La descarga no borra el archivo. | Decidir formalmente si se mantiene este modelo de purga periódica o si se añade un mecanismo de borrado inmediato tras descarga o por solicitud del usuario. Evaluar propuesta de saneamiento de trabajos bloqueados. | **[CÓDIGO OBSERVADO]** / Pendiente de decisión de producto |
-| **Copias de seguridad** | Los archivos residen en almacenamiento local del servidor host durante el ciclo del worker. No existen reglas de backup ni exclusiones en los repositorios de código. | Auditar en Plesk Obsidian y en el hipervisor de IONOS SE el alcance, programación, retención y posibles reglas de exclusión de las copias de seguridad de la ruta de almacenamiento temporal. | **[PENDIENTE]** |
-| **Inteligencia Artificial en Preflight** | Fix it utiliza exclusivamente binarios locales deterministas (`gs`, `qpdf`, `mutool`, `exiftool`) y librerías de parsing locales en el recorrido inspeccionado. | Ninguno en este flujo específico. La ausencia de IA está acreditada en el código inspeccionado. | **[CÓDIGO OBSERVADO]** |
+| **Correspondencia de Versiones** | Commits Git inspeccionados localmente en cada repositorio del ecosistema. | Cotejar la correspondencia exacta entre los Git commit SHAs inspeccionados en local y las versiones / builds efectivamente desplegadas y activas en producción para cada servicio. | **[PENDIENTE OPERATIVO]** |
+| **Ubicación de Alojamiento** | Servidor con IP pública `212.227.79.67` en Alemania asignada a IONOS SE. | Confirmar mediante contrato o factura técnica la ubicación física concreta del centro de datos en Fráncfort am Main frente a otras sedes de IONOS SE en Alemania / UE. | **[PENDIENTE CONTRACTUAL / OPERATIVO]** |
+| **Ciclo de vida Preflight** | `StorageCleanupWorker` consulta cada 1 hora trabajos en estado `COMPLETED` o `FAILED` con `created_at < NOW() - 24h` y ejecuta `deleteJobStorage()` y borrado en BD. La descarga no borra el archivo. | Decidir formalmente si se mantiene este modelo de purga periódica o si se añade un mecanismo de borrado inmediato tras descarga o por solicitud del usuario. Evaluar propuesta de saneamiento de trabajos bloqueados. | **[CÓDIGO OBSERVADO]** / Pendiente de producto |
+| **Copias de seguridad** | Los archivos residen en almacenamiento local del servidor host durante el ciclo del worker. No existen reglas de backup ni exclusiones en los repositorios de código. | Auditar en Plesk Obsidian y en el hipervisor de IONOS SE el alcance, programación, retención y posibles reglas de exclusión de las copias de seguridad de la ruta de almacenamiento temporal. | **[PENDIENTE OPERATIVO]** |
+| **Inteligencia Artificial en Preflight** | Fix it utiliza exclusivamente binarios locales deterministas (`gs`, `qpdf`, `mutool`, `exiftool`) y librerías de parsing locales en el recorrido inspeccionado. | Garantías generales sobre no entrenamiento o no cesión universal en el ecosistema requieren evidencia adicional (auditoría de red en servidor y DPAs vinculantes). | **[CÓDIGO OBSERVADO]** / Pendiente de evidencia adicional |
 | **Inteligencia Artificial en Control Plane** | `aiProviderAdapter.js` invoca la API REST de Google Gemini (`generativelanguage.googleapis.com`) para el asistente de calibración de matrices en B2B. | Evaluar las condiciones contractuales del servicio efectivamente utilizado (Gemini Developer API vs. alternativas) y formalizar el DPA con las garantías pertinentes de tratamiento de datos antes del lanzamiento comercial. | **[CÓDIGO OBSERVADO]** / Pendiente contractual |
-| **Proveedores y CSP** | `proxy.ts` autoriza orígenes de Cloudflare en cabeceras CSP. El componente de onboarding incluye un elemento estático decorativo de Turnstile sin integración activa. | Determinar si se implementará la integración funcional de Cloudflare Turnstile antes de formalizarlo en políticas públicas. Aclarar que `report-uri.com` no forma parte de la configuración. | **[CÓDIGO OBSERVADO]** |
+| **Proveedores y CSP** | `proxy.ts` autoriza orígenes de Cloudflare en cabeceras CSP. El componente de onboarding incluye un elemento estático decorativo de Turnstile sin integración activa. | Retirar en `PartnerOnboardingFlow.tsx` el indicador decorativo «Cloudflare Turnstile Verified» al carecer de verificación funcional que justifique mostrarlo (sin implementar Turnstile por iniciativa propia). | **[CÓDIGO OBSERVADO]** / Pendiente de corrección en frontend |
 | **Datos y Formularios Corporativos** | `telemetry.ts` almacena eventos únicamente en `localStorage` bajo consentimiento. `actions.ts` valida el formulario en servidor e imprime logs en consola con correos y nombres de empresa, sin persistencia en BD. | Auditar la retención y rotación de los registros de consola en el supervisor de procesos del servidor de producción. | **[CÓDIGO OBSERVADO]** / Pendiente operativo |
