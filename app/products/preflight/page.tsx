@@ -110,11 +110,11 @@ export default function PreflightProductPage() {
 
       demoPill: 'DEMOSTRACIÓN TÉCNICA',
       demoTitle: 'Informe de ejemplo (Demostración interactiva)',
-      demoNotice: 'Extracto real de un análisis sobre un documento de prueba (64 páginas, papel estucado 135 g). Etiquetado explícitamente como muestra técnica.',
+      demoNotice: 'Ejemplo ilustrativo / informe sintético de demostración para visualización de la interfaz de diagnóstico.',
       demoReport: {
         docLabel: 'DOCUMENTO: guia_editorial_muestra_v2.pdf',
         status: 'REVISIÓN REQUERIDA',
-        sampleBadge: 'Caso de ejemplo demostrativo • Perfil: OFFSET_STANDARD_F51 • 64 págs.',
+        sampleBadge: 'Caso de ejemplo demostrativo sintético • Perfil de referencia: OFFSET_STANDARD_F51 • 64 págs.',
         riskLabel: 'ÍNDICE DE RIESGO',
         items: [
           {
@@ -140,7 +140,7 @@ export default function PreflightProductPage() {
             title: 'Páginas 12, 19: Texto corrido de 9 pt compuesto en C:60 M:50 Y:50 K:100',
             category: 'TINTA / TAC',
             desc: 'Riesgo de falta de registro en prensa offset para tipografía pequeña.',
-            action: 'Corrección automática disponible: Re-mapear texto fino exclusivamente a 100% Black (K).',
+            action: 'Recomendación de maquetación: Configurar tipografía fina al 100% Black (K) en el software de origen para evitar desajustes de registro.',
             color: '#3b82f6',
             type: 'info'
           }
@@ -151,6 +151,7 @@ export default function PreflightProductPage() {
       compPill: 'ANÁLISIS DOCUMENTAL COMPARATIVO',
       compTitle: 'Comparativa objetiva de soluciones de Preflight',
       compSubtitle: 'Basado en la documentación técnica oficial vigente de cada producto (Revisión: Octubre 2026). Entrega de capacidades contrastadas sin superlativos comerciales.',
+      compSourcesNote: '* Fuentes oficiales y metodología (Revisión: Octubre 2026): Adobe Acrobat Pro (Guía del usuario - Herramienta Comprobaciones y perfiles de corrección, Adobe Help Center); Enfocus PitStop Pro & PitStop Server (Manual técnico v2024/2025 y Especificaciones de producto, Enfocus Documentation); callas software pdfToolbox (Feature Matrix y Manual de pdfToolbox Server/CLI/SDK, callas Help); Ghent Workgroup (Especificaciones de conformidad GWG). Datos referidos a las capacidades documentadas de cada edición de escritorio o servidor.',
       tabIndividual: 'A. Particulares y Editoriales',
       tabPro: 'B. Flujos Profesionales e Imprentas',
       scrollTableHint: '⇄ Desplaza horizontalmente para ver la tabla completa',
@@ -165,7 +166,7 @@ export default function PreflightProductPage() {
           {
             criterion: 'Forma de acceso',
             p1Status: 'Disponible',
-            p1Desc: 'Navegador web (SaaS cloud). Acceso mediante cuenta gratuita o enlace mágico.',
+            p1Desc: 'Navegador web (SaaS cloud). Acceso mediante portal web en preflight.printprice.pro.',
             p2Status: 'Disponible',
             p2Desc: 'Escritorio local (macOS / Windows).',
             p3Status: 'Disponible',
@@ -208,9 +209,9 @@ export default function PreflightProductPage() {
             p3Desc: 'Edición quirúrgica profunda de vectores, textos, trazados y tintas en el propio PDF.'
           },
           {
-            criterion: 'Modelo de licencia',
+            criterion: 'Modelo de acceso',
             p1Status: 'Disponible',
-            p1Desc: 'Uso individual freemium en web; planes por volumen y API para empresas.',
+            p1Desc: 'Acceso web para validación de archivos; API REST para integración técnica.',
             p2Status: 'Disponible',
             p2Desc: 'Suscripción mensual o anual a Adobe Creative Cloud o Acrobat Pro.',
             p3Status: 'Disponible',
@@ -235,13 +236,13 @@ export default function PreflightProductPage() {
             p3Desc: 'Process Plans con lógica condicional avanzada, JavaScript y perfiles GWG.'
           },
           {
-            dimension: 'Estándares y alcance',
-            p1Status: 'Disponible',
-            p1Desc: 'Evaluación de conformidad ISO 15930 (PDF/X-1a, PDF/X-4) con integración veraPDF.',
-            p2Status: 'Disponible',
-            p2Desc: 'Validación completa de PDF/X-1a hasta PDF/X-6 y especificaciones Ghent Workgroup.',
-            p3Status: 'Disponible',
-            p3Desc: 'Motor de referencia oficial para la Ghent Workgroup e ISO (PDF/X, PDF/A, PDF/VT).'
+            dimension: 'Inspección de estándares PDF/X',
+            p1Status: 'Disponible (Inspección)',
+            p1Desc: 'Comprobación técnica de reglas basadas en PDF/X (PDF/X-1a, PDF/X-4). No constituye certificación formal de producto por organismo acreditador.',
+            p2Status: 'Disponible (Certificación GWG)',
+            p2Desc: 'Validación completa de PDF/X y certificación con perfiles oficiales Ghent Workgroup.',
+            p3Status: 'Disponible (Certificación GWG)',
+            p3Desc: 'Motor de referencia oficial empleado en suites de prueba GWG e ISO (PDF/X, PDF/A, PDF/VT).'
           },
           {
             dimension: 'Procesamiento por lotes',
@@ -405,11 +406,11 @@ export default function PreflightProductPage() {
 
       demoPill: 'TECHNICAL DEMONSTRATION',
       demoTitle: 'Sample Diagnostic Report (Interactive Demo)',
-      demoNotice: 'Real extract from an internal audit on a sample book interior (64 pages, 135 gsm coated stock). Explicitly labeled as a demonstration.',
+      demoNotice: 'Illustrative example / synthetic demonstration report for previewing the diagnostic interface.',
       demoReport: {
         docLabel: 'DOCUMENT: publishing_sample_guide_v2.pdf',
         status: 'REVIEW REQUIRED',
-        sampleBadge: 'Demonstrative sample case • Profile: OFFSET_STANDARD_F51 • 64 pp.',
+        sampleBadge: 'Synthetic illustrative sample case • Reference profile: OFFSET_STANDARD_F51 • 64 pp.',
         riskLabel: 'RISK SCORE',
         items: [
           {
@@ -435,7 +436,7 @@ export default function PreflightProductPage() {
             title: 'Pages 12, 19: 9 pt body text composed in C:60 M:50 Y:50 K:100',
             category: 'INK / TAC',
             desc: 'Misregistration risk on offset press for small body typography.',
-            action: 'Automated fix available: Remap small body text strictly to 100% Black (K).',
+            action: 'Layout recommendation: Configure fine typography to 100% Black (K) in the original layout software to prevent misregistration.',
             color: '#3b82f6',
             type: 'info'
           }
@@ -445,6 +446,7 @@ export default function PreflightProductPage() {
       compPill: 'COMPARATIVE DOCUMENTARY ANALYSIS',
       compTitle: 'Objective Comparison of Preflight Solutions',
       compSubtitle: 'Based on official in-force technical documentation of each product (Revision: October 2026). Clear presentation of verified capabilities without sales superlatives.',
+      compSourcesNote: '* Official sources & methodology (Revision: October 2026): Adobe Acrobat Pro (User Guide - Preflight tool & fixup profiles, Adobe Help Center); Enfocus PitStop Pro & PitStop Server (Technical Manual v2024/2025 & Product Specifications, Enfocus Documentation); callas software pdfToolbox (Feature Matrix & pdfToolbox Server/CLI/SDK Manual, callas Help); Ghent Workgroup (GWG Compliance Specifications). Data pertains to documented capabilities of each desktop or server edition.',
       tabIndividual: 'A. Creators & Publishers',
       tabPro: 'B. Professional Workflows & Plants',
       scrollTableHint: '⇄ Scroll horizontally to view full table',
@@ -459,7 +461,7 @@ export default function PreflightProductPage() {
           {
             criterion: 'Access Mode',
             p1Status: 'Available',
-            p1Desc: 'Web browser (cloud SaaS). Access via free account or magic link.',
+            p1Desc: 'Web browser (cloud SaaS). Access via web portal at preflight.printprice.pro.',
             p2Status: 'Available',
             p2Desc: 'Local desktop workstation (macOS / Windows).',
             p3Status: 'Available',
@@ -502,9 +504,9 @@ export default function PreflightProductPage() {
             p3Desc: 'Surgical in-depth editing of vectors, text curves, paths, and separations in the PDF.'
           },
           {
-            criterion: 'Licensing Model',
+            criterion: 'Access Model',
             p1Status: 'Available',
-            p1Desc: 'Individual freemium web tier; volume credits and REST API for enterprise.',
+            p1Desc: 'Web-based file validation; REST API for technical integration.',
             p2Status: 'Available',
             p2Desc: 'Monthly or annual subscription to Adobe Creative Cloud or Acrobat Pro.',
             p3Status: 'Available',
@@ -529,12 +531,12 @@ export default function PreflightProductPage() {
             p3Desc: 'Process Plans with advanced conditional logic, JavaScript, and GWG profiles.'
           },
           {
-            dimension: 'Standards & Scope',
-            p1Status: 'Available',
-            p1Desc: 'ISO 15930 compliance evaluation (PDF/X-1a, PDF/X-4) with veraPDF integration.',
-            p2Status: 'Available',
+            dimension: 'PDF/X Standards Inspection',
+            p1Status: 'Available (Inspection)',
+            p1Desc: 'Technical rule checking based on PDF/X (PDF/X-1a, PDF/X-4). Does not constitute formal product certification by an accredited body.',
+            p2Status: 'Available (GWG Certification)',
             p2Desc: 'Full validation from PDF/X-1a through PDF/X-6 and Ghent Workgroup specs.',
-            p3Status: 'Available',
+            p3Status: 'Available (GWG Certification)',
             p3Desc: 'Official reference engine for the Ghent Workgroup and ISO (PDF/X, PDF/A, PDF/VT).'
           },
           {
@@ -699,11 +701,11 @@ export default function PreflightProductPage() {
 
       demoPill: 'TECHNISCHE DEMONSTRATION',
       demoTitle: 'Beispielbericht (Interaktive Demonstration)',
-      demoNotice: 'Auszug aus einem internen Testdokument (64 Seiten, 135 g Bilderdruckpapier). Ausdrücklich als Demonstration gekennzeichnet.',
+      demoNotice: 'Anschauliches Beispiel / synthetischer Demonstrationsbericht zur Vorschau der Diagnoseoberfläche.',
       demoReport: {
         docLabel: 'DOKUMENT: verlagsleitfaden_muster_v2.pdf',
         status: 'PRÜFUNG ERFORDERLICH',
-        sampleBadge: 'Demonstrativer Beispielfall • Profil: OFFSET_STANDARD_F51 • 64 S.',
+        sampleBadge: 'Synthetischer anschaulicher Beispielfall • Referenzprofil: OFFSET_STANDARD_F51 • 64 S.',
         riskLabel: 'RISIKOINDEX',
         items: [
           {
@@ -729,7 +731,7 @@ export default function PreflightProductPage() {
             title: 'Seiten 12, 19: 9-pt-Fließtext aufgebaut aus C:60 M:50 Y:50 K:100',
             category: 'FARBAUFTRAG / TAC',
             desc: 'Passerungenauigkeitsrisiko im Offsetdruck bei kleiner Fließtexttypografie.',
-            action: 'Automatische Korrektur verfügbar: Feinen Text rein auf 100% Schwarz (K) umwandeln.',
+            action: 'Layout-Empfehlung: Feine Typografie in der ursprünglichen Layoutsoftware auf 100% Black (K) einstellen, um Passfehler zu vermeiden.',
             color: '#3b82f6',
             type: 'info'
           }
@@ -739,6 +741,7 @@ export default function PreflightProductPage() {
       compPill: 'DOKUMENTARISCHE VERGLEICHSANALYSE',
       compTitle: 'Objektiver Vergleich von Preflight-Lösungen',
       compSubtitle: 'Basierend auf der offiziell gültigen technischen Dokumentation der einzelnen Produkte (Stand: Oktober 2026). Sachliche Gegenüberstellung ohne werbliche Übertreibung.',
+      compSourcesNote: '* Offizielle Quellen & Methodik (Stand: Oktober 2026): Adobe Acrobat Pro (Benutzerhandbuch - Preflight-Werkzeug & Korrekturprofile, Adobe Help Center); Enfocus PitStop Pro & PitStop Server (Technisches Handbuch v2024/2025 & Produktspezifikationen, Enfocus Documentation); callas software pdfToolbox (Funktionsmatrix & pdfToolbox Server/CLI/SDK-Handbuch, callas Help); Ghent Workgroup (GWG-Konformitätsspezifikationen). Angaben beziehen sich auf die dokumentierten Funktionen der jeweiligen Desktop- bzw. Server-Edition.',
       tabIndividual: 'A. Privatpersonen & Verlage',
       tabPro: 'B. Professionelle Workflows & Druckereien',
       scrollTableHint: '⇄ Horizontal wischen für die vollständige Tabelle',
@@ -753,7 +756,7 @@ export default function PreflightProductPage() {
           {
             criterion: 'Zugangsart',
             p1Status: 'Verfügbar',
-            p1Desc: 'Webbrowser (Cloud-SaaS). Zugriff über kostenloses Konto oder Magic Link.',
+            p1Desc: 'Webbrowser (Cloud-SaaS). Zugriff über Webportal auf preflight.printprice.pro.',
             p2Status: 'Verfügbar',
             p2Desc: 'Lokaler Desktop (macOS / Windows).',
             p3Status: 'Verfügbar',
@@ -796,9 +799,9 @@ export default function PreflightProductPage() {
             p3Desc: 'Chirurgisch präzise Bearbeitung von Vektoren, Pfaden, Schriften und Farbauszügen im PDF.'
           },
           {
-            criterion: 'Lizenzmodell',
+            criterion: 'Zugriffsmodell',
             p1Status: 'Verfügbar',
-            p1Desc: 'Individuelle Freemium-Nutzung im Web; Volumen-Credits und REST-API für Unternehmen.',
+            p1Desc: 'Webbasierte Dateiprüfung; REST-API für technische Integration.',
             p2Status: 'Verfügbar',
             p2Desc: 'Monats- oder Jahresabonnement von Adobe Creative Cloud oder Acrobat Pro.',
             p3Status: 'Verfügbar',
@@ -823,12 +826,12 @@ export default function PreflightProductPage() {
             p3Desc: 'Process Plans mit fortgeschrittener bedingter Logik, JavaScript und GWG-Profilen.'
           },
           {
-            dimension: 'Standards & Umfang',
-            p1Status: 'Verfügbar',
-            p1Desc: 'ISO 15930 Konformitätsprüfung (PDF/X-1a, PDF/X-4) mit veraPDF-Integration.',
-            p2Status: 'Verfügbar',
+            dimension: 'PDF/X-Standardprüfung',
+            p1Status: 'Verfügbar (Prüfung)',
+            p1Desc: 'Technische Regelprüfung basierend auf PDF/X (PDF/X-1a, PDF/X-4). Stellt keine formelle Produktzertifizierung durch eine akkreditierte Stelle dar.',
+            p2Status: 'Verfügbar (GWG-Zertifizierung)',
             p2Desc: 'Vollständige Prüfung von PDF/X-1a bis PDF/X-6 sowie Ghent Workgroup Spezifikationen.',
-            p3Status: 'Verfügbar',
+            p3Status: 'Verfügbar (GWG-Zertifizierung)',
             p3Desc: 'Offizielle Referenz-Engine für die Ghent Workgroup und ISO (PDF/X, PDF/A, PDF/VT).'
           },
           {
@@ -1392,7 +1395,10 @@ export default function PreflightProductPage() {
             </div>
           )}
 
-          <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+          <div style={{ marginTop: '1.5rem', textAlign: 'center', maxWidth: '920px', margin: '1.5rem auto 0', fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+            <p style={{ margin: '0 0 0.75rem 0' }}>
+              {t.compSourcesNote}
+            </p>
             <Link
               href="/docs/engines/preflight-engine"
               className="technical-text"
