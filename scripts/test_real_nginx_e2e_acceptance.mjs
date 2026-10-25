@@ -60,6 +60,7 @@ const NGINX_CONF_PATH = '/etc/nginx/conf.d/sec04c_test_proxy.conf';
 if (process.argv[2] === '--backend-worker') {
   const customRedisUrl = process.argv[3] || REDIS_URL;
   const failPolicy = process.argv[4] || 'closed';
+  const customKeyPrefix = process.argv[5] || TEST_KEY_PREFIX;
 
   let store;
   if (customRedisUrl.includes('dead')) {
@@ -72,7 +73,7 @@ if (process.argv[2] === '--backend-worker') {
     store = createRateLimitStore({
       redisUrl: customRedisUrl,
       failPolicy,
-      keyPrefix: TEST_KEY_PREFIX
+      keyPrefix: customKeyPrefix
     });
   }
   setActiveRateLimitStore(store);
@@ -137,7 +138,7 @@ function cleanupNginx() {
   }
 }
 
-async function spawnWorker(redisUrl = REDIS_URL, failPolicy = 'closed') {
+async function spawnWorker(redisUrl = REDIS_URL, failPolicy = 'closed', keyPrefix = TEST_KEY_PREFIX) {
   return new Promise((resolve, reject) => {
     const tsxBin = path.join(process.cwd(), 'node_modules', '.bin', process.platform === 'win32' ? 'tsx.cmd' : 'tsx');
     const hasTsx = fs.existsSync(tsxBin);
@@ -146,7 +147,8 @@ async function spawnWorker(redisUrl = REDIS_URL, failPolicy = 'closed') {
       process.argv[1],
       '--backend-worker',
       redisUrl,
-      failPolicy
+      failPolicy,
+      keyPrefix
     ];
 
     const child = spawn(runner, args, {
@@ -233,7 +235,7 @@ server {
   try {
     // 2. Arrancar Worker 1 de Node
     console.log('[Paso 2] Arrancando Worker 1 de Node...');
-    currentWorker = await spawnWorker();
+    currentWorker = await spawnWorker(REDIS_URL, 'closed', TEST_KEY_PREFIX);
     console.log(`  ✓ Worker 1 activo en PID: ${currentWorker.pid}\n`);
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -300,16 +302,15 @@ server {
     // ─────────────────────────────────────────────────────────────────────────
     console.log('\n[Escenario 4] Verificando persistencia ante reciclado REAL de procesos OS...');
     
-    // Consumir 2 intentos más en Worker 1 (total 3 sobre la IP 127.0.0.1)
-    for (let i = 1; i <= 2; i++) {
-      const r = await fetch(`http://127.0.0.1:${NGINX_TEST_PORT}/api/submit`, {
-        method: 'POST',
-        headers: { 'User-Agent': 'Recycle-Test/1.0' }
-      });
-      const d = await r.json();
-      assert.equal(d.allowed, true);
-    }
-    console.log(`    -> Worker 1 (PID: ${currentWorker.pid}) procesó 3 intentos acumulados.`);
+    // Escenarios 1 y 2 consumieron ya 2 intentos sobre la IP 127.0.0.1 en Worker 1.
+    // Consumir 1 intento adicional en Worker 1 para acumular exactamente 3 intentos.
+    const resW1_3 = await fetch(`http://127.0.0.1:${NGINX_TEST_PORT}/api/submit`, {
+      method: 'POST',
+      headers: { 'User-Agent': 'Recycle-Test/1.0' }
+    });
+    const dataW1_3 = await resW1_3.json();
+    assert.equal(dataW1_3.allowed, true, 'Intento 3 debe ser admitido por Worker 1');
+    console.log(`    -> Worker 1 (PID: ${currentWorker.pid}) procesó 3 intentos acumulados para 127.0.0.1.`);
 
     // FINALIZAR COMPLETAMENTE EL PROCESO WORKER 1 (Simulando reciclado / muerte de Passenger)
     console.log(`    -> Terminando proceso Worker 1 (PID: ${currentWorker.pid})...`);
@@ -319,11 +320,11 @@ server {
 
     // ARRANCAR WORKER 2 COMO UN PROCESO OS COMPLETAMENTE NUEVO
     console.log('    -> Arrancando Worker 2 como nuevo proceso independiente...');
-    const worker2 = await spawnWorker();
+    const worker2 = await spawnWorker(REDIS_URL, 'closed', TEST_KEY_PREFIX);
     currentWorker = worker2;
     console.log(`  ✓ Worker 2 activo en nuevo PID: ${worker2.pid}`);
 
-    // Intentos 4 y 5 con Worker 2 a través de Nginx: deben permitirse
+    // Intentos 4 y 5 con Worker 2 a través de Nginx: deben permitirse (máximo por IP = 5)
     for (let i = 4; i <= 5; i++) {
       const r = await fetch(`http://127.0.0.1:${NGINX_TEST_PORT}/api/submit`, {
         method: 'POST',
@@ -355,7 +356,7 @@ server {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     // Arrancar Worker 3 configurado con Redis caído
-    const workerDead = await spawnWorker('dead', 'closed');
+    const workerDead = await spawnWorker('dead', 'closed', TEST_KEY_PREFIX);
     currentWorker = workerDead;
     console.log(`    -> Worker 3 (Redis caído) activo en PID: ${workerDead.pid}`);
 
