@@ -621,18 +621,6 @@ export const PartnerOnboardingFlow: React.FC = () => {
           </div>
         )}
 
-        {/* TURNSTILE / BOT PROTECTION (v2.5) */}
-        <div style={{ marginTop: '3rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', opacity: 0.8 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <Icon name="shield" size={14} color="var(--accent-primary)" />
-                <span className="technical-text" style={{ fontSize: '0.6rem', fontWeight: 900, letterSpacing: '0.1em' }}>BOT_PROTECTION_ACTIVE</span>
-            </div>
-            <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', height: '65px', display: 'flex', alignItems: 'center', padding: '0 1.5rem', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 600 }}>
-                {/* Real Turnstile would inject here. This is the PPOS v2.5 UI placeholder */}
-                <span style={{ flex: 1 }}>Cloudflare Turnstile Verified</span>
-                <Icon name="shield" size={18} color="var(--accent-primary)" />
-            </div>
-        </div>
 
         {/* NAVIGATION BUTTONS */}
         <div style={{ marginTop: '5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-color)', paddingTop: '3rem' }}>
