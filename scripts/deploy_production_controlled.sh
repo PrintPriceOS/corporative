@@ -851,6 +851,70 @@ exit_trap() {
 }
 
 # ------------------------------------------------------------------------------
+# RESOLUCIÓN DE RECURSOS VINCULADOS A /products/budget
+# ------------------------------------------------------------------------------
+resolve_budget_bundles() {
+    local target_root="${1:-${APP_ROOT}}"
+    local resolved_target="${target_root}"
+    if command -v cygpath >/dev/null 2>&1; then
+        resolved_target="$(cygpath -w "${target_root}" 2>/dev/null || echo "${target_root}")"
+    fi
+
+    local output
+    output="$("${PYTHON_BIN}" -c '
+import sys, os, glob, re
+
+app_root = sys.argv[1]
+budget_dir = os.path.join(app_root, ".next", "server", "app", "products", "budget")
+resolved_files = set()
+
+# 1. Archivos directos en el directorio de servidor de la ruta
+if os.path.isdir(budget_dir):
+    for f in glob.glob(os.path.join(budget_dir, "*.js")):
+        if os.path.isfile(f):
+            resolved_files.add(f)
+
+# 2. Chunks SSR asociados nominalmente a la ruta por el compilador
+server_chunks_dir = os.path.join(app_root, ".next", "server", "chunks")
+if os.path.isdir(server_chunks_dir):
+    for f in glob.glob(os.path.join(server_chunks_dir, "**", "*products_budget*.js"), recursive=True):
+        if os.path.isfile(f):
+            resolved_files.add(f)
+
+# 3. Chunks de cliente y SSR declarados en el manifest de referencias cliente de la ruta
+manifest_candidates = [
+    os.path.join(budget_dir, "page_client-reference-manifest.js"),
+    os.path.join(budget_dir, "page_client-reference-manifest.json"),
+]
+for mf in manifest_candidates:
+    if os.path.isfile(mf):
+        try:
+            with open(mf, "r", encoding="utf-8", errors="ignore") as fh:
+                content = fh.read()
+            rel_paths = re.findall(r"[\x27\x22]((?:server/chunks|static/chunks|/next/static/chunks|/_next/static/chunks)/[^\x27\x22]+\.js)[\x27\x22]", content)
+            for rp in rel_paths:
+                clean_rp = re.sub(r"^/(_next|next)/", "", rp).lstrip("/\\")
+                full_path = os.path.join(app_root, ".next", *clean_rp.split("/"))
+                if os.path.isfile(full_path):
+                    resolved_files.add(full_path)
+        except Exception:
+            pass
+
+for f in sorted(resolved_files):
+    print(f.replace("\\", "/"))
+' "${resolved_target}" 2>/dev/null || find "${target_root}/.next/server/app/products/budget" -type f -name "*.js" 2>/dev/null || true)"
+
+    if [ -n "${output}" ] && command -v cygpath >/dev/null 2>&1; then
+        while IFS= read -r line; do
+            line="$(echo "${line}" | tr -d '\r')"
+            [ -n "${line}" ] && cygpath -u "${line}" 2>/dev/null || echo "${line}"
+        done <<< "${output}"
+    else
+        echo "${output}" | tr -d '\r'
+    fi
+}
+
+# ------------------------------------------------------------------------------
 # CLASIFICACIÓN OPERATIVA DEL ESTADO FINAL DE RELEASE
 # ------------------------------------------------------------------------------
 classify_release_state() {
@@ -1328,7 +1392,8 @@ except Exception:
     fi
 
     # 6.4. Capa B: Inspección Estática del Artefacto Compilado (EN y DE)
-    BUDGET_BUNDLES="$(find "${APP_ROOT}/.next/server/app/products/budget" -type f -name "*.js" 2>/dev/null || true)"
+    # Valida exclusivamente los recursos realmente utilizados por la ruta /products/budget
+    BUDGET_BUNDLES="$(resolve_budget_bundles "${APP_ROOT}")"
     if [ -n "${BUDGET_BUNDLES}" ]; then
         if ! grep -q "CALCULATE PRINT PRODUCTION ESTIMATES IN SECONDS" ${BUDGET_BUNDLES}; then
             echo "FALLO: Cadena exacta en inglés CR-01 ausente en bundles de budget." >&2
@@ -1338,6 +1403,9 @@ except Exception:
             echo "FALLO: Cadena exacta en alemán CR-01 ausente en bundles de budget." >&2
             ORIGIN_ROUTES_OK=false
         fi
+    else
+        echo "FALLO: No se encontraron bundles compilados para la ruta /products/budget." >&2
+        ORIGIN_ROUTES_OK=false
     fi
 
     # 6.5. Inspección de Errores Posteriores a la Activación

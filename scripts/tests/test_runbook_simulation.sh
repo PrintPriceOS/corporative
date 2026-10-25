@@ -439,16 +439,30 @@ source "${TARGET_SCRIPT}"
 setup_dummy_env() {
     rm -rf "${TEST_SANDBOX}/releases" "${TEST_SANDBOX}/backups" "${TEST_SANDBOX}/httpdocs_prev" "${TEST_SANDBOX}/httpdocs"* "${TEST_SANDBOX}/conf"
     mkdir -p "${APP_ROOT}/.next/server/app/products/budget"
+    mkdir -p "${APP_ROOT}/.next/server/chunks/ssr"
+    mkdir -p "${APP_ROOT}/.next/static/chunks"
     echo "OLD_BUILD_ID_111" > "${APP_ROOT}/.next/BUILD_ID"
     echo '{"name": "mock-web", "version": "0.1.0"}' > "${APP_ROOT}/package.json"
     echo 'console.log("server running");' > "${APP_ROOT}/server.js"
-    echo 'CALCULATE PRINT PRODUCTION ESTIMATES IN SECONDS DRUCKANGEBOTE IN SEKUNDEN BERECHNEN' > "${APP_ROOT}/.next/server/app/products/budget/page.js"
+    echo 'var R=require("../../../chunks/ssr/[turbopack]_runtime.js");' > "${APP_ROOT}/.next/server/app/products/budget/page.js"
+    cat << 'EOF_M1' > "${APP_ROOT}/.next/server/app/products/budget/page_client-reference-manifest.js"
+globalThis.__RSC_MANIFEST={"clientModules":{"[project]/app/products/budget/page.tsx [app-client]":{"chunks":["static/chunks/mock_budget_client.js"]}},"ssrModuleMapping":{"85777":{"*":{"chunks":["server/chunks/ssr/app_products_budget_page_tsx_mock.js"]}}}};
+EOF_M1
+    echo 'CALCULATE PRINT PRODUCTION ESTIMATES IN SECONDS' > "${APP_ROOT}/.next/static/chunks/mock_budget_client.js"
+    echo 'DRUCKANGEBOTE IN SEKUNDEN BERECHNEN' > "${APP_ROOT}/.next/server/chunks/ssr/app_products_budget_page_tsx_mock.js"
 
     mkdir -p "${STAGING_DIR}/.next/server/app/products/budget"
+    mkdir -p "${STAGING_DIR}/.next/server/chunks/ssr"
+    mkdir -p "${STAGING_DIR}/.next/static/chunks"
     echo "NEW_BUILD_ID_999" > "${STAGING_DIR}/.next/BUILD_ID"
     echo '{"name": "mock-web", "version": "0.1.0"}' > "${STAGING_DIR}/package.json"
     echo 'console.log("server running");' > "${STAGING_DIR}/server.js"
-    echo 'CALCULATE PRINT PRODUCTION ESTIMATES IN SECONDS DRUCKANGEBOTE IN SEKUNDEN BERECHNEN' > "${STAGING_DIR}/.next/server/app/products/budget/page.js"
+    echo 'var R=require("../../../chunks/ssr/[turbopack]_runtime.js");' > "${STAGING_DIR}/.next/server/app/products/budget/page.js"
+    cat << 'EOF_M2' > "${STAGING_DIR}/.next/server/app/products/budget/page_client-reference-manifest.js"
+globalThis.__RSC_MANIFEST={"clientModules":{"[project]/app/products/budget/page.tsx [app-client]":{"chunks":["static/chunks/mock_budget_client.js"]}},"ssrModuleMapping":{"85777":{"*":{"chunks":["server/chunks/ssr/app_products_budget_page_tsx_mock.js"]}}}};
+EOF_M2
+    echo 'CALCULATE PRINT PRODUCTION ESTIMATES IN SECONDS' > "${STAGING_DIR}/.next/static/chunks/mock_budget_client.js"
+    echo 'DRUCKANGEBOTE IN SEKUNDEN BERECHNEN' > "${STAGING_DIR}/.next/server/chunks/ssr/app_products_budget_page_tsx_mock.js"
     echo '{"name": "mock-web"}' > "${STAGING_DIR}/package-lock.json"
 
     mkdir -p "${BACKUP_META_DIR}"
@@ -1447,6 +1461,81 @@ else
     exit 1
 fi
 
+# ------------------------------------------------------------------------------
+# TEST 47: Regresión distribución real de chunks: resolución de recursos de ruta y validación CR-01
+# ------------------------------------------------------------------------------
+echo -n "Test 47: Distribución real de chunks Turbopack (cadenas fuera de page.js) -> validación exitosa... "
+setup_dummy_env
+
+# Crear un archivo ajeno con texto para verificar aislamiento estricto
+mkdir -p "${APP_ROOT}/.next/server/app/other_route"
+echo "CALCULATE PRINT PRODUCTION ESTIMATES IN SECONDS DRUCKANGEBOTE IN SEKUNDEN BERECHNEN" > "${APP_ROOT}/.next/server/app/other_route/page.js"
+
+TEST_47_BUNDLES="$(resolve_budget_bundles "${APP_ROOT}")"
+
+ORIGIN_ROUTES_OK=true
+if [ -n "${TEST_47_BUNDLES}" ]; then
+    if ! grep -q "CALCULATE PRINT PRODUCTION ESTIMATES IN SECONDS" ${TEST_47_BUNDLES}; then
+        ORIGIN_ROUTES_OK=false
+    fi
+    if ! grep -q "DRUCKANGEBOTE IN SEKUNDEN BERECHNEN" ${TEST_47_BUNDLES}; then
+        ORIGIN_ROUTES_OK=false
+    fi
+else
+    ORIGIN_ROUTES_OK=false
+fi
+
+# Verificar que page.js NO contiene las cadenas, que los chunks de ruta sí las contienen y que other_route NO fue incluida
+if [ "${ORIGIN_ROUTES_OK}" = "true" ] && \
+   ! grep -q "CALCULATE PRINT PRODUCTION ESTIMATES IN SECONDS" "${APP_ROOT}/.next/server/app/products/budget/page.js" && \
+   ! echo "${TEST_47_BUNDLES}" | grep -q "other_route" && \
+   echo "${TEST_47_BUNDLES}" | grep -q "mock_budget_client.js" && \
+   echo "${TEST_47_BUNDLES}" | grep -q "app_products_budget_page_tsx_mock.js"; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: ORIGIN_ROUTES_OK=${ORIGIN_ROUTES_OK}]"
+    echo "BUNDLES: ${TEST_47_BUNDLES}"
+    exit 1
+fi
+
+# ------------------------------------------------------------------------------
+# TEST 48: Traducción ausente en chunks de ruta provoca rechazo estricto (incluso si existe en archivo ajeno)
+# ------------------------------------------------------------------------------
+echo -n "Test 48: Traducción realmente ausente en chunks de ruta provoca rechazo estricto... "
+setup_dummy_env
+
+# Eliminar la traducción alemana del chunk de ruta
+echo "CHUNK SIN TRADUCCION ALEMANA" > "${APP_ROOT}/.next/server/chunks/ssr/app_products_budget_page_tsx_mock.js"
+
+# Colocar la traducción ausente en un archivo ajeno para verificar que NO sirve de falso positivo
+mkdir -p "${APP_ROOT}/.next/server/app/other_route"
+echo "DRUCKANGEBOTE IN SEKUNDEN BERECHNEN" > "${APP_ROOT}/.next/server/app/other_route/page.js"
+
+TEST_48_BUNDLES="$(resolve_budget_bundles "${APP_ROOT}")"
+
+TEST_48_ROUTES_OK=true
+TEST_48_ERR=""
+if [ -n "${TEST_48_BUNDLES}" ]; then
+    if ! grep -q "CALCULATE PRINT PRODUCTION ESTIMATES IN SECONDS" ${TEST_48_BUNDLES}; then
+        TEST_48_ROUTES_OK=false
+        TEST_48_ERR="EN_MISSING"
+    fi
+    if ! grep -q "DRUCKANGEBOTE IN SEKUNDEN BERECHNEN" ${TEST_48_BUNDLES}; then
+        TEST_48_ROUTES_OK=false
+        TEST_48_ERR="DE_MISSING"
+    fi
+else
+    TEST_48_ROUTES_OK=false
+fi
+
+if [ "${TEST_48_ROUTES_OK}" = "false" ] && [ "${TEST_48_ERR}" = "DE_MISSING" ] && ! echo "${TEST_48_BUNDLES}" | grep -q "other_route"; then
+    echo "[PASÓ]"
+else
+    echo "[FALLÓ: TEST_48_ROUTES_OK=${TEST_48_ROUTES_OK}, ERR=${TEST_48_ERR}]"
+    exit 1
+fi
+
 echo "========================================================================"
-echo "TODAS LAS 46 PRUEBAS DE RESILIENCIA Y RECUPERACIÓN COMPLETADAS CON ÉXITO."
+echo "TODAS LAS 48 PRUEBAS DE RESILIENCIA Y RECUPERACIÓN COMPLETADAS CON ÉXITO."
 echo "========================================================================"
+
