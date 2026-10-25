@@ -104,7 +104,7 @@ export const Footer: React.FC = () => {
                 href="https://x.com/PRINTPRICEPRO"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Seguir en X"
+                aria-label={dict.footer.followX}
                 style={{
                   width: '34px',
                   height: '34px',
@@ -124,7 +124,7 @@ export const Footer: React.FC = () => {
                 href="https://www.linkedin.com/company/print-price-pro/"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Conectar en LinkedIn"
+                aria-label={dict.footer.connectLinkedIn}
                 style={{
                   width: '34px',
                   height: '34px',
@@ -144,7 +144,7 @@ export const Footer: React.FC = () => {
                 href="https://www.facebook.com/printpricepro"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Página de Facebook"
+                aria-label={dict.footer.facebookPage}
                 style={{
                   width: '34px',
                   height: '34px',
@@ -180,22 +180,22 @@ export const Footer: React.FC = () => {
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
               <li>
                 <Link href="/products/budget" style={linkStyle}>
-                  Price it (Calculador)
+                  {dict.footer.priceItLabel}
                 </Link>
               </li>
               <li>
                 <Link href="/products/preflight" style={{ ...linkStyle, fontWeight: 700, color: 'var(--text-primary)' }}>
-                  Fix it (Preflight PDF)
+                  {dict.footer.fixItLabel}
                 </Link>
               </li>
               <li>
                 <Link href="/products/print" style={linkStyle}>
-                  Print it (Marketplace)
+                  {dict.footer.printItLabel}
                 </Link>
               </li>
               <li>
                 <Link href="/products/mockup" style={linkStyle}>
-                  Maqueta 3D (Visor de libro)
+                  {dict.footer.mockupLabel}
                 </Link>
               </li>
             </ul>
@@ -207,7 +207,7 @@ export const Footer: React.FC = () => {
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
               <li>
                 <a href="https://control.printprice.pro/" target="_blank" rel="noopener noreferrer" style={linkStyle}>
-                  Control Plane (Imprentas) ↗
+                  {dict.footer.controlPlaneLabel}
                 </a>
               </li>
               <li>
@@ -238,9 +238,9 @@ export const Footer: React.FC = () => {
                   {dict.footer.legalCenter}
                 </Link>
               </li>
-              <li><Link href="/legal/terms-of-service" style={linkStyle}>Terms of Service</Link></li>
-              <li><Link href="/legal/privacy-policy" style={linkStyle}>Privacy Policy</Link></li>
-              <li><Link href="/legal/legal-notice" style={linkStyle}>Legal Notice</Link></li>
+              <li><Link href="/legal/terms-of-service" style={linkStyle}>{dict.footer.termsOfService}</Link></li>
+              <li><Link href="/legal/privacy-policy" style={linkStyle}>{dict.footer.privacyPolicy}</Link></li>
+              <li><Link href="/legal/legal-notice" style={linkStyle}>{dict.footer.legalNotice}</Link></li>
               <li><Link href="/legal/partner-terms" style={linkStyle}>{dict.footer.partnerTerms}</Link></li>
               <li>
                 <button

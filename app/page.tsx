@@ -411,7 +411,7 @@ export default function Home() {
         <Container>
           <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 3.5rem' }}>
             <span className="pill-badge" style={{ marginBottom: '0.75rem' }}>
-              PRODUCTOS — QUÉ PUEDES HACER
+              {dict.home.productsPill}
             </span>
             <h2 style={{ fontSize: 'clamp(2rem, 4.5vw, 2.85rem)', marginBottom: '1rem', letterSpacing: '-0.02em', fontWeight: 900 }}>
               PRICE IT. FIX IT. PRINT IT.
@@ -542,7 +542,7 @@ export default function Home() {
                     {locale === 'es' ? 'Herramienta complementaria de visualización: Maqueta 3D Interactiva' : locale === 'de' ? 'Ergänzende 3D-Vorschau: Interaktives Buch-Mockup' : 'Complementary visualization tool: Interactive 3D Mockup'}
                   </span>
                   <span style={{ fontSize: '0.625rem', background: 'var(--accent-container)', color: 'var(--accent-primary)', padding: '0.1rem 0.45rem', borderRadius: 'var(--radius-pill)', fontWeight: 800 }}>
-                    COMPLEMENTARIA
+                    {dict.home.complementaryBadge}
                   </span>
                 </div>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>
@@ -573,7 +573,7 @@ export default function Home() {
         <Container>
           <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 3.5rem' }}>
             <span className="pill-badge" style={{ marginBottom: '0.75rem' }}>
-              PÚBLICOS — PARA QUIÉN
+              {dict.home.stakeholdersPill}
             </span>
             <h2 style={{ fontSize: 'clamp(1.85rem, 4vw, 2.5rem)', marginBottom: '0.75rem' }}>
               {dict.home.stakeholdersHeading}
@@ -695,7 +695,7 @@ export default function Home() {
           <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 3.5rem' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
               <span className="pill-badge">
-                WORKFLOW INDUSTRIAL
+                {dict.home.workflowPill}
               </span>
             </div>
             <h2 style={{ fontSize: 'clamp(1.85rem, 4vw, 2.5rem)', marginBottom: '0.75rem' }}>
@@ -744,9 +744,9 @@ export default function Home() {
                 03
               </div>
               <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.05em', marginBottom: '0.35rem' }}>
-                VISUALIZAR
+                {dict.home.visualizeStep}
               </div>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Maqueta 3D</h3>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{locale === 'es' ? 'Maqueta 3D' : locale === 'de' ? '3D-Mockup' : '3D Mockup'}</h3>
               <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
                 {locale === 'es'
                   ? 'Simulación tridimensional interactiva del lomo y cubiertas basada en el gramaje y páginas calculadas.'
@@ -786,7 +786,7 @@ export default function Home() {
         <Container>
           <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 3rem' }}>
             <span className="pill-badge" style={{ marginBottom: '0.75rem' }}>
-              COMPARATIVAS POR PRODUCTO
+              {dict.home.comparisonsPill}
             </span>
             <h2 style={{ fontSize: 'clamp(1.85rem, 4vw, 2.5rem)', marginBottom: '0.75rem' }}>
               {dict.home.compHeading}
@@ -874,7 +874,7 @@ export default function Home() {
                     <tr>
                       <th style={{ width: '30%' }}>{dict.home.compFeature}</th>
                       <th style={{ width: '18%', color: 'var(--accent-primary)' }}>PrintPrice Pro (Budget)</th>
-                      <th style={{ width: '14%' }}>Tradicional / Manual</th>
+                      <th style={{ width: '14%' }}>{dict.home.compTraditional}</th>
                       <th style={{ width: '14%' }}>Lulu</th>
                       <th style={{ width: '12%' }}>Gelato</th>
                       <th style={{ width: '12%' }}>{dict.home.compScope}</th>
@@ -906,7 +906,7 @@ export default function Home() {
                   </tbody>
                 </table>
               </div>
-              <div className="table-scroll-hint" role="note" aria-label="Desplazamiento horizontal disponible">
+              <div className="table-scroll-hint" role="note" aria-label={dict.home.scrollHint}>
                 <span>⇄ {locale === 'es' ? 'Desliza horizontalmente para ver todas las columnas' : locale === 'de' ? 'Horizontal wischen für alle Spalten' : 'Scroll horizontally to view all columns'}</span>
               </div>
             </>
@@ -955,7 +955,7 @@ export default function Home() {
                   </tbody>
                 </table>
               </div>
-              <div className="table-scroll-hint" role="note" aria-label="Desplazamiento horizontal disponible">
+              <div className="table-scroll-hint" role="note" aria-label={dict.home.scrollHint}>
                 <span>⇄ {locale === 'es' ? 'Desliza horizontalmente para ver todas las columnas' : locale === 'de' ? 'Horizontal wischen für alle Spalten' : 'Scroll horizontally to view all columns'}</span>
               </div>
             </>
@@ -998,7 +998,7 @@ export default function Home() {
                   </tbody>
                 </table>
               </div>
-              <div className="table-scroll-hint" role="note" aria-label="Desplazamiento horizontal disponible">
+              <div className="table-scroll-hint" role="note" aria-label={dict.home.scrollHint}>
                 <span>⇄ {locale === 'es' ? 'Desliza horizontalmente para ver todas las columnas' : locale === 'de' ? 'Horizontal wischen für alle Spalten' : 'Scroll horizontally to view all columns'}</span>
               </div>
             </>
@@ -1022,7 +1022,7 @@ export default function Home() {
           <div style={{ maxWidth: '780px', margin: '0 auto' }}>
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <span className="pill-badge" style={{ marginBottom: '0.75rem' }}>
-                TRANSPARENCIA TOTAL
+                {dict.home.transparencyPill}
               </span>
               <h2 style={{ fontSize: 'clamp(1.85rem, 4vw, 2.5rem)', marginBottom: '0.5rem' }}>
                 {dict.home.faqHeading}

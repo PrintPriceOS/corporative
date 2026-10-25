@@ -207,7 +207,9 @@ export const CookieBanner: React.FC = () => {
                   <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{t.analyticsDesc}</div>
                 </div>
                 <input 
+                  id="cookie-analytics-toggle"
                   type="checkbox" 
+                  aria-label={t.analytics}
                   checked={analyticsEnabled} 
                   onChange={(e) => setAnalyticsEnabled(e.target.checked)} 
                   style={{ width: '22px', height: '22px', cursor: 'pointer', accentColor: 'var(--accent-primary)' }}

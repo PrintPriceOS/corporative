@@ -302,11 +302,15 @@ export default function MockupPage() {
             <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
               <div>
                 <div style={{ fontSize: '1.75rem', fontWeight: 800 }}>PNG / WebP</div>
-                <div className="technical-text" style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>FORMATO DIGITAL</div>
+                <div className="technical-text" style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>
+                  {locale === 'es' ? 'FORMATO DIGITAL' : locale === 'de' ? 'DIGITALES FORMAT' : 'DIGITAL FORMAT'}
+                </div>
               </div>
               <div>
                 <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--accent-primary)' }}>INSTANT</div>
-                <div className="technical-text" style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>PREVISUALIZACIÓN</div>
+                <div className="technical-text" style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>
+                  {locale === 'es' ? 'PREVISUALIZACIÓN' : locale === 'de' ? 'VORSCHAU' : 'PREVIEW'}
+                </div>
               </div>
             </div>
           </div>

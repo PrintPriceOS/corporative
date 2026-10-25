@@ -57,7 +57,7 @@ export const Header: React.FC = () => {
     {
       title: dict.nav.controlPlane,
       desc: dict.nav.controlPlaneDesc,
-      badge: 'OPERATIVA',
+      badge: locale === 'es' ? 'OPERATIVA' : locale === 'de' ? 'BETRIEB' : 'OPERATIONS',
       href: 'https://control.printprice.pro/',
       external: true,
     },
@@ -195,7 +195,7 @@ export const Header: React.FC = () => {
               fontWeight: 600,
               color: 'var(--text-secondary)',
             }}
-            aria-label="Navegación principal"
+            aria-label={locale === 'es' ? 'Navegación principal' : locale === 'de' ? 'Hauptnavigation' : 'Main navigation'}
           >
             {/* 1. PRODUCTOS Dropdown (Qué puedes hacer) */}
             <div ref={productsDropdownRef} style={{ position: 'relative' }}>
@@ -522,7 +522,9 @@ export const Header: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label={isMobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+              aria-label={isMobileMenuOpen 
+                ? (locale === 'es' ? 'Cerrar menú' : locale === 'de' ? 'Menü schließen' : 'Close menu')
+                : (locale === 'es' ? 'Abrir menú' : locale === 'de' ? 'Menü öffnen' : 'Open menu')}
               aria-expanded={isMobileMenuOpen}
               style={{
                 background: 'none',
@@ -548,7 +550,7 @@ export const Header: React.FC = () => {
         <div
           role="dialog"
           aria-modal="true"
-          aria-label="Menú móvil de navegación"
+          aria-label={locale === 'es' ? 'Menú móvil de navegación' : locale === 'de' ? 'Mobiles Navigationsmenü' : 'Mobile navigation menu'}
           style={{
             position: 'fixed',
             inset: 0,
@@ -661,7 +663,7 @@ export const Header: React.FC = () => {
               {dict.nav.docs} ↗
             </a>
             <a href="https://control.printprice.pro/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
-              Control Plane (Imprentas) ↗
+              Control Plane ({locale === 'es' ? 'Imprentas' : locale === 'de' ? 'Druckereien' : 'Printers'}) ↗
             </a>
             <Link href="/developers" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
               {dict.nav.developers}
