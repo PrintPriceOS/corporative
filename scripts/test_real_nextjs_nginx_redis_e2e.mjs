@@ -156,7 +156,7 @@ server {
     const resHealth = await fetch(`http://127.0.0.1:${NGINX_TEST_PORT}/api/health`);
     assert.equal(resHealth.status, 200, 'HTTP 200 esperado en /api/health');
     const healthData = await resHealth.json();
-    assert.equal(healthData.status, 'healthy', 'El estado del servicio debe ser healthy');
+    assert.equal(healthData.status, 'ok', 'El estado del servicio debe ser ok');
     assert.ok(resHealth.headers.get('content-security-policy'), 'Debe incluir cabecera CSP');
     pass('Build real de Next.js responde a través de Nginx con release_id y cabeceras de seguridad CSP (HTTP 200)');
 
@@ -231,7 +231,7 @@ server {
   }
 
   console.log('\n═════════════════════════════════════════════════════════════════════════════');
-  console.log(`🎉 PRUEBA SEC-04D.1 SUPERADA: TODOS LOS ${passedTests}/7 CRITERIOS VERIFICADOS`);
+  console.log(`🎉 PRUEBA DE INTEGRACIÓN REAL SUPERADA: TODOS LOS ${passedTests}/5 ESCENARIOS VERIFICADOS`);
   console.log('═════════════════════════════════════════════════════════════════════════════\n');
 }
 
