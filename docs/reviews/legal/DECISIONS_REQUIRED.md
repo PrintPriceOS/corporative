@@ -57,7 +57,7 @@ A efectos de coherencia contractual y contable en todos los borradores, rigen lo
 | **Decisión Comercial (Pendiente Propietario)** | **Modelo web vs API REST** | Decidir si se mantiene cálculo web libre y se tarifica por volumen en API REST empresarial. | `01_aviso_legal.md`, `02_terminos_generales_uso.md`, `04_condiciones_editoriales_profesionales.md` | **No bloquea su revisión interna**. |
 | **Decisión Comercial (Pendiente Propietario)** | **Monetización de papeleras (Paper Hub)** | Decidir entre cuota anual de suscripción técnica por catálogo o comisión porcentual sobre volumen. | `06_condiciones_proveedores_papel.md` | **No bloquea su revisión interna**. |
 | **Decisión Comercial (Pendiente Propietario)** | **Objetivo de SLA (99,5 % API)** | Decidir si se ofrece meta comercial de disponibilidad del 99,5 % para editoriales o si se omite. | `04_condiciones_editoriales_profesionales.md` | **No bloquea su revisión interna**. |
-| **Dato Operativo (Equipo Técnico)** | **Ciclo de vida de archivos de preflight** | Acreditar técnicamente: servicio responsable, almacenamiento, disparador, mecanismo, fallos y backups. | `02_terminos_generales_uso.md`, `07_politica_privacidad.md`, `10_acuerdo_encargo_tratamiento_dpa.md` | **SÍ bloquea declarar plazos de retención o purga**. |
+| **Dato Operativo (Verificado Técnicamente 25/10/2026)** | **Ciclo de vida de archivos de preflight** | **VERIFICADO EN CÓDIGO:** TTL de 24 horas en disco local (`PPOS_UPLOADS_DIR`) gobernado por `StorageCleanupWorker` (ejecución horaria para estados `COMPLETED`/`FAILED`). La descarga no borra el archivo. Pendiente decidir si se mantiene 24h o se implementa purga post-descarga, y excluir la ruta en backups de Plesk. | `02_terminos_generales_uso.md`, `07_politica_privacidad.md`, `10_acuerdo_encargo_tratamiento_dpa.md` | **Desbloqueado para redacción técnica veraz**; SÍ bloquea asegurar ausencia en backups. |
 | **Dato Operativo (Equipo Técnico)** | **Infraestructura, backups y transferencias** | Auditar contrato con IONOS SE, almacenamiento secundario de backups y accesos remotos de soporte. | `07_politica_privacidad.md`, `11_registro_subencargados_proveedores.md` | **No bloquea su revisión interna**; SÍ transferencias cero. |
 | **Dato Operativo (Equipo Técnico)** | **Pasarelas de cobro y correo** | Formalizar cuenta corporativa para SEPA B2B e inventariar servidores SMTP/IMAP (@printprice.pro). | `05_condiciones_adhesion_imprentas.md`, `11_registro_subencargados_proveedores.md` | **No bloquea su revisión interna**; SÍ cobros B2B reales. |
 | **Dato Operativo (Equipo Técnico)** | **Tolerancias de taller (±1,5 mm / ±3–5%)** | Recabar especificaciones técnicas reales de maquinaria de los primeros talleres asociados adscritos. | `03_condiciones_autores_particulares.md`, `04_condiciones_editoriales_profesionales.md` | **No bloquea su revisión interna**. |
@@ -129,17 +129,20 @@ A pesar de la aprobación de los principios comerciales anteriores, constan como
 ## 6. Datos Operativos por Verificar (Equipo Técnico)
 
 ### 6.1. Verificación Técnica del Ciclo de Vida de Archivos de Preflight
-- **Estado:** **[PENDIENTE DE VERIFICACIÓN TÉCNICA DEL CICLO DE VIDA DE ARCHIVOS]**.
-- **Criterio rector:** No se elige entre eliminación inmediata y retención de 24–72 horas sin evidencia técnica en servidor. Las menciones en la interfaz pública (`app/products/preflight/page.tsx` y `app/legal/privacy-policy/page.tsx`) son informativas y no constituyen prueba de ejecución.
-- **Evidencia requerida:**
-  1. *Servicio responsable:* Identificar el microservicio o script backend que procesa y elimina el archivo.
-  2. *Almacenamiento:* Detallar la ruta en sistema de archivos, volumen temporal o bucket de almacenamiento.
-  3. *Mecanismo de limpieza:* Documentar si opera mediante script cron, proceso worker asíncrono o recolector en memoria.
-  4. *Disparador:* Acreditar si la purga se dispara por evento de descarga, timeout de sesión o TTL programado.
-  5. *Tratamiento de fallos:* Protocolo de reintentos, alertas o borrado forzado si el proceso se interrumpe.
-  6. *Copias de seguridad:* Comprobar si los directorios temporales de preflight se excluyen formalmente de las copias de seguridad del servidor.
+- **Estado:** **VERIFICADO EN CÓDIGO (25/10/2026)**. Auditoría técnica completa documentada en `AUDIT_FILE_PROCESSING_AND_PROVIDERS.md`.
+- **Hechos verificados en código y configuración:**
+  1. *Servicio responsable:* `ppos-preflight-service` (`server.js`, `routes/preflight.js`, `services/PreflightService.js`).
+  2. *Almacenamiento:* Sistema de archivos en disco local configurado por `PPOS_UPLOADS_DIR` (por defecto `/opt/printprice-os/temp-staging`), organizado jerárquicamente por inquilino y trabajo (`/storage/tenants/{tenantId}/jobs/{jobId}/[input|output|temp|reports|previews]`).
+  3. *Mecanismo de limpieza:* Worker asíncrono recurrente `StorageCleanupWorker` (`services/StorageCleanupWorker.js`), ejecutado cada 1 hora (`intervalMs = 3600000`).
+  4. *Disparador y TTL:* **Temporal de 24 horas** (`created_at < NOW() - INTERVAL 24 HOUR`) para trabajos con estado `COMPLETED` o `FAILED`. La descarga del archivo o la generación del reporte **no disparan el borrado**.
+  5. *Tratamiento de fallos:* Trabajos en `FAILED` se purgan a las 24 horas. Trabajos colgados en `PROCESSING` o `QUEUED` requieren ampliación del worker para evitar archivos huérfanos.
+  6. *Copias de seguridad:* **Riesgo no resuelto:** La ruta `/opt/printprice-os/temp-staging` no está explícitamente excluida en las directivas de backup de Plesk Obsidian, pudiendo incorporarse a los respaldos del servidor.
+- **Decisiones y acciones pendientes:**
+  1. *Decisión de Producto:* Confirmar si se mantiene la retención técnica de 24 horas (recomendada para experiencia de usuario y re-descargas) o si se desarrolla una purga inmediata post-descarga.
+  2. *Acción de Sistemas:* Excluir `/opt/printprice-os/temp-staging` en la configuración de backups de Plesk.
+  3. *Acción de Frontend:* Actualizar los textos públicos en `app/products/preflight/page.tsx` y `app/legal/privacy-policy/page.tsx` para corregir las afirmaciones de borrado inmediato tras descarga y «entornos volátiles».
 - **Documentos afectados:** `02_terminos_generales_uso.md`, `07_politica_privacidad.md`, `10_acuerdo_encargo_tratamiento_dpa.md`.
-- **¿Bloquea su revisión interna?:** **SÍ bloquea prometer plazos de retención o purga sin respaldo técnico**.
+- **¿Bloquea su revisión interna?:** **Desbloqueado para redacción técnica veraz**; SÍ bloquea asegurar ausencia en backups.
 
 ### 6.2. Auditoría de Infraestructura, Copias de Seguridad y Transferencias
 - **Estado:** Comprobada la resolución de red de la web corporativa hacia la IP `212.227.79.67` (IONOS SE, Fráncfort, Alemania).
