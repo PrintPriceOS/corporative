@@ -236,6 +236,6 @@ export async function checkActionRateLimit(): Promise<{
     allowed: admission.allowed,
     admissionReason: admission.reason,
     count: admission.count,
-    storeType: store.constructor.name
+    storeType: store.storeType || store.constructor.name
   };
 }

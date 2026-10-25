@@ -368,6 +368,7 @@ export interface RateLimitAdmission {
 }
 
 export interface IRateLimitStore {
+    readonly storeType?: string;
     get(key: string): Promise<RateLimitEntry | null> | RateLimitEntry | null;
     increment(key: string, windowMs: number): Promise<RateLimitEntry> | RateLimitEntry;
     admitAttempt(key: string, maxAttempts: number, windowMs: number): Promise<RateLimitAdmission> | RateLimitAdmission;

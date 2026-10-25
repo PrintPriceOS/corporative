@@ -19,6 +19,7 @@ export interface RateLimitAdmission {
 }
 
 export interface IRateLimitStore {
+    readonly storeType?: string;
     get(key: string): Promise<RateLimitEntry | null> | RateLimitEntry | null;
     increment(key: string, windowMs: number): Promise<RateLimitEntry> | RateLimitEntry;
     admitAttempt(key: string, maxAttempts: number, windowMs: number): Promise<RateLimitAdmission> | RateLimitAdmission;
@@ -38,6 +39,7 @@ const DEFAULT_MAX_SUBMISSIONS_PER_FINGERPRINT = 5;
 const DEFAULT_MAX_UNACCREDITED_GLOBAL_LIMIT = 50;
 
 export class InMemoryRateLimitStore implements IRateLimitStore {
+    readonly storeType: string = 'InMemoryRateLimitStore';
     private store = new Map<string, RateLimitEntry>();
     private defaultWindowMs: number;
 

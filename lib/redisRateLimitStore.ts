@@ -102,7 +102,8 @@ local ttl = redis.call('PTTL', KEYS[1])
 return {n, ttl}
 `;
 
-export class RedisRateLimitStore {
+export class RedisRateLimitStore implements IRateLimitStore {
+    readonly storeType: string = 'RedisRateLimitStore';
     private client: RedisEvalClient;
     private prefix: string;
     private defaultWindowMs: number;
