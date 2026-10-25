@@ -3,6 +3,8 @@
  * Hardened validation for production-grade infrastructure.
  */
 
+import { isIP } from 'node:net';
+
 // 1. FILE SCANNING BYTES (PDF Header)
 const PDF_MAGIC_BYTES = [0x25, 0x50, 0x44, 0x46]; // %PDF
 
@@ -82,46 +84,69 @@ const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour
 const MAX_SUBMISSIONS_PER_IP = 5;
 const ipSubmissions = new Map<string, { count: number; timestamp: number }>();
 
+/**
+ * Standard IPv4 / IPv6 validation using Node.js built-in RFC-compliant parser.
+ * Replaces permissive regexes that could accept malformed strings.
+ */
 export function isValidIp(ip: string): boolean {
     if (!ip || typeof ip !== 'string') return false;
-    const ipv4Regex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    if (ipv4Regex.test(ip)) return true;
-    const ipv6Regex = /^[a-fA-F0-9:]{2,39}$/;
-    if (ipv6Regex.test(ip) && ip.includes(':')) return true;
-    return false;
+    const trimmed = ip.trim();
+    const version = isIP(trimmed);
+    return version === 4 || version === 6;
 }
 
 export interface HeaderReader {
     get(name: string): string | null;
 }
 
+export interface ProxyTrustConfig {
+    /**
+     * If true, trusts `cf-connecting-ip` from Cloudflare edge.
+     * MUST be set only when the domain is actively proxied by Cloudflare and traffic reaches origin through it.
+     */
+    trustCloudflareProxy?: boolean;
+}
+
 /**
- * Resolves client identifier strictly from trusted reverse proxy headers.
- * Avoids indiscriminate trust in arbitrary X-Forwarded-For headers.
- * Returns null if the client IP cannot be ascertained from trusted sources.
+ * Resolves client identifier strictly from accredited reverse proxy headers.
+ * 
+ * INFRASTRUCTURE TRUST MODEL:
+ * 1. PrintPrice OS production host (212.227.79.67) runs Nginx on Plesk as the local reverse
+ *    proxy forwarding to the internal Node.js server. Nginx sets `proxy_set_header X-Real-IP $remote_addr`.
+ *    Because Node.js listens on internal loopback (127.0.0.1), `X-Real-IP` represents the actual TCP
+ *    remote address connecting to Nginx and cannot be spoofed by incoming client headers.
+ * 2. `CF-Connecting-IP` is trusted ONLY when Cloudflare edge proxying is actively accredited
+ *    (via `config.trustCloudflareProxy` or `process.env.TRUST_CLOUDFLARE_PROXY === 'true'`).
+ *    Blindly trusting `CF-Connecting-IP` when DNS points directly to the host allows header spoofing.
+ * 3. `X-Forwarded-For` is NOT used as an arbitrary fallback because clients can prepend spoofed IPs
+ *    into the header, making leftmost-entry parsing an insecure default.
+ * 4. If no accredited header is present or if validation fails, returns `null`.
+ *    Requests with `null` IP NEVER share a global rate limit bucket or lock each other out.
  */
-export function resolveTrustedClientIp(headerList: HeaderReader): string | null {
-    // 1. Cloudflare edge IP if running behind Cloudflare CDN
-    const cfIp = headerList.get('cf-connecting-ip')?.trim();
-    if (cfIp && isValidIp(cfIp)) {
-        return cfIp;
+export function resolveTrustedClientIp(
+    headerList: HeaderReader,
+    config?: ProxyTrustConfig
+): string | null {
+    const isCloudflareAccredited = 
+        config?.trustCloudflareProxy ?? 
+        (typeof process !== 'undefined' && process.env?.TRUST_CLOUDFLARE_PROXY === 'true');
+
+    // 1. Cloudflare edge IP: only accepted if Cloudflare proxy chain is explicitly accredited
+    if (isCloudflareAccredited) {
+        const cfIp = headerList.get('cf-connecting-ip')?.trim();
+        if (cfIp && isValidIp(cfIp)) {
+            return cfIp;
+        }
     }
 
-    // 2. Nginx / Plesk reverse proxy setting X-Real-IP from $remote_addr
+    // 2. Accredited local reverse proxy: X-Real-IP populated by Nginx from $remote_addr
     const realIp = headerList.get('x-real-ip')?.trim();
     if (realIp && isValidIp(realIp)) {
         return realIp;
     }
 
-    // 3. X-Forwarded-For: only inspect leftmost candidate if present and structurally valid
-    const xff = headerList.get('x-forwarded-for');
-    if (xff) {
-        const candidate = xff.split(',')[0]?.trim();
-        if (candidate && isValidIp(candidate)) {
-            return candidate;
-        }
-    }
-
+    // 3. Fallback: NO arbitrary X-Forwarded-For fallback or unverified headers.
+    // Return null to avoid spoofed IP adoption or shared lockout buckets.
     return null;
 }
 

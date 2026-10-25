@@ -233,6 +233,9 @@ export const PartnerOnboardingFlow: React.FC = () => {
       btnExportJson: 'Exportar borrador en JSON ⤓',
       btnGoToControlPlane: 'Registro oficial en Control Plane ➔',
       btnContactTeam: 'Contactar con el equipo de integración',
+      upfrontNoticeTitle: 'Aviso de arquitectura:',
+      upfrontNoticeBody: 'El registro oficial y aprovisionamiento de imprentas se realiza exclusivamente en la consola de Control Plane. Este formulario preliminar no cuenta con canal de ingesta directa conectado.',
+      btnGoToControlPlaneDirect: 'Registro oficial en Control Plane ➔',
       prevStep: '← Paso anterior',
       nextStep: 'Continuar →',
       submitBtn: 'Validar perfil técnico de taller →',
@@ -300,6 +303,9 @@ export const PartnerOnboardingFlow: React.FC = () => {
       btnExportJson: 'Export draft (JSON) ⤓',
       btnGoToControlPlane: 'Official Control Plane registration ➔',
       btnContactTeam: 'Contact partner integration desk',
+      upfrontNoticeTitle: 'Architecture Notice:',
+      upfrontNoticeBody: 'Official print house registration and provisioning is managed exclusively in Control Plane. This preliminary intake form does not have an active direct ingestion pipeline.',
+      btnGoToControlPlaneDirect: 'Official Control Plane Registration ➔',
       prevStep: '← Previous step',
       nextStep: 'Continue →',
       submitBtn: 'Validate partner technical profile →',
@@ -367,6 +373,9 @@ export const PartnerOnboardingFlow: React.FC = () => {
       btnExportJson: 'Entwurf exportieren (JSON) ⤓',
       btnGoToControlPlane: 'Offizielle Control-Plane-Registrierung ➔',
       btnContactTeam: 'Team für Partner-Integration kontaktieren',
+      upfrontNoticeTitle: 'Architektur-Hinweis:',
+      upfrontNoticeBody: 'Die offizielle Druckerei-Registrierung und Einrichtung erfolgt ausschließlich im Control Plane. Dieses vorläufige Formular verfügt über keinen aktiven Direkterfassungskanal.',
+      btnGoToControlPlaneDirect: 'Offizielle Control-Plane-Registrierung ➔',
       prevStep: '← Vorheriger Schritt',
       nextStep: 'Weiter →',
       submitBtn: 'Technisches Betriebsprofil validieren →',
@@ -563,6 +572,42 @@ export const PartnerOnboardingFlow: React.FC = () => {
         boxShadow: 'var(--shadow-card)'
       }}
     >
+      {/* Upfront Architecture Notice & Direct Canonical Route */}
+      <div 
+        style={{
+          background: 'rgba(234, 179, 8, 0.08)',
+          borderBottom: '1px solid rgba(234, 179, 8, 0.25)',
+          padding: '1.25rem 1.75rem',
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '1rem'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, minWidth: '280px' }}>
+          <span style={{ fontSize: '1.1rem' }}>ℹ️</span>
+          <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)', lineHeight: 1.45 }}>
+            <strong style={{ color: '#eab308' }}>{t.upfrontNoticeTitle}</strong>{' '}
+            <span style={{ color: 'var(--text-secondary)' }}>{t.upfrontNoticeBody}</span>
+          </div>
+        </div>
+        <a
+          href="https://control.printprice.pro/printhouse/register"
+          className="btn-primary"
+          style={{
+            padding: '0.6rem 1.2rem',
+            fontSize: '0.85rem',
+            borderRadius: 'var(--radius-btn, 12px)',
+            textDecoration: 'none',
+            whiteSpace: 'nowrap',
+            fontWeight: 700
+          }}
+        >
+          {t.btnGoToControlPlaneDirect}
+        </a>
+      </div>
+
       {/* Progress Stepper Bar */}
       <div 
         style={{ 

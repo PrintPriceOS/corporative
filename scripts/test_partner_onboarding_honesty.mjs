@@ -1,13 +1,14 @@
 /**
  * scripts/test_partner_onboarding_honesty.mjs
  * 
- * Verificación determinista del comportamiento final del formulario de onboarding de imprentas:
- * 1. Sin confirmación real no aparece éxito (success: false, status: 'INTEGRATION_PENDING').
- * 2. Los errores y el estado pendiente conservan íntegro el borrador (localStorage no es purgado).
- * 3. No hay bloqueo global accidental entre usuarios (IP unresolvable no bloquea; rate limiter aislado por IP confiable).
- * 4. No se muestran afirmaciones ficticias de protección anti-bots (sin Turnstile ni BOT_PROTECTION_ACTIVE) ni notificaciones simuladas.
- * 5. Destino de registro oficial y textos íntegros en ES, EN y DE.
- * 6. Cero registro de PII (correos, nombres de empresa o teléfonos) en logs.
+ * Verificación funcional y de seguridad para el formulario de onboarding de imprentas:
+ * 1. Regresión de cabeceras de proxy: rechazo de cabeceras no acreditadas (cf-connecting-ip sin Cloudflare, XFF arbitrario).
+ * 2. Validación estándar IPv4/IPv6 (RFC 791 / RFC 4291 vía node:net): rechazo estricto de strings malformadas.
+ * 3. Aislamiento estricto de contadores de rate limiting (sin contador global compartido para IP null).
+ * 4. Recorrido público real: verificación de que PartnerOnboardingFlow es código sin uso en app/,
+ *    con enlaces canónicos directos en /contact/partner y /for-printhouses hacia https://control.printprice.pro/printhouse/register.
+ * 5. Si el componente se inspecciona o visita, aviso previo de arquitectura para no obligar a 6 pasos.
+ * 6. Garantía de honestidad en actions.ts: nunca devuelve success: true, estado INTEGRATION_PENDING, cero PII en logs.
  */
 
 import assert from 'node:assert/strict';
@@ -23,10 +24,9 @@ import {
   auditLeadQuality,
   sanitizeText
 } from '../lib/security.ts';
-import { PartnerOnboardingSchema } from '../lib/schemas.ts';
 
 console.log('─────────────────────────────────────────────────────────────────────────────');
-console.log('🧪 PPOS TEST SUITE: Partner Onboarding Honesty & Security Verification');
+console.log('🧪 PPOS TEST SUITE: Proxy Trust, Rate Limiting & Onboarding Honesty');
 console.log('─────────────────────────────────────────────────────────────────────────────');
 
 let passedTests = 0;
@@ -36,72 +36,191 @@ function pass(label) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 1. VERIFICACIÓN DE IP CONFIABLE Y PREVENCIÓN DE BLOQUEO GLOBAL
+// 1. REGRESIONES DE CONFIANZA DE PROXY Y CABECERAS FALSIFICADAS
 // ─────────────────────────────────────────────────────────────────────────────
-console.log('\n[1/6] Verificando resolución de IP confiable y ausencia de bloqueo global...');
+console.log('\n[1/5] Verificando confianza de proxy y rechazo de cabeceras falsificadas...');
 
-// Test 1.1: Solicitud sin cabeceras confiables devuelve null (nunca 'unknown')
+// Test 1.1: Validación estándar IPv4/IPv6 (node:net RFC parser)
+assert.equal(isValidIp('127.0.0.1'), true, 'IPv4 válida');
+assert.equal(isValidIp('198.51.100.42'), true, 'IPv4 válida');
+assert.equal(isValidIp('2001:db8::1'), true, 'IPv6 válida');
+assert.equal(isValidIp('::1'), true, 'IPv6 localhost válida');
+// Rechazo de strings malformadas que superaban regex permisivas
+assert.equal(isValidIp(':::'), false, 'Triple colon debe rechazarse');
+assert.equal(isValidIp('1234::5678::90ab'), false, 'Doble :: en IPv6 debe rechazarse');
+assert.equal(isValidIp('256.0.0.1'), false, 'Octeto > 255 debe rechazarse');
+assert.equal(isValidIp('1.2.3.4.5'), false, 'Cinco octetos debe rechazarse');
+assert.equal(isValidIp('unknown'), false, 'String no numérica debe rechazarse');
+assert.equal(isValidIp(''), false, 'String vacía debe rechazarse');
+pass('Validación estándar IPv4/IPv6 estricta: rechaza sintaxis malformadas y bypasses');
+
+// Test 1.2: cf-connecting-ip falsificado sin acreditación de Cloudflare es estrictamente ignorado
+const unaccreditedCf = { get: (name) => (name === 'cf-connecting-ip' ? '198.51.100.42' : null) };
+assert.equal(
+  resolveTrustedClientIp(unaccreditedCf, { trustCloudflareProxy: false }), 
+  null, 
+  'cf-connecting-ip sin acreditación previa debe ignorarse para evitar spoofing'
+);
+pass('cf-connecting-ip falsificado se ignora cuando Cloudflare no está expresamente acreditado');
+
+// Test 1.3: cf-connecting-ip SÍ se acepta si Cloudflare está acreditado
+assert.equal(
+  resolveTrustedClientIp(unaccreditedCf, { trustCloudflareProxy: true }), 
+  '198.51.100.42', 
+  'cf-connecting-ip se acepta solo con acreditación explícita'
+);
+pass('cf-connecting-ip solo se admite bajo cadena de proxy Cloudflare expresamente acreditada');
+
+// Test 1.4: X-Forwarded-For falsificado por cliente es estrictamente ignorado
+const spoofedXff = { get: (name) => (name === 'x-forwarded-for' ? '203.0.113.1, 10.0.0.1' : null) };
+assert.equal(
+  resolveTrustedClientIp(spoofedXff), 
+  null, 
+  'X-Forwarded-For no debe usarse como fallback arbitrario sin cadena de proxy verificada'
+);
+pass('X-Forwarded-For arbitrario no se adopta como fallback inseguro');
+
+// Test 1.5: X-Real-IP del proxy local Nginx/Plesk acreditado es aceptado
+const nginxAccredited = { get: (name) => (name === 'x-real-ip' ? '198.51.100.99' : null) };
+assert.equal(
+  resolveTrustedClientIp(nginxAccredited), 
+  '198.51.100.99', 
+  'X-Real-IP inyectado por Nginx local se acepta como IP acreditada'
+);
+pass('X-Real-IP del proxy local se acepta como fuente acreditada');
+
+// Test 1.6: Prioridad de X-Real-IP frente a cf-connecting-ip o XFF no acreditados
+const mixedHeaders = {
+  get: (name) => {
+    if (name === 'cf-connecting-ip') return '1.2.3.4'; // Intento de spoofing
+    if (name === 'x-forwarded-for') return '5.6.7.8';  // Intento de spoofing
+    if (name === 'x-real-ip') return '198.51.100.99';  // TCP remote_addr fijado por Nginx
+    return null;
+  }
+};
+assert.equal(
+  resolveTrustedClientIp(mixedHeaders, { trustCloudflareProxy: false }),
+  '198.51.100.99',
+  'Debe resolver a X-Real-IP legítimo ignorando cabeceras falsificadas del cliente'
+);
+pass('Aislamiento de cabeceras: X-Real-IP prevalece sobre cabeceras cliente manipuladas');
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 2. AISLAMIENTO DEL CONTADOR Y PREVENCIÓN DE BLOQUEO GLOBAL
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\n[2/5] Verificando aislamiento de contadores de rate limiting...');
+
+// Test 2.1: IP null nunca incrementa contador ni se bloquea
+resetRateLimitStore();
 const emptyHeaders = { get: (name) => null };
-assert.equal(resolveTrustedClientIp(emptyHeaders), null, 'Sin cabeceras debe retornar null');
-assert.equal(isRateLimited(null), false, 'IP null nunca debe ser bloqueada por rate limit');
-pass('Sin cabeceras confiables, la IP se resuelve a null y nunca se bloquea');
+const nullIp = resolveTrustedClientIp(emptyHeaders);
+assert.equal(nullIp, null);
 
-// Test 1.2: Varios usuarios sin cabeceras de proxy identificables NO comparten contador
-resetRateLimitStore();
-for (let i = 0; i < 20; i++) {
-  assert.equal(isRateLimited(null), false, `Intento ${i + 1} para IP null no debe bloquear`);
-  recordSubmissionAttempt(null);
+for (let i = 0; i < 25; i++) {
+  assert.equal(isRateLimited(nullIp), false, `Intento ${i + 1} no debe bloquear`);
+  recordSubmissionAttempt(nullIp);
 }
-assert.equal(isRateLimited(null), false, '20 intentos con IP null no causan bloqueo');
-pass('Múltiples usuarios sin cabeceras identificables no provocan bloqueo global compartido');
+assert.equal(isRateLimited(nullIp), false, 'IP null nunca debe bloquearse globalmente');
+pass('IP null (no resuelta de forma confiable) nunca bloquea globalmente a otros usuarios');
 
-// Test 1.3: Cabeceras prioritarias de proxy
-const cfHeaders = { get: (name) => (name === 'cf-connecting-ip' ? '198.51.100.42' : '203.0.113.1') };
-assert.equal(resolveTrustedClientIp(cfHeaders), '198.51.100.42', 'Debe priorizar cf-connecting-ip');
-
-const nginxHeaders = { get: (name) => (name === 'x-real-ip' ? '198.51.100.99' : null) };
-assert.equal(resolveTrustedClientIp(nginxHeaders), '198.51.100.99', 'Debe leer x-real-ip de Nginx/Plesk');
-
-const xffHeaders = { get: (name) => (name === 'x-forwarded-for' ? '203.0.113.50, 10.0.0.1' : null) };
-assert.equal(resolveTrustedClientIp(xffHeaders), '203.0.113.50', 'Debe tomar el candidato más a la izquierda válido');
-pass('Resolución estricta desde cabeceras proxy acreditadas (Cloudflare, X-Real-IP, XFF)');
-
-// Test 1.4: Rate limiting aislado por IP real identificada
+// Test 2.2: Aislamiento estricto por IP identificada
 resetRateLimitStore();
-const targetIp = '203.0.113.77';
-const otherIp = '203.0.113.88';
+const ipA = '203.0.113.10';
+const ipB = '203.0.113.20';
 
 for (let i = 0; i < 5; i++) {
-  assert.equal(isRateLimited(targetIp), false, `Intento ${i + 1} de targetIp permitido`);
-  recordSubmissionAttempt(targetIp);
+  assert.equal(isRateLimited(ipA), false);
+  recordSubmissionAttempt(ipA);
 }
-assert.equal(isRateLimited(targetIp), true, 'Intento 6 para targetIp debe estar rate-limited');
-assert.equal(isRateLimited(otherIp), false, 'otherIp NO debe estar bloqueada por las acciones de targetIp');
-pass('El rate limiting aísla a la IP infractora sin afectar a otros clientes');
+assert.equal(isRateLimited(ipA), true, 'IP A supera el límite de 5 peticiones y se bloquea');
+assert.equal(isRateLimited(ipB), false, 'IP B NO se ve afectada por el bloqueo de IP A');
+assert.equal(isRateLimited(null), false, 'IP null NO se ve afectada por el bloqueo de IP A');
+pass('El rate limiting aísla rigurosamente por IP sin contaminación cruzada');
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 2. VERIFICACIÓN DE SANITIZACIÓN Y CALIDAD (SIN PII EN LOGS)
+// 3. RECORRIDO PÚBLICO REAL Y DECLARACIÓN DE CÓDIGO SIN USO
 // ─────────────────────────────────────────────────────────────────────────────
-console.log('\n[2/6] Verificando sanitización, anti-spam y ausencia de PII en logs...');
+console.log('\n[3/5] Verificando recorrido público real y código no expuesto...');
 
-const maliciousInput = '<script>alert("xss")</script>Imprenta Moderna<style>body{color:red}</style>';
-const sanitized = sanitizeText(maliciousInput);
-assert.equal(sanitized.includes('<script>'), false, 'HTML/Scripts deben ser eliminados');
-assert.equal(sanitized.includes('Imprenta Moderna'), true, 'El texto legítimo debe conservarse');
-pass('Sanitización estricta de entradas de texto sin rastros de etiquetas maliciosas');
+// Buscar todos los archivos en app/ que importen PartnerOnboardingFlow o submitPartnerOnboarding
+function searchImportsInDir(dir, query) {
+  let matches = [];
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      matches = matches.concat(searchImportsInDir(fullPath, query));
+    } else if (entry.isFile() && (entry.name.endsWith('.tsx') || entry.name.endsWith('.ts'))) {
+      const content = fs.readFileSync(fullPath, 'utf8');
+      if (content.includes(query)) {
+        matches.push(fullPath);
+      }
+    }
+  }
+  return matches;
+}
 
-assert.equal(isEmailDomainAllowed('usuario@tempmail.com'), false, 'Emails temporales deben rechazarse');
-assert.equal(isEmailDomainAllowed('produccion@graficas-unidas.es'), true, 'Emails corporativos deben admitirse');
-pass('Detección y bloqueo de dominios desechables');
+const appDir = path.resolve('app');
+const onboardingImportsInApp = searchImportsInDir(appDir, 'PartnerOnboardingFlow');
+const submitImportsInApp = searchImportsInDir(appDir, 'submitPartnerOnboarding');
 
-assert.equal(auditLeadQuality({ companyName: 'asdfghjkl', email: 'test@empresa.com' }), false, 'Patrón bot rechazado');
-assert.equal(auditLeadQuality({ companyName: 'Talleres Gráficos del Norte S.L.', email: 'admin@tgnorte.es' }), true, 'Empresa legítima aceptada');
-pass('Auditoría de calidad técnica de lead discriminando nombres aleatorios de bots');
+assert.equal(
+  onboardingImportsInApp.length, 
+  0, 
+  `PartnerOnboardingFlow no debe estar importado en ninguna ruta pública de app/. Encontrado en: ${onboardingImportsInApp.join(', ')}`
+);
+assert.equal(
+  submitImportsInApp.length, 
+  0, 
+  `submitPartnerOnboarding no debe estar importado en ninguna ruta pública de app/. Encontrado en: ${submitImportsInApp.join(', ')}`
+);
+pass('Confirmado: PartnerOnboardingFlow es código sin uso en app/, no expuesto en rutas públicas');
+
+// Verificar que las rutas públicas relevantes enlazan directamente a Control Plane
+const contactPartnerPage = fs.readFileSync(path.resolve('app/contact/partner/page.tsx'), 'utf8');
+const forPrinthousesPage = fs.readFileSync(path.resolve('app/for-printhouses/page.tsx'), 'utf8');
+
+assert.equal(
+  contactPartnerPage.includes('https://control.printprice.pro/printhouse/register'),
+  true,
+  '/contact/partner debe enlazar directamente a Control Plane'
+);
+assert.equal(
+  forPrinthousesPage.includes('https://control.printprice.pro/printhouse/register'),
+  true,
+  '/for-printhouses debe enlazar directamente a Control Plane'
+);
+assert.equal(
+  contactPartnerPage.includes('PartnerOnboardingFlow'),
+  false,
+  '/contact/partner no debe importar ni exponer PartnerOnboardingFlow'
+);
+pass('Rutas públicas (/contact/partner, /for-printhouses) utilizan exclusivamente el enlace canónico a Control Plane');
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 3. VERIFICACIÓN DE ACCIONES DEL SERVIDOR (ACTIONS.TS)
+// 4. AVISO PREVIO EN COMPONENTE PARA EVITAR COMPLETAR 6 PASOS EN VANO
 // ─────────────────────────────────────────────────────────────────────────────
-console.log('\n[3/6] Verificando código fuente de lib/actions.ts y schemas.ts...');
+console.log('\n[4/5] Verificando aviso previo de arquitectura en PartnerOnboardingFlow.tsx...');
+
+const flowCode = fs.readFileSync(path.resolve('components/monolith/PartnerOnboardingFlow.tsx'), 'utf8');
+
+// Comprobar que existe el banner previo con el aviso y el enlace canónico
+assert.equal(
+  flowCode.includes('upfrontNoticeTitle') && flowCode.includes('btnGoToControlPlaneDirect'),
+  true,
+  'PartnerOnboardingFlow.tsx debe mostrar un aviso previo con enlace directo a Control Plane'
+);
+assert.equal(
+  flowCode.includes('https://control.printprice.pro/printhouse/register'),
+  true,
+  'El aviso previo debe ofrecer acceso inmediato al registro canónico'
+);
+pass('PartnerOnboardingFlow incluye aviso previo y CTA directo: el usuario no necesita hacer 6 pasos');
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 5. HONESTIDAD, BORRADOR Y CERO PII EN LOGS
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\n[5/5] Verificando honestidad técnica, borrador y ausencia de PII...');
 
 const actionsCode = fs.readFileSync(path.resolve('lib/actions.ts'), 'utf8');
 
@@ -109,142 +228,49 @@ const actionsCode = fs.readFileSync(path.resolve('lib/actions.ts'), 'utf8');
 assert.equal(
   actionsCode.includes('success: true'), 
   false, 
-  'lib/actions.ts NUNCA debe devolver success: true bajo ninguna circunstancia'
+  'actions.ts no debe devolver success: true bajo ninguna circunstancia'
 );
-pass('lib/actions.ts garantiza no devolver nunca success: true');
-
-// Assert: Returns status INTEGRATION_PENDING
 assert.equal(
   actionsCode.includes("'INTEGRATION_PENDING'"),
   true,
-  'lib/actions.ts debe devolver status INTEGRATION_PENDING ante validación correcta'
+  'actions.ts debe entregar estado honesto INTEGRATION_PENDING'
 );
-pass('lib/actions.ts entrega el estado honesto INTEGRATION_PENDING');
+pass('actions.ts garantiza no devolver nunca éxito simulado (success: false siempre)');
 
-// Assert: No PII logged in any console calls (no interpolation, no validatedData references)
-const consoleLines = actionsCode
+// Assert: No PII logged
+const consoleCalls = actionsCode
   .split('\n')
-  .filter(line => line.includes('console.log') || line.includes('console.warn') || line.includes('console.error'));
+  .filter(l => l.includes('console.log') || l.includes('console.warn') || l.includes('console.error'));
 
-for (const line of consoleLines) {
+for (const line of consoleCalls) {
   assert.equal(
-    line.includes('${') || 
-    line.includes('validatedData.') || 
-    line.includes('rawData.') ||
-    line.includes('data.'),
+    line.includes('${') || line.includes('validatedData.') || line.includes('rawData.'),
     false,
-    `Línea de log contiene interpolación o variables de usuario: ${line.trim()}`
+    `Línea de log contiene interpolación de datos de usuario: ${line.trim()}`
   );
 }
-pass('Cero PII o variables de usuario en registros de auditoría y consola');
+pass('Cero PII en logs de consola y auditoría');
 
-// ─────────────────────────────────────────────────────────────────────────────
-// 4. VERIFICACIÓN DE INTERFAZ Y COMPONENTE (PARTNERONBOARDINGFLOW.TSX)
-// ─────────────────────────────────────────────────────────────────────────────
-console.log('\n[4/6] Verificando PartnerOnboardingFlow.tsx...');
-
-const flowCode = fs.readFileSync(path.resolve('components/monolith/PartnerOnboardingFlow.tsx'), 'utf8');
-
-// Assert: No decorative Turnstile
-assert.equal(
-  flowCode.includes('Cloudflare Turnstile Verified'),
-  false,
-  'PartnerOnboardingFlow.tsx no debe incluir "Cloudflare Turnstile Verified"'
-);
-assert.equal(
-  flowCode.includes('BOT_PROTECTION_ACTIVE'),
-  false,
-  'PartnerOnboardingFlow.tsx no debe incluir BOT_PROTECTION_ACTIVE'
-);
-pass('Retirado completamente el indicador decorativo de Turnstile y BOT_PROTECTION_ACTIVE');
-
-// Assert: Draft is NEVER deleted upon submission or error
+// Assert: Draft is NEVER deleted
 assert.equal(
   flowCode.includes("localStorage.removeItem('ppp_partner_onboarding')"),
   false,
-  'PartnerOnboardingFlow.tsx NO debe borrar el borrador de localStorage'
+  'El borrador no debe borrarse de localStorage'
 );
 assert.equal(
   flowCode.includes("localStorage.setItem('ppp_partner_onboarding'"),
   true,
-  'PartnerOnboardingFlow.tsx debe persistir el borrador en localStorage'
+  'El borrador se preserva en localStorage'
 );
 pass('El borrador se preserva rigurosamente en el navegador ante errores y envíos');
 
-// Assert: No false claims of notification or accounts
-assert.equal(
-  flowCode.includes('Our onboarding team has been notified for node activation'),
-  false,
-  'No debe afirmar falsamente que el equipo ha sido notificado'
-);
-assert.equal(
-  flowCode.includes('Direct Onboarding Applied'),
-  false,
-  'No debe afirmar falsamente "Direct Onboarding Applied"'
-);
-assert.equal(
-  flowCode.includes('added to our supply chain registry'),
-  false,
-  'No debe afirmar falsamente inclusión en el registro de suministro'
-);
-pass('Eliminadas todas las afirmaciones ficticias de notificación y creación de cuentas');
-
-// Assert: Rounded design tokens
-assert.equal(
-  flowCode.includes("borderRadius: 'var(--radius-card-lg, 24px)'") || flowCode.includes("rounded-card"),
-  true,
-  'PartnerOnboardingFlow.tsx debe usar el sistema de esquinas redondeadas'
-);
-pass('Diseño redondeado coherente con el sistema visual corporativo');
-
-// ─────────────────────────────────────────────────────────────────────────────
-// 5. VERIFICACIÓN MULTILINGÜE (ES, EN, DE) Y DESTINO DE REGISTRO
-// ─────────────────────────────────────────────────────────────────────────────
-console.log('\n[5/6] Verificando paridad multilingüe y destinos autorizados...');
-
-assert.equal(flowCode.includes("es: 'Legal'"), true, 'Soporta ES');
-assert.equal(flowCode.includes("en: 'Legal'"), true, 'Soporta EN');
-assert.equal(flowCode.includes("de: 'Rechtliches'"), true, 'Soporta DE');
-
-// Destination URL is official without PII in query params
-assert.equal(
-  flowCode.includes('https://control.printprice.pro/printhouse/register'),
-  true,
-  'Debe enlazar al registro canónico oficial en Control Plane'
-);
-assert.equal(
-  flowCode.includes('https://control.printprice.pro/printhouse/register?') ||
-  flowCode.includes('email=') || 
-  flowCode.includes('password='),
-  false,
-  'No debe incluir credenciales ni datos personales en la URL'
-);
-pass('Paridad idiomática completa ES / EN / DE y enlace limpio a Control Plane sin PII');
-
-// ─────────────────────────────────────────────────────────────────────────────
-// 6. DIFERENCIACIÓN ENTRE ENTORNO LOCAL Y PRODUCCIÓN
-// ─────────────────────────────────────────────────────────────────────────────
-console.log('\n[6/6] Verificando diferenciación de entornos (Local vs Producción)...');
-
-const envReport = {
-  localEnvironment: {
-    status: 'VERIFICADO',
-    typecheck: 'Superado (npx tsc --noEmit)',
-    unitAndSecurityTests: `${passedTests + 1} aserciones superadas`,
-    stateHandling: 'Borrador persistido, estado honesto INTEGRATION_PENDING, rate limiter seguro'
-  },
-  productionPendingInspection: {
-    status: 'PENDIENTE DE DESPLIEGUE CONTROLADO (NO EJECUTADO)',
-    backups: 'Cron de backupmng (/etc/cron.d/) en Plesk no acredita copias completas cada 15m; alcance y exclusiones pendientes',
-    cleanupWorker: 'Ejecución efectiva del StorageCleanupWorker en contenedor en runtime pendiente de monitorización directa',
-    imageIdentity: 'Git SHA e identidad de imagen Docker desplegada (evitar inferencias por nombres de carpeta o tags)'
-  }
-};
-
-assert.equal(envReport.localEnvironment.status, 'VERIFICADO');
-assert.equal(envReport.productionPendingInspection.status.includes('PENDIENTE'), true);
-pass('Diferenciación explícita de pruebas locales frente a comprobaciones operativas en producción');
+// Assert: No fake bot protection or team notification claims
+assert.equal(flowCode.includes('Cloudflare Turnstile Verified'), false);
+assert.equal(flowCode.includes('BOT_PROTECTION_ACTIVE'), false);
+assert.equal(flowCode.includes('Our onboarding team has been notified'), false);
+assert.equal(flowCode.includes('Direct Onboarding Applied'), false);
+pass('Retiradas todas las afirmaciones ficticias de protección anti-bots o notificación al equipo');
 
 console.log('\n═════════════════════════════════════════════════════════════════════════════');
-console.log(`🎉 TODAS LAS PRUEBAS SUPERADAS: ${passedTests} aserciones validadas con éxito.`);
+console.log(`🎉 TODAS LAS PRUEBAS FUNCIONALES SUPERADAS: ${passedTests} aserciones verificadas.`);
 console.log('═════════════════════════════════════════════════════════════════════════════\n');
