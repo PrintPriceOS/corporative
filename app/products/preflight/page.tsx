@@ -151,7 +151,7 @@ export default function PreflightProductPage() {
       compPill: 'ANÁLISIS DOCUMENTAL COMPARATIVO',
       compTitle: 'Comparativa objetiva de soluciones de Preflight',
       compSubtitle: 'Basado en la documentación técnica oficial vigente de cada producto (Revisión: Octubre 2026). Entrega de capacidades contrastadas sin superlativos comerciales.',
-      compSourcesNote: '* Fuentes oficiales y metodología (Revisión: Octubre 2026): Adobe Acrobat Pro (Guía del usuario - Herramienta Comprobaciones y perfiles de corrección, Adobe Help Center); Enfocus PitStop Pro & PitStop Server (Manual técnico v2024/2025 y Especificaciones de producto, Enfocus Documentation); callas software pdfToolbox (Feature Matrix y Manual de pdfToolbox Server/CLI/SDK, callas Help); Ghent Workgroup (Especificaciones de conformidad GWG). Datos referidos a las capacidades documentadas de cada edición de escritorio o servidor.',
+      compSourcesNote: '* Fuentes oficiales consultadas (Revisión: Octubre 2026): Adobe Acrobat Pro, Enfocus PitStop Pro/Server, callas pdfToolbox Server y especificaciones Ghent Workgroup. Se distingue rigurosamente entre comprobación técnica de estándares, uso de perfiles de preflight y certificación formal de producto.',
       tabIndividual: 'A. Particulares y Editoriales',
       tabPro: 'B. Flujos Profesionales e Imprentas',
       scrollTableHint: '⇄ Desplaza horizontalmente para ver la tabla completa',
@@ -236,13 +236,13 @@ export default function PreflightProductPage() {
             p3Desc: 'Process Plans con lógica condicional avanzada, JavaScript y perfiles GWG.'
           },
           {
-            dimension: 'Inspección de estándares PDF/X',
-            p1Status: 'Disponible (Inspección)',
-            p1Desc: 'Comprobación técnica de reglas basadas en PDF/X (PDF/X-1a, PDF/X-4). No constituye certificación formal de producto por organismo acreditador.',
-            p2Status: 'Disponible (Certificación GWG)',
-            p2Desc: 'Validación completa de PDF/X y certificación con perfiles oficiales Ghent Workgroup.',
-            p3Status: 'Disponible (Certificación GWG)',
-            p3Desc: 'Motor de referencia oficial empleado en suites de prueba GWG e ISO (PDF/X, PDF/A, PDF/VT).'
+            dimension: 'Comprobación de perfiles y estándares PDF/X',
+            p1Status: 'Disponible (Inspección técnica)',
+            p1Desc: 'Evaluación técnica basada en especificaciones ISO PDF/X (PDF/X-1a, PDF/X-4). No constituye certificación formal de producto.',
+            p2Status: 'Disponible (Perfiles de preflight)',
+            p2Desc: 'Inspección técnica mediante perfiles para estándares PDF/X y especificaciones GWG. Certificación formal de producto: No verificada para versión específica.',
+            p3Status: 'Disponible (Perfiles de preflight)',
+            p3Desc: 'Inspección técnica avanzada mediante Process Plans para estándares PDF/X y especificaciones GWG. Certificación formal de producto: No verificada para versión específica.'
           },
           {
             dimension: 'Procesamiento por lotes',
@@ -446,7 +446,7 @@ export default function PreflightProductPage() {
       compPill: 'COMPARATIVE DOCUMENTARY ANALYSIS',
       compTitle: 'Objective Comparison of Preflight Solutions',
       compSubtitle: 'Based on official in-force technical documentation of each product (Revision: October 2026). Clear presentation of verified capabilities without sales superlatives.',
-      compSourcesNote: '* Official sources & methodology (Revision: October 2026): Adobe Acrobat Pro (User Guide - Preflight tool & fixup profiles, Adobe Help Center); Enfocus PitStop Pro & PitStop Server (Technical Manual v2024/2025 & Product Specifications, Enfocus Documentation); callas software pdfToolbox (Feature Matrix & pdfToolbox Server/CLI/SDK Manual, callas Help); Ghent Workgroup (GWG Compliance Specifications). Data pertains to documented capabilities of each desktop or server edition.',
+      compSourcesNote: '* Official consulted sources (Revision: October 2026): Adobe Acrobat Pro, Enfocus PitStop Pro/Server, callas pdfToolbox Server, and Ghent Workgroup specifications. A rigorous distinction is maintained between technical standards checking, preflight profile usage, and formal product certification.',
       tabIndividual: 'A. Creators & Publishers',
       tabPro: 'B. Professional Workflows & Plants',
       scrollTableHint: '⇄ Scroll horizontally to view full table',
@@ -531,13 +531,13 @@ export default function PreflightProductPage() {
             p3Desc: 'Process Plans with advanced conditional logic, JavaScript, and GWG profiles.'
           },
           {
-            dimension: 'PDF/X Standards Inspection',
-            p1Status: 'Available (Inspection)',
-            p1Desc: 'Technical rule checking based on PDF/X (PDF/X-1a, PDF/X-4). Does not constitute formal product certification by an accredited body.',
-            p2Status: 'Available (GWG Certification)',
-            p2Desc: 'Full validation from PDF/X-1a through PDF/X-6 and Ghent Workgroup specs.',
-            p3Status: 'Available (GWG Certification)',
-            p3Desc: 'Official reference engine for the Ghent Workgroup and ISO (PDF/X, PDF/A, PDF/VT).'
+            dimension: 'PDF/X Profiles & Standards Verification',
+            p1Status: 'Available (Technical inspection)',
+            p1Desc: 'Technical evaluation based on ISO PDF/X specifications (PDF/X-1a, PDF/X-4). Does not constitute formal product certification.',
+            p2Status: 'Available (Preflight profiles)',
+            p2Desc: 'Technical inspection via profiles for PDF/X standards and GWG specifications. Formal product certification: Not verified for specific version.',
+            p3Status: 'Available (Preflight profiles)',
+            p3Desc: 'Advanced technical inspection via Process Plans for PDF/X standards and GWG specifications. Formal product certification: Not verified for specific version.'
           },
           {
             dimension: 'Batch Processing',
@@ -741,7 +741,7 @@ export default function PreflightProductPage() {
       compPill: 'DOKUMENTARISCHE VERGLEICHSANALYSE',
       compTitle: 'Objektiver Vergleich von Preflight-Lösungen',
       compSubtitle: 'Basierend auf der offiziell gültigen technischen Dokumentation der einzelnen Produkte (Stand: Oktober 2026). Sachliche Gegenüberstellung ohne werbliche Übertreibung.',
-      compSourcesNote: '* Offizielle Quellen & Methodik (Stand: Oktober 2026): Adobe Acrobat Pro (Benutzerhandbuch - Preflight-Werkzeug & Korrekturprofile, Adobe Help Center); Enfocus PitStop Pro & PitStop Server (Technisches Handbuch v2024/2025 & Produktspezifikationen, Enfocus Documentation); callas software pdfToolbox (Funktionsmatrix & pdfToolbox Server/CLI/SDK-Handbuch, callas Help); Ghent Workgroup (GWG-Konformitätsspezifikationen). Angaben beziehen sich auf die dokumentierten Funktionen der jeweiligen Desktop- bzw. Server-Edition.',
+      compSourcesNote: '* Offizielle konsultierte Quellen (Stand: Oktober 2026): Adobe Acrobat Pro, Enfocus PitStop Pro/Server, callas pdfToolbox Server und Ghent Workgroup Spezifikationen. Es wird strikt zwischen technischer Standardprüfung, Nutzung von Preflight-Profilen und formeller Produktzertifizierung unterschieden.',
       tabIndividual: 'A. Privatpersonen & Verlage',
       tabPro: 'B. Professionelle Workflows & Druckereien',
       scrollTableHint: '⇄ Horizontal wischen für die vollständige Tabelle',
@@ -826,13 +826,13 @@ export default function PreflightProductPage() {
             p3Desc: 'Process Plans mit fortgeschrittener bedingter Logik, JavaScript und GWG-Profilen.'
           },
           {
-            dimension: 'PDF/X-Standardprüfung',
-            p1Status: 'Verfügbar (Prüfung)',
-            p1Desc: 'Technische Regelprüfung basierend auf PDF/X (PDF/X-1a, PDF/X-4). Stellt keine formelle Produktzertifizierung durch eine akkreditierte Stelle dar.',
-            p2Status: 'Verfügbar (GWG-Zertifizierung)',
-            p2Desc: 'Vollständige Prüfung von PDF/X-1a bis PDF/X-6 sowie Ghent Workgroup Spezifikationen.',
-            p3Status: 'Verfügbar (GWG-Zertifizierung)',
-            p3Desc: 'Offizielle Referenz-Engine für die Ghent Workgroup und ISO (PDF/X, PDF/A, PDF/VT).'
+            dimension: 'PDF/X-Profile und Standardprüfung',
+            p1Status: 'Verfügbar (Technische Prüfung)',
+            p1Desc: 'Technische Prüfung basierend auf ISO PDF/X-Spezifikationen (PDF/X-1a, PDF/X-4). Stellt keine formelle Produktzertifizierung dar.',
+            p2Status: 'Verfügbar (Preflight-Profile)',
+            p2Desc: 'Technische Prüfung über Profile für PDF/X-Standards und GWG-Spezifikationen. Formelle Produktzertifizierung: Nicht verifiziert für spezifische Version.',
+            p3Status: 'Verfügbar (Preflight-Profile)',
+            p3Desc: 'Erweiterte technische Prüfung über Process Plans für PDF/X-Standards und GWG-Spezifikationen. Formelle Produktzertifizierung: Nicht verifiziert für spezifische Version.'
           },
           {
             dimension: 'Stapelverarbeitung',
@@ -1395,9 +1395,51 @@ export default function PreflightProductPage() {
             </div>
           )}
 
-          <div style={{ marginTop: '1.5rem', textAlign: 'center', maxWidth: '920px', margin: '1.5rem auto 0', fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+          <div style={{ marginTop: '1.5rem', textAlign: 'center', maxWidth: '920px', margin: '1.5rem auto 0', fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.7 }}>
             <p style={{ margin: '0 0 0.75rem 0' }}>
-              {t.compSourcesNote}
+              {locale === 'es' ? (
+                <>
+                  * Fuentes oficiales consultadas (Revisión: Octubre 2026): Adobe Acrobat Pro (
+                  <a href="https://helpx.adobe.com/acrobat/using/analyzing-documents-preflight-tool.html" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>Adobe Help Center - Preflight Tool</a>
+                  ); Enfocus PitStop Pro &amp; Server (
+                  <a href="https://www.enfocus.com/en/pitstop-pro" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>Enfocus PitStop Pro</a>
+                  {' / '}
+                  <a href="https://www.enfocus.com/en/pitstop-server" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>PitStop Server</a>
+                  ); callas software pdfToolbox Server (
+                  <a href="https://help.callassoftware.com/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>callas Software Documentation</a>
+                  ); Ghent Workgroup (
+                  <a href="https://gwg.org/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>GWG Specifications</a>
+                  ). Se distingue rigurosamente entre comprobación técnica de estándares, uso de perfiles de preflight y certificación formal de producto (la cual se indica como «No verificada» salvo acreditación documental específica por versión).
+                </>
+              ) : locale === 'de' ? (
+                <>
+                  * Offizielle konsultierte Quellen (Stand: Oktober 2026): Adobe Acrobat Pro (
+                  <a href="https://helpx.adobe.com/acrobat/using/analyzing-documents-preflight-tool.html" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>Adobe Help Center - Preflight-Werkzeug</a>
+                  ); Enfocus PitStop Pro &amp; Server (
+                  <a href="https://www.enfocus.com/en/pitstop-pro" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>Enfocus PitStop Pro</a>
+                  {' / '}
+                  <a href="https://www.enfocus.com/en/pitstop-server" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>PitStop Server</a>
+                  ); callas software pdfToolbox Server (
+                  <a href="https://help.callassoftware.com/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>callas Software Dokumentation</a>
+                  ); Ghent Workgroup (
+                  <a href="https://gwg.org/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>GWG-Spezifikationen</a>
+                  ). Es wird strikt zwischen technischer Standardprüfung, Nutzung von Preflight-Profilen und formeller Produktzertifizierung unterschieden (letztere als «Nicht verifiziert» markiert ohne versionsspezifischen Nachweis).
+                </>
+              ) : (
+                <>
+                  * Official consulted sources (Revision: October 2026): Adobe Acrobat Pro (
+                  <a href="https://helpx.adobe.com/acrobat/using/analyzing-documents-preflight-tool.html" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>Adobe Help Center - Preflight Tool</a>
+                  ); Enfocus PitStop Pro &amp; Server (
+                  <a href="https://www.enfocus.com/en/pitstop-pro" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>Enfocus PitStop Pro</a>
+                  {' / '}
+                  <a href="https://www.enfocus.com/en/pitstop-server" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>PitStop Server</a>
+                  ); callas software pdfToolbox Server (
+                  <a href="https://help.callassoftware.com/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>callas Software Documentation</a>
+                  ); Ghent Workgroup (
+                  <a href="https://gwg.org/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>GWG Specifications</a>
+                  ). A rigorous distinction is maintained between technical standards checking, preflight profile usage, and formal product certification (the latter marked as "Not verified" absent version-specific documentation).
+                </>
+              )}
             </p>
             <Link
               href="/docs/engines/preflight-engine"

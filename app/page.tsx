@@ -152,54 +152,54 @@ export default function Home() {
     {
       feature: locale === 'es' ? 'Cálculo de presupuesto inmediato sin registro' : locale === 'de' ? 'Sofortige Kalkulation ohne Registrierungspflicht' : 'Instant budget estimate without compulsory signup',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      traditional: locale === 'es' ? 'Manual (24-72h)' : locale === 'de' ? 'Manuell (24-72 Std.)' : 'Manual (24-72h)',
-      lulu: locale === 'es' ? 'Mediante registro' : locale === 'de' ? 'Über Registrierung' : 'Via registration',
-      gelato: locale === 'es' ? 'Mediante B2B' : locale === 'de' ? 'Über B2B' : 'Via B2B',
-      notes: locale === 'es' ? 'Budget calcula de inmediato con matrices reales en servidor.' : locale === 'de' ? 'Budget kalkuliert sofort ohne Vorab-Konto auf dem Server.' : 'Budget computes instantly using live server cost matrices.',
+      traditional: locale === 'es' ? 'Varía según proveedor' : locale === 'de' ? 'Variiert je nach Anbieter' : 'Varies by provider',
+      lulu: locale === 'es' ? 'No verificado' : locale === 'de' ? 'Nicht verifiziert' : 'Not verified',
+      gelato: locale === 'es' ? 'No verificado' : locale === 'de' ? 'Nicht verifiziert' : 'Not verified',
+      notes: locale === 'es' ? 'Budget calcula de inmediato con matrices de coste en servidor.' : locale === 'de' ? 'Budget kalkuliert sofort ohne Vorab-Konto auf dem Server.' : 'Budget computes instantly using server cost matrices.',
     },
     {
       feature: locale === 'es' ? 'Desglose transparente entre impresión y papel' : locale === 'de' ? 'Transparente Aufteilung von Druck und Papier' : 'Transparent separation between printing and paper',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      traditional: locale === 'es' ? 'Presupuesto conjunto' : locale === 'de' ? 'Pauschalangebot' : 'Bundled quote',
-      lulu: locale === 'es' ? 'No disponible' : locale === 'de' ? 'Nicht verfügbar' : 'Not available',
-      gelato: locale === 'es' ? 'No disponible' : locale === 'de' ? 'Nicht verfügbar' : 'Not available',
+      traditional: locale === 'es' ? 'Varía según proveedor' : locale === 'de' ? 'Variiert je nach Anbieter' : 'Varies by provider',
+      lulu: locale === 'es' ? 'No verificado' : locale === 'de' ? 'Nicht verifiziert' : 'Not verified',
+      gelato: locale === 'es' ? 'No verificado' : locale === 'de' ? 'Nicht verifiziert' : 'Not verified',
       notes: locale === 'es' ? 'Desglosa el coste de fabricación gráfica y el sustrato catalogado.' : locale === 'de' ? 'Trennt Fertigungsaufwand und katalogisierten Materialpreis.' : 'Separates printing production costs from cataloged substrate costs.',
     },
     {
       feature: locale === 'es' ? 'Optimización de tecnología digital vs offset según volumen' : locale === 'de' ? 'Auflagenoptimierung Digital vs. Offset' : 'Run volume optimization (digital vs offset)',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      traditional: locale === 'es' ? 'Criterio de cotizador' : locale === 'de' ? 'Nach Sachbearbeiter' : 'Estimator discretion',
-      lulu: locale === 'es' ? 'Solo digital / POD' : locale === 'de' ? 'Nur Digital / POD' : 'Digital / POD only',
-      gelato: locale === 'es' ? 'Solo digital / POD' : locale === 'de' ? 'Nur Digital / POD' : 'Digital / POD only',
-      notes: locale === 'es' ? 'Calcula automáticamente el coste más eficiente aplicando tecnología digital para tiradas cortas u offset para tiradas medias y altas.' : locale === 'de' ? 'Ermittelt automatisch die wirtschaftlichste Technologie (Digital für Kleinauflagen, Offset für mittlere/große Auflagen).' : 'Calculates the optimal cost path applying digital for short runs or offset for volume runs.',
+      traditional: locale === 'es' ? 'Varía según proveedor' : locale === 'de' ? 'Variiert je nach Anbieter' : 'Varies by provider',
+      lulu: locale === 'es' ? 'No verificado' : locale === 'de' ? 'Nicht verifiziert' : 'Not verified',
+      gelato: locale === 'es' ? 'No verificado' : locale === 'de' ? 'Nicht verifiziert' : 'Not verified',
+      notes: locale === 'es' ? 'Calcula el coste aplicando tecnología digital u offset según parámetros de tirada.' : locale === 'de' ? 'Ermittelt Fertigungskosten nach Auflagenhöhe und Bogenformat.' : 'Calculates production costs applying digital or offset based on run parameters.',
     },
     {
       feature: locale === 'es' ? 'Tarifas y capacidades calibradas por talleres adscritos' : locale === 'de' ? 'Maschinenkosten hinterlegt von Partnerbetrieben' : 'Machine rates calibrated by partner plants',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      traditional: locale === 'es' ? 'Presupuesto individual' : locale === 'de' ? 'Einzelangebot' : 'Single quote',
-      lulu: locale === 'es' ? 'Tarifa fija cerrada' : locale === 'de' ? 'Feste Einheitstarife' : 'Fixed closed pricing',
-      gelato: locale === 'es' ? 'Tarifa fija cerrada' : locale === 'de' ? 'Feste Einheitstarife' : 'Fixed closed pricing',
-      notes: locale === 'es' ? 'Costes horarios, mermas de arranque y pliegos modelados en la plataforma.' : locale === 'de' ? 'Stundensätze, Rüstzeiten und Bogenformate aus der Plattform.' : 'Hourly rates, makeready waste, and imposition sheets from the platform.',
+      traditional: locale === 'es' ? 'Varía según proveedor' : locale === 'de' ? 'Variiert je nach Anbieter' : 'Varies by provider',
+      lulu: locale === 'es' ? 'No verificado' : locale === 'de' ? 'Nicht verifiziert' : 'Not verified',
+      gelato: locale === 'es' ? 'No verificado' : locale === 'de' ? 'Nicht verifiziert' : 'Not verified',
+      notes: locale === 'es' ? 'Costes horarios y pliegos modelados en la plataforma.' : locale === 'de' ? 'Stundensätze und Bogenformate aus der Plattform.' : 'Hourly rates and imposition sheets from the platform.',
     },
     {
       feature: locale === 'es' ? 'Ficha técnica verificada y vinculada a la orden' : locale === 'de' ? 'Verifizierte technische Spezifikation für den Auftrag' : 'Verified technical spec sheet tied to order',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      traditional: locale === 'es' ? 'Albarán / Email' : locale === 'de' ? 'Lieferschein / E-Mail' : 'Email / Packing slip',
-      lulu: locale === 'es' ? 'Número de pedido' : locale === 'de' ? 'Bestellnummer' : 'Order number',
-      gelato: locale === 'es' ? 'ID de encargo' : locale === 'de' ? 'Auftrags-ID' : 'Job ID',
+      traditional: locale === 'es' ? 'Varía según proveedor' : locale === 'de' ? 'Variiert je nach Anbieter' : 'Varies by provider',
+      lulu: locale === 'es' ? 'No verificado' : locale === 'de' ? 'Nicht verifiziert' : 'Not verified',
+      gelato: locale === 'es' ? 'No verificado' : locale === 'de' ? 'Nicht verifiziert' : 'Not verified',
       notes: locale === 'es' ? 'Vincula la orden de producción a las especificaciones acordadas en el pedido.' : locale === 'de' ? 'Bindet den Fertigungsauftrag an die im Auftrag vereinbarten Spezifikationen.' : 'Binds the production order to the agreed order specifications.',
     },
   ];
 
-  // Tab 2: FIX IT (Preflight y Preparación de PDF) — Official Sources from PREFLIGHT_COMPARISON_SOURCES.md
+  // Tab 2: FIX IT (Preflight y Preparación de PDF)
   const COMPARISON_FIX = [
     {
       feature: locale === 'es' ? 'Comprobación web directa sin instalación de software' : locale === 'de' ? 'Direkte Web-Prüfung ohne Softwareinstallation' : 'Direct browser preflight without desktop software installation',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      acrobat: locale === 'es' ? 'No aplica' : locale === 'de' ? 'Nicht anwendbar' : 'Not applicable',
-      pitstop: locale === 'es' ? 'Mediante servidor' : locale === 'de' ? 'Über Server' : 'Via server',
-      pdftoolbox: locale === 'es' ? 'Mediante servidor' : locale === 'de' ? 'Über Server' : 'Via server',
-      notes: locale === 'es' ? 'Preflight se ejecuta directamente en navegador sin licencias de escritorio pesadas.' : locale === 'de' ? 'Preflight läuft browserbasiert ohne Desktop-Lizenzen.' : 'Preflight executes in browser with no heavy desktop licenses required.',
+      acrobat: locale === 'es' ? 'Aplicación escritorio' : locale === 'de' ? 'Desktop-Anwendung' : 'Desktop app',
+      pitstop: locale === 'es' ? 'Plugin / Servidor' : locale === 'de' ? 'Plugin / Server' : 'Plugin / Server',
+      pdftoolbox: locale === 'es' ? 'Servidor / CLI / SDK' : locale === 'de' ? 'Server / CLI / SDK' : 'Server / CLI / SDK',
+      notes: locale === 'es' ? 'Preflight se ejecuta directamente en navegador web.' : locale === 'de' ? 'Preflight läuft direkt im Webbrowser.' : 'Preflight executes directly in web browser.',
     },
     {
       feature: locale === 'es' ? 'Detección perimetral de sangres según perfil de producción' : locale === 'de' ? 'Beschnittprüfung nach Produktionsprofil' : 'Perimeter bleed audit according to production profile',
@@ -207,7 +207,7 @@ export default function Home() {
       acrobat: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
       pitstop: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
       pdftoolbox: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      notes: locale === 'es' ? 'Verifica el margen configurado (por ejemplo, 3 mm estándar en libros) para evitar filos blancos.' : locale === 'de' ? 'Prüft den definierten Randbeschnitt (z. B. 3 mm im Buchdruck) gegen weiße Blitzer.' : 'Verifies configured bleed margins (e.g. 3mm book standard) to prevent slivers.',
+      notes: locale === 'es' ? 'Verifica el margen configurado para el perfil del libro.' : locale === 'de' ? 'Prüft den definierten Randbeschnitt für das Buchprofil.' : 'Verifies configured bleed margin for the book profile.',
     },
     {
       feature: locale === 'es' ? 'Auditoría de resolución efectiva con localización por página' : locale === 'de' ? 'Effektive Bildauflösung seitengenau' : 'Effective image DPI audit with page localization',
@@ -215,101 +215,101 @@ export default function Home() {
       acrobat: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
       pitstop: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
       pdftoolbox: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      notes: locale === 'es' ? 'Señala imágenes por debajo del umbral recomendado (por ejemplo, 300 DPI en color comercial) indicando la página.' : locale === 'de' ? 'Lokalisiert Bilder unterhalb des Richtwerts (z. B. 300 DPI im Farbdruck) seitengenau.' : 'Pinpoints images below recommended threshold (e.g. 300 DPI in color) with page numbers.',
+      notes: locale === 'es' ? 'Localiza imágenes por debajo del umbral recomendado indicando la página.' : locale === 'de' ? 'Lokalisiert Bilder unterhalb des Schwellenwerts mit Seitenzahl.' : 'Pinpoints images below recommended threshold with page numbers.',
     },
     {
       feature: locale === 'es' ? 'Diagnóstico accesible sin tecnicismos complejos' : locale === 'de' ? 'Verständlicher Prüfbericht ohne Fachchinesisch' : 'Clear actionable diagnostics without esoteric jargon',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      acrobat: locale === 'es' ? 'Requiere formación' : locale === 'de' ? 'Schulung erforderlich' : 'Requires training',
-      pitstop: locale === 'es' ? 'Uso industrial avanzado' : locale === 'de' ? 'Fortgeschrittene Nutzung' : 'Advanced industrial',
-      pdftoolbox: locale === 'es' ? 'Uso industrial avanzado' : locale === 'de' ? 'Fortgeschrittene Nutzung' : 'Advanced industrial',
-      notes: locale === 'es' ? 'Explica con claridad al autor o diseñador qué debe corregir en su maquetación.' : locale === 'de' ? 'Erklärt Autoren verständlich, wie Fehler im Layout behoben werden.' : 'Guides creators and designers plainly on how to remediate layout flaws.',
+      acrobat: locale === 'es' ? 'Varía según usuario' : locale === 'de' ? 'Variiert je nach Anwender' : 'Varies by user',
+      pitstop: locale === 'es' ? 'Varía según usuario' : locale === 'de' ? 'Variiert je nach Anwender' : 'Varies by user',
+      pdftoolbox: locale === 'es' ? 'Varía según usuario' : locale === 'de' ? 'Variiert je nach Anwender' : 'Varies by user',
+      notes: locale === 'es' ? 'Muestra avisos explicativos orientados a creadores y editores.' : locale === 'de' ? 'Zeigt verständliche Hinweise für Autoren und Verlage.' : 'Displays clear warnings tailored to authors and publishers.',
     },
     {
       feature: locale === 'es' ? 'Corrección geométrica asistida de sangrado (BleedBox)' : locale === 'de' ? 'Assistiere geometrische Beschnittanpassung (BleedBox)' : 'Assisted geometric bleed remediation (BleedBox)',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      acrobat: locale === 'es' ? 'Depende de edición' : locale === 'de' ? 'Versionsabhängig' : 'Edition dependent',
+      acrobat: locale === 'es' ? 'Varía según edición' : locale === 'de' ? 'Variiert nach Edition' : 'Varies by edition',
       pitstop: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
       pdftoolbox: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      notes: locale === 'es' ? 'Ajusta cajas PDF cuando el arte incluye fondo suficiente pero falta caja de sangrado.' : locale === 'de' ? 'Passt PDF-Boxen an, wenn Hintergrundfläche vorhanden ist.' : 'Expands PDF page boxes when background art exceeds trim bounds.',
+      notes: locale === 'es' ? 'Ajusta cajas PDF de sangrado cuando el arte incluye fondo perimetral.' : locale === 'de' ? 'Passt Beschnittboxen an, wenn Hintergrundfläche vorhanden ist.' : 'Expands PDF bleed boxes when background artwork is present.',
     },
     {
       feature: locale === 'es' ? 'Firma técnica del informe vinculada a producción' : locale === 'de' ? 'Technische Freigabe signiert für Druckauftrag' : 'Technical audit verification linked to order',
       printprice: locale === 'es' ? 'Disponible' : locale === 'de' ? 'Verfügbar' : 'Available',
-      acrobat: locale === 'es' ? 'No aplica' : locale === 'de' ? 'Nicht anwendbar' : 'Not applicable',
-      pitstop: locale === 'es' ? 'Mediante integración' : locale === 'de' ? 'Über Integration' : 'Via integration',
-      pdftoolbox: locale === 'es' ? 'Mediante integración' : locale === 'de' ? 'Über Integration' : 'Via integration',
-      notes: locale === 'es' ? 'Verificación técnica que vincula el archivo auditado con la orden del impresor.' : locale === 'de' ? 'Verknüpft die geprüfte Datei mit dem Fertigungsauftrag der Druckerei.' : 'Technical check linking the preflighted asset to the printer order.',
+      acrobat: locale === 'es' ? 'No verificado' : locale === 'de' ? 'Nicht verifiziert' : 'Not verified',
+      pitstop: locale === 'es' ? 'Varía según integración' : locale === 'de' ? 'Variiert nach Integration' : 'Varies by integration',
+      pdftoolbox: locale === 'es' ? 'Varía según integración' : locale === 'de' ? 'Variiert nach Integration' : 'Varies by integration',
+      notes: locale === 'es' ? 'Vincula el archivo validado con la orden de producción del taller.' : locale === 'de' ? 'Verknüpft die geprüfte Datei mit dem Fertigungsauftrag.' : 'Links the verified file with the printshop production order.',
     },
   ];
 
-  // Tab 3: PRINT IT (Búsqueda, Contratación y Seguimiento) — Neutral, verifiable dimensions
+  // Tab 3: PRINT IT (Búsqueda, Contratación y Seguimiento)
   const COMPARISON_PRINT = [
     {
       feature: locale === 'es' ? 'Modelo de servicio' : locale === 'de' ? 'Servicemodell' : 'Service model',
       printprice: locale === 'es' ? 'Directo con talleres' : locale === 'de' ? 'Direkt mit Partnerbetrieben' : 'Direct with partner plants',
-      podPlatforms: locale === 'es' ? 'Red POD distribuida' : locale === 'de' ? 'Verteiltes POD-Netzwerk' : 'Distributed POD network',
+      podPlatforms: locale === 'es' ? 'Varía según plataforma' : locale === 'de' ? 'Variiert je nach Plattform' : 'Varies by platform',
       traditionalBrokers: locale === 'es' ? 'Varía según proveedor' : locale === 'de' ? 'Variiert je nach Anbieter' : 'Varies by provider',
       notes: locale === 'es'
-        ? 'PrintPrice conecta con plantas industriales adscritas; Lulu y Gelato operan redes globales de centros asociados bajo demanda; la intermediación gráfica tradicional varía entre agencias, brókeres y talleres locales.'
+        ? 'PrintPrice conecta con plantas industriales adscritas; los modelos de plataformas POD e intermediación gráfica tradicional varían según proveedor o red comercial.'
         : locale === 'de'
-        ? 'PrintPrice bindet Partnerbetriebe an; Lulu und Gelato nutzen globale POD-Fertigungspartner; traditionelle Vermittlung variiert nach Agentur oder Betrieb.'
-        : 'PrintPrice coordinates partner plants; Lulu and Gelato route across distributed POD partner networks; traditional brokering varies by agent or shop.',
+        ? 'PrintPrice bindet Partnerbetriebe an; Modelle von POD-Plattformen und traditioneller Vermittlung variieren je nach Anbieter.'
+        : 'PrintPrice coordinates partner plants; POD platforms and traditional brokering models vary by provider.',
     },
     {
       feature: locale === 'es' ? 'Selección de imprenta' : locale === 'de' ? 'Druckereiauswahl' : 'Printer selection',
       printprice: locale === 'es' ? 'Enrutamiento técnico' : locale === 'de' ? 'Technische Zuweisung' : 'Technical routing',
-      podPlatforms: locale === 'es' ? 'Asignación automatizada' : locale === 'de' ? 'Automatische Zuweisung' : 'Automated routing',
+      podPlatforms: locale === 'es' ? 'Varía según plataforma' : locale === 'de' ? 'Variiert je nach Plattform' : 'Varies by platform',
       traditionalBrokers: locale === 'es' ? 'Varía según proveedor' : locale === 'de' ? 'Variiert je nach Anbieter' : 'Varies by provider',
       notes: locale === 'es'
-        ? 'Matchmaker asigna según pliego y máquina adscrita; Gelato y Lulu enrutan internamente según destino de envío y capacidad (fuente: Gelato Help Center / Lulu Guides); en brókeres tradicionales varía entre acuerdos comerciales o selección manual.'
+        ? 'Matchmaker asigna según pliego y máquina adscrita; en redes externas y brókeres tradicionales varía según acuerdos comerciales o enrutamiento interno.'
         : locale === 'de'
-        ? 'Matchmaker wählt nach Bogenformat und Maschineneinsatz; Gelato und Lulu weisen intern nach Lieferort und Kapazität zu; bei traditionellen Brokern je nach Vereinbarung oder manuell.'
-        : 'Matchmaker assigns by sheet geometry and press fit; Gelato and Lulu route internally by shipping destination and plant availability; traditional brokers vary by agreements or manual assignment.',
+        ? 'Matchmaker wählt nach Bogenformat und Maschine; bei externen Netzwerken und traditionellen Brokern variiert die Zuweisung.'
+        : 'Matchmaker assigns by sheet format and press; in external networks and traditional brokers, routing varies by agreement or internal assignment.',
     },
     {
       feature: locale === 'es' ? 'Presupuestación' : locale === 'de' ? 'Kalkulation & Preis' : 'Pricing & budgeting',
       printprice: locale === 'es' ? 'Inmediata en servidor' : locale === 'de' ? 'Sofortige Server-Kalkulation' : 'Instant server calculation',
-      podPlatforms: locale === 'es' ? 'Tarifas de catálogo POD' : locale === 'de' ? 'POD-Katalogtarife' : 'POD catalog rates',
+      podPlatforms: locale === 'es' ? 'Varía según plataforma' : locale === 'de' ? 'Variiert je nach Plattform' : 'Varies by platform',
       traditionalBrokers: locale === 'es' ? 'Varía según proveedor' : locale === 'de' ? 'Variiert je nach Anbieter' : 'Varies by provider',
       notes: locale === 'es'
-        ? 'Budget desglosa fabricación y papel al instante; Lulu y Gelato aplican tarifas unitarias y tramos de catálogo (fuente: calculadora Lulu / tarifas Gelato); en intermediación tradicional varía desde cotizaciones bajo petición hasta tarifas preacordadas.'
+        ? 'Budget desglosa fabricación y papel al instante; en plataformas externas varía según catálogo, API o cotización bajo petición.'
         : locale === 'de'
-        ? 'Budget schlüsselt Fertigung und Papier sofort auf; Lulu und Gelato nutzen Stücktarife nach Produktkatalog; bei traditionellen Brokern von Angebot auf Anfrage bis zu Rahmenverträgen.'
-        : 'Budget itemizes manufacturing and substrate instantly; Lulu and Gelato publish unit catalog rates; traditional brokering ranges from quotes on request to pre-negotiated rates.',
+        ? 'Budget schlüsselt Fertigung und Papier sofort auf; bei externen Plattformen je nach Katalog, API oder Angebot auf Anfrage.'
+        : 'Budget itemizes manufacturing and paper instantly; external platforms vary by catalog, API, or quotes on request.',
     },
     {
       feature: locale === 'es' ? 'Preparación de archivos' : locale === 'de' ? 'Dateivorbereitung & Preflight' : 'File preparation & preflight',
       printprice: locale === 'es' ? 'Preflight en navegador' : locale === 'de' ? 'In-Browser Preflight' : 'In-browser preflight',
-      podPlatforms: locale === 'es' ? 'Validación según producto' : locale === 'de' ? 'Produktbezogene Prüfung' : 'Product-specific check',
+      podPlatforms: locale === 'es' ? 'Varía según plataforma' : locale === 'de' ? 'Variiert je nach Plattform' : 'Varies by platform',
       traditionalBrokers: locale === 'es' ? 'Varía según proveedor' : locale === 'de' ? 'Variiert je nach Anbieter' : 'Varies by provider',
       notes: locale === 'es'
-        ? 'Fix it comprueba sangrados, perfiles y resolución según perfil técnico; Lulu valida formato, sangrías y PDF/X en subida; Gelato revisa dimensiones y resolución en editor o API (fuente: Gelato Design Guidelines / Lulu Book Creation Guide); en intermediación tradicional varía entre taller de preimpresión o portales web.'
+        ? 'Fix it comprueba sangrados, perfiles y resolución en navegador; en otros canales la revisión varía entre validadores web o talleres de preimpresión.'
         : locale === 'de'
-        ? 'Fix it prüft Beschnitt, Profile und Auflösung im Browser; Lulu validiert Format, Beschnitt und PDF/X beim Upload; Gelato prüft Maße und Auflösung im Editor/API; bei traditionellen Brokern je nach Vorstufe oder Webportal.'
-        : 'Fix it checks bleeds, profiles, and resolution in-browser; Lulu validates trim, bleed, and PDF/X on upload; Gelato checks dimensions and DPI via editor/API; traditional brokering varies by prepress workflow or web portals.',
+        ? 'Fix it prüft Beschnitt, Profile und Auflösung im Browser; in anderen Kanälen variiert die Prüfung zwischen Web-Validatoren oder Vorstufenbetrieb.'
+        : 'Fix it checks bleeds, profiles, and resolution in-browser; in other channels checking varies between web validators and prepress shops.',
     },
     {
       feature: locale === 'es' ? 'Pedido y seguimiento' : locale === 'de' ? 'Bestellung & Tracking' : 'Ordering & tracking',
       printprice: locale === 'es' ? 'Orden y registro técnico' : locale === 'de' ? 'Auftrag & technisches Protokoll' : 'Order & technical log',
-      podPlatforms: locale === 'es' ? 'Panel de pedidos y tracking' : locale === 'de' ? 'Bestellpanel & Tracking' : 'Order dashboard & tracking',
+      podPlatforms: locale === 'es' ? 'Varía según plataforma' : locale === 'de' ? 'Variiert je nach Plattform' : 'Varies by platform',
       traditionalBrokers: locale === 'es' ? 'Varía según proveedor' : locale === 'de' ? 'Variiert je nach Anbieter' : 'Varies by provider',
       notes: locale === 'es'
-        ? 'El pedido vincula especificaciones acordadas y archivo validado con la planta; Lulu y Gelato disponen de paneles con seguimiento de paquetería (fuente: Lulu Dashboard / Gelato Order Tracking); en gestión tradicional varía entre portal de cliente, albarán o gestor de cuenta.'
+        ? 'El pedido vincula especificaciones acordadas y archivo validado con la planta; en otras plataformas varía según panel, albarán o seguimiento de paquetería.'
         : locale === 'de'
-        ? 'Auftrag bindet vereinbarte Spezifikationen und geprüfte Datei an die Fertigung; Lulu und Gelato bieten Tracking-Panels; bei traditionellen Brokern Kundenportale, Lieferschein oder persönliche Betreuung.'
-        : 'Order binds agreed specifications and validated file to plant production; Lulu and Gelato provide dashboards with parcel tracking; traditional brokering uses customer portals, slips, or account managers.',
+        ? 'Auftrag bindet vereinbarte Spezifikationen und geprüfte Datei an die Fertigung; bei anderen Plattformen je nach Portal, Lieferschein oder Paketverfolgung.'
+        : 'Order binds agreed specs and verified file to plant; in other platforms it varies by portal, slip, or parcel tracking.',
     },
     {
       feature: locale === 'es' ? 'Integraciones' : locale === 'de' ? 'Schnittstellen & Integration' : 'Integrations',
       printprice: locale === 'es' ? 'API REST y Control Plane' : locale === 'de' ? 'REST-API & Control Plane' : 'REST API & Control Plane',
-      podPlatforms: locale === 'es' ? 'Plugins e-commerce y API' : locale === 'de' ? 'E-Commerce-Plugins & API' : 'E-commerce plugins & API',
+      podPlatforms: locale === 'es' ? 'Varía según plataforma' : locale === 'de' ? 'Variiert je nach Plattform' : 'Varies by platform',
       traditionalBrokers: locale === 'es' ? 'Varía según proveedor' : locale === 'de' ? 'Variiert je nach Anbieter' : 'Varies by provider',
       notes: locale === 'es'
-        ? 'Control Plane para plantas y API técnica de preflight; Lulu Direct integra Shopify/WooCommerce y API propia; Gelato conecta tiendas e-commerce y Gelato API (sin incluir GelatoConnect, software de planta independiente); en intermediación tradicional varía entre intercambio de archivos, ERPs o correo.'
+        ? 'Control Plane para plantas y API técnica de preflight; en otras soluciones varía según conectores e-commerce, APIs o intercambio de archivos.'
         : locale === 'de'
-        ? 'Control Plane für Druckereien und Preflight-API; Lulu Direct bietet Shopify/WooCommerce-Plugins; Gelato bindet E-Commerce und Gelato API an (ohne GelatoConnect-Betriebssoftware); traditionelle Vermittlung variiert nach Datenaustausch oder E-Mail.'
-        : 'Control Plane for plants and Preflight API; Lulu Direct supports Shopify/WooCommerce and API; Gelato integrates e-commerce stores and Gelato API (excluding separate GelatoConnect plant software); traditional brokering varies by portal, ERP, or email.',
+        ? 'Control Plane für Druckereien und Preflight-API; bei anderen Lösungen je nach E-Commerce-Plugins, APIs oder Datenaustausch.'
+        : 'Control Plane for plants and Preflight API; in other solutions integrations vary by e-commerce plugins, APIs, or file exchange.',
     },
   ];
 
@@ -971,7 +971,7 @@ export default function Home() {
                       <th style={{ width: '28%' }}>{dict.home.compFeature}</th>
                       <th style={{ width: '20%', color: 'var(--accent-primary)' }}>PrintPrice Marketplace</th>
                       <th style={{ width: '20%' }}>
-                        {locale === 'es' ? 'Plataformas POD (Lulu, Gelato)' : locale === 'de' ? 'Integrierte POD-Plattformen' : 'Integrated POD Platforms (Lulu, Gelato)'}
+                        {locale === 'es' ? 'Plataformas POD' : locale === 'de' ? 'POD-Plattformen' : 'POD Platforms'}
                       </th>
                       <th style={{ width: '20%' }}>
                         {locale === 'es' ? 'Gestión gráfica tradicional / Brókeres' : locale === 'de' ? 'Traditionelle Druckvermittlung' : 'Traditional Graphic Brokering'}
@@ -1004,12 +1004,58 @@ export default function Home() {
             </>
           )}
 
-          <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-            {locale === 'es'
-              ? '* Metodología y fuentes (octubre 2026): Datos contrastados con manuales públicos oficiales: Lulu Book Creation Guide y Lulu Direct API; Gelato Print-on-Demand Help Center y Gelato API (referido a la plataforma POD para creadores, excluyendo GelatoConnect como software de planta independiente); y PrintPrice OS API y Control Plane. Para la categoría general de gestión tradicional, los aspectos no estandarizados se indican como «Varía según proveedor».'
-              : locale === 'de'
-              ? '* Methodik und Quellen (Oktober 2026): Abgeglichen mit offiziellen Dokumentationen: Lulu Book Creation Guide & Lulu Direct API; Gelato Print-on-Demand Help Center & Gelato API (bezogen auf die POD-Plattform für Ersteller, ohne GelatoConnect-Fertigungssoftware); sowie PrintPrice OS API & Control Plane. Für traditionelle Druckvermittlung wird bei variablen Merkmalen «Variiert je nach Anbieter» ausgewiesen.'
-              : '* Methodology & Sources (October 2026): Cross-referenced with official public manuals: Lulu Book Creation Guide & Lulu Direct API; Gelato Print-on-Demand Help Center & Gelato API (referring to the creator POD platform, excluding GelatoConnect standalone plant software); and PrintPrice OS API & Control Plane. For general traditional brokering, non-standardized traits are indicated as "Varies by provider".'}
+          <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.7, maxWidth: '960px', margin: '1.5rem auto 0' }}>
+            <p style={{ margin: '0 0 0.5rem 0' }}>
+              {locale === 'es' ? (
+                <>
+                  * Fuentes oficiales consultadas (Revisión: Octubre 2026): Adobe Acrobat Pro (
+                  <a href="https://helpx.adobe.com/acrobat/using/analyzing-documents-preflight-tool.html" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>Adobe Help Center</a>
+                  ); Enfocus PitStop Pro (
+                  <a href="https://www.enfocus.com/en/pitstop-pro" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>Enfocus Documentation</a>
+                  ); callas software pdfToolbox (
+                  <a href="https://help.callassoftware.com/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>callas Help Center</a>
+                  ); Lulu (
+                  <a href="https://help.lulu.com/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>Lulu Help Center</a>
+                  ); Gelato (
+                  <a href="https://support.gelato.com/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>Gelato Help Center</a>
+                  ); Ghent Workgroup (
+                  <a href="https://gwg.org/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>GWG Specifications</a>
+                  ). Las características no estandarizadas o dependientes de canal se indican como «Varía según proveedor» o «No verificado».
+                </>
+              ) : locale === 'de' ? (
+                <>
+                  * Offizielle konsultierte Quellen (Stand: Oktober 2026): Adobe Acrobat Pro (
+                  <a href="https://helpx.adobe.com/acrobat/using/analyzing-documents-preflight-tool.html" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>Adobe Help Center</a>
+                  ); Enfocus PitStop Pro (
+                  <a href="https://www.enfocus.com/en/pitstop-pro" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>Enfocus Documentation</a>
+                  ); callas software pdfToolbox (
+                  <a href="https://help.callassoftware.com/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>callas Help Center</a>
+                  ); Lulu (
+                  <a href="https://help.lulu.com/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>Lulu Help Center</a>
+                  ); Gelato (
+                  <a href="https://support.gelato.com/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>Gelato Help Center</a>
+                  ); Ghent Workgroup (
+                  <a href="https://gwg.org/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>GWG Specifications</a>
+                  ). Nicht standardisierte Merkmale werden als «Variiert je nach Anbieter» oder «Nicht verifiziert» ausgewiesen.
+                </>
+              ) : (
+                <>
+                  * Official consulted sources (Revision: October 2026): Adobe Acrobat Pro (
+                  <a href="https://helpx.adobe.com/acrobat/using/analyzing-documents-preflight-tool.html" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>Adobe Help Center</a>
+                  ); Enfocus PitStop Pro (
+                  <a href="https://www.enfocus.com/en/pitstop-pro" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>Enfocus Documentation</a>
+                  ); callas software pdfToolbox (
+                  <a href="https://help.callassoftware.com/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>callas Help Center</a>
+                  ); Lulu (
+                  <a href="https://help.lulu.com/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>Lulu Help Center</a>
+                  ); Gelato (
+                  <a href="https://support.gelato.com/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>Gelato Help Center</a>
+                  ); Ghent Workgroup (
+                  <a href="https://gwg.org/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'inherit' }}>GWG Specifications</a>
+                  ). Non-standardized traits are indicated as "Varies by provider" or "Not verified".
+                </>
+              )}
+            </p>
           </div>
         </Container>
       </section>

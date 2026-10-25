@@ -192,14 +192,30 @@ Exiting with status code: 0
 
 ## 4. Comparativas y Afirmaciones Comerciales Rigurosas
 
-Se eliminaron superlativos no justificados y generalizaciones no acreditadas, alineando tanto la web pública como esta documentación técnica con fuentes oficiales contrastables a fecha **octubre de 2026**.
+Se eliminaron superlativos no justificados y generalizaciones no acreditadas en los dos únicos módulos que contienen tablas comparativas en la aplicación: la página principal (`app/page.tsx`) y la página de Preflight (`app/products/preflight/page.tsx`), alineando el contenido en español, inglés y alemán con fuentes oficiales contrastables a fecha **octubre de 2026**.
 
 ### 4.1. Criterios de Rigor Aplicados
-1. **Separación estricta entre validación técnica y certificación de producto:** Fix it evalúa reglas basadas en normas ISO PDF/X (PDF/X-1a, PDF/X-4), pero se declara explícitamente como **No disponible** en el criterio de certificación oficial de producto por terceros (a diferencia de software con certificación oficial Ghent Workgroup o motor de referencia de callas software). No se utiliza la etiqueta ambigua "depende del plan" para certificaciones no acreditadas.
-2. **Eliminación de afirmaciones de tiempo de respuesta arbitrarias:** Se eliminó la afirmación "< 1 segundo" en el cálculo de presupuestos. Se indica con honestidad: "Cálculo instantáneo en servidor según complejidad del proyecto y parámetros de imposición".
-3. **Eliminación de términos "gratuito" o "freemium":** No se anticipan modelos tarifarios ni se promete gratuidad perpetua para herramientas accesorias. Se indica: "Acceso mediante portal web en preflight.printprice.pro; API REST para integración técnica".
-4. **Matización de tiradas en marketplace:** Se eliminaron rangos numéricos arbitrarios ("50 a +10.000 copias" o "1 a 50 copias en POD"). Se cualifica honestamente: "PrintPrice conecta con imprentas adscritas para proyectos según formatos y parques de maquinaria disponibles; las plataformas POD operan típicamente bajo demanda orientada a pedidos unitarios o tiradas cortas; la gestión gráfica tradicional varía según la red de proveedores de cada bróker".
-5. **Modelo económico comercial confirmado:** Exclusivamente una **comisión del 4% por transacción completada a través del marketplace Print it**. La imprenta factura y cobra directamente al cliente el importe íntegro de la producción; PrintPrice factura mensualmente su comisión a la imprenta. No se especula sobre comisiones ni exenciones en Budget, Fix it o proveedores de papel.
+
+1. **Distinción técnica tripartita en Preflight (Estándares vs Perfiles vs Certificación de Producto):**
+   - **Comprobación de estándares:** Evaluación algorítmica de reglas ISO PDF/X (PDF/X-1a, PDF/X-4), soportada en los tres motores analizados.
+   - **Uso de perfiles de preflight:** Definición de criterios mediante especificaciones deterministas (PrintPrice vía JSON; PitStop vía Action Lists y perfiles de escritorio; callas vía Process Plans y perfiles GWG).
+   - **Certificación formal de producto:** Se retiraron menciones categóricas como «Certificación GWG» o «motor de referencia oficial ISO» atribuibles genéricamente a terceros sin acreditación documental de versión y alcance específicos. Se declaran formalmente como **«No verificada para versión específica»** para software de terceros, y **«No disponible (Inspección técnica)»** para PrintPrice (el cual realiza comprobación determinista de primitivas pero no cuenta con certificación formal de organismo acreditador).
+2. **Sustitución de generalizaciones no acreditadas en Home (`app/page.tsx`):**
+   - **PRICE IT:** Se eliminó la etiqueta «Manual (24–72h)» atribuida a la presupuestación tradicional, sustituyéndola por **«Varía según proveedor»**. Se neutralizaron afirmaciones categóricas sobre registro obligatorio y capacidades de cotización en Lulu y Gelato, marcadas como **«No verificado»** al no existir acreditación pública concluyente sobre su cálculo instantáneo de matrices de coste en servidor sin registro.
+   - **FIX IT:** Se cualificó Adobe Acrobat como aplicación de escritorio, la exigencia formativa como **«Varía según usuario»** y la vinculación técnica del informe a producción como **«No verificado»** o **«Varía según integración»**.
+   - **PRINT IT:** Se sustituyeron aserciones categóricas sobre redes POD y gestión gráfica tradicional por **«Varía según plataforma»** y **«Varía según proveedor»**, eliminando además la vinculación exclusiva del encabezado a marcas específicas.
+3. **Hiperenlaces oficiales concretos en pies de fuentes:**
+   Tanto en `app/page.tsx` como en `app/products/preflight/page.tsx`, las notas a pie de tabla se dotaron de enlaces HTML activos y verificables a la documentación de soporte oficial de cada fabricante, con paridad semántica exacta en ES, EN y DE:
+   - **Adobe Acrobat Pro:** [Adobe Help Center - Preflight Tool](https://helpx.adobe.com/acrobat/using/analyzing-documents-preflight-tool.html)
+   - **Enfocus PitStop Pro & Server:** [Enfocus PitStop Pro](https://www.enfocus.com/en/pitstop-pro) / [PitStop Server](https://www.enfocus.com/en/pitstop-server)
+   - **callas software pdfToolbox Server:** [callas Help Center](https://help.callassoftware.com/) / [callas Product Specs](https://www.callassoftware.com/en/products/pdftoolbox)
+   - **Ghent Workgroup:** [GWG Specifications](https://gwg.org/)
+   - **Lulu:** [Lulu Help Center](https://help.lulu.com/)
+   - **Gelato:** [Gelato Help Center](https://support.gelato.com/)
+4. **Eliminación de afirmaciones de tiempo de respuesta arbitrarias:** Se eliminó la afirmación "< 1 segundo" en el cálculo de presupuestos. Se indica con honestidad: "Cálculo instantáneo en servidor según complejidad del proyecto y parámetros de imposición".
+5. **Eliminación de términos "gratuito" o "freemium":** No se anticipan modelos tarifarios ni se promete gratuidad perpetua para herramientas accesorias. Se indica: "Acceso mediante portal web en preflight.printprice.pro; API REST para integración técnica".
+6. **Matización de tiradas en marketplace:** Se eliminaron rangos numéricos arbitrarios ("50 a +10.000 copias" o "1 a 50 copias en POD"). Se cualifica honestamente: "PrintPrice conecta con imprentas adscritas para proyectos según formatos y parques de maquinaria disponibles; las plataformas POD operan típicamente bajo demanda orientada a pedidos unitarios o tiradas cortas; la gestión gráfica tradicional varía según la red de proveedores de cada bróker".
+7. **Modelo económico comercial confirmado:** Exclusivamente una **comisión del 4% por transacción completada a través del marketplace Print it**. La imprenta factura y cobra directamente al cliente el importe íntegro de la producción; PrintPrice factura mensualmente su comisión a la imprenta. No se especula sobre comisiones ni exenciones en Budget, Fix it o proveedores de papel.
 
 ### 4.2. Tabla 1: Fix it frente a Software de Preflight de PDF
 
@@ -207,19 +223,22 @@ Se eliminaron superlativos no justificados y generalizaciones no acreditadas, al
 |---|---|---|---|---|
 | **Público objetivo** | Autores, editoriales y clientes web | Diseñadores y talleres de preimpresión | Operadores de preimpresión e imprentas | Desarrolladores y automatización industrial |
 | **Entorno de ejecución** | Navegador web (SaaS cloud) | Aplicación de escritorio (Win/Mac) | Plugin de escritorio para Acrobat | Servidor, CLI, SDK y escritorio |
-| **Detección de sangrado y cajas** | **Disponible** (detección visual e inspección de cajas de página) | **Disponible** (inspección de TrimBox / BleedBox) | **Disponible** (detección y generación de sangrado automático) | **Disponible** (inspección geométrica y corrección avanzada) |
+| **Detección de sangrado y cajas** | **Disponible** (inspección geométrica de cajas TrimBox / BleedBox) | **Disponible** (inspección de TrimBox / BleedBox) | **Disponible** (detección y generación de sangrado) | **Disponible** (inspección geométrica y corrección) |
 | **Resolución de imágenes (DPI)** | **Disponible** (cálculo de resolución efectiva por imagen) | **Disponible** (perfiles de comprobación de 300 DPI) | **Disponible** (análisis de resolución y remuestreo) | **Disponible** (análisis espectral y remuestreo) |
-| **Inspección de fuentes** | **Disponible** (verificación de incrustación de tipografías) | **Disponible** (comprobación y conversión a curvas) | **Disponible** (incrustación automática y sustitución) | **Disponible** (detección, sustitución y renderizado) |
+| **Inspección de fuentes** | **Disponible** (verificación de incrustación de tipografías) | **Disponible** (comprobación y conversión a curvas) | **Disponible** (incrustación y sustitución) | **Disponible** (detección, sustitución y renderizado) |
 | **Espacio de color / CMYK** | **Disponible** (alerta de elementos RGB no convertidos) | **Disponible** (gestión de color con perfiles ICC) | **Disponible** (gestión de color avanzada y DeviceLink) | **Disponible** (conversión DeviceLink y gestión espectral) |
-| **Corrección destructiva automática** | **No disponible** (filosofía de no alteración del arte final) | **Disponible** (reparación mediante perfiles predefinidos) | **Disponible** (motores de acción automatizados) | **Disponible** (motores de corrección y scripting avanzado) |
-| **Certificación formal ISO / GWG** | **No disponible** (inspección técnica basada en reglas, sin certificación formal) | **Disponible** (validación PDF/X-1a, PDF/X-4 certificada) | **Disponible** (certificación oficial Ghent Workgroup) | **Disponible** (motor de referencia oficial GWG e ISO) |
-| **Modelo de acceso comercial** | Acceso web en preflight.printprice.pro; API técnica | Suscripción Adobe CC o Acrobat Pro | Suscripción anual o licencia con mantenimiento | Licencia de servidor o SDK por volumen |
+| **Corrección destructiva automática** | **No disponible** (filosofía de preservación del arte final) | **Disponible** (reparación mediante perfiles predefinidos) | **Disponible** (motores de acción automatizados) | **Disponible** (motores de corrección y scripting) |
+| **Comprobación de estándares PDF/X** | **Disponible** (evaluación técnica de reglas ISO PDF/X-1a, PDF/X-4) | **Disponible** (inspección de perfiles PDF/X) | **Disponible** (inspección de perfiles PDF/X y GWG) | **Disponible** (inspección mediante Process Plans) |
+| **Certificación formal de producto** | **No disponible** (inspección técnica sin certificación formal de organismo) | **No verificada para versión específica** | **No verificada para versión específica** | **No verificada para versión específica** |
+| **Modelo de acceso comercial** | Acceso web en preflight.printprice.pro; API REST técnica | Suscripción Adobe CC o Acrobat Pro | Suscripción anual o licencia con mantenimiento | Licencia de servidor o SDK por volumen |
 
-*Fuentes oficiales consultadas (octubre de 2026):*
+*Fuentes oficiales consultadas (Revisión: Octubre 2026):*
 - *callas software: pdfToolbox Help Center & Feature Matrix (https://help.callassoftware.com/)*
-- *Enfocus: PitStop Pro Technical Specifications & What's New (https://www.enfocus.com/en/pitstop-pro)*
+- *Enfocus: PitStop Pro Technical Specifications (https://www.enfocus.com/en/pitstop-pro) / PitStop Server (https://www.enfocus.com/en/pitstop-server)*
 - *Adobe: Acrobat Pro User Guide - Preflight tool (https://helpx.adobe.com/acrobat/using/analyzing-documents-preflight-tool.html)*
 - *Ghent Workgroup: Compliant Applications & Specifications (https://gwg.org/)*
+- *Lulu: Lulu Help Center (https://help.lulu.com/)*
+- *Gelato: Gelato Help Center (https://support.gelato.com/)*
 
 ---
 
