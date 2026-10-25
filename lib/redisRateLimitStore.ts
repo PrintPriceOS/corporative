@@ -8,6 +8,7 @@
  * 4. Pluggable client interface (RedisEvalClient) compatible with node-redis and ioredis.
  * 5. Explicit failure policy: in production, fails closed on Redis downtime to prevent unmetered abuse.
  */
+import IORedis from 'ioredis';
 
 export interface RateLimitEntry {
     count: number;
@@ -318,9 +319,7 @@ export function getOrCreateRedisClient(redisUrl?: string, customOptions?: Record
     }
 
     if (!redisClientSingleton) {
-        // Dynamically import or require ioredis to preserve compatibility
-        const Redis = require('ioredis');
-        redisClientSingleton = new Redis(targetUrl, {
+        redisClientSingleton = new IORedis(targetUrl, {
             connectTimeout: 5000,
             commandTimeout: 3000,
             maxRetriesPerRequest: 1,
