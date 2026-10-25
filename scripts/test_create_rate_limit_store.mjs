@@ -131,6 +131,30 @@ async function run() {
     assert.equal(failAdm.reason, 'REDIS_ERROR', 'Motivo debe ser REDIS_ERROR');
     pass('Redis caído con failPolicy=closed deniega admisión controladamente (REDIS_ERROR) sin abrir la puerta');
 
+    // 4b. failPolicy: 'open' SOLICITADO EN PRODUCCIÓN NO PUEDE PRODUCIR ADMISIÓN (SEC-04D.1)
+    resetRedisClientSingleton();
+    const forcedOpenInProdStore = createRateLimitStore({
+      redisUrl: 'redis://127.0.0.1:49999',
+      failPolicy: 'open' // Solicitud indebida de fail-open en producción
+    });
+    const admBlockedOpenProd = await forcedOpenInProdStore.admitAttempt('test-ip-prod-open');
+    assert.equal(admBlockedOpenProd.allowed, false, 'En producción no se admite failPolicy open: debe bloquear');
+    assert.equal(admBlockedOpenProd.reason, 'REDIS_ERROR', 'Razón debe ser REDIS_ERROR bajo fail-closed forzado');
+    pass("failPolicy: 'open' solicitado en producción es ignorado e impone estrictamente fail-closed (allowed: false)");
+
+    // 4c. DESARROLLO CONSERVA SUS OPCIONES EXPLÍCITAS (failPolicy: 'open' RESPETADO FUERA DE PROD)
+    resetRedisClientSingleton();
+    process.env.NODE_ENV = 'development';
+    const devOpenStore = createRateLimitStore({
+      redisUrl: 'redis://127.0.0.1:49999',
+      failPolicy: 'open' // Solicitud explícita en desarrollo
+    });
+    const admAllowedDev = await devOpenStore.admitAttempt('test-ip-dev-open');
+    assert.equal(admAllowedDev.allowed, true, 'En desarrollo failPolicy: open debe conceder admisión');
+    assert.equal(admAllowedDev.reason, 'ALLOWED', 'Razón debe ser ALLOWED bajo fail-open');
+    pass("Desarrollo conserva opciones explícitas: failPolicy: 'open' permite admisión degradada controlada");
+    process.env.NODE_ENV = 'production'; // Restaurar para el resto de la suite
+
     // ─────────────────────────────────────────────────────────────────────────
     // 5. TRÁFICO NO ACREDITADO CON REDIS CAÍDO (FAIL-CLOSED)
     // ─────────────────────────────────────────────────────────────────────────

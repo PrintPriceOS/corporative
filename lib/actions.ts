@@ -8,7 +8,8 @@ import {
   auditLeadQuality,
   resolveTrustedClientIp,
   computeClientFingerprint,
-  checkAndRecordRateLimit
+  checkAndRecordRateLimit,
+  getActiveRateLimitStore
 } from './security';
 
 export type SubmitPartnerOnboardingResult = {
@@ -208,5 +209,33 @@ export async function submitPartnerOnboarding(data: FormData): Promise<SubmitPar
       score,
       validatedAt: new Date().toISOString()
     }
+  };
+}
+
+/**
+ * SEC-04D.1 Server Action for in-process diagnostic and rate-limit verification.
+ * Executes strictly inside the Next.js runtime process that serves Server Actions.
+ */
+export async function checkActionRateLimit(): Promise<{
+  accredited: boolean;
+  resolvedIp: string | null;
+  allowed: boolean;
+  admissionReason?: string;
+  count: number;
+  storeType: string;
+}> {
+  const headerList = await headers();
+  const clientIp = resolveTrustedClientIp(headerList);
+  const clientFingerprint = clientIp ? null : computeClientFingerprint(headerList);
+  const admission = await checkAndRecordRateLimit(clientIp, clientFingerprint);
+  const store = getActiveRateLimitStore();
+
+  return {
+    accredited: clientIp !== null,
+    resolvedIp: clientIp,
+    allowed: admission.allowed,
+    admissionReason: admission.reason,
+    count: admission.count,
+    storeType: store.constructor.name
   };
 }

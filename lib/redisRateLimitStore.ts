@@ -115,7 +115,8 @@ export class RedisRateLimitStore {
         this.client = client;
         this.prefix = options?.prefix ?? 'ppos:corporative:rl:';
         this.defaultWindowMs = options?.windowMs ?? 3600000; // 1 hour default
-        this.failPolicy = options?.failPolicy ?? (process.env.NODE_ENV === 'production' ? 'closed' : 'open');
+        const isProduction = typeof process !== 'undefined' && process.env?.NODE_ENV === 'production';
+        this.failPolicy = isProduction ? 'closed' : (options?.failPolicy ?? 'open');
 
         if (!Number.isSafeInteger(this.defaultWindowMs) || this.defaultWindowMs <= 0) {
             throw new Error('Invalid default rate limit window');
@@ -385,12 +386,17 @@ export function createRateLimitStore(options?: {
         return options?.inMemoryFallback ?? new InMemoryRateLimitStore({ defaultWindowMs: options?.defaultWindowMs });
     }
 
-    // 3. Connect to real Redis
+    // 4. Connect to real Redis
     const client = getOrCreateRedisClient(redisUrl);
     const adapter = new IORedisEvalAdapter(client);
+    
+    // In production, failPolicy is unconditionally 'closed', completely ignoring any options passed.
+    // In non-production environments, explicit options?.failPolicy is respected.
+    const effectiveFailPolicy: 'closed' | 'open' = isProduction ? 'closed' : (options?.failPolicy ?? 'open');
+
     return new RedisRateLimitStore(adapter, {
         prefix: options?.keyPrefix,
         windowMs: options?.defaultWindowMs,
-        failPolicy: options?.failPolicy ?? (isProduction ? 'closed' : 'open')
+        failPolicy: effectiveFailPolicy
     });
 }
