@@ -62,20 +62,28 @@ async function run() {
   const server = http.createServer(async (req, res) => {
     const peerIp = req.socket.remoteAddress?.replace(/^::ffff:/, '') || '127.0.0.1';
     
+    const headerReader = {
+      get(name) {
+        const val = req.headers[name.toLowerCase()];
+        return Array.isArray(val) ? val[0] : (val ?? null);
+      }
+    };
+
     // Simular resolución de IP con secreto inyectado por Nginx / Passenger
-    const ipResolution = resolveTrustedClientIp(req.headers, {
-      trustedProxySecret: TEST_SECRET,
+    const resolvedIp = resolveTrustedClientIp(headerReader, {
+      proxySecret: TEST_SECRET,
+      requireProxySecret: true,
       peerIp
     });
 
-    const fingerprint = ipResolution.accredited ? null : computeClientFingerprint(req.headers);
-    const admission = await checkAndRecordRateLimit(ipResolution.ip, fingerprint);
+    const accredited = resolvedIp !== null;
+    const fingerprint = accredited ? null : computeClientFingerprint(headerReader);
+    const admission = await checkAndRecordRateLimit(resolvedIp, fingerprint);
 
     res.writeHead(admission.allowed ? 200 : 429, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
-      accredited: ipResolution.accredited,
-      resolvedIp: ipResolution.ip,
-      reason: ipResolution.reason,
+      accredited,
+      resolvedIp,
       allowed: admission.allowed,
       admissionReason: admission.reason,
       remaining: admission.remaining
@@ -93,7 +101,7 @@ async function run() {
     const res1 = await fetch(`http://127.0.0.1:${TEST_PORT}/submit`, {
       method: 'POST',
       headers: {
-        'x-trusted-proxy-secret': TEST_SECRET,
+        'x-ppos-proxy-secret': TEST_SECRET,
         'x-real-ip': '198.51.100.77',
         'user-agent': 'Legitimate-Agent/1.0'
       }
@@ -119,7 +127,6 @@ async function run() {
     const data2 = await res2.json();
     assert.equal(data2.accredited, false, 'No debe ser acreditado');
     assert.equal(data2.resolvedIp, null, 'IP resuelta debe ser estrictamente null');
-    assert.equal(data2.reason, 'INVALID_PROXY_SECRET', 'Motivo debe ser secreto ausente/inválido');
     pass('Falsificación de X-Real-IP frustrada: no obtiene acreditación y no puede suplantar la IP de la víctima');
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -129,7 +136,7 @@ async function run() {
     const res3 = await fetch(`http://127.0.0.1:${TEST_PORT}/submit`, {
       method: 'POST',
       headers: {
-        'x-trusted-proxy-secret': 'unauthorized_token_attempt',
+        'x-ppos-proxy-secret': 'unauthorized_token_attempt',
         'x-real-ip': '198.51.100.88',
         'user-agent': 'Probe-Bot/1.0'
       }
@@ -150,7 +157,7 @@ async function run() {
       const r = await fetch(`http://127.0.0.1:${TEST_PORT}/submit`, {
         method: 'POST',
         headers: {
-          'x-trusted-proxy-secret': TEST_SECRET,
+          'x-ppos-proxy-secret': TEST_SECRET,
           'x-real-ip': TEST_TARGET_IP,
           'user-agent': 'Session-1-Worker'
         }
@@ -172,7 +179,7 @@ async function run() {
     const res4_5 = await fetch(`http://127.0.0.1:${TEST_PORT}/submit`, {
       method: 'POST',
       headers: {
-        'x-trusted-proxy-secret': TEST_SECRET,
+        'x-ppos-proxy-secret': TEST_SECRET,
         'x-real-ip': TEST_TARGET_IP,
         'user-agent': 'Session-2-New-Worker'
       }
@@ -184,7 +191,7 @@ async function run() {
     const res4_6 = await fetch(`http://127.0.0.1:${TEST_PORT}/submit`, {
       method: 'POST',
       headers: {
-        'x-trusted-proxy-secret': TEST_SECRET,
+        'x-ppos-proxy-secret': TEST_SECRET,
         'x-real-ip': TEST_TARGET_IP,
         'user-agent': 'Session-2-New-Worker'
       }
@@ -210,7 +217,7 @@ async function run() {
     const res5 = await fetch(`http://127.0.0.1:${TEST_PORT}/submit`, {
       method: 'POST',
       headers: {
-        'x-trusted-proxy-secret': TEST_SECRET,
+        'x-ppos-proxy-secret': TEST_SECRET,
         'x-real-ip': '198.51.100.123',
         'user-agent': 'Fail-Test/1.0'
       }
