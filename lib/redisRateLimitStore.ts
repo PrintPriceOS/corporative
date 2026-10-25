@@ -368,15 +368,21 @@ export function createRateLimitStore(options?: {
     const redisUrl = options?.redisUrl || (typeof process !== 'undefined' ? (process.env?.PPOS_REDIS_URL || process.env?.REDIS_URL) : undefined);
     const isProduction = typeof process !== 'undefined' && process.env?.NODE_ENV === 'production';
 
-    // 1. Explicit memory opt-in (development or isolated unit tests)
-    if (options?.forceMemory || (!redisUrl && !isProduction)) {
-        return options?.inMemoryFallback ?? new InMemoryRateLimitStore({ defaultWindowMs: options?.defaultWindowMs });
+    // 1. Strict production safeguard: In-memory store (forceMemory/inMemoryFallback) is NEVER permitted in production
+    if (isProduction && (options?.forceMemory || options?.inMemoryFallback)) {
+        console.error('[SECURITY][RATE_LIMIT_STORE] In-memory rate limiting (forceMemory/inMemoryFallback) is strictly prohibited in production.');
+        throw new Error('[PPOS RateLimit] In-memory rate limiting (forceMemory/inMemoryFallback) is strictly prohibited in production.');
     }
 
     // 2. Production with missing Redis configuration: fail closed
     if (!redisUrl && isProduction) {
         console.error('[SECURITY][RATE_LIMIT_STORE] Production requires REDIS_URL or PPOS_REDIS_URL. Missing configuration.');
         throw new Error('REDIS_URL must be configured in production environment for multi-process quota consistency.');
+    }
+
+    // 3. Explicit memory opt-in (development or isolated unit tests only)
+    if (options?.forceMemory || (!redisUrl && !isProduction)) {
+        return options?.inMemoryFallback ?? new InMemoryRateLimitStore({ defaultWindowMs: options?.defaultWindowMs });
     }
 
     // 3. Connect to real Redis

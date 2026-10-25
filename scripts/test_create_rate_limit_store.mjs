@@ -87,6 +87,34 @@ async function run() {
     );
     pass('En producción sin Redis se exige configuración explícita (fail-closed, sin degradación silenciosa)');
 
+    // 3b. PROHIBICIÓN ESTRICTA DE forceMemory EN PRODUCCIÓN (SEC-04D)
+    assert.throws(
+      () => createRateLimitStore({ forceMemory: true }),
+      (err) => {
+        assert.ok(err instanceof Error);
+        assert.ok(
+          err.message.includes('forceMemory') && err.message.includes('strictly prohibited in production'),
+          `Mensaje esperado, recibido: ${err.message}`
+        );
+        return true;
+      },
+      'En producción, forceMemory: true debe ser rechazado taxativamente con excepción'
+    );
+
+    assert.throws(
+      () => createRateLimitStore({ inMemoryFallback: new InMemoryRateLimitStore() }),
+      (err) => {
+        assert.ok(err instanceof Error);
+        assert.ok(
+          err.message.includes('inMemoryFallback') && err.message.includes('strictly prohibited in production'),
+          `Mensaje esperado, recibido: ${err.message}`
+        );
+        return true;
+      },
+      'En producción, inMemoryFallback debe ser rechazado taxativamente con excepción'
+    );
+    pass('En producción, forceMemory e inMemoryFallback son bloqueados taxativamente con excepción');
+
     // ─────────────────────────────────────────────────────────────────────────
     // 4. COMPORTAMIENTO ANTE REDIS CAÍDO (FAIL-CLOSED)
     // ─────────────────────────────────────────────────────────────────────────

@@ -37,6 +37,7 @@ import { spawn, execSync } from 'node:child_process';
 import assert from 'node:assert/strict';
 import Redis from 'ioredis';
 
+import crypto from 'node:crypto';
 import { 
   resolveTrustedClientIp, 
   computeClientFingerprint,
@@ -51,7 +52,7 @@ import {
 
 const NGINX_TEST_PORT = 3890;
 const BACKEND_PORT = 3891;
-const PROXY_SECRET = 'sec04c_staging_isolated_secret_token_8899aabbcc';
+const PROXY_SECRET = process.env.PPOS_PROXY_SECRET || `sec04d_ephemeral_${crypto.randomBytes(32).toString('hex')}`;
 const REDIS_URL = process.env.PPOS_REDIS_URL || process.env.REDIS_URL || 'redis://127.0.0.1:6379';
 const TEST_KEY_PREFIX = `sec04c_nginx_test_${Date.now()}:`;
 const NGINX_CONF_PATH = '/etc/nginx/conf.d/sec04c_test_proxy.conf';
@@ -153,7 +154,7 @@ async function spawnWorker(redisUrl = REDIS_URL, failPolicy = 'closed', keyPrefi
 
     const child = spawn(runner, args, {
       stdio: ['pipe', 'pipe', 'pipe'],
-      env: { ...process.env, NODE_ENV: 'staging' }
+      env: { ...process.env, NODE_ENV: 'staging', PPOS_PROXY_SECRET: PROXY_SECRET }
     });
 
     let stdout = '';

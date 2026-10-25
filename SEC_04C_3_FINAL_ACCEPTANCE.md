@@ -3,7 +3,8 @@
 **Repositorio:** `PrintPriceOS/corporative`  
 **Rama:** `feat/comparisons-evidence-and-legal-policy-review`  
 **Commit base de referencia:** `ec9a02e04de692f926eeb5e8fe07690d837d2c11`  
-**Commit verificado en remoto:** `683d8fa05535244cefc2f0e04f99a8a1cacb3873`  
+**Commit de código probado y certificado:** `683d8fa05535244cefc2f0e04f99a8a1cacb3873`  
+**Commit de incorporación del informe:** `da6d782e1c640c64a60fac9bef7ebeee62f581f7`  
 **Fecha de ejecución y cierre:** 25 de Octubre de 2026  
 **Auditor:** Antigravity (Google DeepMind)  
 **Estado:** **PASS COMPLETO — LISTO PARA REVISIÓN FINAL (DESPLIEGUE A PRODUCCIÓN NO AUTORIZADO)**
@@ -316,12 +317,12 @@ flowchart TD
 ## 8. Verificación de Integridad Git
 
 - **Rama:** `feat/comparisons-evidence-and-legal-policy-review`
-- **Último Commit:** `683d8fa05535244cefc2f0e04f99a8a1cacb3873`
-- **Mensaje:** `fix(test): pass consistent test keyPrefix and align attempt count across worker recycling`
+- **Commit de código probado:** `683d8fa05535244cefc2f0e04f99a8a1cacb3873` (`fix(test): pass consistent test keyPrefix and align attempt count across worker recycling`)
+- **Commit de incorporación del informe:** `da6d782e1c640c64a60fac9bef7ebeee62f581f7` (`docs(security): publish SEC-04C.3 final acceptance report with real Nginx, OS process recycling and fail-closed runbook`)
 - **Verificación remota:**
   ```text
   $ git ls-remote origin refs/heads/feat/comparisons-evidence-and-legal-policy-review
-  683d8fa05535244cefc2f0e04f99a8a1cacb3873    refs/heads/feat/comparisons-evidence-and-legal-policy-review
+  da6d782e1c640c64a60fac9bef7ebeee62f581f7    refs/heads/feat/comparisons-evidence-and-legal-policy-review
   ```
 - **Limpieza de Staging:**
   - El archivo temporal `/etc/nginx/conf.d/sec04c_test_proxy.conf` fue eliminado y Nginx recargado.
