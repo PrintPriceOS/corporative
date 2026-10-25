@@ -10,6 +10,7 @@
  */
 import IORedis from 'ioredis';
 import { InMemoryRateLimitStore, type IRateLimitStore } from './inMemoryRateLimitStore.ts';
+export { InMemoryRateLimitStore, type IRateLimitStore };
 
 export interface RateLimitEntry {
     count: number;
