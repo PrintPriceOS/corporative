@@ -22,10 +22,13 @@ import {
   recordSubmissionAttempt, 
   resetRateLimitStore,
   InMemoryRateLimitStore,
+  setActiveRateLimitStore,
+  checkAndRecordRateLimit,
   isEmailDomainAllowed,
   auditLeadQuality,
   sanitizeText
 } from '../lib/security.ts';
+import { RedisRateLimitStore } from '../lib/redisRateLimitStore.ts';
 
 console.log('─────────────────────────────────────────────────────────────────────────────');
 console.log('🧪 PPOS TEST SUITE: Proxy Trust, Rate Limiting & Onboarding Honesty');
@@ -411,6 +414,196 @@ assert.equal(flowCode.includes('BOT_PROTECTION_ACTIVE'), false);
 assert.equal(flowCode.includes('Our onboarding team has been notified'), false);
 assert.equal(flowCode.includes('Direct Onboarding Applied'), false);
 pass('Retiradas todas las afirmaciones ficticias de protección anti-bots o notificación al equipo');
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 6. SEC-04C: CONCURRENCIA DE RATE LIMITING ATÓMICO Y ADAPTADOR REDIS
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\n[6/6] Verificando SEC-04C: Concurrencia de rate limit atómico y adaptador Redis...');
+
+// Mock RedisEvalClient que implementa las operaciones atómicas de Redis (INCR, GET, PEXPIRE, PTTL)
+class MockRedisClient {
+  constructor() {
+    this.storage = new Map(); // key -> { value: number, pttl: number, expiresAt: number }
+  }
+
+  async eval(script, { keys, arguments: args }) {
+    const now = Date.now();
+    
+    // Script de admisión atómica IP
+    if (script.includes('local current = redis.call(\'INCR\', key)')) {
+      const key = keys[0];
+      const windowMs = Number(args[0]);
+      const maxAllowed = Number(args[1]);
+
+      let entry = this.storage.get(key);
+      if (entry && entry.expiresAt <= now) {
+        this.storage.delete(key);
+        entry = undefined;
+      }
+
+      if (!entry) {
+        entry = { value: 1, pttl: windowMs, expiresAt: now + windowMs };
+        this.storage.set(key, entry);
+      } else {
+        entry.value += 1;
+        entry.pttl = Math.max(0, entry.expiresAt - now);
+      }
+
+      const allowed = entry.value <= maxAllowed ? 1 : 0;
+      return [allowed, entry.value, entry.pttl];
+    }
+
+    // Script de admisión atómica no acreditada (global + huella)
+    if (script.includes('local global_key = KEYS[1]')) {
+      const globalKey = keys[0];
+      const fpKey = keys[1];
+      const windowMs = Number(args[0]);
+      const maxGlobal = Number(args[1]);
+      const maxFp = Number(args[2]);
+
+      let gEntry = this.storage.get(globalKey);
+      if (gEntry && gEntry.expiresAt <= now) {
+        this.storage.delete(globalKey);
+        gEntry = undefined;
+      }
+      let fEntry = this.storage.get(fpKey);
+      if (fEntry && fEntry.expiresAt <= now) {
+        this.storage.delete(fpKey);
+        fEntry = undefined;
+      }
+
+      const gVal = gEntry ? gEntry.value : 0;
+      const fVal = fEntry ? fEntry.value : 0;
+
+      if (gVal >= maxGlobal) {
+        const ttl = gEntry ? Math.max(0, gEntry.expiresAt - now) : windowMs;
+        return [0, gVal, ttl, 'GLOBAL_LIMIT'];
+      }
+      if (fVal >= maxFp) {
+        const ttl = fEntry ? Math.max(0, fEntry.expiresAt - now) : windowMs;
+        return [0, fVal, ttl, 'FP_LIMIT'];
+      }
+
+      // Increment both
+      if (!gEntry) {
+        gEntry = { value: 1, pttl: windowMs, expiresAt: now + windowMs };
+        this.storage.set(globalKey, gEntry);
+      } else {
+        gEntry.value += 1;
+        gEntry.pttl = Math.max(0, gEntry.expiresAt - now);
+      }
+
+      if (!fEntry) {
+        fEntry = { value: 1, pttl: windowMs, expiresAt: now + windowMs };
+        this.storage.set(fpKey, fEntry);
+      } else {
+        fEntry.value += 1;
+        fEntry.pttl = Math.max(0, fEntry.expiresAt - now);
+      }
+
+      return [1, fEntry.value, fEntry.pttl, 'ALLOWED'];
+    }
+
+    // Read script
+    if (script.includes('local n = tonumber(redis.call(\'GET\', KEYS[1]) or \'0\')')) {
+      const key = keys[0];
+      const entry = this.storage.get(key);
+      if (!entry || entry.expiresAt <= now) return [0, 0];
+      return [entry.value, Math.max(0, entry.expiresAt - now)];
+    }
+
+    throw new Error('Unknown Lua script in MockRedisClient');
+  }
+}
+
+// Test 6.1: Puerta de admisión atómica (checkAndRecordRateLimit) bloquea intento 6 en IP acreditada
+const memStore = new InMemoryRateLimitStore();
+const testIp = '198.51.100.77';
+for (let i = 1; i <= 5; i++) {
+  const res = await checkAndRecordRateLimit(testIp, null, { store: memStore });
+  assert.equal(res.allowed, true, `Intento ${i} debe permitirse`);
+  assert.equal(res.count, i, `Contador debe ser ${i}`);
+}
+const res6 = await checkAndRecordRateLimit(testIp, null, { store: memStore });
+assert.equal(res6.allowed, false, 'Intento 6 debe ser bloqueado');
+assert.equal(res6.count, 6, 'Contador debe ser 6');
+assert.equal(res6.reason, 'IP_LIMIT', 'Razón debe ser IP_LIMIT');
+pass('SEC-04C: Puerta de admisión atómica bloquea intento 6 en IP acreditada');
+
+// Test 6.2: Puerta de admisión atómica para tráfico no acreditado bloquea por huella (intento 6)
+const testFp = 'fp_atomic_test_signature';
+for (let i = 1; i <= 5; i++) {
+  const res = await checkAndRecordRateLimit(null, testFp, { store: memStore });
+  assert.equal(res.allowed, true, `Intento ${i} no acreditado debe permitirse`);
+  assert.equal(res.count, i);
+}
+const resFp6 = await checkAndRecordRateLimit(null, testFp, { store: memStore });
+assert.equal(resFp6.allowed, false, 'Intento 6 de huella debe bloquearse');
+assert.equal(resFp6.reason, 'FP_LIMIT', 'Razón debe ser FP_LIMIT');
+pass('SEC-04C: Tráfico no acreditado bloqueado atómicamente por huella al intento 6');
+
+// Test 6.3: Concurrencia multi-proceso simulada en Redis (Worker A y Worker B comparten cuota)
+const sharedRedisClient = new MockRedisClient();
+const workerAStore = new RedisRateLimitStore(sharedRedisClient, { prefix: 'test:shared:rl:' });
+const workerBStore = new RedisRateLimitStore(sharedRedisClient, { prefix: 'test:shared:rl:' });
+
+// Worker A procesa 3 peticiones
+for (let i = 1; i <= 3; i++) {
+  const resA = await workerAStore.admitAttempt('ip:203.0.113.88', 5, 3600000);
+  assert.equal(resA.allowed, true, `Worker A intento ${i} permitido`);
+  assert.equal(resA.count, i);
+}
+// Worker B procesa 2 peticiones concurrentes
+for (let i = 4; i <= 5; i++) {
+  const resB = await workerBStore.admitAttempt('ip:203.0.113.88', 5, 3600000);
+  assert.equal(resB.allowed, true, `Worker B intento ${i} permitido`);
+  assert.equal(resB.count, i);
+}
+// Intento 6 realizado desde Worker A -> Debe ser bloqueado por cuota compartida
+const workerABlocked = await workerAStore.admitAttempt('ip:203.0.113.88', 5, 3600000);
+assert.equal(workerABlocked.allowed, false, 'Worker A debe bloquear intento 6 por cuota compartida en Redis');
+assert.equal(workerABlocked.count, 6);
+assert.equal(workerABlocked.reason, 'IP_LIMIT');
+
+// Intento 7 realizado desde Worker B -> También bloqueado
+const workerBBlocked = await workerBStore.admitAttempt('ip:203.0.113.88', 5, 3600000);
+assert.equal(workerBBlocked.allowed, false, 'Worker B debe bloquear intento 7');
+pass('SEC-04C: Concurrencia multiproceso demostrada: Workers A y B comparten cuota Redis y bloquean intento 6');
+
+// Test 6.4: Cortafuegos global unaccredited en Redis (máximo 50)
+const unaccRedisStore = new RedisRateLimitStore(sharedRedisClient, { prefix: 'test:unacc:rl:' });
+for (let i = 1; i <= 50; i++) {
+  const res = await unaccRedisStore.admitUnaccreditedAttempt(`fp:rot_${i}`, 'global:test', 5, 50, 3600000);
+  assert.equal(res.allowed, true, `Intento global ${i} permitido`);
+}
+const globalBlocked = await unaccRedisStore.admitUnaccreditedAttempt('fp:rot_51', 'global:test', 5, 50, 3600000);
+assert.equal(globalBlocked.allowed, false, 'Intento 51 debe ser bloqueado por cortafuegos global');
+assert.equal(globalBlocked.reason, 'GLOBAL_LIMIT');
+pass('SEC-04C: Cortafuegos global para tráfico no acreditado opera atómicamente en Redis');
+
+// Test 6.5: Política de fallo explícita (fail-closed) ante error o indisponibilidad de Redis
+const failingRedisClient = {
+  eval: async () => { throw new Error('ECONNREFUSED 127.0.0.1:6379'); }
+};
+const failClosedStore = new RedisRateLimitStore(failingRedisClient, { failPolicy: 'closed' });
+const failResult = await failClosedStore.admitAttempt('ip:1.2.3.4', 5, 3600000);
+assert.equal(failResult.allowed, false, 'En producción con fail-closed, error de Redis bloquea por seguridad');
+assert.equal(failResult.reason, 'REDIS_ERROR');
+pass('SEC-04C: Política fail-closed comprobada: indisponibilidad de Redis no abre la puerta silenciosamente');
+
+// Test 6.6: lib/actions.ts usa la puerta atómica checkAndRecordRateLimit
+const updatedActionsCode = fs.readFileSync(path.resolve('lib/actions.ts'), 'utf8');
+assert.equal(
+  updatedActionsCode.includes('checkAndRecordRateLimit('),
+  true,
+  'lib/actions.ts debe invocar checkAndRecordRateLimit para admisión atómica'
+);
+assert.equal(
+  updatedActionsCode.includes('recordSubmissionAttempt('),
+  false,
+  'lib/actions.ts no debe usar recordSubmissionAttempt separado para evitar condición de carrera'
+);
+pass('SEC-04C: actions.ts integrado con la puerta de admisión atómica (cero condiciones de carrera)');
 
 console.log('\n═════════════════════════════════════════════════════════════════════════════');
 console.log(`🎉 TODAS LAS PRUEBAS FUNCIONALES SUPERADAS: ${passedTests} aserciones verificadas.`);

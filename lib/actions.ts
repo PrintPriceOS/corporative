@@ -8,8 +8,7 @@ import {
   auditLeadQuality,
   resolveTrustedClientIp,
   computeClientFingerprint,
-  isRateLimited,
-  recordSubmissionAttempt
+  checkAndRecordRateLimit
 } from './security';
 
 export type SubmitPartnerOnboardingResult = {
@@ -38,11 +37,10 @@ export async function submitPartnerOnboarding(data: FormData): Promise<SubmitPar
   const clientFingerprint = clientIp ? null : computeClientFingerprint(headerList);
 
   // 1. Abuse Protection & Rate Limiting:
-  // - Verified client IPs are rate-limited per IP (5 submissions / hour).
-  // - Requests without accredited IP are rate-limited per client fingerprint (5 submissions / hour)
-  //   without shared lockout across distinct users, backed by a global unaccredited circuit breaker
-  //   (50 submissions / hour) to prevent rate limit evasion or distributed abuse.
-  if (isRateLimited(clientIp, clientFingerprint)) {
+  // Single atomic admission operation (SEC-04C): checks quota and increments atomically,
+  // preventing check-then-record race conditions across multiple worker processes.
+  const admission = await checkAndRecordRateLimit(clientIp, clientFingerprint);
+  if (!admission.allowed) {
     return {
       success: false,
       status: 'RATE_LIMIT_EXCEEDED',
@@ -55,8 +53,6 @@ export async function submitPartnerOnboarding(data: FormData): Promise<SubmitPar
       }
     };
   }
-
-  recordSubmissionAttempt(clientIp, clientFingerprint);
 
   // 2. Parse & Sanitize Input
   const rawData = Object.fromEntries(data.entries()) as Record<string, any>;

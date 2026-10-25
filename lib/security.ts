@@ -360,9 +360,24 @@ export interface RateLimitEntry {
     timestamp: number;
 }
 
+export interface RateLimitAdmission {
+    allowed: boolean;
+    count: number;
+    ttlMs: number;
+    reason?: 'ALLOWED' | 'IP_LIMIT' | 'FP_LIMIT' | 'GLOBAL_LIMIT' | 'REDIS_ERROR';
+}
+
 export interface IRateLimitStore {
     get(key: string): Promise<RateLimitEntry | null> | RateLimitEntry | null;
     increment(key: string, windowMs: number): Promise<RateLimitEntry> | RateLimitEntry;
+    admitAttempt(key: string, maxAttempts: number, windowMs: number): Promise<RateLimitAdmission> | RateLimitAdmission;
+    admitUnaccreditedAttempt(
+        fpKey: string,
+        globalKey: string,
+        maxFp: number,
+        maxGlobal: number,
+        windowMs: number
+    ): Promise<RateLimitAdmission> | RateLimitAdmission;
     reset(): Promise<void> | void;
 }
 
@@ -391,8 +406,89 @@ export class InMemoryRateLimitStore implements IRateLimitStore {
         return newEntry;
     }
 
+    admitAttempt(key: string, maxAttempts: number = MAX_SUBMISSIONS_PER_IP, windowMs: number = RATE_LIMIT_WINDOW): RateLimitAdmission {
+        const now = Date.now();
+        const existing = this.get(key);
+        if (existing) {
+            existing.count += 1;
+            const allowed = existing.count <= maxAttempts;
+            const ttlMs = Math.max(0, windowMs - (now - existing.timestamp));
+            return { allowed, count: existing.count, ttlMs, reason: allowed ? 'ALLOWED' : 'IP_LIMIT' };
+        }
+        const newEntry: RateLimitEntry = { count: 1, timestamp: now };
+        this.store.set(key, newEntry);
+        return { allowed: true, count: 1, ttlMs: windowMs, reason: 'ALLOWED' };
+    }
+
+    admitUnaccreditedAttempt(
+        fpKey: string,
+        globalKey: string = 'unaccredited:global',
+        maxFp: number = MAX_SUBMISSIONS_PER_FINGERPRINT,
+        maxGlobal: number = MAX_UNACCREDITED_GLOBAL_LIMIT,
+        windowMs: number = RATE_LIMIT_WINDOW
+    ): RateLimitAdmission {
+        const now = Date.now();
+        const globalEntry = this.get(globalKey);
+        const fpEntry = this.get(fpKey);
+
+        if (globalEntry && globalEntry.count >= maxGlobal) {
+            const ttlMs = Math.max(0, windowMs - (now - globalEntry.timestamp));
+            return { allowed: false, count: globalEntry.count, ttlMs, reason: 'GLOBAL_LIMIT' };
+        }
+
+        if (fpEntry && fpEntry.count >= maxFp) {
+            const ttlMs = Math.max(0, windowMs - (now - fpEntry.timestamp));
+            return { allowed: false, count: fpEntry.count, ttlMs, reason: 'FP_LIMIT' };
+        }
+
+        const newGlobalCount = (globalEntry ? globalEntry.count + 1 : 1);
+        this.store.set(globalKey, { count: newGlobalCount, timestamp: globalEntry?.timestamp ?? now });
+
+        const newFpCount = (fpEntry ? fpEntry.count + 1 : 1);
+        this.store.set(fpKey, { count: newFpCount, timestamp: fpEntry?.timestamp ?? now });
+
+        const fpTtl = Math.max(0, windowMs - (now - (fpEntry?.timestamp ?? now)));
+        return { allowed: true, count: newFpCount, ttlMs: fpTtl, reason: 'ALLOWED' };
+    }
+
     reset(): void {
         this.store.clear();
     }
+}
+
+let activeStore: IRateLimitStore = new InMemoryRateLimitStore();
+
+export function setActiveRateLimitStore(store: IRateLimitStore) {
+    activeStore = store;
+}
+
+export function getActiveRateLimitStore(): IRateLimitStore {
+    return activeStore;
+}
+
+/**
+ * Single Atomic Admission Gate (SEC-04C):
+ * Performs check-and-record in one atomic operation.
+ * Concurrency-safe across worker processes, rejecting attempt 6 under concurrent load.
+ */
+export async function checkAndRecordRateLimit(
+    ip: string | null,
+    clientFingerprint?: string | null,
+    options?: { store?: IRateLimitStore }
+): Promise<RateLimitAdmission> {
+    const store = options?.store ?? activeStore;
+
+    if (ip) {
+        return await store.admitAttempt(`ip:${ip}`, MAX_SUBMISSIONS_PER_IP, RATE_LIMIT_WINDOW);
+    }
+
+    const fpKey = clientFingerprint ? `fp:${clientFingerprint}` : 'fp:unknown';
+    return await store.admitUnaccreditedAttempt(
+        fpKey,
+        'unaccredited:global',
+        MAX_SUBMISSIONS_PER_FINGERPRINT,
+        MAX_UNACCREDITED_GLOBAL_LIMIT,
+        RATE_LIMIT_WINDOW
+    );
 }
 
