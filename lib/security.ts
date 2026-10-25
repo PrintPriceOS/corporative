@@ -381,8 +381,8 @@ export interface IRateLimitStore {
     reset(): Promise<void> | void;
 }
 
-import { InMemoryRateLimitStore, type IRateLimitStore } from './inMemoryRateLimitStore.ts';
-export { InMemoryRateLimitStore, type IRateLimitStore };
+import { InMemoryRateLimitStore } from './inMemoryRateLimitStore';
+export { InMemoryRateLimitStore };
 
 let activeStore: IRateLimitStore | null = null;
 
@@ -395,7 +395,7 @@ export function getActiveRateLimitStore(): IRateLimitStore {
         const { createRateLimitStore } = require('./redisRateLimitStore');
         activeStore = createRateLimitStore();
     }
-    return activeStore;
+    return activeStore!;
 }
 
 /**

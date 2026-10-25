@@ -42,12 +42,12 @@ import {
   computeClientFingerprint,
   checkAndRecordRateLimit,
   setActiveRateLimitStore
-} from '../lib/security.ts';
+} from '../lib/security';
 import { 
   createRateLimitStore, 
   RedisRateLimitStore,
   resetRedisClientSingleton
-} from '../lib/redisRateLimitStore.ts';
+} from '../lib/redisRateLimitStore';
 
 const NGINX_TEST_PORT = 3890;
 const BACKEND_PORT = 3891;
@@ -139,12 +139,17 @@ function cleanupNginx() {
 
 async function spawnWorker(redisUrl = REDIS_URL, failPolicy = 'closed') {
   return new Promise((resolve, reject) => {
-    const child = spawn(process.execPath, [
+    const tsxBin = path.join(process.cwd(), 'node_modules', '.bin', process.platform === 'win32' ? 'tsx.cmd' : 'tsx');
+    const hasTsx = fs.existsSync(tsxBin);
+    const runner = hasTsx ? tsxBin : process.execPath;
+    const args = [
       process.argv[1],
       '--backend-worker',
       redisUrl,
       failPolicy
-    ], {
+    ];
+
+    const child = spawn(runner, args, {
       stdio: ['pipe', 'pipe', 'pipe'],
       env: { ...process.env, NODE_ENV: 'staging' }
     });

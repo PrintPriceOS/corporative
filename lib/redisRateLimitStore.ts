@@ -9,7 +9,7 @@
  * 5. Explicit failure policy: in production, fails closed on Redis downtime to prevent unmetered abuse.
  */
 import IORedis from 'ioredis';
-import { InMemoryRateLimitStore, type IRateLimitStore } from './inMemoryRateLimitStore.ts';
+import { InMemoryRateLimitStore, type IRateLimitStore } from './inMemoryRateLimitStore';
 export { InMemoryRateLimitStore, type IRateLimitStore };
 
 export interface RateLimitEntry {
@@ -384,7 +384,7 @@ export function createRateLimitStore(options?: {
     const adapter = new IORedisEvalAdapter(client);
     return new RedisRateLimitStore(adapter, {
         prefix: options?.keyPrefix,
-        defaultWindowMs: options?.defaultWindowMs,
+        windowMs: options?.defaultWindowMs,
         failPolicy: options?.failPolicy ?? (isProduction ? 'closed' : 'open')
     });
 }
