@@ -9,6 +9,7 @@
  * 5. Explicit failure policy: in production, fails closed on Redis downtime to prevent unmetered abuse.
  */
 import IORedis from 'ioredis';
+import { InMemoryRateLimitStore, type IRateLimitStore } from './inMemoryRateLimitStore.ts';
 
 export interface RateLimitEntry {
     count: number;
@@ -359,14 +360,16 @@ export function createRateLimitStore(options?: {
     redisUrl?: string;
     failPolicy?: 'closed' | 'open';
     forceMemory?: boolean;
-    inMemoryFallback?: any;
-}): any {
+    inMemoryFallback?: IRateLimitStore;
+    keyPrefix?: string;
+    defaultWindowMs?: number;
+}): IRateLimitStore {
     const redisUrl = options?.redisUrl || (typeof process !== 'undefined' ? (process.env?.PPOS_REDIS_URL || process.env?.REDIS_URL) : undefined);
     const isProduction = typeof process !== 'undefined' && process.env?.NODE_ENV === 'production';
 
     // 1. Explicit memory opt-in (development or isolated unit tests)
     if (options?.forceMemory || (!redisUrl && !isProduction)) {
-        return options?.inMemoryFallback;
+        return options?.inMemoryFallback ?? new InMemoryRateLimitStore({ defaultWindowMs: options?.defaultWindowMs });
     }
 
     // 2. Production with missing Redis configuration: fail closed
@@ -379,6 +382,8 @@ export function createRateLimitStore(options?: {
     const client = getOrCreateRedisClient(redisUrl);
     const adapter = new IORedisEvalAdapter(client);
     return new RedisRateLimitStore(adapter, {
+        prefix: options?.keyPrefix,
+        defaultWindowMs: options?.defaultWindowMs,
         failPolicy: options?.failPolicy ?? (isProduction ? 'closed' : 'open')
     });
 }

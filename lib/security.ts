@@ -381,80 +381,8 @@ export interface IRateLimitStore {
     reset(): Promise<void> | void;
 }
 
-export class InMemoryRateLimitStore implements IRateLimitStore {
-    private store = new Map<string, RateLimitEntry>();
-
-    get(key: string): RateLimitEntry | null {
-        const entry = this.store.get(key);
-        if (!entry) return null;
-        if (Date.now() - entry.timestamp > RATE_LIMIT_WINDOW) {
-            this.store.delete(key);
-            return null;
-        }
-        return entry;
-    }
-
-    increment(key: string, windowMs: number = RATE_LIMIT_WINDOW): RateLimitEntry {
-        const now = Date.now();
-        const existing = this.get(key);
-        if (existing) {
-            existing.count += 1;
-            return existing;
-        }
-        const newEntry: RateLimitEntry = { count: 1, timestamp: now };
-        this.store.set(key, newEntry);
-        return newEntry;
-    }
-
-    admitAttempt(key: string, maxAttempts: number = MAX_SUBMISSIONS_PER_IP, windowMs: number = RATE_LIMIT_WINDOW): RateLimitAdmission {
-        const now = Date.now();
-        const existing = this.get(key);
-        if (existing) {
-            existing.count += 1;
-            const allowed = existing.count <= maxAttempts;
-            const ttlMs = Math.max(0, windowMs - (now - existing.timestamp));
-            return { allowed, count: existing.count, ttlMs, reason: allowed ? 'ALLOWED' : 'IP_LIMIT' };
-        }
-        const newEntry: RateLimitEntry = { count: 1, timestamp: now };
-        this.store.set(key, newEntry);
-        return { allowed: true, count: 1, ttlMs: windowMs, reason: 'ALLOWED' };
-    }
-
-    admitUnaccreditedAttempt(
-        fpKey: string,
-        globalKey: string = 'unaccredited:global',
-        maxFp: number = MAX_SUBMISSIONS_PER_FINGERPRINT,
-        maxGlobal: number = MAX_UNACCREDITED_GLOBAL_LIMIT,
-        windowMs: number = RATE_LIMIT_WINDOW
-    ): RateLimitAdmission {
-        const now = Date.now();
-        const globalEntry = this.get(globalKey);
-        const fpEntry = this.get(fpKey);
-
-        if (globalEntry && globalEntry.count >= maxGlobal) {
-            const ttlMs = Math.max(0, windowMs - (now - globalEntry.timestamp));
-            return { allowed: false, count: globalEntry.count, ttlMs, reason: 'GLOBAL_LIMIT' };
-        }
-
-        if (fpEntry && fpEntry.count >= maxFp) {
-            const ttlMs = Math.max(0, windowMs - (now - fpEntry.timestamp));
-            return { allowed: false, count: fpEntry.count, ttlMs, reason: 'FP_LIMIT' };
-        }
-
-        const newGlobalCount = (globalEntry ? globalEntry.count + 1 : 1);
-        this.store.set(globalKey, { count: newGlobalCount, timestamp: globalEntry?.timestamp ?? now });
-
-        const newFpCount = (fpEntry ? fpEntry.count + 1 : 1);
-        this.store.set(fpKey, { count: newFpCount, timestamp: fpEntry?.timestamp ?? now });
-
-        const fpTtl = Math.max(0, windowMs - (now - (fpEntry?.timestamp ?? now)));
-        return { allowed: true, count: newFpCount, ttlMs: fpTtl, reason: 'ALLOWED' };
-    }
-
-    reset(): void {
-        this.store.clear();
-    }
-}
+import { InMemoryRateLimitStore, type IRateLimitStore } from './inMemoryRateLimitStore.ts';
+export { InMemoryRateLimitStore, type IRateLimitStore };
 
 let activeStore: IRateLimitStore | null = null;
 
@@ -464,23 +392,10 @@ export function setActiveRateLimitStore(store: IRateLimitStore | null) {
 
 export function getActiveRateLimitStore(): IRateLimitStore {
     if (!activeStore) {
-        const redisUrl = typeof process !== 'undefined' ? (process.env?.PPOS_REDIS_URL || process.env?.REDIS_URL) : undefined;
-        if (redisUrl) {
-            try {
-                const { createRateLimitStore } = require('./redisRateLimitStore');
-                activeStore = createRateLimitStore({ redisUrl });
-            } catch (err) {
-                console.error('[SECURITY][STORE_INIT] Failed to initialize Redis store from environment:', err);
-                if (process.env?.NODE_ENV === 'production') {
-                    throw err; // Fail closed in production
-                }
-                activeStore = new InMemoryRateLimitStore();
-            }
-        } else {
-            activeStore = new InMemoryRateLimitStore();
-        }
+        const { createRateLimitStore } = require('./redisRateLimitStore');
+        activeStore = createRateLimitStore();
     }
-    return activeStore!;
+    return activeStore;
 }
 
 /**
