@@ -238,11 +238,12 @@ Se realizó una auditoría directa en la consola del servidor compartido (`cool-
 ## 7. SHA Final Inmutable y Certificación
 
 - **Rama:** `feat/comparisons-evidence-and-legal-policy-review`
-- **SHA Candidato Definitivo:** `ad42f9e421a1170d306b3a9cfa8cfa103328e352`
+- **SHA Candidato Definitivo de Código:** `ad42f9e421a1170d306b3a9cfa8cfa103328e352`
+- **Commit de Incorporación del Informe:** `8be018a42e5d95759efc0d935f8e562149bfe3e4`
 - **Verificación remota:**
   ```text
   $ git ls-remote origin refs/heads/feat/comparisons-evidence-and-legal-policy-review
-  ad42f9e421a1170d306b3a9cfa8cfa103328e352    refs/heads/feat/comparisons-evidence-and-legal-policy-review
+  8be018a42e5d95759efc0d935f8e562149bfe3e4    refs/heads/feat/comparisons-evidence-and-legal-policy-review
   ```
 - **Conclusión de la Auditoría:**  
   El candidato `ad42f9e421a1170d306b3a9cfa8cfa103328e352` reúne todas las garantías de seguridad técnica, robustez arquitectónica y fidelidad corporativa para su paso a producción. No obstante, en estricto acatamiento de las reglas de gobierno, **el despliegue no se ejecutará hasta contar con la autorización operativa correspondiente**.
