@@ -1,0 +1,52 @@
+{
+  "state_1_before_choice": {
+    "cookies": [],
+    "localStorage": {},
+    "sessionStorage": {},
+    "network_requests_count": 34,
+    "network_domains": [
+      "printprice.pro"
+    ]
+  },
+  "state_2_after_reject": {
+    "cookies": [],
+    "localStorage": {
+      "ppp_consent_v1_audit": "{\"essential\":true,\"analytics\":false,\"timestamp\":\"2026-10-25T03:13:30.880Z\",\"version\":\"v1.1\"}",
+      "ppp_audit_consent_proof": "{\"proof_id\":\"CONSENT_1792898010883\",\"essential\":true,\"analytics\":false,\"timestamp\":\"2026-10-25T03:13:30.880Z\",\"version\":\"v1.1\"}"
+    },
+    "sessionStorage": {},
+    "network_requests_count": 34,
+    "network_domains": [
+      "printprice.pro"
+    ]
+  },
+  "state_3_after_accept_all": {
+    "cookies": [],
+    "localStorage": {
+      "ppp_consent_v1_audit": "{\"essential\":true,\"analytics\":true,\"timestamp\":\"2026-10-25T03:13:36.003Z\",\"version\":\"v1.1\"}",
+      "ppp_audit_consent_proof": "{\"proof_id\":\"CONSENT_1792898016004\",\"essential\":true,\"analytics\":true,\"timestamp\":\"2026-10-25T03:13:36.003Z\",\"version\":\"v1.1\"}",
+      "ppos_telemetry_history": "[{\"event\":\"hero_view\",\"system_version\":\"v1.1-corporate\",\"path\":\"/\",\"referrer\":\"\",\"session_id\":\"sid_9w6tolovo\",\"user_type\":\"unknown\",\"timestamp\":\"2026-10-25T03:13:36.004Z\"},{\"event\":\"page_view\",\"system_version\":\"v1.1-corporate\",\"path\":\"/\",\"referrer\":\"\",\"session_id\":\"sid_9w6tolovo\",\"user_type\":\"unknown\",\"timestamp\":\"2026-10-25T03:13:36.004Z\"}]"
+    },
+    "sessionStorage": {
+      "ppos_session_id": "sid_9w6tolovo"
+    },
+    "network_requests_count": 51,
+    "network_domains": [
+      "printprice.pro"
+    ]
+  },
+  "state_4_after_withdraw": {
+    "cookies": [],
+    "localStorage": {
+      "ppp_consent_v1_audit": "{\"essential\":true,\"analytics\":false,\"timestamp\":\"2026-10-25T03:13:39.233Z\",\"version\":\"v1.1\"}",
+      "ppp_audit_consent_proof": "{\"proof_id\":\"CONSENT_1792898019233\",\"essential\":true,\"analytics\":false,\"timestamp\":\"2026-10-25T03:13:39.233Z\",\"version\":\"v1.1\"}"
+    },
+    "sessionStorage": {
+      "ppos_session_id": "sid_9w6tolovo"
+    },
+    "network_requests_count": 100,
+    "network_domains": [
+      "printprice.pro"
+    ]
+  }
+}
