@@ -7,6 +7,7 @@ import {
   isEmailDomainAllowed, 
   auditLeadQuality,
   resolveTrustedClientIp,
+  computeClientFingerprint,
   isRateLimited,
   recordSubmissionAttempt
 } from './security';
@@ -34,23 +35,28 @@ export type SubmitPartnerOnboardingResult = {
 export async function submitPartnerOnboarding(data: FormData): Promise<SubmitPartnerOnboardingResult> {
   const headerList = await headers();
   const clientIp = resolveTrustedClientIp(headerList);
+  const clientFingerprint = clientIp ? null : computeClientFingerprint(headerList);
 
-  // 1. IP Rate Limiting (only applies to successfully identified client IPs)
-  if (isRateLimited(clientIp)) {
+  // 1. Abuse Protection & Rate Limiting:
+  // - Verified client IPs are rate-limited per IP (5 submissions / hour).
+  // - Requests without accredited IP are rate-limited per client fingerprint (5 submissions / hour)
+  //   without shared lockout across distinct users, backed by a global unaccredited circuit breaker
+  //   (50 submissions / hour) to prevent rate limit evasion or distributed abuse.
+  if (isRateLimited(clientIp, clientFingerprint)) {
     return {
       success: false,
       status: 'RATE_LIMIT_EXCEEDED',
       error: 'RATE_LIMIT_EXCEEDED',
-      message: 'Too many submissions from this address. Please try again later.',
+      message: 'Too many submissions. Please try again later.',
       localizedMessage: {
-        es: 'Demasiados intentos desde esta dirección. Por favor, inténtelo de nuevo más tarde.',
-        en: 'Too many submissions from this address. Please try again later.',
-        de: 'Zu viele Versuche von dieser Adresse. Bitte versuchen Sie es später erneut.'
+        es: 'Demasiados intentos de envío. Por favor, inténtelo de nuevo más tarde.',
+        en: 'Too many submission attempts. Please try again later.',
+        de: 'Zu viele Übermittlungsversuche. Bitte versuchen Sie es später erneut.'
       }
     };
   }
 
-  recordSubmissionAttempt(clientIp);
+  recordSubmissionAttempt(clientIp, clientFingerprint);
 
   // 2. Parse & Sanitize Input
   const rawData = Object.fromEntries(data.entries()) as Record<string, any>;
@@ -136,20 +142,21 @@ export async function submitPartnerOnboarding(data: FormData): Promise<SubmitPar
   if (validatedData.typicalJobs) validatedData.typicalJobs = sanitizeText(validatedData.typicalJobs);
   if (validatedData.qaProcess) validatedData.qaProcess = sanitizeText(validatedData.qaProcess);
 
-  // 7. Velocity Check (Reject automated submissions completing under 5s)
+  // 7. Velocity & Freshness Check (Reject automated submissions completing under 5s or with invalid timestamps)
   const now = Date.now();
-  const submissionDelay = now - (Number(validatedData._timestamp) || 0);
-  if (submissionDelay < 5000) {
-    console.warn('[SECURITY][BOT_DETECTED] Velocity threshold triggered for onboarding submission');
+  const submissionTimestamp = Number(validatedData._timestamp);
+  const submissionDelay = now - (submissionTimestamp || 0);
+  if (!submissionTimestamp || isNaN(submissionTimestamp) || submissionDelay < 5000 || (submissionTimestamp - now) > 60000) {
+    console.warn('[SECURITY][BOT_DETECTED] Velocity or timestamp threshold triggered for onboarding submission');
     return {
       success: false,
       status: 'BOT_DETECTED',
       error: 'BOT_DETECTED',
       message: 'Submission rejected by system audit speed check.',
       localizedMessage: {
-        es: 'Envío rechazado por comprobación de velocidad de entrada.',
-        en: 'Submission rejected by intake speed check.',
-        de: 'Übermittlung durch Geschwindigkeitsprüfung abgelehnt.'
+        es: 'Envío rechazado por comprobación de velocidad de entrada o marca temporal.',
+        en: 'Submission rejected by intake speed or timestamp check.',
+        de: 'Übermittlung durch Geschwindigkeits- oder Zeitstempelprüfung abgelehnt.'
       }
     };
   }

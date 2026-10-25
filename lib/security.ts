@@ -4,6 +4,7 @@
  */
 
 import { isIP } from 'node:net';
+import { createHash } from 'node:crypto';
 
 // 1. FILE SCANNING BYTES (PDF Header)
 const PDF_MAGIC_BYTES = [0x25, 0x50, 0x44, 0x46]; // %PDF
@@ -82,7 +83,12 @@ export function auditLeadQuality(data: any) {
 // 5. CLIENT IP & RATE LIMITING HELPERS
 const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 hour
 const MAX_SUBMISSIONS_PER_IP = 5;
+const MAX_SUBMISSIONS_PER_FINGERPRINT = 5;
+const MAX_UNACCREDITED_GLOBAL_LIMIT = 50;
+
 const ipSubmissions = new Map<string, { count: number; timestamp: number }>();
+const fingerprintSubmissions = new Map<string, { count: number; timestamp: number }>();
+const unaccreditedGlobalSubmissions = { count: 0, timestamp: Date.now() };
 
 /**
  * Standard IPv4 / IPv6 validation using Node.js built-in RFC-compliant parser.
@@ -110,18 +116,19 @@ export interface ProxyTrustConfig {
 /**
  * Resolves client identifier strictly from accredited reverse proxy headers.
  * 
- * INFRASTRUCTURE TRUST MODEL:
- * 1. PrintPrice OS production host (212.227.79.67) runs Nginx on Plesk as the local reverse
- *    proxy forwarding to the internal Node.js server. Nginx sets `proxy_set_header X-Real-IP $remote_addr`.
- *    Because Node.js listens on internal loopback (127.0.0.1), `X-Real-IP` represents the actual TCP
- *    remote address connecting to Nginx and cannot be spoofed by incoming client headers.
- * 2. `CF-Connecting-IP` is trusted ONLY when Cloudflare edge proxying is actively accredited
- *    (via `config.trustCloudflareProxy` or `process.env.TRUST_CLOUDFLARE_PROXY === 'true'`).
- *    Blindly trusting `CF-Connecting-IP` when DNS points directly to the host allows header spoofing.
- * 3. `X-Forwarded-For` is NOT used as an arbitrary fallback because clients can prepend spoofed IPs
- *    into the header, making leftmost-entry parsing an insecure default.
- * 4. If no accredited header is present or if validation fails, returns `null`.
- *    Requests with `null` IP NEVER share a global rate limit bucket or lock each other out.
+ * INFRASTRUCTURE TRUST AUDIT & MODEL:
+ * 1. Production Reverse Proxy: In Nginx (/var/www/vhosts/system/printprice.pro/conf/vhost_nginx.conf),
+ *    Nginx terminates TLS and sets `proxy_set_header X-Real-IP $remote_addr;`.
+ *    For traffic entering through port 80/443, Nginx actively overwrites any incoming `X-Real-IP` header,
+ *    preventing client header spoofing over the public web interface.
+ * 2. Backend Port Isolation Finding: Node.js currently listens on `*:8790` (all interfaces), and firewall
+ *    rules do not explicitly drop external connections to 8790. Requests arriving directly at port 8790
+ *    bypass Nginx and must NEVER be treated as pre-filtered or accredited.
+ * 3. Client Header Untrust: External client-supplied headers (such as `CF-Connecting-IP` without accredited
+ *    proxy chain or arbitrary `X-Forwarded-For`) are NEVER considered reliable.
+ * 4. Unaccredited Requests: When no accredited header exists or when validation fails, returns `null`.
+ *    Requests with `null` IP are protected via per-client fingerprint rate limiting (to avoid shared lockouts
+ *    of legitimate visitors) combined with a global unaccredited circuit breaker (to prevent rate limit evasion).
  */
 export function resolveTrustedClientIp(
     headerList: HeaderReader,
@@ -146,41 +153,114 @@ export function resolveTrustedClientIp(
     }
 
     // 3. Fallback: NO arbitrary X-Forwarded-For fallback or unverified headers.
-    // Return null to avoid spoofed IP adoption or shared lockout buckets.
+    // Return null to avoid spoofed IP adoption.
     return null;
 }
 
-export function isRateLimited(ip: string | null): boolean {
-    // CRITICAL: Never lump unresolvable requests into a shared 'unknown' bucket.
-    if (!ip) return false;
+/**
+ * Computes a non-PII anonymous client fingerprint from HTTP headers.
+ * Generates distinct buckets for legitimate visitors whose IP cannot be accredited,
+ * ensuring they are not indiscriminately locked out by other unaccredited users.
+ */
+export function computeClientFingerprint(headerList: HeaderReader, salt: string = ''): string {
+    const ua = headerList.get('user-agent') || 'no-ua';
+    const lang = headerList.get('accept-language') || 'no-lang';
+    const secChUa = headerList.get('sec-ch-ua') || '';
+    const encoding = headerList.get('accept-encoding') || '';
+    const raw = `${ua}:::${lang}:::${secChUa}:::${encoding}:::${salt}`;
+    return createHash('sha256').update(raw).digest('hex').slice(0, 24);
+}
 
+/**
+ * Evaluates whether a submission should be rate-limited:
+ * 1. Accredited IP: Strictly isolated per IP (max 5 submissions / hour).
+ * 2. Unaccredited requests (null IP):
+ *    a) Global unaccredited circuit breaker: If aggregate unaccredited submissions reach
+ *       MAX_UNACCREDITED_GLOBAL_LIMIT (50/hour), blocks further unaccredited requests to prevent
+ *       attackers from evading rate limiting by stripping headers or cycling random user-agents.
+ *    b) Per-fingerprint rate limiting: If clientFingerprint is supplied, isolates each unique
+ *       browser signature (max 5 submissions / hour), ensuring legitimate users do not share a single bucket.
+ */
+export function isRateLimited(
+    ip: string | null,
+    clientFingerprint?: string | null
+): boolean {
     const now = Date.now();
-    const entry = ipSubmissions.get(ip);
 
-    if (entry && (now - entry.timestamp) > RATE_LIMIT_WINDOW) {
-        ipSubmissions.delete(ip);
-        return false;
+    // 1. Check accredited IP
+    if (ip) {
+        const entry = ipSubmissions.get(ip);
+        if (entry && (now - entry.timestamp) > RATE_LIMIT_WINDOW) {
+            ipSubmissions.delete(ip);
+            return false;
+        }
+        return !!(entry && entry.count >= MAX_SUBMISSIONS_PER_IP);
     }
 
-    if (entry && entry.count >= MAX_SUBMISSIONS_PER_IP) {
+    // 2. Unaccredited requests protection:
+    // 2a. Global unaccredited circuit breaker to prevent infinite bypass
+    if ((now - unaccreditedGlobalSubmissions.timestamp) > RATE_LIMIT_WINDOW) {
+        unaccreditedGlobalSubmissions.count = 0;
+        unaccreditedGlobalSubmissions.timestamp = now;
+    }
+    if (unaccreditedGlobalSubmissions.count >= MAX_UNACCREDITED_GLOBAL_LIMIT) {
         return true;
+    }
+
+    // 2b. Per-client fingerprint rate limit (isolates legitimate users)
+    if (clientFingerprint) {
+        const fpEntry = fingerprintSubmissions.get(clientFingerprint);
+        if (fpEntry && (now - fpEntry.timestamp) > RATE_LIMIT_WINDOW) {
+            fingerprintSubmissions.delete(clientFingerprint);
+            return false;
+        }
+        return !!(fpEntry && fpEntry.count >= MAX_SUBMISSIONS_PER_FINGERPRINT);
     }
 
     return false;
 }
 
-export function recordSubmissionAttempt(ip: string | null) {
-    if (!ip) return;
+export function recordSubmissionAttempt(
+    ip: string | null,
+    clientFingerprint?: string | null
+) {
     const now = Date.now();
-    const entry = ipSubmissions.get(ip);
-    if (entry && (now - entry.timestamp) < RATE_LIMIT_WINDOW) {
-        entry.count += 1;
+
+    // 1. Record accredited IP
+    if (ip) {
+        const entry = ipSubmissions.get(ip);
+        if (entry && (now - entry.timestamp) < RATE_LIMIT_WINDOW) {
+            entry.count += 1;
+        } else {
+            ipSubmissions.set(ip, { count: 1, timestamp: now });
+        }
+        return;
+    }
+
+    // 2. Record unaccredited traffic:
+    // Update aggregate unaccredited counter
+    if ((now - unaccreditedGlobalSubmissions.timestamp) < RATE_LIMIT_WINDOW) {
+        unaccreditedGlobalSubmissions.count += 1;
     } else {
-        ipSubmissions.set(ip, { count: 1, timestamp: now });
+        unaccreditedGlobalSubmissions.count = 1;
+        unaccreditedGlobalSubmissions.timestamp = now;
+    }
+
+    // Update per-client fingerprint counter
+    if (clientFingerprint) {
+        const fpEntry = fingerprintSubmissions.get(clientFingerprint);
+        if (fpEntry && (now - fpEntry.timestamp) < RATE_LIMIT_WINDOW) {
+            fpEntry.count += 1;
+        } else {
+            fingerprintSubmissions.set(clientFingerprint, { count: 1, timestamp: now });
+        }
     }
 }
 
 export function resetRateLimitStore() {
     ipSubmissions.clear();
+    fingerprintSubmissions.clear();
+    unaccreditedGlobalSubmissions.count = 0;
+    unaccreditedGlobalSubmissions.timestamp = Date.now();
 }
 

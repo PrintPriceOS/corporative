@@ -17,6 +17,7 @@ import path from 'node:path';
 import { 
   isValidIp, 
   resolveTrustedClientIp, 
+  computeClientFingerprint,
   isRateLimited, 
   recordSubmissionAttempt, 
   resetRateLimitStore,
@@ -105,25 +106,93 @@ assert.equal(
 );
 pass('Aislamiento de cabeceras: X-Real-IP prevalece sobre cabeceras cliente manipuladas');
 
-// ─────────────────────────────────────────────────────────────────────────────
-// 2. AISLAMIENTO DEL CONTADOR Y PREVENCIÓN DE BLOQUEO GLOBAL
-// ─────────────────────────────────────────────────────────────────────────────
-console.log('\n[2/5] Verificando aislamiento de contadores de rate limiting...');
+// Test 1.7: Simulación de acceso directo al backend (sin proxy Nginx / cabeceras no acreditadas)
+const directBackendHeaders = {
+  get: (name) => {
+    if (name === 'x-forwarded-for') return '203.0.113.50';
+    if (name === 'client-ip') return '203.0.113.51';
+    if (name === 'cf-connecting-ip') return '203.0.113.52';
+    // Sin x-real-ip porque el atacante se conecta directo a Node.js en puerto 8790
+    return null;
+  }
+};
+assert.equal(
+  resolveTrustedClientIp(directBackendHeaders),
+  null,
+  'En acceso directo sin X-Real-IP de Nginx, ninguna cabecera externa es acreditada'
+);
+pass('Acceso directo al backend: cabeceras externas no acreditadas se descartan estrictamente como null');
 
-// Test 2.1: IP null nunca incrementa contador ni se bloquea
+// ─────────────────────────────────────────────────────────────────────────────
+// 2. AISLAMIENTO DEL CONTADOR, HUELLA CLIENTE Y PREVENCIÓN DE ELUSIÓN
+// ─────────────────────────────────────────────────────────────────────────────
+console.log('\n[2/5] Verificando protección contra abuso, huella cliente y no elusión de rate limit...');
+
+// Test 2.1: Cálculo determinista y sensible de huella cliente no PII
+const headersChromeEs = {
+  get: (name) => {
+    if (name === 'user-agent') return 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/130.0';
+    if (name === 'accept-language') return 'es-ES,es;q=0.9';
+    return null;
+  }
+};
+const headersFirefoxDe = {
+  get: (name) => {
+    if (name === 'user-agent') return 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:132.0) Gecko/20100101 Firefox/132.0';
+    if (name === 'accept-language') return 'de-DE,de;q=0.9';
+    return null;
+  }
+};
+const fpA = computeClientFingerprint(headersChromeEs);
+const fpB = computeClientFingerprint(headersFirefoxDe);
+assert.notEqual(fpA, fpB, 'Diferentes perfiles de cliente deben generar huellas diferentes');
+assert.equal(fpA, computeClientFingerprint(headersChromeEs), 'Mismos encabezados deben generar huella idéntica');
+pass('Huella cliente anónima: diferenciación determinista sin almacenamiento de PII');
+
+// Test 2.2: Solicitudes sin IP acreditada no pueden eludir rate limit (bloqueo por huella tras 5 intentos)
 resetRateLimitStore();
-const emptyHeaders = { get: (name) => null };
-const nullIp = resolveTrustedClientIp(emptyHeaders);
-assert.equal(nullIp, null);
-
-for (let i = 0; i < 25; i++) {
-  assert.equal(isRateLimited(nullIp), false, `Intento ${i + 1} no debe bloquear`);
-  recordSubmissionAttempt(nullIp);
+const nullIp = null;
+for (let i = 0; i < 5; i++) {
+  assert.equal(isRateLimited(nullIp, fpA), false, `Intento ${i + 1} de cliente A no debe bloquearse`);
+  recordSubmissionAttempt(nullIp, fpA);
 }
-assert.equal(isRateLimited(nullIp), false, 'IP null nunca debe bloquearse globalmente');
-pass('IP null (no resuelta de forma confiable) nunca bloquea globalmente a otros usuarios');
+assert.equal(isRateLimited(nullIp, fpA), true, 'Intento 6 de cliente A debe bloquearse por exceder 5 envíos');
+pass('Solicitudes sin IP acreditada no eluden el rate limiting: se bloquean tras 5 intentos por huella');
 
-// Test 2.2: Aislamiento estricto por IP identificada
+// Test 2.3: Ausencia de bloqueo compartido entre usuarios legítimos no acreditados
+assert.equal(
+  isRateLimited(nullIp, fpB), 
+  false, 
+  'El bloqueo del cliente A no debe afectar al cliente B con distinta huella'
+);
+pass('Sin bloqueo compartido: un usuario sin IP acreditada no bloquea a otros usuarios legítimos');
+
+// Test 2.4: Cortafuegos global para solicitudes no acreditadas (evita elusión por rotación masiva de huellas)
+resetRateLimitStore();
+for (let i = 0; i < 50; i++) {
+  const rotatedFp = `bot_fp_${i}`;
+  assert.equal(isRateLimited(nullIp, rotatedFp), false, `Intento global ${i + 1} dentro de cuota`);
+  recordSubmissionAttempt(nullIp, rotatedFp);
+}
+// Intento 51 debe ser bloqueado por el cortafuegos global de tráfico no acreditado
+const attackerNewFp = 'bot_fp_new_signature';
+assert.equal(
+  isRateLimited(nullIp, attackerNewFp), 
+  true, 
+  'El cortafuegos global debe activarse tras 50 envíos acumulados sin IP acreditada'
+);
+pass('Cortafuegos global activo: impide eludir rate limit mediante rotación infinita de User-Agents');
+
+// Test 2.5: Inmunidad total del tráfico legítimo con IP acreditada
+const legitIp = '198.51.100.99';
+assert.equal(
+  isRateLimited(legitIp), 
+  false, 
+  'El tráfico con IP acreditada NUNCA es bloqueado por el cortafuegos de tráfico no acreditado'
+);
+pass('Inmunidad del tráfico acreditado: peticiones con IP de Nginx no se ven afectadas por el cortafuegos');
+
+// Test 2.6: Aislamiento estricto entre IPs identificadas
 resetRateLimitStore();
 const ipA = '203.0.113.10';
 const ipB = '203.0.113.20';
@@ -134,7 +203,7 @@ for (let i = 0; i < 5; i++) {
 }
 assert.equal(isRateLimited(ipA), true, 'IP A supera el límite de 5 peticiones y se bloquea');
 assert.equal(isRateLimited(ipB), false, 'IP B NO se ve afectada por el bloqueo de IP A');
-assert.equal(isRateLimited(null), false, 'IP null NO se ve afectada por el bloqueo de IP A');
+assert.equal(isRateLimited(null, fpA), false, 'Tráfico no acreditado NO se ve afectado por el bloqueo de IP A');
 pass('El rate limiting aísla rigurosamente por IP sin contaminación cruzada');
 
 // ─────────────────────────────────────────────────────────────────────────────
