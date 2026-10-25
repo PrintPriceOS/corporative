@@ -49,22 +49,33 @@ Para cumplir con el principio de exactitud y transparencia del RGPD (Art. 5.1.a 
 | Módulo o Servicio | ¿Utiliza Inteligencia Artificial o Modelos LLM? | Realidad Técnica Acreditada en Repositorio | ¿Los archivos se utilizan para entrenamiento? | Plazo Real de Eliminación |
 | :--- | :--- | :--- | :--- | :--- |
 | **Price it** (Cálculo de presupuestos) | **NO.** Motor 100% determinista. | Fórmulas matemáticas y matrices algebraicas de imposición en pliego resueltas exclusivamente en backend. Cero inferencia probabilística. | No aplica (no hay modelos de aprendizaje). | En sesión hasta que el usuario guarde el proyecto en localStorage. |
-| **Fix it** (Auditoría de PDF) | **NO.** Motor 100% determinista. | Parser sintáctico de objetos PDF y cálculo de geometrías vectoriales contra normas ISO 15930 (PDF/X). Sin redes neuronales ni LLMs. | **NO.** Ningún archivo se utiliza para entrenar algoritmos de terceros ni modelos públicos. | **Realidad en código:** Eliminación automática tras procesamiento o descarga (`app/products/preflight/page.tsx`). Ventana de 24–72 h calificada como **[PROPUESTA OPERATIVA SUJETA A APROBACIÓN TÉCNICA]**. |
+| **Fix it** (Auditoría de PDF) | **NO.** Motor 100% determinista. | Parser sintáctico de objetos PDF y cálculo de geometrías vectoriales contra normas ISO 15930 (PDF/X). Sin redes neuronales ni LLMs. | **NO.** Ningún archivo se utiliza para entrenar algoritmos de terceros ni modelos públicos. | **[PENDIENTE DE VERIFICACIÓN TÉCNICA DEL CICLO DE VIDA DE ARCHIVOS].** No se afirma eliminación inmediata ni retención de 24–72 horas como práctica vigente en tanto no se disponga de evidencia de ejecución técnica en backend (servicio responsable, almacenamiento en disco/bucket, mecanismo de limpieza mediante cron o worker, disparador por descarga o TTL, tratamiento de fallos y políticas de copias de seguridad). Las menciones en interfaz pública constituyen declaraciones informativas, no evidencia de servidor. |
 | **Mockup 3D** (Visualizador de cubierta) | **NO.** Render 100% determinista WebGL. | Computación gráfica estándar en cliente mediante WebGL / Three.js (renderizado local de geometría 3D a partir de número de páginas y calibre de papel). Sin redes neuronales ni IA generativa. | No aplica (cero modelos de IA implicados). | Puramente efímero en la memoria de la GPU/navegador del usuario; sin persistencia en servidor ni transmisión de imágenes a terceros. |
 | **AI Agent Core** (/ai-agent) | **PROTOTIPO ASISTIDO.** | Interfaz interactiva de demostración con proxy mock en /api/v1/agents. No realiza llamadas autónomas directas a LLMs desde el cliente web corporativo. | No aplica en fase actual de maqueta técnica interactiva. | Sin persistencia de datos reales de clientes en el prototipo. |
 
 ---
 
-## 3. Registro Oficial de Subencargados e Infraestructura Técnica
+## 3. Registro de Infraestructura Técnica, Destinatarios y Transferencias
 
-Print Price Pro SIA recurre a los siguientes prestadores de servicios que actúan como subencargados del tratamiento para la operatividad de la plataforma corporativa:
+Para una estricta coherencia documental, se desglosa el inventario distinguiendo alojamiento, servicios externos y accesos de soporte:
 
-| Subencargado / Proveedor | Servicio Prestado | Sede y Jurisdicción | Centro de Datos | Garantía de Transferencia Internacional |
+### 3.1. Proveedor y Ubicación del Alojamiento
+| Proveedor | Servicio Prestado | Sede Corporativa | Centro de Datos | Estado de Evidencia y Garantía de Transferencia |
 | :--- | :--- | :--- | :--- | :--- |
-| **IONOS SE** | Infraestructura de computación en nube, servidor dedicado / VPS y almacenamiento de aplicaciones. | Montabaur, Alemania (Unión Europea). | Centros de datos certificados en Alemania / Fráncfort (UE). | **No existe transferencia fuera del EEE.** Sujeto al marco de protección de datos de la UE y DPA B2B bajo el RGPD. |
-| **Proveedor de Correo Electrónico Corporativo** | Gestión del servidor de correo SMTP/IMAP para dominios @printprice.pro. | Alojado en la infraestructura propia del servidor dedicado (Plesk Obsidian, IONOS SE, Alemania). | Alemania (UE). | **No existe transferencia internacional.** |
-| **Telemetría y Analítica de Navegación** | Sistema de telemetría interno propio (*first-party*). | Operado directamente por PrintPrice Pro SIA en el navegador del usuario y backend propio. | Dispositivo local del usuario / Servidores en Alemania. | **No hay terceros receptores.** Cero datos transmitidos a Google, Meta u otras redes de publicidad. |
-| **Proveedor de Pasarela de Pagos (Comisiones B2B)** | Cobro de la comisión del 4% y gestión de recibos bancarios a imprentas. | Entidad financiera europea con licencia bancaria en la UE (SEPA B2B). | Unión Europea. | Transferencias electrónicas intracomunitarias reguladas por normativa bancaria de la UE (Directiva PSD2 / PSR). |
+| **IONOS SE** | Infraestructura de servidor dedicado / VPS, panel Plesk Obsidian y almacenamiento de aplicaciones. | Montabaur, Alemania (UE). | Centros de datos en Fráncfort am Main (Alemania / UE, IP `212.227.79.67`). | **Comprobada IP pública en Alemania.** Garantía integral de transferencias en soporte y almacenamiento de backups clasificada como **[PENDIENTE DE AUDITORÍA CONTRACTUAL Y DE CONFIGURACIÓN]**.<br>*Aviso:* No se deduce «cero transferencias» exclusivamente de la geolocalización de la IP o capturas de red de cliente. |
+
+### 3.2. Servicios Externos y Destinatarios
+| Servicio / Destinatario | Función Operativa | Ubicación | Estado de Evidencia |
+| :--- | :--- | :--- | :--- |
+| **Servicio de Correo Corporativo** | Gestión del servidor de correo SMTP/IMAP para dominios @printprice.pro. | Servidor propio en Alemania (UE). | **[VERIFICADO EN CONFIGURACIÓN DE SERVIDOR].** Alojado en la instancia de producción. |
+| **Imprentas Asociadas** | Fabricación material de libros y entrega al cliente. | Espacio Económico Europeo. | **[MODELO CONFIRMADO]:** Destinatarios independientes que reciben los archivos técnicos únicamente tras formalizarse el pedido. |
+| **Pasarelas de Pago Bancarias (SEPA B2B)** | Liquidación mensual de la comisión del 4 % a imprentas. | Unión Europea. | **[PROPUESTA SUJETA A CONTRATACIÓN Y DEFINICIÓN OPERATIVA].** Pendiente de formalizar pasarela bancaria corporativa. |
+| **Telemetría y Analítica de Navegación** | Sistema de telemetría interno propio (*first-party*). | Dispositivo local del usuario (`localStorage`). | **[VERIFICADO TÉCNICAMENTE CON PLAYWRIGHT]:** Sin terceros receptores. Purgado verificado tras revocación. |
+
+### 3.3. Accesos de Soporte y Transferencias Internacionales
+- **Acceso administrativo:** Restringido a personal técnico autorizado mediante SSH y panel Plesk Obsidian **[PENDIENTE DE REGISTRO FORMAL DE ACCESOS]**.
+- **Copias de seguridad:** **[PENDIENTE DE AUDITORÍA TÉCNICA DE BACKUPS]** para comprobar ubicación geográfica de almacenamiento secundario y exclusión de archivos temporales.
+- **Microservicios satélite externos:** **[PENDIENTE DE CONTRATACIÓN Y DPA]** para cualquier API o servicio satélite futuro.
 
 ---
 

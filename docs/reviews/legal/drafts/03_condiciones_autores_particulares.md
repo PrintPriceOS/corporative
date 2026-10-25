@@ -1,4 +1,4 @@
-﻿# CONDICIONES ESPECÍFICAS PARA AUTORES INDEPENDIENTES Y CLIENTES PARTICULARES (B2C)
+# CONDICIONES ESPECÍFICAS PARA AUTORES INDEPENDIENTES Y CLIENTES PARTICULARES (B2C)
 
 > **ESTADO DEL DOCUMENTO:** BORRADOR PENDIENTE DE APROBACIÓN JURÍDICA FORMAL  
 > **DOCUMENT STATUS:** DRAFT PENDING FORMAL LEGAL APPROVAL  
@@ -30,7 +30,7 @@
 > **AVISO LEGAL OBLIGATORIO AL CONSUMIDOR:**  
 > **El derecho de desistimiento de 14 días NO será aplicable a los pedidos de libros impresos confeccionados conforme a las especificaciones aportadas por el consumidor o claramente personalizados (libros de autor con manuscrito propio, fotografías, cubiertas y textos específicos encargados a medida).**
 3.2. **Consentimiento previo y renuncia:** Antes de confirmar el pedido y proceder al pago a la imprenta, el Autor deberá marcar una casilla específica mediante la cual reconoce y acepta que, una vez iniciado el proceso de imposición en pliego o impresión física por el taller, perderá el derecho a desistir libremente de la compra del bien personalizado.  
-3.3. **Cancelación previa:** Si el Autor solicita la cancelación del pedido antes de que la imprenta haya iniciado la confección de planchas o la tirada en máquina, la imprenta podrá admitir la cancelación deduciendo únicamente los gastos técnicos de gestión de archivo debidamente justificados [PROPUESTA CONTRACTUAL SUJETA A CONDICIONES PARTICULARES DE TALLER].
+3.3. **Cancelación previa:** **[PROPUESTA NO APROBADA - PENDIENTE DE DEFINICIÓN COMERCIAL Y CONDICIONES DE TALLER]**. Si el Autor solicita la cancelación del pedido antes de que la imprenta haya iniciado la confección de planchas o la tirada en máquina, el tratamiento de costes y deducciones queda pendiente de aprobación en la política operativa de taller.
 
 ---
 
@@ -43,9 +43,8 @@
 
 ### 5. Pruebas de Impresión, Tolerancias Industriales y Conformidad
 5.1. **Muestra previa o prueba digital (Plotter/PDF):** Para tiradas significativas, se recomienda solicitar una prueba previa digital o ejemplar de muestra antes de autorizar la tirada completa. La autorización de la prueba de imprenta por parte del Autor vincula a las partes respecto a la composición y maqueta aprobadas.  
-5.2. **Tolerancias mecánicas de taller [PROPUESTA DE ESTÁNDAR OPERATIVO BASADA EN USOS DE ARTES GRÁFICAS, SUJETA A CONDICIONES DE CADA TALLER]:**
-En la industria gráfica existen variaciones físicas normales e inevitables inherentes al proceso mecánico de corte, plegado y encuadernación:
-- **Tolerancia de corte y registro:** Se propone como referencia una desviación estándar industrial de hasta **+/- 1,5 mm** en el corte de guillotina o hendido de lomo, sujeta a la ficha técnica del taller adjudicatario.
+5.2. **Tolerancias mecánicas de taller [PROPUESTA OPERATIVA NO APROBADA - PENDIENTE DE REVISIÓN CON TALLERES]:**  
+En la industria gráfica existen variaciones físicas inherentes al proceso mecánico de corte, plegado y encuadernación. Se plantea como referencia orientativa no aprobada una desviación de hasta **+/- 1,5 mm** en el corte de guillotina o hendido de lomo, pero dicha tolerancia **no rige como condición vigente** en tanto no sea formalizada en las condiciones particulares de cada taller asociado.  
 - **Tolerancia cromática:** El color visualizado en pantallas RGB no es idéntico a las tintas CMYK impresas en sustratos de papel poroso o estucado. Se admiten las variaciones cromáticas normales dentro de los estándares de tolerancia ISO 12647.
 5.3. **Garantía legal de conformidad:** Si los libros recibidos presentan defectos manifiestos de fabricación imputables al taller (páginas en blanco por fallo de máquina, pliegos invertidos, encuadernación defectuosa con hojas desprendidas o daños físicos en el transporte), el Autor tiene derecho a la reimpresión gratuita o subsanación del lote defectuoso por parte de la imprenta conforme a la legislación de garantías de consumo.
 

@@ -1,4 +1,4 @@
-﻿# CONDICIONES DE ADHESIÓN DE IMPRENTAS AL MARKETPLACE (P2B)
+# CONDICIONES DE ADHESIÓN DE IMPRENTAS AL MARKETPLACE (P2B)
 
 > **ESTADO DEL DOCUMENTO:** BORRADOR PENDIENTE DE APROBACIÓN JURÍDICA FORMAL  
 > **DOCUMENT STATUS:** DRAFT PENDING FORMAL LEGAL APPROVAL  
@@ -26,23 +26,23 @@
 ---
 
 ### 3. Ejecución de Pedidos, Facturación Directa y Calidad
-3.1. **Aceptación vinculante:** Al recibir una orden de trabajo asignada a través del marketplace con preflight aprobado, la Imprenta dispone de un plazo máximo propuesto de **24 horas hábiles** [PROPUESTA OPERATIVA SUJETA A APROBACIÓN] para confirmar la recepción técnica del pedido o justificar motivadamente una discrepancia insubsanable. Una vez aceptada, la orden constituye un compromiso vinculante de producción.  
+3.1. **Aceptación vinculante:** Al recibir una orden de trabajo asignada a través del marketplace con preflight aprobado, la Imprenta dispone de un plazo propuesto de **24 horas hábiles** **[PROPUESTA OPERATIVA NO APROBADA]** para confirmar la recepción técnica del pedido o justificar motivadamente una discrepancia insubsanable. Una vez aceptada, la orden constituye un compromiso vinculante de producción.  
 3.2. **Facturación y cobro directo al comprador:** La Imprenta es la parte vendedora y fabricante frente al cliente *(Modelo comercial confirmado)*. En consecuencia, la Imprenta emitirá la factura legal correspondiente directamente a nombre del cliente (autor, editorial o empresa) y gestionará el cobro del 100 % del importe acordado a través de su propio medio o pasarela de pago.  
-3.3. **Estándares de calidad y tolerancias:** La producción se ajustará a las normas ISO aplicables a la industria gráfica (ISO 12647, tolerancias mecánicas de +/- 1,5 mm) [PROPUESTA DE ESTÁNDAR OPERATIVO SUJETO A CONDICIONES DE TALLER]. La Imprenta asume la plena responsabilidad por defectos materiales de fabricación, pliegos manchados o problemas mecánicos de encuadernación.
+3.3. **Estándares de calidad y tolerancias:** La producción se ajustará a las normas ISO aplicables a la industria gráfica (ISO 12647; tolerancias mecánicas propuestas de +/- 1,5 mm) **[PROPUESTA OPERATIVA NO APROBADA - PENDIENTE DE REVISIÓN CON TALLERES]**. La Imprenta asume la plena responsabilidad por defectos materiales de fabricación, pliegos manchados o problemas mecánicos de encuadernación.
 
 ---
 
 ### 4. Comisión de Marketplace del 4 % y Régimen de Liquidación
-4.1. **Porcentaje de la comisión:** Por los servicios tecnológicos de intermediación, captación de pedidos, preflight y software de cálculo, PrintPrice devenga una **comisión del 4 %** por cada pedido formalizado a través de la plataforma *(Porcentaje confirmado por el proyecto)*.  
-4.2. [DECISIÓN DE NEGOCIO PENDIENTE]: La base imponible exacta de la comisión (si aplica sobre la base neta estricta de producción o sobre el total neto incluyendo costes de transporte) y el momento preciso de devengo contable (al aceptar la orden vs al entregar la mercancía) constan como decisiones pendientes en [DECISIONS_REQUIRED.md](../DECISIONS_REQUIRED.md).  
-4.3. **Liquidación mensual:** Dentro de los primeros diez (10) días de cada mes natural, PrintPrice emitirá a la Imprenta una factura comercial B2B recapitulativa por el total de comisiones del 4 % devengadas en el mes inmediatamente anterior.  
-4.4. **Plazo de pago:** La factura mensual de comisiones será abonada por la Imprenta en un plazo propuesto de **15 días naturales** desde su emisión [PROPUESTA SUJETA A APROBACIÓN], preferentemente mediante domiciliación bancaria SEPA B2B o transferencia bancaria a la cuenta designada por PrintPrice.  
+4.1. **Porcentaje de la comisión:** Por los servicios tecnológicos de intermediación, captación de pedidos, preflight y software de cálculo, PrintPrice devenga una **comisión del 4 %** por cada pedido formalizado a través de la plataforma *(Modelo confirmado únicamente: comisión del 4 %, cobro directo de la imprenta al cliente y facturación mensual posterior)*.  
+4.2. **[PROPUESTA NO APROBADA - PENDIENTE DE DECISIÓN DEL PROPIETARIO]:** La delimitación de la base imponible de la comisión (aplicación estricta sobre la producción neta vs total neto incluyendo portes de transporte), el momento exacto de devengo (al formalizar la orden vs al certificar la entrega al cliente) y el tratamiento de cancelaciones o mermas constituyen propuestas no aprobadas sujetas a decisión en [DECISIONS_REQUIRED.md](../DECISIONS_REQUIRED.md).  
+4.3. **Liquidación mensual:** Dentro de los primeros diez (10) días de cada mes natural, PrintPrice emitirá a la Imprenta una factura comercial B2B recapitulativa por el total de comisiones del 4 % devengadas en el mes inmediatamente anterior *(Modelo confirmado)*.  
+4.4. **Plazo de pago:** La previsión de pago de la factura mensual de comisiones en un plazo de **15 días naturales** constituye una **[PROPUESTA COMERCIAL NO APROBADA]**, sujeta a definición de las vías de cobro (domiciliación bancaria SEPA B2B o transferencia bancaria).  
 4.5. **Mora:** Los saldos impagados devengarán automáticamente el interés legal de demora para operaciones comerciales fijado por la Directiva 2011/7/UE y su legislación nacional de transposición.
 
 ---
 
 ### 5. Criterios de Clasificación y Posicionamiento en el Marketplace (Ranking P2B)
-En cumplimiento del artículo 5 del Reglamento P2B (UE 2019/1150), se detallan los parámetros objetivos propuestos [PROPUESTA DE ALGORITMO DE RANKING SUJETA A IMPLEMENTACIÓN EN CONTROL PLANE] que determinarán el orden de presentación de las ofertas de las imprentas a los compradores:
+En cumplimiento del artículo 5 del Reglamento P2B (UE 2019/1150), se detallan los parámetros objetivos **[PROPUESTA DE ALGORITMO DE RANKING NO APROBADA - PENDIENTE DE IMPLEMENTACIÓN EN CONTROL PLANE]** previstos para determinar el orden de presentación de las ofertas de las imprentas a los compradores:
 1. **Precio final calculado:** Competitividad del presupuesto total estimado para la especificación exacta.
 2. **Plazo de entrega comprometido:** Días laborables hasta la entrega física de la mercancía.
 3. **Proximidad geográfica:** Distancia entre la planta de producción y la dirección de envío del comprador.
@@ -52,7 +52,7 @@ En cumplimiento del artículo 5 del Reglamento P2B (UE 2019/1150), se detallan l
 ---
 
 ### 6. Obligaciones de Información Fiscal (Directiva DAC7)
-Conforme a la Directiva (UE) 2021/514 (DAC7) y la normativa letona de transposición [OBLIGACIÓN LEGAL EN PROCESO DE DEFINICIÓN DE UMBRALES], la Imprenta facilitará a PrintPrice sus datos de identificación fiscal, número de IVA intracomunitario (VIES) y dirección registrada para el reporte periódico de operadores de plataforma ante la administración tributaria letona (*Valsts ieņēmumu dienests* — VID).
+Conforme a la Directiva (UE) 2021/514 (DAC7) y la normativa letona de transposición **[CUESTIÓN JURÍDICA PENDIENTE DE ANÁLISIS DE APLICABILIDAD POR ASESORÍA LEGAL]**, la Imprenta facilitará a PrintPrice sus datos de identificación fiscal, número de IVA intracomunitario (VIES) y dirección registrada si el volumen de operaciones alcanza los umbrales exigibles para el reporte de operadores de plataforma ante la administración tributaria letona (*Valsts ieņēmumu dienests* — VID).
 
 ---
 

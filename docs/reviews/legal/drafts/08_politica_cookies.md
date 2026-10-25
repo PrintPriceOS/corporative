@@ -1,4 +1,4 @@
-﻿# POLÍTICA DE COOKIES Y ALMACENAMIENTO LOCAL
+# POLÍTICA DE COOKIES Y ALMACENAMIENTO LOCAL
 
 > **ESTADO DEL DOCUMENTO:** BORRADOR PENDIENTE DE APROBACIÓN JURÍDICA FORMAL  
 > **DOCUMENT STATUS:** DRAFT PENDING FORMAL LEGAL APPROVAL  
@@ -18,7 +18,7 @@
 ### 2. Resultados de la Auditoría Técnica en Tiempo de Ejecución
 Conforme a la auditoría técnica automatizada ejecutada el 25 de octubre de 2026 con Playwright sobre la versión activa (BUILD_ID: uQt50K2DV3BjTbyMjtcSc):
 - **Cero cookies HTTP detectadas:** El sitio web **no establece cookies HTTP en cabeceras Set-Cookie**; todas las preferencias y métricas se gestionan en las APIs de almacenamiento del navegador (localStorage y sessionStorage).
-- **Cero solicitudes a dominios de terceros observadas:** Durante la navegación e interacción, todas las solicitudes de red se dirigieron exclusivamente al dominio propio printprice.pro. No se detectaron conexiones con redes de publicidad externa ni intermediarios de datos.
+- **Cero solicitudes a dominios de terceros observadas en cliente:** Durante la navegación e interacción en el navegador, todas las solicitudes de red se dirigieron al dominio propio printprice.pro, sin detectarse conexiones con redes de publicidad externa ni intermediarios de datos en la sesión auditada. *(Aviso de rigor: Este resultado acredita la ausencia de balizas o rastreadores de terceros en el navegador web del usuario; no equivale a deducir "cero transferencias" a nivel de infraestructura de servidor, accesos de soporte o subencargados, lo cual queda sujeto a inventario técnico integral y contratos DPA).*
 
 ---
 

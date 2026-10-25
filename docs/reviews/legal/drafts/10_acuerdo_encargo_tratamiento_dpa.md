@@ -1,4 +1,4 @@
-﻿# ACUERDO DE ENCARGO DE TRATAMIENTO DE DATOS (DPA - ART. 28 RGPD)
+# ACUERDO DE ENCARGO DE TRATAMIENTO DE DATOS (DPA - ART. 28 RGPD)
 
 > **ESTADO DEL DOCUMENTO:** BORRADOR PENDIENTE DE APROBACIÓN JURÍDICA FORMAL  
 > **DOCUMENT STATUS:** DRAFT PENDING FORMAL LEGAL APPROVAL  
@@ -32,7 +32,7 @@ PrintPrice se compromete expresamente a:
    - Cifrado de datos en tránsito mediante protocolos TLS 1.3.
    - Segregación lógica de datos de clientes e identificadores de inquilino (*tenant separation*).
    - Verificación de integridad mediante sumas de control criptográficas (SHA-256).
-   - Purgado automatizado periódico de archivos temporales en los servidores tras el procesamiento técnico y descarga *(Práctica declarada en código)*.
+   - **[PENDIENTE DE VERIFICACIÓN TÉCNICA DEL CICLO DE VIDA DE ARCHIVOS]:** Protocolo técnico de purgado automatizado de archivos en backend (servicio responsable, almacenamiento, disparador por evento o TTL, tratamiento de excepciones y copias de seguridad).
 4. **Régimen de Subencargados:** Respetar las condiciones indicadas en la Cláusula 3 para recurrir a otro encargado del tratamiento.
 5. **Asistencia en el ejercicio de derechos:** Asistir al Responsable a través de medidas técnicas y organizativas apropiadas para responder a las solicitudes de los interesados (acceso, rectificación, supresión, limitación, portabilidad y oposición).
 6. **Notificación de brechas de seguridad [PROPUESTA CONTRACTUAL SUJETA A APROBACIÓN]:** Notificar al Responsable, sin dilación indebida y a más tardar en el plazo propuesto de **48 horas**, cualquier violación de la seguridad de los datos personales de la que tenga conocimiento.

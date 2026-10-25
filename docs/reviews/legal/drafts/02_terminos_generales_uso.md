@@ -1,4 +1,4 @@
-﻿# TÉRMINOS GENERALES DE USO DE LA PLATAFORMA
+# TÉRMINOS GENERALES DE USO DE LA PLATAFORMA
 
 > **ESTADO DEL DOCUMENTO:** BORRADOR PENDIENTE DE APROBACIÓN JURÍDICA FORMAL  
 > **DOCUMENT STATUS:** DRAFT PENDING FORMAL LEGAL APPROVAL  
@@ -12,7 +12,7 @@
 ### 1. Objeto, Ámbito y Aceptación
 1.1. Los presentes Términos Generales de Uso (en adelante, las «Condiciones Generales») regulan el acceso, navegación y utilización de la plataforma digital printprice.pro y sus herramientas de software asociadas, titularidad de **Print Price Pro SIA** [PENDIENTE DE RATIFICACIÓN REGISTRAL] (en adelante, «PrintPrice»).  
 1.2. El registro en la plataforma o la utilización de cualquiera de sus servicios implica la aceptación plena de estas Condiciones Generales, complementadas por las Condiciones Específicas aplicables a cada categoría de usuario (Autores/Particulares, Editoriales, Imprentas y Proveedores de Papel).  
-1.3. **Inexistencia de período de prueba:** Se hace constar de forma expresa que la plataforma PrintPrice **no ofrece ningún período de prueba gratuito de 14 ni de 21 días** *(Modelo confirmado: eliminación de pruebas gratuitas)*. El acceso a las herramientas de cálculo y preflight se rige por las modalidades libres o tarifadas vigentes en la plataforma.
+1.3. **Inexistencia de período de prueba:** Se hace constar de forma expresa que la plataforma PrintPrice **no ofrece ningún período de prueba gratuito de 14 ni de 21 días** *(Modelo confirmado: eliminación de pruebas gratuitas)*. Cualquier régimen de libre acceso gratuito para cálculo web o tarificación por volumen en API constituye una **[PROPUESTA COMERCIAL NO APROBADA - PENDIENTE DE DECISIÓN DEL PROPIETARIO]**.
 
 ---
 
@@ -21,9 +21,9 @@
 2.2. **Delimitación de la compraventa material:** Salvo acuerdo particular expreso, PrintPrice no actúa como imprenta física, no fabrica bienes materiales, no custodia fondos de producción ni actúa como transportista de mercancías.  
 2.3. **Perfección del contrato de impresión:** Cuando un usuario cursa un encargo a través del marketplace Print it, el contrato de compraventa y fabricación de obra física se perfecciona **directa y exclusivamente entre el cliente (comprador) y la imprenta asociada seleccionada (vendedor y fabricante)** *(Modelo comercial confirmado)*.  
 2.4. **Flujo económico y comisiones:**
-- La imprenta seleccionada factura y cobra directamente al cliente el importe íntegro acordado para la tirada.
-- PrintPrice factura posteriormente a la imprenta una **comisión de servicio de marketplace del 4 %**, con liquidación mensual conforme a las condiciones de adhesión de talleres *(Porcentaje confirmado por el proyecto)*.
-- [DECISIÓN DE NEGOCIO PENDIENTE]: La base imponible de dicha comisión (inclusión o exclusión de transporte e IVA) y el momento exacto de devengo contable constan como decisiones pendientes de ratificación formal en [DECISIONS_REQUIRED.md](../DECISIONS_REQUIRED.md).
+- La imprenta seleccionada factura y cobra directamente al cliente el importe íntegro acordado para la tirada *(Modelo comercial confirmado)*.
+- PrintPrice factura posteriormente a la imprenta una **comisión de servicio de marketplace del 4 %**, con liquidación mensual en ciclo posterior *(Confirmado únicamente: comisión del 4 %, cobro directo de la imprenta al cliente y facturación mensual posterior)*.
+- **[PROPUESTA NO APROBADA - PENDIENTE DE DECISIÓN DEL PROPIETARIO]:** La definición de la base imponible exacta de la comisión (si incluye o excluye portes de transporte e IVA), el momento exacto de devengo (aprobación de preflight vs entrega) y el régimen de notas de crédito por cancelación o mermas constituyen propuestas comerciales no aprobadas, sujetas a decisión en [DECISIONS_REQUIRED.md](../DECISIONS_REQUIRED.md).
 - PrintPrice no interviene como entidad de pago con retención de depósitos ni custodia fondos de clientes finales.
 
 ---
@@ -49,12 +49,18 @@
 ---
 
 ### 5. Conservación, Tratamiento y Purgado de Archivos
-5.1. **Archivos de preflight:** Conforme a la práctica técnica declarada en código (app/products/preflight/page.tsx y app/legal/privacy-policy/page.tsx), los archivos temporales de PDF subidos para inspección se purgan de los servidores de forma automática tras el procesamiento técnico y descarga del informe.  
-5.2. **Retención temporal prolongada [PROPUESTA OPERATIVA PENDIENTE DE APROBACIÓN TÉCNICA]:** Cualquier ventana de retención temporal extendida (p. ej. 24 a 72 horas para facilitar la re-descarga del reporte o la comparación de perfiles) se considerará una propuesta sujeta a la aprobación de la infraestructura de almacenamiento y no una práctica plenamente garantizada en producción.  
-5.3. **Archivos de pedidos en firme:** Los archivos asociados a un pedido formalizado se conservan en la infraestructura técnica durante el ciclo de producción y el plazo de garantía legal del pedido para permitir la verificación técnica en caso de incidencias de taller.  
-5.4. **Compromiso sobre algoritmos e IA:**
+5.1. **Archivos de preflight:** **[PENDIENTE DE VERIFICACIÓN TÉCNICA DEL CICLO DE VIDA DE ARCHIVOS]**. No se afirma eliminación inmediata ni retención de 24–72 horas como práctica vigente en tanto no se disponga de evidencia de ejecución técnica verificable en backend:
+- *Servicio responsable del ciclo de vida y borrado.*
+- *Ubicación del almacenamiento (rutas de sistema de archivos, volúmenes o buckets).*
+- *Mecanismo de limpieza (script cron, proceso worker asíncrono o recolector en memoria).*
+- *Disparador de la purga (evento de descarga por el cliente, timeout o TTL programado).*
+- *Tratamiento de fallos (reintentos o alertas ante excepciones en el borrado).*
+- *Políticas de copias de seguridad / backups del servidor (si los archivos temporales se incluyen o excluyen de las copias).*  
+Las menciones existentes en `app/products/preflight/page.tsx` y `app/legal/privacy-policy/page.tsx` corresponden a declaraciones informativas en la interfaz pública, no a evidencia de ejecución en servidor.
+5.2. **Archivos de pedidos en firme:** Los archivos asociados a un pedido formalizado se conservan durante el ciclo de producción según las condiciones particulares de la imprenta adjudicataria **[PENDIENTE DE PROTOCOLO TÉCNICO DE CUSTODIA Y BACKUP]**.  
+5.3. **Compromiso sobre algoritmos e IA:**
 - *Verificado en código propio:* Los motores de imposición y preflight propios de PrintPrice son algoritmos deterministas que no entrenan modelos de aprendizaje automático.
-- [PROPUESTA CONTRACTUAL PARA TERCEROS]: Respecto a cualquier integración futura de servicios externos de IA o renderizado, PrintPrice exigirá contractualmente la suscripción de acuerdos con cláusula de no entrenamiento público (*Zero Data Retention*), pendiente de formalización con los proveedores externos pertinentes.
+- *[PROPUESTA CONTRACTUAL PARA TERCEROS NO APROBADA]:* Respecto a cualquier integración futura de servicios externos de IA o renderizado, PrintPrice exigirá contractualmente la suscripción de acuerdos con cláusula de no entrenamiento público (*Zero Data Retention*), pendiente de formalización con los proveedores externos pertinentes.
 
 ---
 

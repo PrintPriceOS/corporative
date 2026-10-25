@@ -1,4 +1,4 @@
-﻿# POLÍTICA DE USO Y TRANSPARENCIA DE INTELIGENCIA ARTIFICIAL (EU AI ACT)
+# POLÍTICA DE USO Y TRANSPARENCIA DE INTELIGENCIA ARTIFICIAL (EU AI ACT)
 
 > **ESTADO DEL DOCUMENTO:** BORRADOR PENDIENTE DE APROBACIÓN JURÍDICA FORMAL  
 > **DOCUMENT STATUS:** DRAFT PENDING FORMAL LEGAL APPROVAL  
@@ -28,7 +28,7 @@
 
 ### 3. Compromisos de Gobernanza y No Entrenamiento de Modelos
 3.1. **Algoritmos propios de PrintPrice:** Los manuscritos, libros, textos, cubiertas, imágenes y archivos PDF cargados por los clientes en la plataforma **no se utilizan para el entrenamiento, re-entrenamiento o ajuste fino (*fine-tuning*) de modelos de inteligencia artificial** ni se ceden a terceros para fines de aprendizaje de máquina *(Verificado en la arquitectura interna)*.  
-3.2. **Eliminación técnica:** Los archivos sometidos a validación técnica en Fix it se procesan temporalmente para la emisión del informe y se destruyen automáticamente tras el procesamiento técnico y descarga *(Práctica declarada en código)*.  
+3.2. **Ciclo de vida de archivos:** **[PENDIENTE DE VERIFICACIÓN TÉCNICA DEL CICLO DE VIDA DE ARCHIVOS]**. La eliminación de archivos temporales de preflight queda sujeta a comprobación técnica de ejecución en backend (servicio responsable, almacenamiento, disparador, mecanismo de limpieza, tratamiento de fallos y backups). No se afirma eliminación inmediata ni ventana de 24–72 horas como práctica vigente en tanto no se acredite en servidor.  
 3.3. **Exigencia contractual a terceros [PROPUESTA CONTRACTUAL SUJETA A CONTRATACIÓN B2B]:** Si en el futuro se integrase un servicio externo de IA generativa para maquetas avanzadas, PrintPrice exigirá contractualmente al proveedor una cláusula estricta de *Zero Data Retention* y la suscripción de un DPA conforme al RGPD antes de ponerlo en producción.
 
 ---

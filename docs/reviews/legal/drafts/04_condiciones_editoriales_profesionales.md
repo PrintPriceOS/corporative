@@ -1,4 +1,4 @@
-﻿# CONDICIONES ESPECÍFICAS PARA EDITORIALES Y CLIENTES PROFESIONALES (B2B)
+# CONDICIONES ESPECÍFICAS PARA EDITORIALES Y CLIENTES PROFESIONALES (B2B)
 
 > **ESTADO DEL DOCUMENTO:** BORRADOR PENDIENTE DE APROBACIÓN JURÍDICA FORMAL  
 > **DOCUMENT STATUS:** DRAFT PENDING FORMAL LEGAL APPROVAL  
@@ -24,25 +24,25 @@
 
 ### 3. Especificaciones Industriales, Pruebas y Tolerancias de Fabricación
 3.1. **Aprobación de Ferros Digitales (Plotter):** Antes de iniciar la tirada, la Editorial debe validar la prueba digital definitiva (PDF de imposición o ferro digital) remitida por la imprenta. La aprobación de la prueba libera a la imprenta y a PrintPrice de cualquier responsabilidad por erratas tipográficas, disposición de páginas o cortes previamente visados.  
-3.2. **Tolerancias de tirada [PROPUESTA DE COSTUMBRE MERCANTIL SUJETA A CONDICIONES PARTICULARES DE TALLER]:**
-Salvo pacto en contrario formalizado por escrito en la orden de trabajo, se proponen como marco de referencia los usos habituales del sector de artes gráficas:
-- Para tiradas de hasta 1.000 ejemplares: tolerancia orientativa de **+/- 5 %**.
-- Para tiradas superiores a 1.000 ejemplares: tolerancia orientativa de **+/- 3 %**.
-- La imprenta facturará la cantidad efectivamente entregada dentro de dichos márgenes de tolerancia acordados.
+3.2. **Tolerancias de tirada [PROPUESTA OPERATIVA NO APROBADA - PENDIENTE DE REVISIÓN CON TALLERES]:**  
+Como propuesta orientativa no aprobada, pendiente de definición bilateral con cada imprenta asociada:
+- Para tiradas de hasta 1.000 ejemplares: tolerancia orientativa propuesta de **+/- 5 %**.
+- Para tiradas superiores a 1.000 ejemplares: tolerancia orientativa propuesta de **+/- 3 %**.
+- Dichos porcentajes constituyen propuestas no aprobadas y no rigen como condiciones vigentes en tanto no sean pactados formalmente en cada orden de trabajo.
 3.3. **Estándares cromáticos:** La producción se ajustará a las normas internacionales ISO 12647-2 (impresión offset en pliego) o ISO 12647-8 (validación de procesos de impresión digital), utilizando los perfiles ICC especificados en la orden de trabajo.
 
 ---
 
 ### 4. Integración Técnica vía API y Disponibilidad de Servicio
 4.1. **Acceso a la API REST:** Las Editoriales que integren sus sistemas ERP o flujos de preimpresión con los endpoints /analyze, /autofix o /budget de PrintPrice dispondrán de credenciales técnicas seguras (API Keys).  
-4.2. **Objetivo de disponibilidad (SLA) [PROPUESTA COMERCIAL SUJETA A APROBACIÓN]:** PrintPrice procurará un objetivo de disponibilidad técnica mensual del 99,5 % para su API REST, excluyendo ventanas de mantenimiento programado comunicadas con 48 horas de antelación. Dicho objetivo constituye una meta de servicio y no una garantía indemnizatoria absoluta.  
+4.2. **Objetivo de disponibilidad (SLA) [PROPUESTA TÉCNICA Y COMERCIAL NO APROBADA - PENDIENTE DE DEFINICIÓN]:** Cualquier compromiso formal de nivel de servicio (como un objetivo de disponibilidad del 99,5 % mensual o ventanas de mantenimiento previo) constituye una propuesta no aprobada sujeta a auditoría técnica y decisión comercial.  
 4.3. **Protección de Datos y DPA:** Cuando la Editorial remita mediante API archivos PDF que contengan datos de carácter personal, ambas entidades suscribirán el **Acuerdo de Encargo de Tratamiento (DPA)** incorporado en el catálogo legal de la plataforma.
 
 ---
 
-### 5. Limitación de Responsabilidad [PROPUESTA CONTRACTUAL B2B SUJETA A APROBACIÓN JURÍDICA]
-5.1. **Límite cuantitativo propuesto:** La responsabilidad total agregada de PrintPrice frente a la Editorial por cualquier reclamación derivada del funcionamiento del software o de la plataforma se limitará estrictamente al importe de las tarifas efectivamente abonadas por la Editorial a PrintPrice en los tres (3) meses anteriores al hecho causante.  
-5.2. **Exclusión de lucro cesante:** En ningún caso PrintPrice será responsable frente a la Editorial por lucro cesante, pérdida de ingresos editoriales, campañas de marketing fallidas, retrasos en ferias del libro o daños indirectos, incidentales o consecuenciales.
+### 5. Limitación de Responsabilidad [PROPUESTA CONTRACTUAL B2B NO APROBADA - PENDIENTE DE ASESORÍA JURÍDICA]
+5.1. **Límite cuantitativo propuesto:** La delimitación de la responsabilidad de PrintPrice frente a la Editorial al importe de las tarifas abonadas en los tres (3) meses anteriores constituye una propuesta de cláusula no aprobada.  
+5.2. **Exclusión de lucro cesante:** La exclusión general de lucro cesante y daños indirectos se someterá a validación por la asesoría jurídica antes de su incorporación a contratos formales.
 
 ---
 

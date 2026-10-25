@@ -1,4 +1,4 @@
-﻿# CONDICIONES ESPECÍFICAS PARA DISTRIBUIDORES Y FABRICANTES DE PAPEL (PAPER HUB)
+# CONDICIONES ESPECÍFICAS PARA DISTRIBUIDORES Y FABRICANTES DE PAPEL (PAPER HUB)
 
 > **ESTADO DEL DOCUMENTO:** BORRADOR PENDIENTE DE APROBACIÓN JURÍDICA FORMAL  
 > **DOCUMENT STATUS:** DRAFT PENDING FORMAL LEGAL APPROVAL  
@@ -31,11 +31,11 @@
 
 ---
 
-### 4. Régimen Económico con PrintPrice [DECISIÓN DE NEGOCIO PENDIENTE]
-4.1. **Estructura del modelo económico pendiente de aprobación:** La vinculación económica entre el Proveedor de Papel y PrintPrice se regirá por la modalidad comercial acordada formalmente en el Anexo Particular de Adhesión:
-- *Opción A (Propuesta recomendada):* Abono de una **cuota anual de catálogo e integración técnica** por la homologación de gamas y perfiles ICC en el motor de cálculo de Price it.
-- *Opción B:* Liquidación de un porcentaje sobre el volumen de papel adjudicado y transaccionado a través de pedidos originados en la plataforma.
-4.2. **Transparencia técnica:** Con independencia de la modalidad económica elegida, las fórmulas de imposición de pliegos en Price it priorizarán siempre la optimización física y de costes reales para el impresor y el cliente final.
+### 4. Régimen Económico con PrintPrice [PROPUESTAS NO APROBADAS - PENDIENTE DE DECISIÓN DEL PROPIETARIO]
+4.1. **Estructura del modelo económico no aprobada:** Cualquier esquema de suscripción o monetización con proveedores de papel constituye una propuesta no aprobada pendiente de decisión del propietario del negocio:
+- *Propuesta A (No aprobada):* Abono de una **cuota anual de catálogo o suscripción técnica** por la indexación de gamas y perfiles ICC en el motor de cálculo de Price it.
+- *Propuesta B (No aprobada):* Liquidación de un porcentaje sobre el volumen de papel transaccionado en la plataforma.
+4.2. **Transparencia técnica:** Con independencia del modelo comercial que en su caso decida el propietario, las fórmulas de imposición de pliegos en Price it priorizarán siempre la optimización física y de costes reales para el impresor y el cliente final.
 
 ---
 
