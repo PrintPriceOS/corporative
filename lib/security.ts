@@ -456,14 +456,31 @@ export class InMemoryRateLimitStore implements IRateLimitStore {
     }
 }
 
-let activeStore: IRateLimitStore = new InMemoryRateLimitStore();
+let activeStore: IRateLimitStore | null = null;
 
-export function setActiveRateLimitStore(store: IRateLimitStore) {
+export function setActiveRateLimitStore(store: IRateLimitStore | null) {
     activeStore = store;
 }
 
 export function getActiveRateLimitStore(): IRateLimitStore {
-    return activeStore;
+    if (!activeStore) {
+        const redisUrl = typeof process !== 'undefined' ? (process.env?.PPOS_REDIS_URL || process.env?.REDIS_URL) : undefined;
+        if (redisUrl) {
+            try {
+                const { createRateLimitStore } = require('./redisRateLimitStore');
+                activeStore = createRateLimitStore({ redisUrl });
+            } catch (err) {
+                console.error('[SECURITY][STORE_INIT] Failed to initialize Redis store from environment:', err);
+                if (process.env?.NODE_ENV === 'production') {
+                    throw err; // Fail closed in production
+                }
+                activeStore = new InMemoryRateLimitStore();
+            }
+        } else {
+            activeStore = new InMemoryRateLimitStore();
+        }
+    }
+    return activeStore!;
 }
 
 /**
@@ -476,7 +493,7 @@ export async function checkAndRecordRateLimit(
     clientFingerprint?: string | null,
     options?: { store?: IRateLimitStore }
 ): Promise<RateLimitAdmission> {
-    const store = options?.store ?? activeStore;
+    const store = options?.store ?? getActiveRateLimitStore();
 
     if (ip) {
         return await store.admitAttempt(`ip:${ip}`, MAX_SUBMISSIONS_PER_IP, RATE_LIMIT_WINDOW);

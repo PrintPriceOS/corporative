@@ -285,3 +285,101 @@ export class RedisRateLimitStore {
         throw new Error('Global Redis reset intentionally unsupported: use an isolated test key prefix instead');
     }
 }
+
+/**
+ * Adapter wrapping real ioredis instance to satisfy RedisEvalClient interface.
+ */
+export class IORedisEvalAdapter implements RedisEvalClient {
+    private client: any;
+
+    constructor(client: any) {
+        this.client = client;
+    }
+
+    async eval(script: string, options: { keys: string[]; arguments: string[] }): Promise<unknown> {
+        return await this.client.eval(
+            script,
+            options.keys.length,
+            ...options.keys,
+            ...options.arguments
+        );
+    }
+}
+
+let redisClientSingleton: any = null;
+
+/**
+ * Manages singleton Redis connection per process with controlled timeouts.
+ */
+export function getOrCreateRedisClient(redisUrl?: string, customOptions?: Record<string, any>): any {
+    const targetUrl = redisUrl || (typeof process !== 'undefined' ? (process.env?.PPOS_REDIS_URL || process.env?.REDIS_URL) : undefined);
+    if (!targetUrl) {
+        throw new Error('REDIS_URL or PPOS_REDIS_URL is not configured');
+    }
+
+    if (!redisClientSingleton) {
+        // Dynamically import or require ioredis to preserve compatibility
+        const Redis = require('ioredis');
+        redisClientSingleton = new Redis(targetUrl, {
+            connectTimeout: 5000,
+            commandTimeout: 3000,
+            maxRetriesPerRequest: 1,
+            enableReadyCheck: true,
+            lazyConnect: false,
+            retryStrategy(times: number) {
+                if (times > 3) return null; // Do not hang web worker indefinitely
+                return Math.min(times * 100, 1000);
+            },
+            ...customOptions
+        });
+
+        redisClientSingleton.on('error', (err: any) => {
+            console.error('[SECURITY][REDIS_CONNECTION] Redis client connection error:', err?.message || err);
+        });
+    }
+
+    return redisClientSingleton;
+}
+
+export function resetRedisClientSingleton() {
+    if (redisClientSingleton) {
+        try {
+            redisClientSingleton.disconnect();
+        } catch {}
+        redisClientSingleton = null;
+    }
+}
+
+/**
+ * SEC-04C Factory: Produces appropriate rate limit store based on environment.
+ * - If REDIS_URL or PPOS_REDIS_URL is set: connects to Redis. Fails closed on error (no silent fallback).
+ * - If in production without Redis: throws explicit configuration error (no silent degradation).
+ * - In development or test without Redis: uses InMemoryRateLimitStore.
+ */
+export function createRateLimitStore(options?: {
+    redisUrl?: string;
+    failPolicy?: 'closed' | 'open';
+    forceMemory?: boolean;
+    inMemoryFallback?: any;
+}): any {
+    const redisUrl = options?.redisUrl || (typeof process !== 'undefined' ? (process.env?.PPOS_REDIS_URL || process.env?.REDIS_URL) : undefined);
+    const isProduction = typeof process !== 'undefined' && process.env?.NODE_ENV === 'production';
+
+    // 1. Explicit memory opt-in (development or isolated unit tests)
+    if (options?.forceMemory || (!redisUrl && !isProduction)) {
+        return options?.inMemoryFallback;
+    }
+
+    // 2. Production with missing Redis configuration: fail closed
+    if (!redisUrl && isProduction) {
+        console.error('[SECURITY][RATE_LIMIT_STORE] Production requires REDIS_URL or PPOS_REDIS_URL. Missing configuration.');
+        throw new Error('REDIS_URL must be configured in production environment for multi-process quota consistency.');
+    }
+
+    // 3. Connect to real Redis
+    const client = getOrCreateRedisClient(redisUrl);
+    const adapter = new IORedisEvalAdapter(client);
+    return new RedisRateLimitStore(adapter, {
+        failPolicy: options?.failPolicy ?? (isProduction ? 'closed' : 'open')
+    });
+}
