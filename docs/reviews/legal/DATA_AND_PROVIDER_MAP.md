@@ -3,7 +3,8 @@
 **Fecha de consolidación:** 25 de octubre de 2026  
 **Rama:** feat/comparisons-evidence-and-legal-policy-review  
 **Referencia base:** Commit 8a333d7821e5bfe976accc6b24d6dcc3fb00ab5a  
-**Ámbito:** Calificación jurídica de los tratamientos de datos personales conforme al RGPD, distinción de roles de responsabilidad y catálogo verificable de subencargados e integraciones.
+**Ámbito:** Calificación jurídica de los tratamientos de datos personales conforme al RGPD, distinción de roles de responsabilidad y catálogo verificable de subencargados e integraciones.  
+**Nota de alcance lingüístico:** La documentación comparativa (`COMPARISON_COPY_ES_EN_DE.md`) está completada íntegramente en ES, EN y DE. Los 11 borradores de políticas legales están redactados en español como documentos de trabajo interno, incorporando encabezados trilingües indicativos de estado.
 
 ---
 
@@ -11,7 +12,7 @@
 
 Conforme a las directrices del Comité Europeo de Protección de Datos (Directrices 07/2020 sobre los conceptos de responsable y encargado del tratamiento en el RGPD), la calificación no depende de la denominación contractual, sino de la determinación fáctica de los fines y medios del tratamiento:
 
-`mermaid
+```mermaid
 flowchart TD
     Client["Cliente (Autor / Editorial)"] -->|"1. Parámetros de cotización"| PrintPrice["PrintPrice Pro SIA (Responsable)"]
     Client -->|"2. Archivo PDF para preflight"| FixIt["Fix it Engine (Encargado del tratamiento)"]
@@ -19,7 +20,7 @@ flowchart TD
     FixIt -->|"4. Informe técnico"| Client
     Client -->|"5. Pago directo y formalización"| Printhouse
     Printhouse -->|"6. Comisión del 4%"| PrintPrice
-`
+```
 
 ### 1.1. Flujo 1: Navegación, Cuentas de Usuario y Cotización (Price it)
 - **Responsable del tratamiento:** Print Price Pro SIA.
@@ -48,9 +49,9 @@ Para cumplir con el principio de exactitud y transparencia del RGPD (Art. 5.1.a 
 | Módulo o Servicio | ¿Utiliza Inteligencia Artificial o Modelos LLM? | Realidad Técnica Acreditada en Repositorio | ¿Los archivos se utilizan para entrenamiento? | Plazo Real de Eliminación |
 | :--- | :--- | :--- | :--- | :--- |
 | **Price it** (Cálculo de presupuestos) | **NO.** Motor 100% determinista. | Fórmulas matemáticas y matrices algebraicas de imposición en pliego resueltas exclusivamente en backend. Cero inferencia probabilística. | No aplica (no hay modelos de aprendizaje). | En sesión hasta que el usuario guarde el proyecto en localStorage. |
-| **Fix it** (Auditoría de PDF) | **NO.** Motor 100% determinista. | Parser sintáctico de objetos PDF y cálculo de geometrías vectoriales contra normas ISO 15930 (PDF/X). Sin redes neuronales ni LLMs. | **NO.** Ningún archivo se utiliza para entrenar algoritmos de terceros ni modelos públicos. | Archivos temporales eliminados a las 24-72h tras completar la validación o al confirmarse el pedido. |
-| **Mockup 3D** (Visualizador de cubierta) | **ASISTENCIA GRÁFICA / HÍBRIDO.** | Renderizado local en cliente mediante WebGL/Three.js complementado con servicio de generación visual en subdominio externo. | **NO VERIFICADO EN REPOSITORIO.** La política no debe afirmar «cero retención» hasta contar con el DPA del subdominio de maqueta. | Purgado en sesión del navegador; persistencia en servidor sujeta al contrato del proveedor externo de render. |
-| **AI Agent Core** (/ai-agent) | **PROTOTIPO ASISTIDO.** | Interfaz interactiva de demostración con proxy mock en /api/v1/agents. No realiza llamadas autónomas directas a LLMs desde el cliente web. | No aplica en fase actual de maqueta técnica interactiva. | Sin persistencia de datos reales de clientes en el prototipo. |
+| **Fix it** (Auditoría de PDF) | **NO.** Motor 100% determinista. | Parser sintáctico de objetos PDF y cálculo de geometrías vectoriales contra normas ISO 15930 (PDF/X). Sin redes neuronales ni LLMs. | **NO.** Ningún archivo se utiliza para entrenar algoritmos de terceros ni modelos públicos. | **Realidad en código:** Eliminación automática tras procesamiento o descarga (`app/products/preflight/page.tsx`). Ventana de 24–72 h calificada como **[PROPUESTA OPERATIVA SUJETA A APROBACIÓN TÉCNICA]**. |
+| **Mockup 3D** (Visualizador de cubierta) | **NO.** Render 100% determinista WebGL. | Computación gráfica estándar en cliente mediante WebGL / Three.js (renderizado local de geometría 3D a partir de número de páginas y calibre de papel). Sin redes neuronales ni IA generativa. | No aplica (cero modelos de IA implicados). | Puramente efímero en la memoria de la GPU/navegador del usuario; sin persistencia en servidor ni transmisión de imágenes a terceros. |
+| **AI Agent Core** (/ai-agent) | **PROTOTIPO ASISTIDO.** | Interfaz interactiva de demostración con proxy mock en /api/v1/agents. No realiza llamadas autónomas directas a LLMs desde el cliente web corporativo. | No aplica en fase actual de maqueta técnica interactiva. | Sin persistencia de datos reales de clientes en el prototipo. |
 
 ---
 

@@ -3,7 +3,8 @@
 **Fecha de revisión:** 25 de octubre de 2026  
 **Rama:** feat/comparisons-evidence-and-legal-policy-review  
 **Referencia base:** Commit 8a333d7821e5bfe976accc6b24d6dcc3fb00ab5a  
-**Alcance:** Propuesta editorial multilingüe calibrada para autores, editores y compradores de imprenta, libre de superlativos comerciales, con rigor técnico y referencias cruzadas directas.
+**Alcance:** Propuesta editorial multilingüe calibrada para autores, editores y compradores de imprenta, libre de superlativos comerciales, con rigor técnico y referencias cruzadas directas.  
+**Nota de alcance lingüístico:** Este documento contiene las propuestas editoriales de comparativas redactadas íntegramente en español (ES), inglés (EN) y alemán (DE) en sus secciones respectivas (2, 3 y 4). Los 11 borradores de políticas legales están redactados en español como documentos de trabajo interno, incorporando encabezados trilingües indicativos de estado.
 
 ---
 
@@ -18,7 +19,7 @@
 
 ## 2. Textos Editoriales en Español (ES)
 
-### 2.1. Comparativa de Cotización (Price it) — pp/page.tsx
+### 2.1. Comparativa de Cotización (Price it) — app/page.tsx
 *Para autores, editores y compradores que necesitan conocer la estructura real de costes de su tirada.*
 
 | Criterio / Parámetro | PrintPrice Pro (Price it) | Web-to-Print / Imprenta Online | Cotización Tradicional | Ref. Evidencia |
@@ -33,7 +34,7 @@
 
 ---
 
-### 2.2. Comparativa de Preflight Básico (Fix it) — pp/page.tsx
+### 2.2. Comparativa de Preflight Básico (Fix it) — app/page.tsx
 *Para creadores de contenido y diseñadores que preparan PDFs para imprenta profesional.*
 
 | Criterio | PrintPrice Pro (Fix it) | Adobe Acrobat Pro | Enfocus PitStop Pro | Ref. Evidencia |
@@ -49,7 +50,7 @@
 
 ---
 
-### 2.3. Comparativa de Producción y Marketplace (Print it) — pp/page.tsx
+### 2.3. Comparativa de Producción y Marketplace (Print it) — app/page.tsx
 *Para autores independientes, editoriales y responsables de contratación gráfica.*
 
 | Criterio | PrintPrice Pro (Print it) | Plataformas POD Tradicionales | Imprenta Comercial Tradicional | Ref. Evidencia |
@@ -65,7 +66,7 @@
 
 ---
 
-### 2.4. Comparativa de Preflight de Escritorio / Plugin — pp/products/preflight/page.tsx (Tabla A)
+### 2.4. Comparativa de Preflight de Escritorio / Plugin — app/products/preflight/page.tsx (Tabla A)
 
 | Criterio | PrintPrice Preflight Web | Adobe Acrobat Pro | Enfocus PitStop Pro | Ref. Evidencia |
 | :--- | :--- | :--- | :--- | :--- |
@@ -78,7 +79,7 @@
 
 ---
 
-### 2.5. Comparativa de Motores y Servidores de Preflight — pp/products/preflight/page.tsx (Tabla B)
+### 2.5. Comparativa de Motores y Servidores de Preflight — app/products/preflight/page.tsx (Tabla B)
 
 | Criterio | PrintPrice Preflight OS | Enfocus PitStop Server | callas pdfToolbox Server | Ref. Evidencia |
 | :--- | :--- | :--- | :--- | :--- |
@@ -93,7 +94,7 @@
 
 ## 3. Textos Editoriales en Inglés (EN)
 
-### 3.1. Instant Quoting Comparison (Price it) — pp/page.tsx
+### 3.1. Instant Quoting Comparison (Price it) — app/page.tsx
 
 | Criterion | PrintPrice Pro (Price it) | Web-to-Print / Online Printers | Traditional Quoting | Ref. Evidence |
 | :--- | :--- | :--- | :--- | :--- |
@@ -105,7 +106,7 @@
 
 ---
 
-### 3.2. Preflight Comparison (Fix it) — pp/page.tsx
+### 3.2. Preflight Comparison (Fix it) — app/page.tsx
 
 | Criterion | PrintPrice Pro (Fix it) | Adobe Acrobat Pro | Enfocus PitStop Pro | Ref. Evidence |
 | :--- | :--- | :--- | :--- | :--- |
@@ -118,7 +119,7 @@
 
 ---
 
-### 3.3. Marketplace and Production Comparison (Print it) — pp/page.tsx
+### 3.3. Marketplace and Production Comparison (Print it) — app/page.tsx
 
 | Criterion | PrintPrice Pro (Print it) | Traditional POD Platforms | Commercial Printshops | Ref. Evidence |
 | :--- | :--- | :--- | :--- | :--- |
@@ -131,7 +132,7 @@
 
 ---
 
-### 3.4. Preflight Desktop / Plugin Comparison — pp/products/preflight/page.tsx (Table A)
+### 3.4. Preflight Desktop / Plugin Comparison — app/products/preflight/page.tsx (Table A)
 
 | Criterion | PrintPrice Preflight Web | Adobe Acrobat Pro | Enfocus PitStop Pro | Ref. Evidence |
 | :--- | :--- | :--- | :--- | :--- |
@@ -144,7 +145,7 @@
 
 ---
 
-### 3.5. High-Volume Preflight Engines — pp/products/preflight/page.tsx (Table B)
+### 3.5. High-Volume Preflight Engines — app/products/preflight/page.tsx (Table B)
 
 | Criterion | PrintPrice Preflight OS | Enfocus PitStop Server | callas pdfToolbox Server | Ref. Evidence |
 | :--- | :--- | :--- | :--- | :--- |
@@ -159,7 +160,7 @@
 
 ## 4. Textos Editoriales en Alemán (DE)
 
-### 4.1. Angebotskalkulation im Vergleich (Price it) — pp/page.tsx
+### 4.1. Angebotskalkulation im Vergleich (Price it) — app/page.tsx
 
 | Kriterium | PrintPrice Pro (Price it) | Web-to-Print / Onlinedruckerei | Traditionelle Druckkalkulation | Evidenz-Ref. |
 | :--- | :--- | :--- | :--- | :--- |
@@ -171,7 +172,7 @@
 
 ---
 
-### 4.2. Preflight-Prüfung im Vergleich (Fix it) — pp/page.tsx
+### 4.2. Preflight-Prüfung im Vergleich (Fix it) — app/page.tsx
 
 | Kriterium | PrintPrice Pro (Fix it) | Adobe Acrobat Pro | Enfocus PitStop Pro | Evidenz-Ref. |
 | :--- | :--- | :--- | :--- | :--- |
@@ -184,7 +185,7 @@
 
 ---
 
-### 4.3. Marktplatz und Buchproduktion im Vergleich (Print it) — pp/page.tsx
+### 4.3. Marktplatz und Buchproduktion im Vergleich (Print it) — app/page.tsx
 
 | Kriterium | PrintPrice Pro (Print it) | Traditionelle POD-Plattformen | Klassische Akzidenzdruckerei | Evidenz-Ref. |
 | :--- | :--- | :--- | :--- | :--- |
@@ -197,7 +198,7 @@
 
 ---
 
-### 4.4. Preflight Desktop / Plugin im Vergleich — pp/products/preflight/page.tsx (Tabelle A)
+### 4.4. Preflight Desktop / Plugin im Vergleich — app/products/preflight/page.tsx (Tabelle A)
 
 | Kriterium | PrintPrice Preflight Web | Adobe Acrobat Pro | Enfocus PitStop Pro | Evidenz-Ref. |
 | :--- | :--- | :--- | :--- | :--- |
@@ -210,7 +211,7 @@
 
 ---
 
-### 4.5. Hochleistungs-Preflight-Server im Vergleich — pp/products/preflight/page.tsx (Tabelle B)
+### 4.5. Hochleistungs-Preflight-Server im Vergleich — app/products/preflight/page.tsx (Tabelle B)
 
 | Kriterium | PrintPrice Preflight OS | Enfocus PitStop Server | callas pdfToolbox Server | Evidenz-Ref. |
 | :--- | :--- | :--- | :--- | :--- |

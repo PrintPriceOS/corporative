@@ -1,37 +1,39 @@
-# AVISO LEGAL Y DATOS IDENTIFICATIVOS (IMPRINT)
+﻿# AVISO LEGAL Y DATOS IDENTIFICATIVOS (IMPRINT)
 
 > **ESTADO DEL DOCUMENTO:** BORRADOR PENDIENTE DE APROBACIÓN JURÍDICA FORMAL  
 > **DOCUMENT STATUS:** DRAFT PENDING FORMAL LEGAL APPROVAL  
 > **DOKUMENTENSTATUS:** ENTWURF VORBEHALTLICH FORMELLER RECHTLICHER PRÜFUNG  
-> **Versión:** v2026.1-draft | **Fecha de emisión:** 25 de octubre de 2026
+> **Idioma:** Redactado íntegramente en Español (ES), con encabezado trilingüe.  
+> **Versión:** v2026.1-draft | **Fecha de revisión:** 25 de octubre de 2026
+> **Nota de idioma / Language note / Sprachhinweis:** Este documento está redactado íntegramente en español como borrador de trabajo interno; las cabeceras trilingües indican el estado del ciclo documental y no constituyen traducciones completas en EN o DE.
 
 ---
 
 ### 1. Identificación del Titular del Sitio Web
 En cumplimiento de la legislación aplicable de la Unión Europea y de la República de Letonia (Ley de la Sociedad de la Información — *Informācijas sabiedrības pakalpojumu likums*), se informa a los usuarios y visitantes de los datos identificativos y de contacto de la entidad titular y operadora de la plataforma PrintPrice Pro:
 
-- **Denominación Social:** Print Price Pro SIA
-- **Forma Jurídica:** Sociedad de Responsabilidad Limitada (*Sabiedrība ar ierobežotu atbildību* — SIA), válidamente constituida con arreglo al derecho de la República de Letonia.
-- **Número de Registro Mercantil:** 40203631570 (Inscrita en el Registro de Empresas de la República de Letonia / *Latvijas Republikas Uzņēmumu reģistrs*). *(Dato sujeto a ratificación notarial definitiva)*.
-- **Número de Identificación Fiscal / IVA (VAT ID):** LV40203631570 *(Sujeto a validación VIES definitiva)*.
-- **Domicilio Social:** Bruņinieku iela 60-8, Latgales priekšpilsēta, Rīga, LV-1009, Letonia.
-- **Correo Electrónico de Contacto General:** info@printprice.pro
-- **Correo Electrónico para Privacidad y Protección de Datos:** privacy@printprice.pro
-- **Correo Electrónico para Reclamaciones e Incidencias:** claims@printprice.pro
+- **Denominación Social:** Print Price Pro SIA [PENDIENTE DE RATIFICACIÓN REGISTRAL DEFINITIVA]
+- **Forma Jurídica:** Sociedad de Responsabilidad Limitada (*Sabiedrība ar ierobežotu atbildību* — SIA), con arreglo al derecho de la República de Letonia.
+- **Número de Registro Mercantil:** 40203631570 (Inscripción en el Registro de Empresas de la República de Letonia / *Latvijas Republikas Uzņēmumu reģistrs*) [PENDIENTE DE COTEJO DOCUMENTAL OFICIAL]
+- **Número de Identificación Fiscal / IVA (VAT ID):** LV40203631570 [PENDIENTE DE VALIDACIÓN VIES DEFINITIVA]
+- **Domicilio Social:** Bruņinieku iela 60-8, Latgales priekšpilsēta, Rīga, LV-1009, Letonia [PENDIENTE DE CONFIRMACIÓN DE SEDE EFECTIVA]
+- **Correo Electrónico de Contacto General:** info@printprice.pro *(Operativo en servidor de dominio)*
+- **Correo Electrónico para Privacidad y Protección de Datos:** privacy@printprice.pro *(Operativo en servidor de dominio)*
+- **Correo Electrónico para Reclamaciones e Incidencias:** claims@printprice.pro *(Operativo en servidor de dominio)*
 - **Sitio Web Oficial:** https://printprice.pro
-- **Alojamiento de la Infraestructura:** Servidores seguros ubicados en Fráncfort (Alemania / Unión Europea), operados bajo entorno Linux / Plesk.
+- **Infraestructura Web Corporativa:** Servidores seguros en Fráncfort (Alemania / Unión Europea), operados bajo entorno Linux / Plesk en IONOS SE (IP: 212.227.79.67) [VERIFICADO TÉCNICAMENTE PARA LA WEB CORPORATIVA; SUBDOMINIOS Y MICROSERVICES SATÉLITE PENDIENTES DE AUDITAR CONTRATOS DE INFRAESTRUCTURA].
 
 ---
 
 ### 2. Objeto y Actividad de la Plataforma
-El sitio web printprice.pro y sus entornos asociados constituyen la plataforma corporativa y técnica del ecosistema PrintPrice OS, concebido para aportar transparencia, eficiencia y cálculo computacional a las artes gráficas e impresión de libros. La plataforma integra las siguientes soluciones modulares:
-1. **Price it (/products/budget):** Motor de cálculo algorítmico y presupuestación industrial de libros, encuadernación y packaging.
-2. **Fix it (/products/preflight):** Herramienta determinista de inspección, diagnóstico y normalización de archivos PDF de imprenta conforme a especificaciones ISO.
+El sitio web printprice.pro y sus entornos asociados constituyen la plataforma corporativa y técnica del ecosistema PrintPrice OS, concebido para aportar cálculo computacional, preflight y agregación técnica a las artes gráficas. La plataforma integra las siguientes soluciones:
+1. **Price it (/products/budget):** Motor determinista de cálculo de costes de fabricación de libros y packaging resuelto exclusivamente en backend.
+2. **Fix it (/products/preflight):** Herramienta determinista de inspección sintáctica, comprobación de cajas y normalización de archivos PDF conforme a especificaciones ISO.
 3. **Print it (/platform):** Entorno de marketplace que conecta solicitudes de impresión de autores y editoriales con imprentas industriales asociadas de la red.
-4. **Mockup 3D (/products/mockup):** Asistente de visualización volumétrica 3D para previsualización digital de portada y lomo.
+4. **Mockup 3D (/products/mockup):** Renderizador volumétrico WebGL / Three.js en navegador que simula el lomo y cubierta a partir del cálculo de grosor de papel. *(No es un sistema de IA generativa; es un render gráfico 3D determinista en cliente)*.
 5. **Control Plane (/control-plane):** Entorno operativo para talleres gráficos y distribuidores de papel.
 
-Print Price Pro SIA opera como **proveedor tecnológico y operador de marketplace**. Salvo que se manifieste expresamente lo contrario por escrito en un contrato particular, Print Price Pro SIA no es fabricante físico de libros, no explota talleres de impresión propios ni actúa como distribuidor de papel.
+Print Price Pro SIA opera como **proveedor tecnológico y operador de marketplace**. Salvo que se manifieste expresamente lo contrario por escrito en un contrato particular, Print Price Pro SIA **no actúa como fabricante físico de libros, no explota talleres de impresión propios ni actúa como distribuidor de papel**.
 
 ---
 

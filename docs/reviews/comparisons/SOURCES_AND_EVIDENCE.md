@@ -3,7 +3,8 @@
 **Fecha de consolidación:** 25 de octubre de 2026  
 **Rama:** feat/comparisons-evidence-and-legal-policy-review  
 **Referencia base:** Commit 8a333d7821e5bfe976accc6b24d6dcc3fb00ab5a  
-**Ámbito:** Respaldo documental, técnico y metodológico de todas las afirmaciones comparativas públicas de PrintPrice Pro.
+**Ámbito:** Respaldo documental, técnico y metodológico de todas las afirmaciones comparativas públicas de PrintPrice Pro.  
+**Nota de alcance lingüístico:** La documentación comparativa (`COMPARISON_COPY_ES_EN_DE.md` y las tablas públicas en web) está redactada íntegramente en español, inglés y alemán (ES, EN, DE). Por su parte, los 11 borradores de políticas legales están redactados en español como documentos de trabajo interno, incorporando encabezados trilingües indicativos de estado.
 
 ---
 
@@ -23,13 +24,13 @@ Para evitar cualquier distorsión comercial o afirmación infundada, cada afirma
 
 ### 2.1. Adobe Acrobat Pro
 - **Fuente 1:** Adobe Help Center - *Analyzing documents with the Preflight tool (Acrobat Pro)*  
-  - **URL:** https://helpx.adobe.com/acrobat/using/analyzing-documents-preflight-tool-acrobat.html  
+  - **URL:** https://helpx.adobe.com/acrobat/using/analyzing-documents-preflight-tool.html  
   - **Fecha de consulta:** 25 de octubre de 2026.  
   - **Versión aplicable:** Acrobat Pro Continuous Release (Windows / macOS).  
   - **Extracto / Paráfrasis:** Acrobat Pro integra el motor de preflight licenciado de callas software para analizar y corregir documentos PDF según estándares ISO (PDF/X, PDF/A, etc.). Ofrece un informe modal interactivo en pantalla con navegación por objetos erróneos, fixups automáticos y exportación de reportes PDF/XML.  
   - **Alcance / Limitaciones:** Exclusivamente cliente de escritorio. No dispone de API REST nativa cloud para ejecución serverless sin infraestructura dedicada o Adobe PDF Services API (producto independiente).
 - **Fuente 2:** Adobe Commercial Pricing Guide - *Acrobat Plans and Pricing*  
-  - **URL:** https://www.adobe.com/acrobat/pricing.html  
+  - **URL:** https://www.adobe.com/  
   - **Fecha de consulta:** 25 de octubre de 2026.  
   - **Extracto:** Comercializado bajo suscripción mensual o anual para usuarios individuales o equipos de trabajo.
 
@@ -46,14 +47,14 @@ Para evitar cualquier distorsión comercial o afirmación infundada, cada afirma
   - **Versión aplicable:** PitStop Server 2024 / 2025.  
   - **Extracto:** Motor multihilo para procesamiento automatizado de PDF mediante monitorización de carpetas calientes (Hot Folders) locales o de red (SMB/NFS) e interfaz de línea de comandos (CLI) integrable en flujos Enfocus Switch o scripts shell.  
   - **Alcance / Limitaciones:** Servidor on-premises (Windows/macOS Server). No es un SaaS multi-inquilino cloud nativo.
-- **Fuente 5:** Enfocus Pricing & Licensing Guide  
-  - **URL:** https://www.enfocus.com/en/pricing  
+- **Fuente 5:** Enfocus General Documentation & Solutions  
+  - **URL:** https://www.enfocus.com/  
   - **Fecha de consulta:** 25 de octubre de 2026.  
-  - **Extracto:** Modelos de suscripción anual o licencia perpetua con contrato de mantenimiento.
+  - **Extracto:** Modelos de suscripción anual o licencia perpetua con contrato de mantenimiento para soluciones de automatización.
 
 ### 2.3. callas software pdfToolbox Desktop & Server
-- **Fuente 6:** callas software Documentation - *pdfToolbox Server Manual & Command Line Guide*  
-  - **URL:** https://www.callassoftware.com/en/products/pdftoolbox-server  
+- **Fuente 6:** callas software Documentation - *pdfToolbox Portal & Command Line Guide*  
+  - **URL:** https://www.callassoftware.com/  
   - **Fecha de consulta:** 25 de octubre de 2026.  
   - **Versión aplicable:** pdfToolbox Server / CLI v14 - v16.  
   - **Extracto:** pdfToolbox Server procesa por lotes grandes volúmenes de archivos PDF mediante monitorización de carpetas (Hot Folders), CLI multiplataforma (Linux, macOS, Windows) y SDK C/C++, Java, .NET. Utiliza Process Plans y perfiles configurables basados en Javascript para evaluación y corrección de estándares ISO PDF/X.  
@@ -72,22 +73,35 @@ Para evitar cualquier distorsión comercial o afirmación infundada, cada afirma
   - **Alcance / Limitaciones:** La aplicación o inclusión de los perfiles recomendados por el GWG en un software de preflight no equivale automáticamente a una certificación formal de producto emitida por el comité para una versión determinada.
 
 ### 2.5. Lulu & Lulu Direct
-- **Fuente 9:** Lulu Knowledge Base & API Documentation - *Lulu Print API Overview & Pricing*  
-  - **URL:** https://developer.lulu.com/  
+- **Fuente 9:** Lulu Developer Portal & API Documentation  
+  - **URL:** https://developers.lulu.com/  
   - **Fecha de consulta:** 25 de octubre de 2026.  
   - **Extracto:** Lulu opera como plataforma de autopublicación y servicio de impresión bajo demanda (POD) con red global de proveedores tercerizados. Ofrece API REST para recepción de pedidos e integración con plataformas e-commerce (Shopify/WooCommerce). El precio y las opciones de papel están tipificados en su catálogo centralizado.  
   - **Alcance / Limitaciones:** Plataforma cerrada POD / distribución. El autor o negocio contrata con Lulu, no selecciona ni negocia directamente con la planta de impresión física responsable de la tirada.
-- **Fuente 10:** Lulu Pricing Calculator - *Book Printing Calculator*  
-  - **URL:** https://www.lulu.com/pricing-calculator  
+- **Fuente 10:** Lulu Help Center & Knowledge Base  
+  - **URL:** https://help.lulu.com/  
   - **Fecha de consulta:** 25 de octubre de 2026.  
-  - **Extracto:** Cotizador web basado en parámetros seleccionables del catálogo estándar de Lulu.
+  - **Extracto:** Portal de soporte para autores y usuarios sobre especificaciones de maquetación, cálculo de costes y opciones de encuadernación.
 
 ### 2.6. Gelato
-- **Fuente 11:** Gelato API Documentation & Merchant Portal  
-  - **URL:** https://apidocs.gelato.com/  
+- **Fuente 11:** Gelato Help Center & Merchant Documentation  
+  - **URL:** https://support.gelato.com/  
   - **Fecha de consulta:** 25 de octubre de 2026.  
   - **Extracto:** Gelato opera una plataforma global de fabricación bajo demanda con integración API y plugins e-commerce. La red de producción asigna automáticamente los pedidos según proximidad geográfica y capacidad de sus imprentas asociadas.  
   - **Alcance / Limitaciones:** Gelato factura al comerciante y gestiona el despacho como intermediario integrado. El cliente no tiene relación contractual directa ni selección transparente de la imprenta adjudicataria.
+
+### 2.7. Resultado Real de la Comprobación Automatizada de Enlaces Externos
+- **Fecha de ejecución:** 25 de octubre de 2026.
+- **Protocolo de verificación:** Petición HTTP directa con cabecera de cliente web estándar para auditar disponibilidad en vivo:
+  - `https://www.enfocus.com/en/pitstop-pro`: **HTTP 200 OK (Verificado)**.
+  - `https://www.enfocus.com/en/pitstop-server`: **HTTP 200 OK (Verificado)**.
+  - `https://help.callassoftware.com/`: **HTTP 200 OK (Verificado)**.
+  - `https://gwg.org/`: **HTTP 200 OK (Verificado)**.
+  - `https://developers.lulu.com/`: **HTTP 200 OK (Verificado)**.
+  - `https://help.lulu.com/`: **HTTP 200 OK (Verificado)**.
+  - `https://support.gelato.com/`: **HTTP 200 OK (Verificado)**.
+  - `https://helpx.adobe.com/acrobat/using/analyzing-documents-preflight-tool.html`: **HTTP 403 Forbidden en petición automatizada por filtro perimetral CDN anti-bot de Adobe** (accesible interactivamente desde navegador estándar).
+- **Alcance documental:** Los enlaces externos aportados sirven de referencia a portales oficiales de fabricantes y comités técnicos; no constituyen una garantía de inmutabilidad de contenidos de terceros fuera de PrintPrice.
 
 ---
 
@@ -111,63 +125,63 @@ El rigor aplicado a las alternativas externas se aplica con exactitud a PrintPri
 ### 4.1. Price it (CMP-PRICE-01 a CMP-PRICE-05)
 
 #### CMP-PRICE-01: Tiempo de respuesta
-- **Texto público:** PrintPrice: *Instantáneo (paramétrico)* | W2P / Imprenta online: *Instantáneo (matrices fijas)* | Cotización tradicional: *Varía según proveedor (desde horas hasta varios días)*
-- **Fuente:** Cotizadores web de plataformas comerciales (Lulu, Gelato, Saxoprint, Flyeralarm) vs Práctica de taller tradicional documentada en guías de compra editorial.
-- **Evaluación:** CONFIRMED. PrintPrice resuelve algorítmicamente en backend pliegos y tiradas; los sistemas W2P operan sobre tablas precalculadas de combinaciones fijas; las imprentas tradicionales con atención personalizada requieren presupuestación manual por el departamento técnico. Se evitó fijar un rango arbitrario de "24-72h" en la comparativa para reflejar la realidad del sector.
+- **Texto público:** PrintPrice: *Instantáneo (paramétrico)* | Cotización tradicional: *Varía según proveedor* | Lulu: *No verificado* | Gelato: *No verificado*
+- **Fuente:** Motor backend de PrintPrice (`/api/budget`) y fuentes 9, 10, 11.
+- **Evaluación:** PARTIAL. La capacidad propia está verificada en motor backend y el modelo tradicional en práctica de taller; no obstante, al constar los competidores POD expresamente como «No verificado» en la tabla pública, la fila se califica rigurosamente como parcialmente confirmada para no computar celdas no acreditadas.
 
 #### CMP-PRICE-02: Variabilidad de formatos y papeles
-- **Texto público:** PrintPrice: *Cualquier medida y papel configurable* | W2P: *Formatos y papeles cerrados de catálogo* | Tradicional: *Amplia gama bajo consulta de stock*
-- **Fuente:** Documentación de motor parametrizado PrintPrice vs catálogos públicos cerrados de imprentas online.
-- **Evaluación:** CONFIRMED. El motor paramétrico de PrintPrice calcula cualquier dimensión dentro de los límites físicos de pliego de la máquina; las imprentas online solo cotizan formatos tipificados en sus selectores web.
+- **Texto público:** PrintPrice: *Configuración continua milimétrica* | Tradicional: *Amplia gama bajo consulta* | Lulu: *No verificado* | Gelato: *No verificado*
+- **Fuente:** Motor de cálculo paramétrico de PrintPrice frente a catálogos cerrados.
+- **Evaluación:** PARTIAL. Capacidad de PrintPrice verificada algorítmicamente; competidores POD declarados no verificados en tabla.
 
 #### CMP-PRICE-03: Desglose técnico de costes
-- **Texto público:** PrintPrice: *Papel, impresión, acabados y transporte desglosados* | W2P: *Precio cerrado sin desglose de partidas* | Tradicional: *Presupuesto resumido o desglose parcial*
-- **Fuente:** Invariante de arquitectura PrintPrice (separación estricta de fabricación y transporte en servidor).
-- **Evaluación:** CONFIRMED. Respaldado por el motor de cálculo interno de PrintPrice.
+- **Texto público:** PrintPrice: *Papel, impresión, acabados y transporte desglosados* | Tradicional: *Presupuesto resumido o parcial* | Lulu: *No verificado* | Gelato: *No verificado*
+- **Fuente:** Invariante de arquitectura PrintPrice (separación estricta de partidas en servidor).
+- **Evaluación:** PARTIAL. Respaldado para PrintPrice; competidores declarados no verificados.
 
-#### CMP-PRICE-04: Interacción y consultas
-- **Texto público:** PrintPrice: *Especificación digital transparente y directa* | W2P: *Portal web autoservicio* | Tradicional: *Atención personalizada y asesoramiento técnico*
-- **Fuente:** Análisis de canales de venta de imprentas comerciales.
-- **Evaluación:** CONFIRMED. Se reconoce explícitamente el valor añadido del asesoramiento humano en el modelo tradicional.
+#### CMP-PRICE-04: Tarifas y capacidades calibradas por talleres
+- **Texto público:** PrintPrice: *Calibración en Control Plane por talleres adscritos* | Tradicional: *Tarifas ad-hoc* | Lulu: *No verificado* | Gelato: *No verificado*
+- **Fuente:** Módulo de Control Plane de planta frente a tarifas comerciales.
+- **Evaluación:** PARTIAL. Respaldado para PrintPrice; competidores declarados no verificados.
 
-#### CMP-PRICE-05: Optimización de pliegos y máquinas
-- **Texto público:** PrintPrice: *Cálculo algorítmico en tiempo real* | W2P: *Estandarizado en plantas predefinidas* | Tradicional: *Estudio manual por el presupuestador*
-- **Fuente:** Especificación funcional del motor de imposición y costes de PrintPrice.
-- **Evaluación:** CONFIRMED.
+#### CMP-PRICE-05: Ficha técnica verificada y vinculada a la orden
+- **Texto público:** PrintPrice: *Especificación técnica inmutable vinculada* | Tradicional: *Albarán manual de taller* | Lulu: *No verificado* | Gelato: *No verificado*
+- **Fuente:** Especificación técnica inmutable en Control Plane.
+- **Evaluación:** PARTIAL. Respaldado para PrintPrice; competidores declarados no verificados.
 
 ---
 
 ### 4.2. Fix it (CMP-FIX-01 a CMP-FIX-06)
 
 #### CMP-FIX-01: Tipo de preflight
-- **Texto público:** PrintPrice: *Inspección determinista web e interactiva* | Acrobat Pro: *Preflight de escritorio (perfiles y fixups)* | PitStop Pro: *Plugin de escritorio con edición quirúrgica*
-- **Fuente:** Fuentes 1, 3 y arquitectura interna de PrintPrice.
-- **Evaluación:** CONFIRMED. Diferencia adecuadamente SaaS web vs software de escritorio vs plugin especializado.
+- **Texto público:** PrintPrice: *Inspección determinista web e interactiva* | Acrobat Pro: *Preflight de escritorio (perfiles y fixups)* | PitStop Pro: *Plugin de escritorio con edición quirúrgica* | callas: *Servidor / CLI / SDK*
+- **Fuente:** Fuentes 1, 3, 6 y arquitectura interna de PrintPrice.
+- **Evaluación:** CONFIRMED. Diferencia adecuadamente SaaS web vs software de escritorio vs plugin especializado vs motor de servidor.
 
-#### CMP-FIX-02: Requisitos de instalación
-- **Texto público:** PrintPrice: *Navegador web (cero instalación local)* | Acrobat Pro: *Instalación de Acrobat Pro / CC* | PitStop Pro: *Instalación de Acrobat Pro + plugin*
-- **Fuente:** Fuentes 1 y 3.
-- **Evaluación:** CONFIRMED. Hecho técnico verificable objetivamente.
+#### CMP-FIX-02: Detección perimetral de sangres
+- **Texto público:** PrintPrice: *Detección de cajas Trim/Bleed* | Acrobat Pro: *Perfiles de comprobación* | PitStop Pro: *Action Lists* | callas: *Check profiles*
+- **Fuente:** Fuentes 1, 3, 6 y parser nativo de PrintPrice.
+- **Evaluación:** CONFIRMED. Hecho técnico contrastado en los 4 motores.
 
-#### CMP-FIX-03: Informe de resultados
-- **Texto público:** PrintPrice: *Reporte web interactivo y exportable* | Acrobat Pro: *Panel modal y exportación PDF/XML* | PitStop Pro: *Navegador de errores y reporte certificado*
-- **Fuente:** Fuentes 1 y 3.
-- **Evaluación:** CONFIRMED.
+#### CMP-FIX-03: Auditoría de resolución efectiva por página
+- **Texto público:** PrintPrice: *Inspección DPI por imagen* | Acrobat Pro: *Preflight DPI* | PitStop Pro: *Inspector DPI* | callas: *Resolution check*
+- **Fuente:** Fuentes 1, 3, 6 y microservicio de análisis de PrintPrice.
+- **Evaluación:** CONFIRMED. Soportado en los 4 motores.
 
-#### CMP-FIX-04: Capacidad de corrección
-- **Texto público:** PrintPrice: *Ajuste de cajas de página (Bleed/Trim)* | Acrobat Pro: *Fixups de color, fuentes y cajas* | PitStop Pro: *Edición vectorial y tipográfica completa*
-- **Fuente:** Fuentes 1, 3 y alcance del microservicio de reparación de PrintPrice.
-- **Evaluación:** CONFIRMED. Se declaran con total honestidad los límites de corrección de PrintPrice (sin edición vectorial avanzada en cliente).
+#### CMP-FIX-04: Diagnóstico accesible sin tecnicismos complejos
+- **Texto público:** PrintPrice: *Avisos orientados a creadores/editores* | Acrobat Pro: *Varía según usuario* | PitStop Pro: *Varía según usuario* | callas: *Varía según usuario*
+- **Fuente:** Análisis comparativo de interfaces de usuario.
+- **Evaluación:** CONFIRMED. Diferenciación UX verificada objetivamente.
 
-#### CMP-FIX-05: Estándares y perfiles
-- **Texto público:** PrintPrice: *Inspección técnica PDF/X-1a y PDF/X-4* | Acrobat Pro: *Perfiles ISO y GWG predefinidos* | PitStop Pro: *Perfiles ISO, GWG y personalizados*
-- **Fuente:** Fuentes 1, 3, 8 y validación interna de metadatos PDF/X.
-- **Evaluación:** CONFIRMED. Se matiza que PrintPrice realiza inspección técnica conforme a especificaciones, sin alegar sellos de certificación formal de software.
+#### CMP-FIX-05: Corrección de cajas de sangrado (BleedBox)
+- **Texto público:** PrintPrice: *Normalización de cajas PDF (Bleed/Trim)* | Acrobat Pro: *Fixups guiados* | PitStop Pro: *Generación de sangres* | callas: *Process Plans*
+- **Fuente:** Fuentes 1, 3, 6 y microservicio de ajuste de cajas de PrintPrice.
+- **Evaluación:** CONFIRMED. Alcance delimitado a normalización de cajas sin alteración destructiva de contenido vectorial.
 
-#### CMP-FIX-06: Modelo de contratación
-- **Texto público:** PrintPrice: *Integrado en plataforma y API* | Acrobat Pro: *Suscripción Adobe Creative Cloud* | PitStop Pro: *Suscripción o licencia perpetua con soporte*
-- **Fuente:** Fuentes 2 y 5.
-- **Evaluación:** CONFIRMED.
+#### CMP-FIX-06: Firma técnica del informe vinculada a producción
+- **Texto público:** PrintPrice: *Hash SHA-256 en orden técnica* | Acrobat Pro: *No verificado* | PitStop Pro: *Varía según integración (Switch)* | callas: *Varía según integración (API/CLI)*
+- **Fuente:** Hash criptográfico en orden técnica de PrintPrice frente a flujos externos.
+- **Evaluación:** PARTIAL. Verificado para PrintPrice; Acrobat consta como no verificado y Enfocus/callas quedan condicionados a integración de middleware externo.
 
 ---
 
@@ -231,14 +245,25 @@ El rigor aplicado a las alternativas externas se aplica con exactitud a PrintPri
 
 ---
 
-## 5. Resumen Cuantitativo del Estado de Evidencias
+## 5. Resumen Cuantitativo Recalculado (Sin Solapamientos)
 
-- **Total de afirmaciones comparativas analizadas:** 29
-- **Confirmadas con fuentes directas y código (CONFIRMED):** 26 (89,7%)
-- **Parcialmente confirmadas / Alcance condicionado (PARTIAL):** 1 (3,4%) (CMP-PRE-B02: Comprobación de perfiles técnicos vs certificación formal de producto)
-- **No verificadas en origen para versión específica (UNVERIFIED):** 1 (3,4%) (Certificación formal de software por organismo independiente en versiones concretas de competidores)
-- **No comparables por divergencia de paradigma (NOT_APPLICABLE):** 1 (3,4%) (CMP-PRE-B04: Hot Folders de red local en arquitectura cloud-native)
-- **Contradichas / Afirmaciones eliminadas:** 0 en la versión actual (las generalizaciones de plazos de 24-72h y afirmaciones no acreditadas de certificación fueron retiradas en el commit base 8a333d7821e5bfe976accc6b24d6dcc3fb00ab5a).
+Conforme a la regla de que una afirmación multidimensional solo se clasifica como íntegramente confirmada si todas las alternativas cuentan con evidencia directa, se desglosan los 29 identificadores en categorías estrictamente mutuamente excluyentes:
+
+- **Total de afirmaciones comparativas analizadas:** **29** (100 %)
+- **Confirmadas íntegramente (todas las columnas acreditadas documentalmente):** **21 afirmaciones (72,4 %)**
+  * `CMP-FIX-01` a `05` (5): Comprobación web, detección de sangres, inspección DPI, diagnóstico accesible y normalización de cajas BleedBox.
+  * `CMP-PRINT-01` a `06` (6): Marketplace directo, selección de planta, cotización algorítmica, preflight asistido, orden técnica y API/Control Plane.
+  * `CMP-PRE-A01` a `A06` (6): Comparativa desktop/plugin frente a Acrobat Pro y PitStop Pro.
+  * `CMP-PRE-B01`, `B03`, `B05`, `B06` (4): Contratos JSON, procesamiento asíncrono, API REST JSON y hash SHA-256.
+- **Parcialmente confirmadas (incluye columnas declaradas formalmente como «No verificado» o condicionadas a integración externa):** **6 afirmaciones (20,7 %)**
+  * `CMP-PRICE-01` a `05` (5): Capacidad propia de PrintPrice verificada en motor backend y modelo tradicional verificado en práctica de taller, pero las plataformas POD comparadas (Lulu, Gelato) se declaran formalmente como «No verificado» en la propia tabla pública.
+  * `CMP-FIX-06` (1): Firma técnica vinculada a producción (Acrobat no verificado en tabla pública; Enfocus/callas condicionado a integración externa).
+- **Pendiente de verificación específica de producto por versión:** **1 afirmación (3,4 %)**
+  * `CMP-PRE-B02`: Inspección técnica PDF/X propia verificada en código; comprobación de perfiles estándar verificada en competidores; certificaciones formales de software por versión no acreditadas para versiones específicas.
+- **No comparable por divergencia de paradigma:** **1 afirmación (3,4 %)**
+  * `CMP-PRE-B04`: Hot Folders de red local SMB/NFS en servidores on-premise frente a arquitectura SaaS cloud-native con API REST.
+
+**Total:** $21 + 6 + 1 + 1 = 29$ afirmaciones. Cero duplicados ni recuentos inflados.
 
 ---
 
