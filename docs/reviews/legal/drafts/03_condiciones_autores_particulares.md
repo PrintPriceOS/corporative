@@ -20,7 +20,7 @@
 1. **Configuración en Price it:** El Autor selecciona formato, páginas, papel, encuadernación y cantidad deseada.
 2. **Validación en Fix it:** El Autor carga su archivo PDF (interior y cubierta) para análisis técnico determinista de corte, sangrado y color.
 3. **Selección de taller en Print it:** El Autor compara transparentemente las ofertas de las imprentas de la red (precio, plazo de entrega y ubicación) y selecciona la imprenta adjudicataria.
-4. **Perfección del pedido y cobro:** La imprenta seleccionada recibe la orden técnica, valida la capacidad de producción, y factura y cobra directamente al Autor mediante su pasarela bancaria o método acordado *(Modelo comercial confirmado)*.
+4. **Perfección del pedido y cobro:** La imprenta seleccionada recibe la orden técnica, valida la capacidad de producción, y factura y cobra directamente al Autor el importe íntegro acordado (desglosando los conceptos de producción, transporte e impuestos aplicables) mediante su pasarela bancaria o método acordado *(Modelo comercial confirmado)*.
 2.2. **Identidad del vendedor:** El Autor queda informado expresamente de que **la imprenta asociada elegida es la parte vendedora y fabricante responsable de la entrega del libro físico**. PrintPrice actúa como prestador de la plataforma tecnológica y facilitador del marketplace.
 
 ---
@@ -30,7 +30,7 @@
 > **AVISO LEGAL OBLIGATORIO AL CONSUMIDOR:**  
 > **El derecho de desistimiento de 14 días NO será aplicable a los pedidos de libros impresos confeccionados conforme a las especificaciones aportadas por el consumidor o claramente personalizados (libros de autor con manuscrito propio, fotografías, cubiertas y textos específicos encargados a medida).**
 3.2. **Consentimiento previo y renuncia:** Antes de confirmar el pedido y proceder al pago a la imprenta, el Autor deberá marcar una casilla específica mediante la cual reconoce y acepta que, una vez iniciado el proceso de imposición en pliego o impresión física por el taller, perderá el derecho a desistir libremente de la compra del bien personalizado.  
-3.3. **Cancelación previa:** **[PROPUESTA NO APROBADA - PENDIENTE DE DEFINICIÓN COMERCIAL Y CONDICIONES DE TALLER]**. Si el Autor solicita la cancelación del pedido antes de que la imprenta haya iniciado la confección de planchas o la tirada en máquina, el tratamiento de costes y deducciones queda pendiente de aprobación en la política operativa de taller.
+3.3. **Cancelación previa y devoluciones:** **[PROPUESTA NO APROBADA - PENDIENTE DE DEFINICIÓN COMERCIAL Y CONDICIONES DE TALLER]**. Si el Autor solicita la cancelación del pedido antes de que la imprenta haya iniciado la confección de planchas o la tirada en máquina, o si procede una devolución por defecto material atribuible al taller, la imprenta tramitará el abono correspondiente al Autor y lo registrará en la plataforma para que PrintPrice ajuste de forma correlativa la comisión facturada en la siguiente liquidación mensual.
 
 ---
 

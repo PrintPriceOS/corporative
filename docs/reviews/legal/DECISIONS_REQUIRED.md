@@ -8,80 +8,127 @@
 ---
 
 ### Principio Rector de Gobernanza Comercial y Técnica
-En el estado actual del proyecto, se mantiene como **ÚNICAMENTE CONFIRMADO**:
-1. **Comisión del 4 % en el marketplace** abonada por la imprenta a PrintPrice.
-2. **Cobro directo de la imprenta al cliente final** (PrintPrice no custodia fondos de fabricación).
-3. **Facturación mensual posterior de la comisión** emitida por PrintPrice al taller.
 
-**Todo lo demás constituye una PROPUESTA NO APROBADA o un DATO PENDIENTE DE VERIFICACIÓN.** Ningún borrador presenta la gratuidad de herramientas, la cuota de papeleras, la base imponible sobre portes, el hito de devengo, las notas de crédito, los SLA o las tolerancias como condiciones vigentes.
+A fecha 25 de octubre de 2026, el **propietario de la plataforma ha aprobado formalmente las siguientes decisiones comerciales** para el marketplace:
+
+1. **Base imponible de la comisión del 4 %:** Se fija estrictamente en el **4 % sobre el importe neto de impresión y acabados**, excluyendo expresamente impuestos y costes de transporte debidamente desglosados.
+2. **Generación sobre cobros efectivos y facturación mensual posterior:** La comisión se genera sobre los **importes efectivamente cobrados por la imprenta**, procediendo PrintPrice a su facturación mensual posterior agrupada. En supuestos de **cobros parciales**, la comisión aplica exclusivamente sobre la parte cobrada que corresponda a los conceptos sujetos a comisión (impresión y acabados).
+3. **Tratamiento de devoluciones:** **No se devenga ni cobra comisión sobre importes devueltos al cliente.** En caso de haberse facturado previamente la comisión, se practicará el ajuste corrector (abono/nota de crédito) en la liquidación mensual inmediatamente posterior.
+4. **Tratamiento de impagos:** **No se cobra comisión sobre cantidades impagadas** por los clientes finales.
+5. **Obligación de registro y conciliación por la imprenta:** Dado que la imprenta factura y cobra directamente al cliente, la imprenta asume la obligación de registrar verazmente en la plataforma todos los cobros y devoluciones vinculados a cada pedido para hacer posible la conciliación mensual.  
+   *(Aviso técnico de rigor: El mecanismo específico y panel para este registro y conciliación en el Control Plane consta como **[PENDIENTE DE DEFINICIÓN TÉCNICA E IMPLEMENTACIÓN EN CONTROL PLANE; NO PRESENTAR COMO FUNCIONALIDAD YA IMPLEMENTADA]**).*
+
+**Distinción entre comisión comercial e impuestos propios de PrintPrice:**  
+La base comercial del 4 % se calcula sobre importes netos de fabricación cobrados. Los impuestos que correspondan a la factura emitida por PrintPrice a la imprenta por los servicios de intermediación/software (como el IVA según el régimen fiscal letono, intracomunitario o nacional que resulte aplicable) se liquidarán adicionalmente con arreglo a la normativa tributaria vigente en el momento de facturación, sin alterar la base comercial neta.
+
+**Todo lo demás constituye una PROPUESTA NO APROBADA o un DATO PENDIENTE DE VERIFICACIÓN.** Ningún borrador presenta la gratuidad definitiva de herramientas, la suscripción de papeleras, los SLA de API o las tolerancias como condiciones vigentes.
 
 ---
 
-## 1. Tabla Breve Consolidada de Pendientes para Decidir
+## 1. Ejemplos Numéricos de Liquidación Comercial Aprobada
 
-| Categoría | Asunto / Propuesta No Aprobada | Resumen de la Cuestión | Documentos Afectados | ¿Bloquea Publicación de Borradores? |
+A efectos de coherencia contractual y contable en todos los borradores, rigen los siguientes ejemplos ilustrativos:
+
+- **Ejemplo 1 (Pedido estándar con desglose completo):**  
+  - Concepto impresión y acabados: 1.000 € netos.  
+  - Concepto transporte desglosado: 100 € netos.  
+  - Impuestos: Separados según tipo aplicable al cliente.  
+  - **Liquidación al cobrar la producción íntegra:** Base comisionable = 1.000 € (el transporte de 100 € y los impuestos quedan excluidos). Comisión devengada a favor de PrintPrice = **40 €** (4 % de 1.000 €).
+
+- **Ejemplo 2 (Cobro parcial de producción):**  
+  - Se formaliza un pedido con 1.000 € netos de impresión y acabados.  
+  - La imprenta percibe un cobro a cuenta del 50 % de la producción (500 € netos correspondientes a impresión y acabados).  
+  - **Liquidación mensual:** Base comisionable devengada = 500 €. Comisión facturada por PrintPrice = **20 €** (4 % de 500 €). El 50 % restante devengará su comisión únicamente si y cuando la imprenta efectúe el cobro.
+
+- **Ejemplo 3 (Devolución sobre producción previamente comisionada):**  
+  - Sobre un pedido de 1.000 € cuya producción ya fue cobrada y cuya comisión de 40 € ya fue facturada en el mes anterior, la imprenta efectúa una devolución al cliente de 200 € netos por defecto de encuadernación.  
+  - **Ajuste en la siguiente liquidación:** Base de ajuste = 200 € devueltos. Ajuste de comisión a favor de la imprenta = **−8 €** (4 % de 200 €), reduciendo el saldo a abonar en la factura mensual siguiente.
+
+---
+
+## 2. Tabla Consolidada de Decisiones y Pendientes
+
+| Categoría | Asunto / Propuesta | Resumen del Estado y Cuestión | Documentos Afectados | ¿Bloquea su Revisión Interna? |
 | :--- | :--- | :--- | :--- | :--- |
-| **Decisión Comercial (Propietario)** | **Base imponible de la comisión** | Decidir si el 4 % aplica solo sobre producción industrial o sobre el total con transporte (excluyendo IVA). | `02_terminos_generales_uso.md`, `05_condiciones_adhesion_imprentas.md` | No para borrador; **SÍ para contrato de imprentas**. |
-| **Decisión Comercial (Propietario)** | **Momento de devengo de comisión** | Decidir si se devenga al aceptar la orden técnica en taller o tras la entrega de la mercancía. | `02_terminos_generales_uso.md`, `05_condiciones_adhesion_imprentas.md` | No para borrador; **SÍ para liquidación mensual**. |
-| **Decisión Comercial (Propietario)** | **Cancelaciones, mermas e impagos** | Establecer si PrintPrice emite abono de comisión en ciclo posterior si se cancela antes de máquinas. | `03_condiciones_autores_particulares.md`, `05_condiciones_adhesion_imprentas.md` | No para borrador; **SÍ para transacciones reales**. |
-| **Decisión Comercial (Propietario)** | **Modelo SaaS independiente / API** | Definir si se mantiene el cálculo web corporativo libre y se tarifica por volumen en API REST. | `01_aviso_legal.md`, `02_terminos_generales_uso.md`, `04_condiciones_editoriales_profesionales.md` | No bloquea publicación. |
-| **Decisión Comercial (Propietario)** | **Monetización de papeleras (Paper Hub)** | Decidir entre cuota anual de suscripción técnica (propuesta recomendada) o comisión por volumen. | `06_condiciones_proveedores_papel.md` | No bloquea publicación. |
-| **Decisión Comercial (Propietario)** | **Objetivo de SLA (99,5 % API)** | Decidir si se ofrece meta comercial de disponibilidad del 99,5 % para editoriales o si se omite. | `04_condiciones_editoriales_profesionales.md` | No bloquea publicación. |
-| **Dato Operativo (Equipo Técnico)** | **Ciclo de vida de archivos de preflight** | Acreditar técnicamente: servicio responsable, almacenamiento, disparador, mecanismo de purga, fallos y backups. | `02_terminos_generales_uso.md`, `07_politica_privacidad.md`, `10_acuerdo_encargo_tratamiento_dpa.md` | **SÍ bloquea declarar plazos de retención o purga**. |
-| **Dato Operativo (Equipo Técnico)** | **Infraestructura, backups y transferencias** | Auditar contrato con IONOS SE, almacenamiento secundario de copias de seguridad y accesos remotos de soporte. | `07_politica_privacidad.md`, `11_registro_subencargados_proveedores.md` | No para web actual; **SÍ para declarar ausencia total de transferencias**. |
-| **Dato Operativo (Equipo Técnico)** | **Pasarelas de cobro y correo** | Formalizar cuenta bancaria corporativa para adeudos SEPA e inventariar servidores SMTP/IMAP. | `05_condiciones_adhesion_imprentas.md`, `11_registro_subencargados_proveedores.md` | No para borrador; **SÍ para cobros B2B**. |
-| **Dato Operativo (Equipo Técnico)** | **Tolerancias de taller (±1,5 mm / ±3–5%)** | Recabar especificaciones técnicas reales de maquinaria de los primeros talleres asociados adscritos. | `03_condiciones_autores_particulares.md`, `04_condiciones_editoriales_profesionales.md` | No bloquea publicación. |
-| **Cuestión Jurídica (Asesoría Legal)** | **Ratificación de Print Price Pro SIA** | Cotejo documental ordinario de razón social, Reg. No. 40203631570 y VAT ID en *Uzņēmumu reģistrs* y VIES. | `01_aviso_legal.md`, `07_politica_privacidad.md` | **SÍ bloquea la publicación del Aviso Legal definitivo**. |
-| **Cuestión Jurídica (Asesoría Legal)** | **Excepción de desistimiento B2C** | Validar la exclusión de desistimiento (Art. 16.c Directiva 2011/83/UE) para libros personalizados impresos. | `03_condiciones_autores_particulares.md` | **SÍ bloquea cobros a autores particulares**. |
-| **Cuestión Jurídica (Asesoría Legal)** | **Umbrales y reporte fiscal DAC7** | Determinar si aplica exclusión por volumen o si la plataforma debe implementar reporte periódico ante VID. | `05_condiciones_adhesion_imprentas.md` | No para borrador; **SÍ antes de superar umbrales**. |
-| **Cuestión Jurídica (Asesoría Legal)** | **Necesidad formal de DPO (Art. 37 RGPD)** | Confirmar que por dimensión y naturaleza de tratamiento técnico no procede DPO universal obligatorio. | `01_aviso_legal.md`, `07_politica_privacidad.md` | No bloquea publicación. |
-| **Cuestión Jurídica (Asesoría Legal)** | **Encuadre regulatorio bajo el AI Act** | Confirmar calificación de riesgo mínimo para preflight/cálculo y exclusión del render WebGL de maquetas. | `09_politica_transparencia_ia.md` | No bloquea publicación. |
+| **Decisión Comercial (Aprobada Propietario 25/10/2026)** | **Base de comisión del 4 %** | 4 % sobre neto de impresión y acabados, excluyendo transporte desglosado e impuestos. | `02_terminos_generales_uso.md`, `05_condiciones_adhesion_imprentas.md` | **No bloquea su revisión interna** (aprobada). |
+| **Decisión Comercial (Aprobada Propietario 25/10/2026)** | **Devengo sobre cobros efectivos** | Comisión generada sobre cobro real. En cobro parcial, aplica a la parte proporcional cobrada sujeta. | `02_terminos_generales_uso.md`, `05_condiciones_adhesion_imprentas.md` | **No bloquea su revisión interna** (aprobada). |
+| **Decisión Comercial (Aprobada Propietario 25/10/2026)** | **Exclusión de devoluciones e impagos** | Cero comisión sobre importes devueltos o impagados; ajuste en ciclo posterior si ya se facturó. | `03_condiciones_autores_particulares.md`, `05_condiciones_adhesion_imprentas.md` | **No bloquea su revisión interna** (aprobada). |
+| **Dato Operativo (Equipo Técnico)** | **Detalles operativos de comisiones** | Pendiente definir: documentación justificativa, conciliación, vencimiento de factura y no desglosados. | `02_terminos_generales_uso.md`, `05_condiciones_adhesion_imprentas.md` | **No bloquea su revisión interna**; bloquea cobro efectivo. |
+| **Decisión Comercial (Pendiente Propietario)** | **Modelo web vs API REST** | Decidir si se mantiene cálculo web libre y se tarifica por volumen en API REST empresarial. | `01_aviso_legal.md`, `02_terminos_generales_uso.md`, `04_condiciones_editoriales_profesionales.md` | **No bloquea su revisión interna**. |
+| **Decisión Comercial (Pendiente Propietario)** | **Monetización de papeleras (Paper Hub)** | Decidir entre cuota anual de suscripción técnica por catálogo o comisión porcentual sobre volumen. | `06_condiciones_proveedores_papel.md` | **No bloquea su revisión interna**. |
+| **Decisión Comercial (Pendiente Propietario)** | **Objetivo de SLA (99,5 % API)** | Decidir si se ofrece meta comercial de disponibilidad del 99,5 % para editoriales o si se omite. | `04_condiciones_editoriales_profesionales.md` | **No bloquea su revisión interna**. |
+| **Dato Operativo (Equipo Técnico)** | **Ciclo de vida de archivos de preflight** | Acreditar técnicamente: servicio responsable, almacenamiento, disparador, mecanismo, fallos y backups. | `02_terminos_generales_uso.md`, `07_politica_privacidad.md`, `10_acuerdo_encargo_tratamiento_dpa.md` | **SÍ bloquea declarar plazos de retención o purga**. |
+| **Dato Operativo (Equipo Técnico)** | **Infraestructura, backups y transferencias** | Auditar contrato con IONOS SE, almacenamiento secundario de backups y accesos remotos de soporte. | `07_politica_privacidad.md`, `11_registro_subencargados_proveedores.md` | **No bloquea su revisión interna**; SÍ transferencias cero. |
+| **Dato Operativo (Equipo Técnico)** | **Pasarelas de cobro y correo** | Formalizar cuenta corporativa para SEPA B2B e inventariar servidores SMTP/IMAP (@printprice.pro). | `05_condiciones_adhesion_imprentas.md`, `11_registro_subencargados_proveedores.md` | **No bloquea su revisión interna**; SÍ cobros B2B reales. |
+| **Dato Operativo (Equipo Técnico)** | **Tolerancias de taller (±1,5 mm / ±3–5%)** | Recabar especificaciones técnicas reales de maquinaria de los primeros talleres asociados adscritos. | `03_condiciones_autores_particulares.md`, `04_condiciones_editoriales_profesionales.md` | **No bloquea su revisión interna**. |
+| **Cuestión Jurídica (Asesoría Legal)** | **Ratificación de Print Price Pro SIA** | Comprobación registral ordinaria de razón social, Reg. No. 40203631570 y VAT ID en *Uzņēmumu reģistrs* y VIES. | `01_aviso_legal.md`, `07_politica_privacidad.md` | **SÍ bloquea la publicación del Aviso Legal definitivo**. |
+| **Cuestión Jurídica (Asesoría Legal)** | **Excepción de desistimiento B2C** | Análisis de aplicabilidad del Art. 16.c Directiva 2011/83/UE y fórmula de renuncia previa en pedidos a medida. | `03_condiciones_autores_particulares.md` | **SÍ bloquea cobros a autores particulares**. |
+| **Cuestión Jurídica (Asesoría Legal)** | **Umbrales y reporte fiscal DAC7** | Consulta neutral sobre aplicabilidad, umbrales de exención y obligaciones formales ante la *VID* letona. | `05_condiciones_adhesion_imprentas.md` | **No bloquea su revisión interna**; SÍ antes de umbrales. |
+| **Cuestión Jurídica (Asesoría Legal)** | **Designación de DPO (Art. 37 RGPD)** | Consulta neutral sobre obligatoriedad o idoneidad de nombramiento formal de DPO frente a contacto interno. | `01_aviso_legal.md`, `07_politica_privacidad.md` | **No bloquea su revisión interna**. |
+| **Cuestión Jurídica (Asesoría Legal)** | **Clasificación bajo el AI Act** | Consulta neutral sobre calificación regulatoria y deberes de transparencia bajo el Reglamento (UE) 2024/1689. | `09_politica_transparencia_ia.md` | **No bloquea su revisión interna**. |
 
 ---
 
-## 2. Decisiones Comerciales Pendientes (Propietario)
+## 3. Decisiones Comerciales Aprobadas por el Propietario (25/10/2026)
 
-### 2.1. Base Imponible de la Comisión del 4 % en Marketplace (Transporte e Impuestos)
-- **Propuesta:** Liquidar el 4 % sobre el importe neto total facturado por la imprenta al cliente que comprende producción industrial y transporte, excluyendo estrictamente el IVA.
-- **Motivo:** El transporte forma parte indisociable de la transacción gestionada en el marketplace; auditar separadamente portes frente a fabricación en cada albarán introduce fricciones contables desproporcionadas. El IVA se excluye por ser impuesto indirecto repercutido.
-- **Documentos afectados:** `02_terminos_generales_uso.md`, `05_condiciones_adhesion_imprentas.md`.
-- **¿Bloquea publicación de borradores?:** **No bloquea borradores; SÍ bloquea la firma del contrato de adhesión de talleres**.
+### 3.1. Base Imponible de la Comisión de Marketplace (4 %)
+- **Estado:** **APROBADO POR EL PROPIETARIO (25/10/2026)**.
+- **Alcance:** La comisión del 4 % aplica estrictamente sobre el importe neto cobrado por los conceptos de **impresión y acabados**. Se excluyen de forma expresa los costes de transporte debidamente desglosados y cualesquiera impuestos repercutidos al cliente final.
+- **Documentos actualizados:** `02_terminos_generales_uso.md`, `05_condiciones_adhesion_imprentas.md`.
+- **¿Bloquea su revisión interna?:** No bloquea su revisión interna.
 
-### 2.2. Momento Exacto de Devengo de la Comisión de Marketplace
-- **Propuesta:** Considerar devengada la comisión en el momento en que la imprenta valida técnicamente los archivos (preflight aprobado) y acepta la orden de trabajo para entrar a máquina.
-- **Motivo:** Si se devenga al aceptar el presupuesto, cualquier cancelación técnica previa generaría disputas de facturación; si se pospone hasta la entrega física, PrintPrice asumiría indebidamente el riesgo operacional del transportista ajeno a la plataforma de software.
-- **Documentos afectados:** `02_terminos_generales_uso.md`, `05_condiciones_adhesion_imprentas.md`.
-- **¿Bloquea publicación de borradores?:** **No bloquea borradores; SÍ bloquea la liquidación contable mensual**.
+### 3.2. Devengo sobre Cobros Efectivos y Cobros Parciales
+- **Estado:** **APROBADO POR EL PROPIETARIO (25/10/2026)**.
+- **Alcance:** La comisión no se genera al presupuestar ni al aceptar la orden técnica, sino en función de los importes efectivamente cobrados por la imprenta. En cobros parciales (p. ej. anticipos o hitos), la comisión del 4 % se devenga exclusivamente sobre la fracción cobrada que corresponda a los conceptos sujetos a comisión.
+- **Documentos actualizados:** `02_terminos_generales_uso.md`, `05_condiciones_adhesion_imprentas.md`.
+- **¿Bloquea su revisión interna?:** No bloquea su revisión interna.
 
-### 2.3. Tratamiento de Cancelaciones, Defectos de Calidad e Impagos
-- **Propuesta:** Emisión de nota de crédito / abono de la comisión en el siguiente ciclo mensual si la imprenta acredita fehacientemente la cancelación total o el reembolso al cliente antes de entrar en máquinas. Los defectos de impresión, mermas o acabados defectuosos son responsabilidad exclusiva del taller impresor.
-- **Motivo:** Preserva la equidad contractual con las imprentas asociadas sin trasladar a PrintPrice el riesgo comercial o la garantía industrial de fabricación física.
-- **Documentos afectados:** `03_condiciones_autores_particulares.md`, `04_condiciones_editoriales_profesionales.md`, `05_condiciones_adhesion_imprentas.md`.
-- **¿Bloquea publicación de borradores?:** **No bloquea borradores; SÍ bloquea la apertura de transacciones reales**.
+### 3.3. Régimen de Devoluciones e Impagados
+- **Estado:** **APROBADO POR EL PROPIETARIO (25/10/2026)**.
+- **Alcance:** 
+  - **Devoluciones:** No se cobra comisión sobre importes devueltos al comprador. Si la comisión ya fue incluida en una liquidación mensual anterior, se practicará el ajuste proporcional correspondiente (abono/nota de crédito) en la liquidación inmediatamente posterior.
+  - **Impagos:** No se cobra comisión sobre importes que resulten impagados por el cliente.
+- **Documentos actualizados:** `03_condiciones_autores_particulares.md`, `05_condiciones_adhesion_imprentas.md`.
+- **¿Bloquea su revisión interna?:** No bloquea su revisión interna.
 
-### 2.4. Modelo de Tarifas para Servicios SaaS Independientes (Standalone)
-- **Propuesta:** Libre acceso gratuito a la herramienta web de cálculo (Price it) y validación básica de preflight (Fix it) para usuarios corporativos; tarificación por volumen exclusivamente en integraciones de API REST / ERP industrial.
-- **Motivo:** Maximiza la captación y recurrencia técnica sin contradecir la eliminación de la prueba gratuita de 14 días.
+---
+
+## 4. Detalles Operativos Pendientes de Definición (Equipo Técnico / Operaciones)
+
+A pesar de la aprobación de los principios comerciales anteriores, constan como **pendientes de definición operativa** los siguientes aspectos antes de la ejecución real:
+
+1. **Documentación justificativa:** Definir los requisitos de soporte documental exigibles a las imprentas para acreditar devoluciones, cobros parciales o impagos (p. ej., facturas rectificativas, justificantes de transferencia bancaria de devolución o comunicaciones fehacientes de mora).
+2. **Mecanismo técnico de registro y conciliación en Control Plane:** Diseñar y desarrollar en el panel de taller el flujo para que la imprenta declare los cobros efectivos y devoluciones por cada pedido, así como el protocolo de cotejo periódico frente a las órdenes de marketplace. *(No presentar como funcionalidad ya implementada)*.
+3. **Plazo y vencimiento de la factura mensual de comisiones:** Fijar el vencimiento exigible para el pago de la factura emitida por PrintPrice (p. ej., a 15, 30 días naturales desde emisión o mediante cargo recurrente SEPA B2B).
+4. **Tratamiento de conceptos no desglosados:** Establecer la regla de liquidación aplicable si una imprenta emite un pedido o factura global sin desglose explícito de los costes de transporte respecto a la producción.
+
+---
+
+## 5. Decisiones Comerciales Pendientes del Propietario
+
+### 5.1. Modelo de Tarifas para Servicios SaaS Independientes (Standalone)
+- **Propuesta:** Libre acceso de uso al cálculo web (Price it) y validación básica (Fix it) para captación técnica; tarificación por volumen exclusivamente en integraciones de API REST / ERP industrial.
+- **Estado:** **[PROPUESTA PENDIENTE DE DECISIÓN DEL PROPIETARIO]**. No se introducen promesas de gratuidad definitiva ni suscripciones vigentes.
 - **Documentos afectados:** `01_aviso_legal.md`, `02_terminos_generales_uso.md`, `04_condiciones_editoriales_profesionales.md`.
-- **¿Bloquea publicación de borradores?:** **No bloquea publicación**.
+- **¿Bloquea su revisión interna?:** No bloquea su revisión interna.
 
-### 2.5. Modelo de Monetización con Fabricantes y Distribuidores de Papel (Paper Hub)
-- **Propuesta:** Suscripción fija anual de presencia en el catálogo técnico de papeles y perfiles ICC para imprentas, sin comisión porcentual sobre la venta física de bobinas o palés.
-- **Motivo:** La distribución de papel opera con márgenes industriales reducidos (2–5 %) y créditos comerciales a 90 días, incompatibles con una comisión del 4 %.
+### 5.2. Modelo de Monetización con Fabricantes y Distribuidores de Papel (Paper Hub)
+- **Propuesta:** Suscripción fija anual por gama de papel/perfiles ICC homologados frente a comisión porcentual sobre venta de bobinas/palés.
+- **Estado:** **[PROPUESTA PENDIENTE DE DECISIÓN DEL PROPIETARIO]**.
 - **Documentos afectados:** `06_condiciones_proveedores_papel.md`.
-- **¿Bloquea publicación de borradores?:** **No bloquea publicación**.
+- **¿Bloquea su revisión interna?:** No bloquea su revisión interna.
 
-### 2.6. Objetivo de Disponibilidad (SLA) para Clientes de API
-- **Propuesta:** Meta comercial de disponibilidad técnica mensual del 99,5 % sin penalización financiera directa, excluyendo paradas programadas.
-- **Motivo:** Establecer una referencia de calidad de servicio para grandes editoriales sin incurrir en obligaciones indemnizatorias desproporcionadas en fase inicial.
+### 5.3. Objetivo de Disponibilidad (SLA) para Clientes de API
+- **Propuesta:** Meta técnica comercial del 99,5 % mensual para clientes API empresariales sin penalización indemnizatoria directa.
+- **Estado:** **[PROPUESTA PENDIENTE DE DEFINICIÓN TÉCNICA Y COMERCIAL]**.
 - **Documentos afectados:** `04_condiciones_editoriales_profesionales.md`.
-- **¿Bloquea publicación de borradores?:** **No bloquea publicación**.
+- **¿Bloquea su revisión interna?:** No bloquea su revisión interna.
 
 ---
 
-## 3. Datos Operativos por Verificar (Equipo Técnico)
+## 6. Datos Operativos por Verificar (Equipo Técnico)
 
-### 3.1. Verificación Técnica del Ciclo de Vida de Archivos de Preflight
+### 6.1. Verificación Técnica del Ciclo de Vida de Archivos de Preflight
 - **Estado:** **[PENDIENTE DE VERIFICACIÓN TÉCNICA DEL CICLO DE VIDA DE ARCHIVOS]**.
 - **Criterio rector:** No se elige entre eliminación inmediata y retención de 24–72 horas sin evidencia técnica en servidor. Las menciones en la interfaz pública (`app/products/preflight/page.tsx` y `app/legal/privacy-policy/page.tsx`) son informativas y no constituyen prueba de ejecución.
 - **Evidencia requerida:**
@@ -92,9 +139,9 @@ En el estado actual del proyecto, se mantiene como **ÚNICAMENTE CONFIRMADO**:
   5. *Tratamiento de fallos:* Protocolo de reintentos, alertas o borrado forzado si el proceso se interrumpe.
   6. *Copias de seguridad:* Comprobar si los directorios temporales de preflight se excluyen formalmente de las copias de seguridad del servidor.
 - **Documentos afectados:** `02_terminos_generales_uso.md`, `07_politica_privacidad.md`, `10_acuerdo_encargo_tratamiento_dpa.md`.
-- **¿Bloquea publicación de borradores?:** **SÍ bloquea prometer plazos de retención o purga sin respaldo técnico**.
+- **¿Bloquea su revisión interna?:** **SÍ bloquea prometer plazos de retención o purga sin respaldo técnico**.
 
-### 3.2. Auditoría de Infraestructura, Copias de Seguridad y Transferencias
+### 6.2. Auditoría de Infraestructura, Copias de Seguridad y Transferencias
 - **Estado:** Comprobada la resolución de red de la web corporativa hacia la IP `212.227.79.67` (IONOS SE, Fráncfort, Alemania).
 - **Criterio rector:** No deducir «cero transferencias» de una dirección IP, geolocalización o capturas de red del navegador del cliente.
 - **Evidencia requerida:**
@@ -102,50 +149,47 @@ En el estado actual del proyecto, se mantiene como **ÚNICAMENTE CONFIRMADO**:
   2. Configuración de copias de seguridad remotas (ubicación geográfica del servidor de backup y cifrado en reposo).
   3. Inventario de accesos de soporte administrativo (SSH / Plesk) y herramientas de telemetría de servidor.
 - **Documentos afectados:** `07_politica_privacidad.md`, `11_registro_subencargados_proveedores.md`.
-- **¿Bloquea publicación de borradores?:** No para la web actual; **SÍ para declarar ausencia total de transferencias en producción**.
+- **¿Bloquea su revisión interna?:** **No bloquea su revisión interna**; SÍ bloquea declarar ausencia total de transferencias en producción.
 
-### 3.3. Pasarelas de Pago y Configuración de Servidores de Correo
+### 6.3. Pasarelas de Pago y Configuración de Servidores de Correo
 - **Estado:** **[PENDIENTE DE CONTRATACIÓN Y DEFINICIÓN OPERATIVA]**.
 - **Evidencia requerida:** Contrato de pasarela de pago bancaria o cuenta SEPA B2B para la emisión y cobro de recibos mensuales a talleres; inventario de configuración de puertos y autenticación SPF/DKIM/DMARC del servidor SMTP/IMAP propio en Alemania.
 - **Documentos afectados:** `05_condiciones_adhesion_imprentas.md`, `11_registro_subencargados_proveedores.md`.
-- **¿Bloquea publicación de borradores?:** No para borradores; **SÍ para activar cobros B2B reales**.
+- **¿Bloquea su revisión interna?:** **No bloquea su revisión interna**; SÍ para activar cobros B2B reales.
 
-### 3.4. Tolerancias Industriales Mecánicas (Corte ±1,5 mm y Merma ±3–5%)
+### 6.4. Tolerancias Industriales Mecánicas (Corte ±1,5 mm y Merma ±3–5%)
 - **Estado:** **[PROPUESTAS OPERATIVAS NO APROBADAS - SUJETAS A ESPECIFICACIONES DE TALLER]**.
 - **Evidencia requerida:** Recabar las especificaciones técnicas particulares de los talleres que se adhieran al marketplace para contrastar si las tolerancias mecánicas de ±1,5 mm y sobreproducción de ±3–5 % concuerdan con sus condiciones reales de taller.
 - **Documentos afectados:** `03_condiciones_autores_particulares.md`, `04_condiciones_editoriales_profesionales.md`.
-- **¿Bloquea publicación de borradores?:** No bloquea publicación.
+- **¿Bloquea su revisión interna?:** **No bloquea su revisión interna**.
 
 ---
 
-## 4. Cuestiones para Asesoría Jurídica
+## 7. Cuestiones para Asesoría Jurídica (Formulación Neutral)
 
-### 4.1. Ratificación Registral y Fiscal de Print Price Pro SIA
-- **Propuesta:** Cotejo documental ordinario de los datos societarios (Reg. No. 40203631570, NIF-IVA LV40203631570 y domicilio en Bruņinieku iela 60-8, Rīga) contra el Registro de Empresas de Letonia (*Uzņēmumu reģistrs*) y en la base VIES de la Comisión Europea.
-- **Criterio rector:** No se exige formalismo notarial extraordinario ni innecesario, sino la comprobación administrativa pública ordinaria.
+Las siguientes cuestiones deben ser sometidas a criterio de la asesoría jurídica de forma neutral, sin prejuzgar ni anticipar conclusiones normativas:
+
+### 7.1. Ratificación Registral y Fiscal de Print Price Pro SIA
+- **Cuestión:** Realizar el cotejo administrativo de los datos mercantiles y societarios de la entidad (denominación Print Price Pro SIA, número de registro 40203631570, VAT ID LV40203631570 y domicilio en Bruņinieku iela 60-8, Rīga) ante el Registro de Empresas de la República de Letonia (*Latvijas Republikas Uzņēmumu reģistrs*) y el censo VIES de operadores intracomunitarios.
 - **Documentos afectados:** `01_aviso_legal.md`, `07_politica_privacidad.md`.
-- **¿Bloquea publicación de borradores?:** **SÍ bloquea la publicación del Aviso Legal vinculante en producción**.
+- **¿Bloquea su revisión interna?:** **SÍ bloquea la publicación del Aviso Legal vinculante en producción**.
 
-### 4.2. Delimitación del Desistimiento en Contratos B2C con Autores Particulares
-- **Propuesta:** Validar el redactado de la excepción al derecho de desistimiento conforme al Art. 16.c de la Directiva 2011/83/UE (bienes confeccionados conforme a especificaciones del consumidor para libros impresos a medida) y la renuncia previa expresa para servicios digitales de análisis inmediato.
-- **Motivo:** Proteger a la plataforma y a las imprentas de cancelaciones improcedentes una vez que los pliegos han entrado en máquina o el informe técnico ha sido generado.
+### 7.2. Delimitación del Derecho de Desistimiento en Contratos B2C (Autores Particulares)
+- **Cuestión:** Examinar la aplicabilidad y redactado de la excepción al derecho de desistimiento regulada en el artículo 16, letra c) de la Directiva 2011/83/UE para la producción de libros a medida de autores independientes, así como la validez del mecanismo de consentimiento previo expreso y renuncia al inicio de la impresión física.
 - **Documentos afectados:** `03_condiciones_autores_particulares.md`.
-- **¿Bloquea publicación de borradores?:** **SÍ bloquea la activación de cobros B2C en producción**.
+- **¿Bloquea su revisión interna?:** **SÍ bloquea la activación de cobros a consumidores particulares en producción**.
 
-### 4.3. Aplicabilidad y Umbrales de Reporte Fiscal DAC7 (Directiva UE 2021/514)
-- **Propuesta:** Dictaminar si PrintPrice califica como operador de plataforma sujeto a comunicación obligatoria anual de ventas de talleres ante la administración tributaria letona (*VID*), o si concurre exclusión por volumen (menos de 30 operaciones o menos de 2.000 € anuales por taller exento).
-- **Motivo:** Evitar sanciones tributarias graves por incumplimiento de obligaciones de información transfronteriza de plataformas de comercio electrónico.
+### 7.3. Aplicabilidad y Umbrales de Reporte Fiscal DAC7 (Directiva UE 2021/514)
+- **Cuestión:** Solicitar criterio jurídico sobre el encuadre de la plataforma como operador sujeto a las obligaciones de comunicación de datos de vendedores a la administración tributaria letona (*Valsts ieņēmumu dienests* — VID) bajo la transposición de la Directiva DAC7, verificando los umbrales de exención por volumen o número de transacciones y el calendario exigible.
 - **Documentos afectados:** `05_condiciones_adhesion_imprentas.md`.
-- **¿Bloquea publicación de borradores?:** No bloquea borradores; debe quedar resuelto antes de que los talleres alcancen umbrales comerciales.
+- **¿Bloquea su revisión interna?:** **No bloquea su revisión interna**; debe resolverse con anterioridad a que los talleres asociados alcancen los umbrales de actividad comercial.
 
-### 4.4. Necesidad de Designación Formal de Delegado de Protección de Datos (DPO)
-- **Propuesta:** Consultar a la asesoría jurídica si concurren las circunstancias del Art. 37.1 del RGPD. Al ser una pyme de software técnico gráfico que no realiza observación sistemática a gran escala ni trata categorías especiales de datos (Arts. 9 y 10 RGPD), el análisis preliminar indica que **no es universalmente obligatorio**, bastando designar un responsable interno de privacidad a través de `privacy@printprice.pro`.
-- **Motivo:** Evitar la imposición de figuras organizativas complejas que la normativa no exige a esta escala empresarial.
+### 7.4. Necesidad de Designación Formal de Delegado de Protección de Datos (DPO)
+- **Cuestión:** Solicitar dictamen jurídico sobre si, conforme al artículo 37 del RGPD y a la legislación letona de protección de datos personales (*Fizisko personu datu apstrādes likums*), la empresa está legalmente obligada a designar formalmente un Delegado de Protección de Datos (DPO) ante la autoridad de control (*Datu valsts inspekcija* — DVI), o si resulta jurídicamente adecuado mantener la figura de un responsable interno de privacidad con buzón de contacto específico (`privacy@printprice.pro`).
 - **Documentos afectados:** `01_aviso_legal.md`, `07_politica_privacidad.md`.
-- **¿Bloquea publicación de borradores?:** No bloquea publicación.
+- **¿Bloquea su revisión interna?:** **No bloquea su revisión interna**.
 
-### 4.5. Alcance y Transparencia bajo el Reglamento Europeo de IA (AI Act - Reglamento UE 2024/1689)
-- **Propuesta:** Confirmar que los motores de presupuestación, imposición y preflight son sistemas deterministas (riesgo mínimo) fuera de los requisitos de alto riesgo del AI Act, que el renderizado 3D de maquetas es puramente gráfico local WebGL (sin componente generativo), y que las obligaciones del Art. 50 (transparencia de interacción) aplican estrictamente a interfaces interactivas de agentes virtuales (como `/ai-agent`).
-- **Motivo:** Evitar calificaciones erróneas de "IA híbrida" que susciten cargas regulatorias injustificadas sobre software algorítmico tradicional.
+### 7.5. Clasificación y Obligaciones bajo el Reglamento Europeo de IA (AI Act - Reglamento UE 2024/1689)
+- **Cuestión:** Solicitar análisis jurídico sobre la calificación regulatoria que corresponde atribuir a las diferentes herramientas de software de la plataforma (motores deterministas de cálculo de costes, algoritmos de preflight, renderizador gráfico 3D en cliente WebGL y posibles asistentes conversacionales) a la luz de las definiciones del AI Act, determinando las obligaciones de transparencia (como el Art. 50), catalogación o gobernanza técnica que en su caso resulten aplicables.
 - **Documentos afectados:** `09_politica_transparencia_ia.md`.
-- **¿Bloquea publicación de borradores?:** No bloquea publicación.
+- **¿Bloquea su revisión interna?:** **No bloquea su revisión interna**.

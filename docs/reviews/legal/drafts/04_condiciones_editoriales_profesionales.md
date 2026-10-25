@@ -18,7 +18,7 @@
 ### 2. Contratación Industrial y Papel de Marketplace
 2.1. **Libertad de pactos con la imprenta:** La Editorial selecciona la imprenta industrial para cada proyecto. El contrato de fabricación y compraventa mercantil se perfecciona directamente entre la Editorial y el taller gráfico adjudicatario *(Modelo comercial confirmado)*.  
 2.2. **Facturación directa y condiciones de crédito:** La imprenta factura a la Editorial el importe neto acordado para la producción. Las partes podrán convenir libremente formas de pago diferidas habituales en el sector gráfico (pagarés, confirming, transferencia a 30/60 días), de las cuales PrintPrice es completamente ajena.  
-2.3. **Comisión de intermediación:** PrintPrice liquida a la imprenta adjudicataria su comisión de marketplace del 4 % en su ciclo mensual ordinario *(Modelo confirmado)*. La Editorial no abona comisión adicional a PrintPrice por la gestión del pedido en el marketplace, salvo que contrate servicios específicos de API de pago.
+2.3. **Comisión de intermediación de marketplace:** PrintPrice factura a la imprenta adjudicataria su comisión de marketplace del 4 % calculada estrictamente sobre el importe neto de impresión y acabados efectivamente cobrado (excluyendo transporte debidamente desglosado e impuestos), con facturación mensual posterior *(Modelo comercial aprobado por el propietario el 25/10/2026)*. En caso de cobros parciales o devoluciones acordadas entre la Editorial y el taller, la comisión se ajusta proporcionalmente. La Editorial no abona comisión adicional a PrintPrice por la gestión del pedido en el marketplace.
 
 ---
 
