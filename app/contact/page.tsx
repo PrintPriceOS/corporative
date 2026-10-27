@@ -68,11 +68,11 @@ export default function ContactPage() {
           title: "Desarrolladores & Software",
           category: "INTEGRACIÓN TÉCNICA",
           description: "Integra cálculo de costes, validación de PDFs y enrutamiento directamente en tu ERP o tienda online mediante API.",
-          cta: "Documentación y API ➔",
-          subtext: "→ Accede a especificaciones técnicas",
+          cta: "Solicitar acceso API ➔",
+          subtext: "→ Escribe a api-support@printprice.pro",
           reason: "Según tu exploración de endpoints y esquemas",
           icon: "developer",
-          href: "/developers"
+          href: "mailto:api-support@printprice.pro?subject=Solicitud%20de%20Acceso%20API%20PrintPrice%20OS"
         },
         {
           id: "print_house" as UserType,
@@ -132,11 +132,11 @@ export default function ContactPage() {
           title: "Developers & Software",
           category: "TECHNICAL INTEGRATION",
           description: "Integrate pricing engines, PDF validation, and order routing into your ERP or storefront via REST API.",
-          cta: "Documentation & API ➔",
-          subtext: "→ Access technical specifications",
+          cta: "Request API access ➔",
+          subtext: "→ Write to api-support@printprice.pro",
           reason: "Based on your technical API exploration",
           icon: "developer",
-          href: "/developers"
+          href: "mailto:api-support@printprice.pro?subject=PrintPrice%20OS%20API%20Access%20Request"
         },
         {
           id: "print_house" as UserType,
@@ -196,11 +196,11 @@ export default function ContactPage() {
           title: "Entwickler & Software",
           category: "TECHNISCHE INTEGRATION",
           description: "Integrieren Sie Preiskalkulation, PDF-Preflight und Fertigungsrouting via REST-API direkt in Ihr MIS oder Webshop.",
-          cta: "Dokumentation & API ➔",
-          subtext: "→ Öffnet API-Spezifikationen",
+          cta: "API-Zugang anfragen ➔",
+          subtext: "→ E-Mail an api-support@printprice.pro",
           reason: "Basierend auf Ihrem Interesse an Entwickler-Tools",
           icon: "developer",
-          href: "/developers"
+          href: "mailto:api-support@printprice.pro?subject=PrintPrice%20OS%20API%20Zugangsanfrage"
         },
         {
           id: "print_house" as UserType,
@@ -302,7 +302,7 @@ export default function ContactPage() {
         </p>
       </div>
 
-      <Section variant="secondary">
+      <Section id="api-access" variant="secondary">
         {showRecommendation && recommendedRoute ? (
           <div 
             style={{ 

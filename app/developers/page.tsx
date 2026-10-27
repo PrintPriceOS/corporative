@@ -15,59 +15,79 @@ import { useLocale } from "@/lib/i18n";
 export default function DeveloperPortal() {
   const { locale } = useLocale();
 
-  const quickstartCode = `// Initialize SDK
-import { ppos } from '@ppos/sdk';
-
-const client = new ppos.Client({
-  apiKey: process.env.PPOS_KEY,
-  environment: 'production'
-});
-
-// Perform System Health Check
-const status = await client.control.health();
-console.log(\`Node status: \${status.id} [\${status.state}]\`);`;
-
-  const budgetCode = `// POST /v1/budget/estimate
-const response = await fetch('https://api.printprice.pro/v1/budget/estimate', {
+  const quickstartCode = `// Calculate book offers via standard HTTP fetch
+const response = await fetch('https://api.printprice.pro/api/marketplace/offers', {
   method: 'POST',
-  headers: { 'Authorization': 'Bearer YOUR_KEY' },
+  headers: {
+    'Content-Type': 'application/json',
+    'x-trace-id': 'trace_demo_12345'
+  },
   body: JSON.stringify({
-    component: 'folding-carton',
-    quantity: 5000,
-    materials: ['300gsm-sbs'],
-    dieline: 'v12-structure'
+    copies: 500,
+    interior_pages: 192,
+    format: '148x210',
+    paper_inner: 'offset_white_90',
+    paper_cover: 'couche_gloss_250',
+    binding_method: 'perfect_bound',
+    delivery_country: 'ES'
   })
 });
 
 const result = await response.json();
-console.log(result.price.certified);`;
+console.log(\`Best Offer: €\${result.offers[0].total_price} (\${result.offers[0].print_house})\`);`;
 
-  const preflightCode = `// POST /v1/preflight/verify
-const audit = await ppos.preflight.verify({
-  fileUrl: 'https://storage.net/job-123.pdf',
-  policies: ['enterprise-v2-compliance'],
-  autoFix: true,
-  callback: 'https://your-webhook.com'
+  const budgetCode = `// POST /api/marketplace/offers
+const response = await fetch('https://api.printprice.pro/api/marketplace/offers', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'x-trace-id': 'trace_client_001'
+  },
+  body: JSON.stringify({
+    copies: 500,
+    interior_pages: 192,
+    format: '148x210',
+    paper_inner: 'offset_white_90',
+    paper_cover: 'couche_gloss_250',
+    binding_method: 'perfect_bound',
+    finishing_options: 'matt_lam_scratch'
+  })
 });
 
-console.log(audit.status.id);`;
+const result = await response.json();
+console.log(result.offers);`;
+
+  const preflightCode = `// POST /api/preflight/jobs (Multipart Upload up to 2GB)
+const formData = new FormData();
+formData.append('file', pdfFileBlob, 'manuscrito_interior.pdf');
+
+const response = await fetch('https://api.printprice.pro/api/preflight/jobs', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_PARTNER_TOKEN'
+  },
+  body: formData
+});
+
+const audit = await response.json();
+console.log(\`Job enqueued: \${audit.jobId} [\${audit.status}]\`);`;
 
   const texts = {
     es: {
       heroLabel: 'HERRAMIENTAS PARA DESARROLLADORES',
       heroTitle: 'CONSTRUYE SOBRE LA API DE IMPRESIÓN',
       heroSlogan: ["PRESUPUESTA", "VALIDA", "PRODUCE vía API"],
-      heroSub: 'Calcula costes, valida archivos PDF y enruta trabajos a taller directamente por API REST o SDK.',
+      heroSub: 'Calcula costes, valida archivos PDF y enruta trabajos a taller directamente por API REST estándar y JSON.',
       heroCtaPrimary: 'Solicitar acceso API ➔',
       heroCtaSecondary: 'Ver documentación API ➔',
       quickstartBadge: 'NODO DE ACTIVACIÓN',
       quickstartTitle: 'Integración en minutos',
-      quickstartDesc: 'Realiza tu primera llamada de cálculo o validación en minutos. Nuestro SDK permite conectar la inteligencia gráfica de PrintPrice OS en cualquier sistema.',
+      quickstartDesc: 'Realiza tu primera llamada de cálculo o validación en minutos. Peticiones REST nativas y JSON estructurado sin dependencias privativas.',
       quickstartBtn: 'Comenzar ahora ➔',
-      budgetTitle: 'Cálculo de costes por API',
-      budgetDesc: 'Obtén costes reales basados en especificaciones técnicas de imprenta al instante. Sincroniza tu e-commerce o ERP con nuestro motor de precios.',
+      budgetTitle: 'Cálculo de costes algorítmico',
+      budgetDesc: 'Obtén costes reales de imprenta al instante mediante Book Pricing Engine (BPE). Sincroniza tu e-commerce o ERP con nuestro motor de precios.',
       preflightTitle: 'Validación de archivos automatizada',
-      preflightDesc: 'Ejecuta auditorías preflight antes de enviar a taller. Normaliza geometrías, detecta resoluciones bajas y sangrados insuficientes.',
+      preflightDesc: 'Ejecuta inspecciones preflight antes de enviar a taller. Normaliza geometrías, detecta resoluciones bajas y sangrados insuficientes.',
       useCasesBadge: 'CASOS DE USO',
       useCasesTitle: 'Qué puedes construir',
       cases: [
@@ -77,22 +97,22 @@ console.log(audit.status.id);`;
         { icon: 'node', title: 'Enrutamiento a Taller', desc: 'Asigna pedidos a las imprentas más idóneas según maquinaria, papel y ubicación.' }
       ],
       ctaActionTitle: '¿Listo para integrar la API?',
-      ctaActionDesc: 'Conecta tu software con los motores deterministas de PrintPrice OS sin fricciones operativas innecesarias.',
-      ctaActionBtn: 'Contactar para acceso API ➔'
+      ctaActionDesc: 'Conecta tu software con los motores deterministas de PrintPrice OS. Contacta con ingeniería en api-support@printprice.pro.',
+      ctaActionBtn: 'Solicitar acceso API a soporte ➔'
     },
     en: {
       heroLabel: 'DEVELOPER TOOLS',
       heroTitle: 'BUILD ON THE PRINT API',
       heroSlogan: ["ESTIMATE", "VALIDATE", "PRODUCE via API"],
-      heroSub: 'Calculate costs, validate PDF files, and route production jobs directly via REST API or SDK.',
+      heroSub: 'Calculate costs, validate PDF files, and route production jobs directly via standard REST APIs and JSON.',
       heroCtaPrimary: 'Request API access ➔',
       heroCtaSecondary: 'View API docs ➔',
       quickstartBadge: 'ACTIVATION NODE',
       quickstartTitle: 'Start in minutes',
-      quickstartDesc: 'Make your first pricing or validation call in minutes. Our SDK allows seamless integration of print intelligence into any application or ERP.',
+      quickstartDesc: 'Make your first pricing or validation call in minutes. Standard REST calls with zero proprietary SDK dependencies.',
       quickstartBtn: 'Get started ➔',
-      budgetTitle: 'Estimate cost via API',
-      budgetDesc: 'Get real print costs based on physical specifications instantly. Sync your storefront or internal tools with our precision pricing engine.',
+      budgetTitle: 'Deterministic Cost Estimation',
+      budgetDesc: 'Get real print costs based on physical specifications instantly via BPE. Sync your storefront or ERP with our precision pricing engine.',
       preflightTitle: 'Validate files automatically',
       preflightDesc: 'Run automated preflight checks and detect issues prior to prepress intake. Enforce ISO compliance and normalize page boxes.',
       useCasesBadge: 'USE CASES',
@@ -104,22 +124,22 @@ console.log(audit.status.id);`;
         { icon: 'node', title: 'Production Routing', desc: 'Orchestrate job delivery to qualified production nodes based on real press capabilities.' }
       ],
       ctaActionTitle: 'Ready to integrate the API?',
-      ctaActionDesc: 'Connect your software to the deterministic engines of PrintPrice OS without unnecessary operational overhead.',
-      ctaActionBtn: 'Request API access ➔'
+      ctaActionDesc: 'Connect your software to the deterministic engines of PrintPrice OS. Contact engineering at api-support@printprice.pro.',
+      ctaActionBtn: 'Request API access via support ➔'
     },
     de: {
       heroLabel: 'ENTWICKLER-WERKZEUGE',
       heroTitle: 'BAUEN SIE AUF DER DRUCK-API AUF',
       heroSlogan: ["KALKULIEREN", "PRÜFEN", "PRODUZIEREN via API"],
-      heroSub: 'Berechnen Sie Kosten, validieren Sie PDF-Dateien und leiten Sie Druckaufträge direkt via REST-API oder SDK weiter.',
+      heroSub: 'Berechnen Sie Kosten, validieren Sie PDF-Dateien und leiten Sie Druckaufträge direkt via REST-API und JSON weiter.',
       heroCtaPrimary: 'API-Zugang anfragen ➔',
       heroCtaSecondary: 'API-Dokumentation ansehen ➔',
       quickstartBadge: 'AKTIVIERUNGS-KNOTEN',
       quickstartTitle: 'Start in wenigen Minuten',
-      quickstartDesc: 'Führen Sie Ihren ersten Preiskalkulations- oder Preflight-Aufruf in Minuten aus. Unser SDK bindet Druckintelligenz nahtlos in jede Anwendung ein.',
+      quickstartDesc: 'Führen Sie Ihren ersten Preiskalkulations- oder Preflight-Aufruf in Minuten aus. Standard-REST-Aufrufe ohne proprietäre Abhängigkeiten.',
       quickstartBtn: 'Jetzt starten ➔',
-      budgetTitle: 'Kostenkalkulation via API',
-      budgetDesc: 'Erhalten Sie sofort echte Druckkosten basierend auf technischen Spezifikationen. Synchronisieren Sie Ihren Shop oder Ihr ERP.',
+      budgetTitle: 'Deterministische Kostenkalkulation',
+      budgetDesc: 'Erhalten Sie sofort echte Druckkosten basierend auf technischen Spezifikationen via BPE. Synchronisieren Sie Ihren Shop oder Ihr ERP.',
       preflightTitle: 'Automatische Dateivalidierung',
       preflightDesc: 'Führen Sie Preflight-Prüfungen vor der Weiterleitung an die Druckerei durch. Erkennen Sie Anschnitt- und Geometriefehler automatisch.',
       useCasesBadge: 'ANWENDUNGSFÄLLE',
@@ -131,8 +151,8 @@ console.log(audit.status.id);`;
         { icon: 'node', title: 'Fertigungs-Routing', desc: 'Verteilen Sie Aufträge an die am besten geeigneten Druckereien nach echten Maschinenprofilen.' }
       ],
       ctaActionTitle: 'Bereit für die API-Integration?',
-      ctaActionDesc: 'Verbinden Sie Ihre Software mit den deterministischen Motoren von PrintPrice OS ohne administrativen Mehraufwand.',
-      ctaActionBtn: 'API-Zugang anfragen ➔'
+      ctaActionDesc: 'Verbinden Sie Ihre Software mit den deterministischen Motoren von PrintPrice OS. Kontaktieren Sie uns unter api-support@printprice.pro.',
+      ctaActionBtn: 'API-Zugang beim Support anfragen ➔'
     }
   };
 
@@ -147,7 +167,7 @@ console.log(audit.status.id);`;
         slogan={t.heroSlogan}
         isHeadlineSlogan={false}
         subheadline={t.heroSub}
-        primaryAction={{ label: t.heroCtaPrimary, href: "/contact" }}
+        primaryAction={{ label: t.heroCtaPrimary, href: "/contact#api-access" }}
         secondaryAction={{ label: t.heroCtaSecondary, href: "https://docs.printprice.pro" }}
         variant="particles"
       />
@@ -165,11 +185,11 @@ console.log(audit.status.id);`;
             <p style={{ color: 'var(--text-secondary)', fontSize: '1.15rem', lineHeight: 1.6, marginBottom: '2.5rem', maxWidth: '50ch' }}>
               {t.quickstartDesc}
             </p>
-            <a href="https://docs.printprice.pro" className="btn-primary" style={{ padding: '0.875rem 1.75rem' }}>
+            <a href="https://docs.printprice.pro/docs/api/quickstart" className="btn-primary" style={{ padding: '0.875rem 1.75rem' }}>
               {t.quickstartBtn}
             </a>
           </div>
-          <CodeBlock code={quickstartCode} title="client-init.js" language="javascript" />
+          <CodeBlock code={quickstartCode} title="request-offers.mjs" language="javascript" />
         </div>
       </Section>
 
@@ -178,7 +198,7 @@ console.log(audit.status.id);`;
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(400px, 100%), 1fr))', gap: 'clamp(3rem, 6vw, 5rem)' }}>
           <div>
             <span className="technical-text" style={{ color: 'var(--accent-primary)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '1rem', display: 'block', fontWeight: 900 }}>
-              POST /v1/budget
+              POST /api/marketplace/offers
             </span>
             <h2 style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '-0.03em', marginBottom: '1.25rem' }}>
               {t.budgetTitle}
@@ -190,7 +210,7 @@ console.log(audit.status.id);`;
           </div>
           <div>
             <span className="technical-text" style={{ color: 'var(--accent-primary)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '1rem', display: 'block', fontWeight: 900 }}>
-              POST /v1/preflight
+              POST /api/preflight/jobs
             </span>
             <h2 style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '-0.03em', marginBottom: '1.25rem' }}>
               {t.preflightTitle}
@@ -198,7 +218,7 @@ console.log(audit.status.id);`;
             <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.6, marginBottom: '2rem', maxWidth: '45ch' }}>
               {t.preflightDesc}
             </p>
-            <CodeBlock code={preflightCode} title="trigger-verification.js" language="javascript" />
+            <CodeBlock code={preflightCode} title="trigger-preflight.js" language="javascript" />
           </div>
         </div>
       </Section>
@@ -237,11 +257,11 @@ console.log(audit.status.id);`;
 
       {/* Ready to Build Section */}
       <ActionCTA 
-        slogan="API & SDK PRINTPRICE OS"
+        slogan="API & DESARROLLADORES PRINTPRICE OS"
         title={t.ctaActionTitle}
         description={t.ctaActionDesc}
         buttonLabel={t.ctaActionBtn}
-        buttonHref="/contact"
+        buttonHref="/contact#api-access"
         trackingAction="developers_cta_access"
       />
     </div>
