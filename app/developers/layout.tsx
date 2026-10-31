@@ -1,15 +1,16 @@
 import type { Metadata } from 'next';
-import { constructMetadata, getBreadcrumbJsonLd } from '@/lib/seo';
+import { constructMetadata, getBreadcrumbJsonLd, JSON_LD_DEVELOPERS_SCHEMA } from '@/lib/seo';
 
 export const metadata: Metadata = constructMetadata({
-  title: 'API para Fabricación Gráfica y Automatización | PrintPrice Pro',
-  description: 'Integra presupuesto, preflight PDF y enrutamiento de producción directamente en tu aplicación. Explora la API de PrintPrice OS.',
+  title: 'Developer Hub & REST API — Industrial Print Pricing & 3D Pallet Cubing | PrintPrice Pro',
+  description:
+    'Integrate the deterministic Book Pricing Engine (BPE), SPINE-04 cover geometry, 3D FEFCO 0201 / EUR-EPAL pallet cubing, and editorial warehouse compliance (Zeitfracht, VVA Arvato, Amazon FBA) via REST API.',
   canonical: '/developers',
 });
 
 const breadcrumbs = getBreadcrumbJsonLd([
   { name: 'Inicio', path: '/' },
-  { name: 'Desarrolladores', path: '/developers' },
+  { name: 'Desarrolladores & API', path: '/developers' },
 ]);
 
 export default function DevelopersLayout({ children }: { children: React.ReactNode }) {
@@ -18,6 +19,10 @@ export default function DevelopersLayout({ children }: { children: React.ReactNo
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD_DEVELOPERS_SCHEMA) }}
       />
       {children}
     </>

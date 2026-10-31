@@ -1,0 +1,113 @@
+# PrintPriceOS — Complete Technical & Architectural Reference (llms-full.txt)
+
+> Industrial Operating System, Deterministic Book Pricing Engine (BPE), Authoritative Spine Geometry (`SPINE-04`), Automated PDF Preflight, and 3D EUR-EPAL Logistics & Editorial Warehouse Compliance Platform.
+
+---
+
+## 1. Platform Overview & Architectural Invariants
+
+PrintPriceOS (`https://printprice.pro`) is a B2B/B2C industrial software ecosystem engineered for the graphic arts, book publishing, and print manufacturing industry. It eliminates manual estimating spreadsheets, defective prepress PDFs, and uncalibrated freight surcharges through four non-negotiable architectural invariants:
+
+1. **Server-Authoritative Calculation**: All pricing matrices, sheet impositions, spine widths, carton counts, and LDM freight tariffs are resolved exclusively on the server (`BPE :8004` and `Control Plane :8081`). Zero pricing formulas or unit rates are exposed to the client browser.
+2. **Strict Cost Segregation (`Manufacturing != Packaging != Freight`)**: Every quote and production order maintains independent line items for net press/bindery manufacturing, packaging consumables (FEFCO 0201 cartons, EUR-1 EPAL pallets, kraft edge protectors, stretch film), and carrier transport.
+3. **Multi-Tenant RBAC Isolation**: Each printhouse (`PRINTHOUSE_ADMIN`, `PRINTHOUSE_OPERATOR`) and paper distributor (`SUPPLIER_ADMIN`) operates within an isolated tenant boundary. Competitor plants can never inspect another facility's hourly machine rates, waste curves, or paper discounts.
+4. **Cryptographic & Evidentiary Traceability**: Quotes emitted by BPE are signed via `HMAC-SHA256`. Preflight audits and spine calculations bind an immutable `evidenceId` and `selectedVariantId` to the production order before cart checkout is unlocked.
+
+---
+
+## 2. Core Engines & Mathematical Models
+
+### 2.1 Book Pricing Engine (BPE — `:8004`)
+- **Sheetfed & Digital Imposition**: Evaluates B1 (`700 x 1,000 mm` / `750 x 1,060 mm`), B2 (`500 x 700 mm`), and SRA3 (`320 x 450 mm`) press formats, gripper margins, signatures (`4, 8, 12, 16, 24, 32 pp`), makeready hours, startup sheet waste curves, CTP plate consumption, and bindery line speeds.
+- **Digital vs. Offset Crossover**: Simultaneously scores digital toner/inkjet lines against sheetfed offset presses to highlight `RECOMMENDED BY BPE` and `BEST TARIFF` offers across vetted partner facilities.
+
+### 2.2 Spine & Cover Spread Geometry Engine (`SPINE-04`)
+- **Endpoint**: `POST /api/v1/spine/calculate`
+- **Physical Micron Resolution**: Instead of estimating book thickness from basis weight (`gsm`) alone, `SPINE-04` queries the verified physical caliper in microns (`caliperUm` in `µm`) from the Federated Paper Catalog.
+- **Example (200 pages, 100 gsm, 170 x 240 mm)**:
+  - *Scenario A (Smooth Offset, 98 µm)*: Net block `9.80 mm` -> Sewn spine `11.5 mm` -> Net cover spread `351.5 x 240.0 mm`.
+  - *Scenario B (High-Bulk Cream 1.75x, 175 µm)*: Net block `17.50 mm` -> Sewn spine `20.0 mm` -> Cover spread with 90 mm flaps `540.0 x 240.0 mm`.
+  - *Scenario C (Casebound Hardcover, 150 µm + 2.4 mm Greyboard)*: Computes board dimensions, hinge groove (`Rastri 10.5 mm`), overhang (`2.5 mm`), and cover turn-in (`18.0 mm`).
+
+### 2.3 3D Pallet Cubing & Editorial Warehouse Engine (`LOGISTICS-01` to `04`)
+- **Net Trimmed Book Mass**:
+  - Interior mass: `((Width_mm * Height_mm) / 1,000,000) * (Pages / 2) * (GSM / 1,000)`
+  - Hardcover greyboard (`1.20 g/cm³` density) + endpapers (`2 x 4 pp`) + adhesive/cloth allowance.
+- **Ergonomic FEFCO 0201 Cartonization**: Automatically caps standard cartons at `<= 15.0 kg` gross weight to comply with occupational safety and Amazon FBA single-box thresholds.
+- **EUR-EPAL (`1,200 x 800 mm`) Interlocked Tiling**: Computes optimal cartons per layer using cross-stacked (*Kreuzverband*) patterns, bottom slip sheets, top protective cardboard lids, kraft corner protectors, and `2x2` plastic strapping bands.
+- **Editorial Receiving Dock Profiles**:
+  - `ZEITFRACHT_ERFURT` (Zeitfracht Medien, Erfurt): Max height `1,200 mm` (including 144 mm EPAL base), max gross weight `1,000 kg`, mandatory `30 mm` perimeter setback (zero overhang), rear-unloading dock truck (`bed height >= 120 cm`, `width >= 220 cm`), mandatory 48h advance slot booking.
+  - `VVA_ARVATO_GUETERSLOH` (VVA Arvato, Gütersloh): Max height `1,300 mm`, max weight `1,000 kg`, mandatory flat top layer (`Requires Flat Top Layer = true`), pallet exchange capability.
+  - `AMAZON_FBA_EU`: Strict `15.0 kg` carton limit (`23.0 kg` absolute ceiling with `HEAVY_PACKAGE` tag), `635 mm` max carton side, GS1-128 / FNSKU barcode compliance.
+- **LDM & Chargeable Weight**:
+  - 1 EUR-Pallet (`1,200 x 800 mm`) = `0.4 LDM` (Loading Meters).
+  - Road freight conversion: `1 LDM = 1,850 kg` (`740 kg` minimum chargeable weight per non-stackable pallet space).
+
+---
+
+## 3. Primary REST API Contracts
+
+### 3.1 Calculate 3D Cubing & Landed Logistics Quote
+- **Method & Path**: `POST https://control.printprice.pro/api/logistics/calculate-quote`
+- **Headers**:
+  - `Authorization: Bearer <jwt_token>`
+  - `Content-Type: application/json`
+  - `x-tenant-id: <printhouse_tenant_id>`
+- **Request Payload**:
+  ```json
+  {
+    "trimWidthMm": 148,
+    "trimHeightMm": 210,
+    "pages": 320,
+    "interiorGrammageGsm": 90,
+    "interiorBulkFactor": 1.20,
+    "bindingType": "hardcover",
+    "boardThicknessMm": 2.5,
+    "quantity": 2500,
+    "warehouseProfileCode": "ZEITFRACHT_ERFURT",
+    "originCountry": "DE",
+    "destCountry": "DE",
+    "destPostal": "99098",
+    "stackabilityHandling": "STRICT_LDM_NON_STACKABLE",
+    "slotBookingManagement": "SHIPPER_MANAGED"
+  }
+  ```
+- **Response Highlights**: Returns `unitBookWeightGrams`, `cartonPlan` (books per carton, total cartons, gross carton weight), `palletPlan` (pallets count, layers per pallet, max height mm, LDM, chargeable weight kg), `complianceAudit` (`ZEITFRACHT_ERFURT` pass/warnings), and segregated `costBreakdown` (`packagingConsumablesEur` vs. `carrierFreightEur`).
+
+### 3.2 Additional Logistics & Printhouse Endpoints
+- `GET /api/logistics/warehouse-profiles` — List active editorial warehouse compliance profiles.
+- `GET /api/printhouse/shipping/logistics-matrix` — Retrieve printhouse pallet consumables and carrier tariff matrix.
+- `POST /api/printhouse/shipping/adopt-standard-matrix` — Adopt the platform standard logistics matrix in 1 click (Dachser, DB Schenker, Raben).
+- `POST /api/marketplace/offers` — Request multi-printer BPE manufacturing quotes with HMAC-SHA256 signatures.
+- `POST /api/v1/spine/calculate` — Authoritative spine and cover spread geometry calculation (`SPINE-04`).
+
+---
+
+## 4. Printhouse Control Plane Setup (`/printhouse/setup`)
+
+New print houses onboard into Control Plane through 12 structured modules:
+1. `OVERVIEW` — Readiness percentage tracker & `GuidedTutorialOverlay`.
+2. `COMPANY` — Corporate tax ID, EUR currency, ISO 12647-2 / FOGRA, FSC/PEFC certifications.
+3. `SITES` — Multi-site production plants, loading docks, and working calendars.
+4. `MACHINES` — Sheetfed offset (B1/B2/B3), web offset, digital toner/inkjet presses, folders, sewers, PUR binders, casing-in lines.
+5. `CAPABILITIES` — Trim format limits, spine ranges, binding families, and surface finishes.
+6. `MATERIALS` — House paper stock & 1-click connection to **Paper Supplier Hub** (verified `gsm`, `µm`, and bulk).
+7. `CAPACITY` — Shift scheduling and daily machine-hour ceilings.
+8. `LEAD_TIMES` — Standard and express SLA turnaround days per binding family.
+9. `PRICING` — Canonical `rates_json` industrial pricing editor, quick calibration, commercial price books, and live simulator.
+10. `SHIPPING` — 1-click standard logistics matrix adoption, custom carrier rates, and live 3D isometric EUR-EPAL pallet diagram preview (`PalletDiagramPreview`).
+11. `INTEGRATIONS` — Scoped API keys, signed order webhooks, and MIS/ERP JDF job ticket exports.
+12. `MARKETPLACE` — Automated readiness audit and immutable snapshot submission for marketplace accreditation.
+
+---
+
+## 5. Canonical Links & Documentation
+
+- **Corporate Website**: https://printprice.pro
+- **Developer Portal**: https://printprice.pro/developers
+- **Book Price Calculator (Price It)**: https://printprice.pro/products/budget (Live App: https://budget.printprice.pro)
+- **Print Houses Portal**: https://printprice.pro/for-printhouses (Live Console: https://control.printprice.pro)
+- **Official Documentation**: https://docs.printprice.pro/docs/
+- **3D Cubing & Logistics Engine Docs**: https://docs.printprice.pro/docs/engines/logistics-cubing-engine
+- **Logistics REST API Reference**: https://docs.printprice.pro/docs/api/logistics-api
+- **API Overview**: https://docs.printprice.pro/docs/api/overview

@@ -1,16 +1,24 @@
 import type { Metadata } from 'next';
-import { constructMetadata, getBreadcrumbJsonLd } from '@/lib/seo';
+import { constructMetadata, getBreadcrumbJsonLd, getSoftwareApplicationJsonLd } from '@/lib/seo';
 
 export const metadata: Metadata = constructMetadata({
-  title: 'Motor de Captación y Modelado para Imprentas | PrintPrice Pro',
-  description: 'Recibe órdenes de trabajo verificadas con registro técnico de preflight, modelado de maquinaria gráfica y especificaciones acordadas en el pedido.',
+  title: 'Control Plane para Imprentas — ERP Gráfico, Maquinaria y Cubicaje 3D EPAL | PrintPrice Pro',
+  description:
+    'Conecta tu imprenta a Control Plane (control.printprice.pro): onboarding guiado de 12 módulos, perfilado offset/digital, Paper Supplier Hub, matriz de cubicaje 3D EPAL (Zeitfracht / VVA) y pedidos con PDF auditados.',
   canonical: '/for-printhouses',
 });
 
 const breadcrumbs = getBreadcrumbJsonLd([
   { name: 'Inicio', path: '/' },
-  { name: 'Imprentas y Talleres', path: '/for-printhouses' },
+  { name: 'Imprentas y Talleres (Control Plane)', path: '/for-printhouses' },
 ]);
+
+const controlPlaneAppJsonLd = getSoftwareApplicationJsonLd({
+  name: 'PrintPriceOS Control Plane — Printhouse Hub & 3D Logistics ERP',
+  description:
+    'Industrial operating system for print houses and bindery plants featuring 12-module guided onboarding, offset/digital fleet profiling, Paper Supplier Hub integration, and 3D EUR-EPAL pallet cubing.',
+  path: '/for-printhouses',
+});
 
 export default function ForPrinthousesLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -18,6 +26,10 @@ export default function ForPrinthousesLayout({ children }: { children: React.Rea
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(controlPlaneAppJsonLd) }}
       />
       {children}
     </>

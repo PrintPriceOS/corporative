@@ -25,7 +25,7 @@ const inter = Inter({
   weight: ["400"],
 });
 
-import { constructMetadata, JSON_LD_ORGANIZATION, JSON_LD_WEBSITE } from "@/lib/seo";
+import { constructMetadata, JSON_LD_GLOBAL_GRAPH } from "@/lib/seo";
 
 export const metadata: Metadata = constructMetadata();
 
@@ -40,14 +40,10 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${manrope.variable} ${spaceGrotesk.variable} ${inter.variable}`} suppressHydrationWarning>
       <head>
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD_ORGANIZATION) }}
-          />
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD_WEBSITE) }}
-          />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD_GLOBAL_GRAPH) }}
+        />
       </head>
       <body>
         <ThemeProvider>
@@ -66,4 +62,3 @@ export default function RootLayout({
     </html>
   );
 }
-

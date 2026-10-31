@@ -1,0 +1,27 @@
+# PrintPriceOS (PrintPrice Pro)
+
+> Industrial Intelligence Layer, Book Manufacturing ERP, Automated PDF Preflight, and 3D Pallet Cubing & Logistics Infrastructure.
+
+PrintPriceOS connects authors, publishing houses, industrial print plants (sheetfed offset, digital, and bindery lines), and paper distributors into a deterministic, server-authoritative manufacturing and logistics network.
+
+## Core Capabilities
+
+- **Book Pricing Engine (BPE — `:8004`)**: Sub-second deterministic sheet imposition (B1, B2, SRA3), press makeready calculation, startup waste curves, CTP plate modeling, Digital vs. Offset crossover optimization, and HMAC-SHA256 cryptographically signed quotes.
+- **Authoritative Spine & Cover Spread Geometry (`SPINE-04`)**: Computes net paper block thickness (`mm`), spine width (`mm`), hardcover greyboard dimensions, hinge groove (`Rastri`), and cover turn-in (`15–18 mm`) directly from verified physical paper microns (`µm`) and binding profiles via `POST /api/v1/spine/calculate`.
+- **3D Pallet Cubing & Logistics Engine (`LOGISTICS-01` to `04`)**: Trimmed book mass estimation (including `1.20 g/cm³` hardcover greyboard and endpapers), ergonomic FEFCO 0201 cartonization (`<= 15 kg` per box), and interlocking cross-stacked EUR-EPAL pallet tiling (`1,200 x 800 mm`).
+- **Editorial Warehouse Compliance Profiles**: Automated dock validation rules for **Zeitfracht Medien Erfurt** (`1,200 mm` max height, `1,000 kg` max weight, `30 mm` mandatory perimeter setback, dock-level truck `>= 120 cm`, 48h slot booking), **VVA Arvato Gütersloh** (`1,300 mm` max height, mandatory flat top layer), and **Amazon EU FBA** (`15 kg` single-box safety limit, GS1-128 / SSCC labeling).
+- **Segregated Cost Governance (`Mfg != Pack != Freight`)**: Strict server-side separation between net print manufacturing cost, packaging consumables (EPAL pallets, FEFCO cartons, edge protectors, stretch film), and regional LTL/FTL carrier freight (0.4 LDM per EUR-pallet, `1,850 kg/LDM` chargeable weight factor).
+- **Control Plane & Printhouse Hub (`control.printprice.pro`)**: 12-module guided plant onboarding (Company, Multi-Site Facilities, Machinery Fleet, Capabilities, Federated Paper Supplier Hub, Capacity, Lead Times, Industrial Pricing, 3D Shipping Matrix, MIS/ERP Integrations, and Governed Marketplace Review) with strict Multi-Tenant RBAC isolation.
+
+## Key Ecosystem Portals & Routes
+
+- **Corporate Hub**: https://printprice.pro/
+- **Book Price Calculator & Order Workstation**: https://budget.printprice.pro/ (Product overview: https://printprice.pro/products/budget)
+- **Control Plane (Printhouse & Supplier Hub)**: https://control.printprice.pro/ (Overview for Print Houses: https://printprice.pro/for-printhouses)
+- **Developer Hub & API Showcase**: https://printprice.pro/developers
+- **Industrial Solutions**: https://printprice.pro/solutions
+- **Official Technical Documentation**: https://docs.printprice.pro/docs/
+- **3D Cubing & Logistics Engine Guide**: https://docs.printprice.pro/docs/engines/logistics-cubing-engine
+- **Logistics REST API Reference**: https://docs.printprice.pro/docs/api/logistics-api
+- **API Contracts & Overview**: https://docs.printprice.pro/docs/api/overview
+- **Extended LLM Context**: https://printprice.pro/llms-full.txt
