@@ -7,7 +7,7 @@ import { Section } from '@/components/ui/Section';
 import { HeroPlatform } from '@/components/monolith/HeroPlatform';
 import { ActionCTA } from '@/components/monolith/ActionCTA';
 import { useLocale } from '@/lib/i18n';
-import { Calculator, ShieldCheck, Factory, BookOpen, Library, Settings, FileText } from 'lucide-react';
+import { Calculator, ShieldCheck, Factory, BookOpen, Library, Settings, FileText, PackageCheck, Truck, Layers, Scale, TrendingUp, ArrowUpRight } from 'lucide-react';
 
 export default function Home() {
   const { dict, locale } = useLocale();
@@ -775,6 +775,187 @@ export default function Home() {
       {/* 
         SECCIÓN 4: COMPARATIVAS ORGANIZADAS POR PRODUCTO (PRICE IT, FIX IT, PRINT IT)
       */}
+      {/* SECCION 3.5: SMART SHIPPING & 3D LOGISTICS */}
+      <section
+        id="smart-shipping-logistics"
+        style={{
+          padding: 'clamp(4rem, 8vw, 6.5rem) 0',
+          background: 'var(--bg-primary)',
+          borderBottom: '1px solid var(--border-color)',
+        }}
+      >
+        <Container>
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+              gap: '1.5rem',
+              marginBottom: '3rem',
+            }}
+          >
+            <div style={{ maxWidth: '760px' }}>
+              <span className="pill-badge" style={{ marginBottom: '0.75rem' }}>
+                SMART SHIPPING &amp; 3D LOGISTICS ENGINE
+              </span>
+              <h2 style={{ fontSize: 'clamp(1.85rem, 4.2vw, 2.65rem)', marginBottom: '0.85rem', letterSpacing: '-0.025em', fontWeight: 900 }}>
+                {locale === 'es'
+                  ? 'Cubicaje 3D sobre Euro-Palet EPAL y Cumplimiento con Almacenes Editoriales'
+                  : locale === 'de'
+                  ? '3D-Palettierung auf EPAL-Europaletten & Richtlinien für Verlagsauslieferungen'
+                  : '3D EPAL Euro-Pallet Cubing & Editorial Hub Delivery Compliance'}
+              </h2>
+              <p style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', lineHeight: 1.65, margin: 0 }}>
+                {locale === 'es'
+                  ? 'En la producción industrial de libros, el transporte y la recepción en distribuidoras (Verlagsauslieferungen) determinan la rentabilidad real. Nuestro motor calcula desde la masa neta guillotinada de cada ejemplar hasta el mosaico entrelazado en palet y las reservas de muelle a 48 h.'
+                  : locale === 'de'
+                  ? 'Im industriellen Buchdruck entscheiden Fracht, Palettierung und Anlieferrichtlinien über die reale Marge. Unsere Engine berechnet vom beschnittenen Einzelbuchgewicht bis zum Kreuzverband auf der Europalette und der 48h-Zeitfensterbuchung jeden Schritt deterministisch.'
+                  : 'In industrial book manufacturing, freight matrices and receiving dock rules dictate true landed profitability. Our engine deterministically computes everything from trimmed book mass to interlocked EPAL pallet layers and 48h dock slot governance.'}
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+              <a
+                href="https://docs.printprice.pro/docs/engines/logistics-cubing-engine"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary"
+                style={{ padding: '0.75rem 1.25rem', fontSize: '0.875rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+              >
+                <span>{locale === 'es' ? 'Guía Técnica 3D' : locale === 'de' ? 'Technischer Leitfaden' : '3D Engine Docs'}</span>
+                <ArrowUpRight size={16} />
+              </a>
+              <Link
+                href="/developers#code-showcase"
+                className="btn-primary"
+                style={{ padding: '0.75rem 1.25rem', fontSize: '0.875rem' }}
+              >
+                {locale === 'es' ? 'Explorar Logistics API ➔' : locale === 'de' ? 'Logistics API testen ➔' : 'Explore Logistics API ➔'}
+              </Link>
+            </div>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(310px, 100%), 1fr))',
+              gap: '1.5rem',
+            }}
+          >
+            {/* Card 1: 3D Pallet Stacking & Net Weight Engine */}
+            <div className="rounded-card" style={{ padding: '2rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Layers size={22} />
+                </div>
+                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--accent-primary)', background: 'var(--accent-container)', padding: '0.2rem 0.55rem', borderRadius: 'var(--radius-pill)' }}>
+                  1200 × 800 MM EPAL
+                </span>
+              </div>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0 }}>
+                {locale === 'es' ? '3D Pallet Stacking & Net Weight Engine' : locale === 'de' ? '3D-Palettierung & Nettogewichts-Engine' : '3D Pallet Stacking & Net Weight Engine'}
+              </h3>
+              <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
+                {locale === 'es'
+                  ? 'Cálculo determinista de la masa neta guillotinada del libro (incluyendo tapa dura con cartón gris a 1,20 g/cm³ y guardas), encajado ergonómico en cajas FEFCO 0201 (≤ 15 kg) y apilado en capas entrelazadas (Kreuzverband) sobre Euro-Palets EPAL (1.200 × 800 mm).'
+                  : locale === 'de'
+                  ? 'Deterministische Berechnung des beschnittenen Buchgewichts (inkl. Hardcover-Graupappe mit 1,20 g/cm³ und Vorsatzpapier), ergonomische FEFCO-0201-Kartonpackung (≤ 15 kg) und Kreuzverband-Stapelung auf EPAL-Europaletten (1.200 × 800 mm).'
+                  : 'Deterministic calculation of trimmed book net mass (including hardcover greyboard at 1.20 g/cm³ and endpapers), ergonomic FEFCO 0201 carton packing (≤ 15 kg), and interlocked pinwheel stacking on EPAL Euro-Pallets (1,200 × 800 mm).'}
+              </p>
+            </div>
+
+            {/* Card 2: Editorial Hub Delivery Compliance */}
+            <div className="rounded-card" style={{ padding: '2rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <PackageCheck size={22} />
+                </div>
+                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--accent-primary)', background: 'var(--accent-container)', padding: '0.2rem 0.55rem', borderRadius: 'var(--radius-pill)' }}>
+                  ZEITFRACHT · VVA · FBA
+                </span>
+              </div>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0 }}>
+                {locale === 'es' ? 'Editorial Hub Delivery Compliance' : locale === 'de' ? 'Compliance für Verlagsauslieferungen' : 'Editorial Hub Delivery Compliance'}
+              </h3>
+              <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
+                {locale === 'es'
+                  ? 'Validación nativa de perfiles de recepción para Zeitfracht Erfurt (1.200 mm máx., 1.000 kg, retranqueo interior de 3 cm sin salientes), VVA Arvato Gütersloh (1.300 mm, 700 kg, capa superior plana obligatoria) y Amazon EU FBA (≤ 15 kg/caja), previniendo recargos de €40 a €185.'
+                  : locale === 'de'
+                  ? 'Native Prüfung der Anlieferprofile für Zeitfracht Erfurt (max. 1.200 mm, 1.000 kg, 3 cm Randrücksprung ohne Überstand), VVA Arvato Gütersloh (1.300 mm, 700 kg, flache oberste Lage Pflicht) und Amazon EU FBA (≤ 15 kg/Karton) – schützt vor Strafgebühren von 40 € bis 185 €.'
+                  : 'Native validation of receiving dock profiles for Zeitfracht Erfurt (1,200 mm max height, 1,000 kg, 3 cm perimeter setback), VVA Arvato Gütersloh (1,300 mm, 700 kg, mandatory flat top layer), and Amazon EU FBA (15 kg/carton), preventing €40–€185 dock penalties.'}
+              </p>
+            </div>
+
+            {/* Card 3: Strict Cost Segregation */}
+            <div className="rounded-card" style={{ padding: '2rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Scale size={22} />
+                </div>
+                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--accent-primary)', background: 'var(--accent-container)', padding: '0.2rem 0.55rem', borderRadius: 'var(--radius-pill)' }}>
+                  MFG ≠ PACK ≠ FREIGHT
+                </span>
+              </div>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0 }}>
+                {locale === 'es' ? 'Strict Cost Segregation' : locale === 'de' ? 'Strikte Kostentrennung' : 'Strict Cost Segregation'}
+              </h3>
+              <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
+                {locale === 'es'
+                  ? 'Desacoplamiento contable y comercial estricto entre el coste industrial de fabricación (manufacturingPrice), los consumibles físicos de embalaje (palets EPAL, cajas FEFCO y film estirable: packagingMaterialsCostEur) y la tarifa del transportista (carrierFreightCostEur).'
+                  : locale === 'de'
+                  ? 'Strikte buchhalterische Entkopplung zwischen reinen Druck-Herstellkosten (manufacturingPrice), physischem Verpackungsmaterial (EPAL-Paletten, FEFCO-Kartons, Stretchfolie: packagingMaterialsCostEur) und Speditionsfracht (carrierFreightCostEur).'
+                  : 'Transparent accounting and API decoupling between print manufacturing cost (manufacturingPrice), physical packaging consumables (EPAL pallets, FEFCO cartons, stretch wrap: packagingMaterialsCostEur), and carrier freight (carrierFreightCostEur).'}
+              </p>
+            </div>
+
+            {/* Card 4: Freight & Tracking Intelligence */}
+            <div className="rounded-card" style={{ padding: '2rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Truck size={22} />
+                </div>
+                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--accent-primary)', background: 'var(--accent-container)', padding: '0.2rem 0.55rem', borderRadius: 'var(--radius-pill)' }}>
+                  0.4 LDM · 48H SLOT · SSCC
+                </span>
+              </div>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0 }}>
+                {locale === 'es' ? 'Freight & Tracking Intelligence' : locale === 'de' ? 'Fracht-, LDM- & Tracking-Intelligenz' : 'Freight & Tracking Intelligence'}
+              </h3>
+              <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
+                {locale === 'es'
+                  ? 'Soporte para metros de carga (0,4 LDM = 740 kg tasables en palets no remontables), camiones de doble piso (Doppelstock), gestión de reservas de muelle con 48 h de antelación (+2 días de buffer o aviso automático) y tracking híbrido (webhooks de carrier o código GS1-128 SSCC / NVE de 18 dígitos).'
+                  : locale === 'de'
+                  ? 'Berechnung von Lademetern (0,4 LDM = 740 kg frachtpflichtiges Gewicht bei nicht stapelbaren Paletten), Doppelstock-LKW, 48h-Zeitfenstersteuerung (+2 Tage Puffer oder automatische Avis-E-Mail) sowie hybrides Tracking (Carrier-API oder 18-stelliger GS1-128 SSCC/NVE Barcode).'
+                  : 'Full support for Loading Meters (0.4 LDM = 740 kg min taxable weight on non-stackable pallets), double-deck trailers, 48h dock slot booking governance (+2d carrier buffer or automated dispatch notice), and dual tracking (carrier webhooks vs. 18-digit GS1-128 SSCC / NVE barcodes).'}
+              </p>
+            </div>
+
+            {/* Card 5: Full-Pallet Run Optimizer */}
+            <div className="rounded-card" style={{ padding: '2rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ width: '42px', height: '42px', borderRadius: '10px', background: 'var(--accent-container)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <TrendingUp size={22} />
+                </div>
+                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--accent-primary)', background: 'var(--accent-container)', padding: '0.2rem 0.55rem', borderRadius: 'var(--radius-pill)' }}>
+                  DELTA Q- / DELTA Q+
+                </span>
+              </div>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0 }}>
+                {locale === 'es' ? 'Full-Pallet Run Optimizer (ΔQ- / ΔQ+)' : locale === 'de' ? 'Vollpaletten-Auflagenoptimierer (ΔQ- / ΔQ+)' : 'Full-Pallet Run Optimizer (ΔQ- / ΔQ+)'}
+              </h3>
+              <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
+                {locale === 'es'
+                  ? 'Cuando una tirada genera un último palet a media carga ("transporte de aire"), el optimizador sugiere micro-ajustes exactos de cantidad: reducir ejemplares (ΔQ-) para ahorrar un palet completo o completar el último palet al 100% (ΔQ+) diluyendo el coste logístico unitario.'
+                  : locale === 'de'
+                  ? 'Wenn eine Auflage eine halbvolle Restpalette erzeugt, schlägt der Optimierer exakte Mengenkorrekturen vor: Auflage leicht reduzieren (ΔQ-), um eine komplette Palette einzusparen, oder die letzte Palette zu 100 % auffüllen (ΔQ+), um die Stückfrachtkosten zu senken.'
+                  : 'Whenever a print run leaves a half-empty remainder pallet, the algorithm computes exact run adjustments: trim quantity (ΔQ-) to eliminate an entire pallet fee, or top up the final pallet to 100% capacity (ΔQ+) to minimize landed unit cost per book.'}
+              </p>
+            </div>
+          </div>
+        </Container>
+      </section>
+
       <section
         id="comparativas"
         style={{
