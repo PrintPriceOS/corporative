@@ -174,6 +174,12 @@ export default function ForPublishersPage() {
           desc: 'Guarda cada título con su combinación certificada de papel, acabado y evidencia comercial (evidenceId). Lanza una 2ª o 5ª edición en 10 segundos comparando tiradas al instante.',
           icon: Library,
         },
+        {
+          badge: '07 / 3D SOFT-PROOF & B2B HUB',
+          title: 'Visor 3D Paramétrico y Firma "APPROVE FOR PRESS"',
+          desc: 'Inspecciona en 360° el lomo real calculado (PHASE-11A), ceja de cartoné (3 mm) y esquinas TrimBox/BleedBox, emite firma digital SHA-256, sigue los 6 hitos de planta en vivo y descarga albaranes POD y certificados FSC/PEFC.',
+          icon: PackageCheck,
+        },
       ],
 
       // FAQ
@@ -346,6 +352,12 @@ export default function ForPublishersPage() {
           desc: 'Store every title with its certified paper grade, finish, and immutable evidenceId. Quote a 2nd or 5th reprint across multiple run quantities in 10 seconds.',
           icon: Library,
         },
+        {
+          badge: '07 / 3D SOFT-PROOF & B2B HUB',
+          title: 'Parametric 3D Soft-Proofing & "APPROVE FOR PRESS"',
+          desc: 'Inspect true 3D spine width (PHASE-11A), 3 mm hardcover overhang, and TrimBox/BleedBox corners in 360°, issue SHA-256 press sign-off, track 6 live manufacturing milestones, and download signed PODs and FSC/PEFC certificates.',
+          icon: PackageCheck,
+        },
       ],
 
       faqHeading: 'Frequently Asked Questions for Publishing Production Teams',
@@ -516,6 +528,12 @@ export default function ForPublishersPage() {
           title: 'Parametrisches Nachdruck-Gedächtnis',
           desc: 'Speichern Sie jeden Titel mit zertifizierter Papiersorte, Veredelung und evidenceId. Kalkulieren Sie die 2. oder 5. Auflage über mehrere Mengenstaffeln in 10 Sekunden.',
           icon: Library,
+        },
+        {
+          badge: '07 / 3D SOFT-PROOF & B2B HUB',
+          title: 'Parametrischer 3D-Softproof & "APPROVE FOR PRESS"',
+          desc: 'Prüfen Sie in 360° die exakte Rückenbreite (PHASE-11A), 3 mm Buchdecken-Überstand und TrimBox/BleedBox-Ecken, erteilen Sie die digitale SHA-256-Druckfreigabe, verfolgen Sie 6 Live-Meilensteine und laden Sie signierte POD-Lieferscheine herunter.',
+          icon: PackageCheck,
         },
       ],
 

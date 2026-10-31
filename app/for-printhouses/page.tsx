@@ -224,24 +224,24 @@ export default function ForPrinthousesPage() {
           icon: Inbox
         },
         {
-          badge: 'MÓDULO 03 · /PREFLIGHT/JOBS',
-          title: 'Servicio Preflight PDF y Geometría de Cubierta',
-          desc: 'Inspección automatizada de los PDFs de interior y cubierta frente a la geometría oficial calculada por el motor SPINE-04 antes de insolar planchas o lanzar a RIP digital.',
+          badge: 'MÓDULO 03 · /PREFLIGHT/JOBS (PHASE-11A FIX IT)',
+          title: 'Motor Automático FIX IT & Geometría de Lomo',
+          desc: 'Inspección y saneamiento automatizado de PDFs: síntesis de sangrado por reflexión espejo (+3 mm / +5 mm / +15 mm cartoné) y recalibrado del lomo antes de insolar planchas CTP.',
           bullets: [
-            'Verificación de TrimBox, BleedBox (+3 mm), vuelta de forro (15 mm) y canal de bisagra (Rastri).',
-            'Control de espacios de color CMYK / 1-1 negro, resolución de imágenes e incrustación tipográfica.',
-            'Trazabilidad completa mediante evidenceId vinculada al expediente del pedido.'
+            'Auto-Fix en 1 clic: genera sangrado espejo (+3 mm) y reajusta el lomo de cubierta a la micra exacta.',
+            'Control colorimétrico TAC (≤ 300% estucado ISO Coated v2 / ≤ 260% offset) y negro puro en texto < 12pt.',
+            'Integrado con el Visor 3D de Soft-Proofing del editor con firma digital SHA-256 "APPROVE FOR PRESS".'
           ],
           icon: FileSearch
         },
         {
-          badge: 'MÓDULO 04 · /MANUFACTURING',
-          title: 'Cola de Fabricación y Estados de Planta',
-          desc: 'Organiza el flujo físico del trabajo desde preimpresión hasta expedición con estados normalizados que informan automáticamente al cliente editorial.',
+          badge: 'MÓDULO 04 · /MANUFACTURING (PHASE-11B IMPOSITION)',
+          title: 'Imposición Dinámica, Planchas CTP y Cola de Planta',
+          desc: 'Descompone automáticamente páginas en signaturas (32, 16, 8, 4 pp) ajustadas a formatos B1/B2/SRA3, aplica compensación de arrastre (creep) y calcula mermas de puesta a punto.',
           bullets: [
-            'Transiciones trazables: EN COLA → PREIMPRESIÓN → EN PRODUCCIÓN → ENCUADERNACIÓN → ENVIADO.',
-            'Asignación a máquina específica (Offset o Digital) según el cruce óptimo calculado por BPE.',
-            'Eliminación de correos manuales de seguimiento para tu equipo de atención al cliente.'
+            'Trazado editorial automático (ej. 240 pp en B1 → 7×32pp + 1×16pp = 64 planchas CTP CMYK 4/4).',
+            'Compensación progresiva de arrastre (Creep) en caballete y mermas Offset vs Rotativa vs Digital.',
+            'Enrutamiento directo de signaturas y planchas a cada prensa con telemetría de 6 hitos en vivo.'
           ],
           icon: Cpu
         },
@@ -565,24 +565,24 @@ export default function ForPrinthousesPage() {
           icon: Inbox
         },
         {
-          badge: 'MODULE 03 · /PREFLIGHT/JOBS',
-          title: 'Automated PDF Preflight & Cover Geometry Audit',
-          desc: 'Automated inspection of interior and cover PDFs against the authoritative geometry calculated by SPINE-04 before imaging CTP plates or queuing digital RIPs.',
+          badge: 'MODULE 03 · /PREFLIGHT/JOBS (PHASE-11A FIX IT)',
+          title: 'Automated FIX IT Engine & Spine Geometry Audit',
+          desc: 'Automated PDF inspection and remediation: edge-mirror bleed synthesis (+3 mm / +5 mm / +15 mm hardcover wrap) and dynamic spine recalibration prior to CTP imaging.',
           bullets: [
-            'Verifies TrimBox, BleedBox (+3 mm), hardcover turn-in (15 mm), and hinge groove (Rastri).',
-            'Checks CMYK / 1-1 monochrome color spaces, effective image resolution, and font embedding.',
-            'Full evidentiary traceability via evidenceId permanently linked to the order record.'
+            '1-Click Auto-Fix: synthesizes +3 mm mirror bleed and recalibrates cover spine templates automatically.',
+            'Enforces TAC ink limits (≤ 300% Coated FOGRA39 / ≤ 260% Uncoated) and pure black text (< 12pt).',
+            'Connected to the Publisher 3D Soft-Proofing Viewer with SHA-256 "APPROVE FOR PRESS" sign-off.'
           ],
           icon: FileSearch
         },
         {
-          badge: 'MODULE 04 · /MANUFACTURING',
-          title: 'Manufacturing Queue & Shop-Floor Statuses',
-          desc: 'Orchestrate physical job progression from prepress to dispatch with standardized states that automatically notify the publishing client.',
+          badge: 'MODULE 04 · /MANUFACTURING (PHASE-11B IMPOSITION)',
+          title: 'Dynamic Imposition, CTP Plates & Press Queue',
+          desc: 'Automatically decomposes pages into folding signatures (32, 16, 8, 4 pp) across B1/B2/SRA3 sheets, applies progressive saddle-stitch creep, and models make-ready waste.',
           bullets: [
-            'Audited transitions: QUEUED → PREPRESS → IN_PRODUCTION → BINDERY → READY_TO_SHIP → SHIPPED.',
-            'Direct assignment to specific Offset or Digital presses based on BPE crossover optimization.',
-            'Eliminates manual status-check emails for your customer service and production planners.'
+            'Editorial signature breakdown (e.g., 240 pp on B1 → 7×32pp + 1×16pp = 64 CMYK 4/4 CTP plates).',
+            'Progressive creep shingling and technical make-ready waste for Sheetfed Offset, Web Rotary, and Digital.',
+            'Direct signature routing to target presses with 6-stage real-time publisher telemetry.'
           ],
           icon: Cpu
         },
@@ -906,24 +906,24 @@ export default function ForPrinthousesPage() {
           icon: Inbox
         },
         {
-          badge: 'MODUL 03 · /PREFLIGHT/JOBS',
-          title: 'Automatisiertes PDF-Preflight & Umschlaggeometrie',
-          desc: 'Automatische Prüfung von Innenteil- und Umschlag-PDFs gegen die offizielle SPINE-04-Geometrie vor der Plattenbelichtung oder Übergabe an das Digital-RIP.',
+          badge: 'MODUL 03 · /PREFLIGHT/JOBS (PHASE-11A FIX IT)',
+          title: 'Automatisierte FIX-IT-Engine & Buchrückengeometrie',
+          desc: 'Automatische PDF-Prüfung und Korrektur: Spiegel-Beschnittsynthese (+3 mm / +5 mm / +15 mm Einschlag) und automatische Umschlagrücken-Kalibrierung vor der CTP-Belichtung.',
           bullets: [
-            'Prüft TrimBox, BleedBox (+3 mm), Einschlag (15 mm) und Falzbereich (Rastri) bei Hardcover.',
-            'Kontrolliert CMYK- / 1-1-Schwarzdruck-Farbräume, Bildauflösung und Schrifteinbettung.',
-            'Revisionssichere Nachvollziehbarkeit über evidenceId direkt am Auftrag.'
+            '1-Klick Auto-Fix: erzeugt +3 mm Spiegel-Beschnitt und passt die Umschlagrückenbreite exakt an.',
+            'Prüft TAC-Farbauftrag (≤ 300% gestrichen FOGRA39 / ≤ 260% ungestrichen) und 100%-Schwarz bei Text < 12pt.',
+            'Direkt gekoppelt mit dem 3D-Softproof-Viewer des Verlags inkl. SHA-256 "APPROVE FOR PRESS"-Freigabe.'
           ],
           icon: FileSearch
         },
         {
-          badge: 'MODUL 04 · /MANUFACTURING',
-          title: 'Fertigungswarteschlange & Produktionsstatus',
-          desc: 'Steuern Sie den physischen Auftragsdurchlauf von der Vorstufe bis zum Versand mit standardisierten Statusmeldungen an den Verlagskunden.',
+          badge: 'MODUL 04 · /MANUFACTURING (PHASE-11B IMPOSITION)',
+          title: 'Dynamische Ausschießplanung, CTP-Platten & Druckwarteschlange',
+          desc: 'Zerlegt Buchumfänge automatisch in Falzbögen (32, 16, 8, 4 S.) für B1/B2/SRA3-Formate, berechnet den Bundzuwachs (Creep) und kalkuliert Einrichtemakulatur.',
           bullets: [
-            'Nachvollziehbare Schritte: WARTESCHLANGE → VORSTUFE → IM DRUCK → BUCHBINDEREI → VERSANDT.',
-            'Gezielte Zuweisung auf Offset- oder Digitalmaschinen gemäß BPE-Break-Even-Optimierung.',
-            'Reduziert manuelle Status-Rückfragen für Ihre Auftragsbearbeitung drastisch.'
+            'Automatische Falzbogen-Zerlegung (z. B. 240 S. auf B1 → 7×32er + 1×16er = 64 CMYK-CTP-Platten).',
+            'Progressiver Bundzuwachs-Ausgleich (Creep) bei Rückendrahtheftung sowie Bogenoffset-/Rollen-/Digital-Makulatur.',
+            'Direktes Routing an die Zielmaschine mit 6-stufiger Echtzeit-Telemetrie für den Verlag.'
           ],
           icon: Cpu
         },
