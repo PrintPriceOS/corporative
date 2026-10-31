@@ -96,6 +96,15 @@ export interface Translations {
     tabPrintIt: string;
     compFeature: string;
     compScope: string;
+    compTraditional: string;
+    productsPill: string;
+    stakeholdersPill: string;
+    workflowPill: string;
+    comparisonsPill: string;
+    transparencyPill: string;
+    complementaryBadge: string;
+    visualizeStep: string;
+    scrollHint: string;
     faqHeading: string;
     faqSubtitle: string;
     ctaCloseHeading: string;
@@ -254,6 +263,17 @@ export interface Translations {
     partnerTerms: string;
     rights: string;
     cookies: string;
+    priceItLabel: string;
+    fixItLabel: string;
+    printItLabel: string;
+    mockupLabel: string;
+    controlPlaneLabel: string;
+    termsOfService: string;
+    privacyPolicy: string;
+    legalNotice: string;
+    followX: string;
+    connectLinkedIn: string;
+    facebookPage: string;
   };
 }
 

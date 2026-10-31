@@ -1,0 +1,76 @@
+# Auditoría de Cookies, Almacenamiento Local y Telemetría en Tiempo Real
+
+**Fecha y hora de auditoría:** 25 de octubre de 2026, 03:22:37 UTC  
+**Rama:** feat/comparisons-evidence-and-legal-policy-review  
+**Entorno auditado:** Instancia pública en producción (https://printprice.pro)  
+**Release / BUILD_ID observado:** uQt50K2DV3BjTbyMjtcSc (verificado mediante /api/health)  
+**Navegador y motor:** Chromium Headless v151.0.7922.34 (Playwright v1.56)  
+**Rutas auditadas:** / (Home) y /products/budget (Navegación e interacción post-revocación)  
+**Script ejecutable:** [scripts/run_cookie_audit.py](../../../scripts/run_cookie_audit.py) (Aserciones estrictas, salida 0 en éxito, no cero en fallo)  
+**Evidencia JSON en disco:** [scripts/cookie_audit_results.json](../../../scripts/cookie_audit_results.json)
+
+---
+
+## 1. Metodología de Inspección y Recorrido de Interfaz Real
+
+La prueba se ha ejecutado exclusivamente mediante interacciones reales de interfaz de usuario (sin inyección directa de eventos JavaScript de atajo), evaluando secuencialmente cuatro fases:
+
+1. **Fase 1 (Aterrizaje inicial antes de elegir):** Navegación limpia a https://printprice.pro/, espera del temporizador del banner (2.500 ms). Comprobación de visibilidad de los controles de consentimiento y comprobación de ausencia previa de almacenamiento no consentido.
+2. **Fase 2 (Rechazo de no esenciales):** Clic real en el botón de interfaz «Rechazar no esenciales». Aserción de cierre del banner, registro de analytics: false en localStorage y ausencia de historial de telemetría.
+3. **Fase 3 (Aceptación en contexto limpio):** Clic real en el botón de interfaz «Aceptar todas», desplazamiento vertical de página e interacción. Aserción de activación de analytics: true y registro de eventos en ppos_telemetry_history.
+4. **Fase 4 (Retirada de consentimiento vía interfaz y prueba de no reaparición):**
+   - Desplazamiento real hasta el pie de página (aooter).
+   - Clic en el botón interactivo real del footer (Configuración de Cookies / Cookie Settings).
+   - Verificación de apertura del modal de configuración.
+   - Desmarcado del control deslizante #cookie-analytics-toggle.
+   - Clic en «Guardar preferencias».
+   - Aserción de purga inmediata de ppos_telemetry_history en localStorage.
+   - **Prueba post-revocación:** Navegación a /products/budget, generación de desplazamientos y clics, recarga completa de la página (eload) y aserción estricta de que la telemetría analítica **no reaparece**.
+
+---
+
+## 2. Resultados Empíricos Observados por Fase
+
+| Fase Auditada | Cookies HTTP Detectadas | Claves en localStorage | Claves en sessionStorage | Solicitudes de Red | Dominios de Red Observados | Resultado de Aserciones |
+| :--- | :---: | :--- | :--- | :---: | :--- | :---: |
+| **Fase 1 (Antes de elegir)** | a | {} (vacío) | {} (vacío) | 34 | printprice.pro | **PASÓ** |
+| **Fase 2 (Tras rechazar)** | a | ppp_consent_v1_audit<br>ppp_audit_consent_proof (analytics: false) | {} (vacío) | 34 | printprice.pro | **PASÓ** |
+| **Fase 3 (Tras aceptar)** | a | ppp_consent_v1_audit<br>ppp_audit_consent_proof (analytics: true)<br>ppos_telemetry_history (2 eventos) | ppos_session_id (sid_qxgivwt40) | 34 | printprice.pro | **PASÓ** |
+| **Fase 4 (Tras retirar, navegar y recargar)** | a | ppp_consent_v1_audit<br>ppp_audit_consent_proof (analytics: false)<br>*(telemetría purgada)* | ppos_session_id (sid_qxgivwt40) | 138 | printprice.pro | **PASÓ** |
+
+---
+
+## 3. Análisis Técnico del Identificador ppos_session_id
+
+Durante la auditoría se detectó que la clave ppos_session_id (valor observado: sid_qxgivwt40) se genera en sessionStorage tras la carga e interacción en Fase 3 y **permanece almacenada tras la retirada de la analítica** en Fase 4.
+
+* **Origen técnico en código:** Se genera mediante la función getSessionId() en lib/telemetry.ts:
+  `	ypescript
+  function getSessionId(): string {
+    if (typeof window === 'undefined') return "ssr-node";
+    let id = sessionStorage.getItem('ppos_session_id');
+    if (!id) {
+      id = sid_;
+      sessionStorage.setItem('ppos_session_id', id);
+    }
+    return id;
+  }
+  `
+* **Comportamiento y ciclo de vida:** Al almacenarse en sessionStorage, el identificador es **efímero y está estrictamente confinado a la pestaña activa del navegador**. Se destruye de forma automática e irreversible al cerrar la pestaña o el navegador. No persiste entre sesiones ni se comparte entre diferentes dominios.
+* **Calificación y evaluación:** 
+  - La función de purga en lib/consent.ts solo ejecuta localStorage.removeItem('ppos_telemetry_history'), sin limpiar sessionStorage.
+  - Aunque ppos_session_id no constituye una cookie de rastreo persistente entre sitios ni se asocia a perfiles de marketing en el estado actual, su persistencia en sessionStorage tras retirar el consentimiento analítico representa un área de mejora técnica.
+  - **Recomendación técnica:** Incorporar sessionStorage.removeItem('ppos_session_id') dentro de setConsent cuando analytics === false, asegurando una limpieza completa de cualquier identificador volátil de sesión técnica de telemetría.
+
+---
+
+## 4. Limitaciones del Alcance y Conclusiones Observadas
+
+1. **Alcance de las solicitudes de red:** Durante las 4 fases de la prueba, las 240 solicitudes de red registradas se dirigieron exclusivamente al dominio propio printprice.pro. No se observaron solicitudes dirigidas a servidores de analítica de terceros (Google Analytics, Meta, etc.).
+2. **Delimitación de inferencias sobre el servidor:** La ausencia de llamadas a dominios externos en el navegador **no acredita por sí sola qué tratamientos o registros técnicos de IP / logs realiza el servidor backend** ante peticiones HTTP estándar. La auditoría se circunscribe empíricamente al comportamiento del cliente web.
+3. **Ausencia de cookies HTTP en cabeceras:** La aplicación web corporativa no utiliza cabeceras Set-Cookie para rastreo; todas las operaciones de estado de consentimiento y métricas se gestionan en las APIs de almacenamiento del navegador (localStorage y sessionStorage).
+
+---
+
+**Dictamen de la auditoría:**  
+El flujo de interfaz interactivo (banner, rechazo, aceptación, reapertura en pie de página y revocación) supera todas las aserciones de control. La telemetría no se escribe al rechazar, se purga de localStorage al revocar y no reaparece tras navegar y recargar la página. Se identifica la persistencia de ppos_session_id en sessionStorage como observación técnica para optimización.

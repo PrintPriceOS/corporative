@@ -29,18 +29,42 @@ interface ActionCTAProps {
 }
 
 export const ActionCTA: React.FC<ActionCTAProps> = ({
-  title = "Ready to optimize your production chain?",
-  description = "Presupuesto técnico estructurado y validación de archivos editoriales conectando autores y editoriales con talleres homologados.",
-  buttonLabel = "CALCULATE MY COST",
+  title,
+  description,
+  buttonLabel,
   buttonHref = "https://budget.printprice.pro/",
   secondaryButtonLabel,
   secondaryButtonHref,
-  slogan = "START YOUR PRINT CALCULATION",
+  slogan,
   trackingAction = "final_cta_calculation",
   footerNote,
   children
 }) => {
   const { locale } = useLocale();
+
+  const finalTitle = title || (
+    locale === 'es'
+      ? '¿Listo para optimizar tu cadena de producción?'
+      : locale === 'de'
+      ? 'Bereit, Ihre Produktionskette zu optimieren?'
+      : 'Ready to optimize your production chain?'
+  );
+
+  const finalDescription = description || (
+    locale === 'es'
+      ? 'Presupuesto técnico estructurado y validación de archivos editoriales conectando autores y editoriales con talleres homologados.'
+      : locale === 'de'
+      ? 'Strukturierte technische Kalkulation und forensische Druckdatenprüfung verbinden Autoren und Verlage mit zertifizierten Druckereien.'
+      : 'Structured technical pricing and forensic prepress validation connecting creators and publishers with certified print shops.'
+  );
+
+  const finalButtonLabel = buttonLabel || (
+    locale === 'es' ? 'CALCULAR MI COSTE ➔' : locale === 'de' ? 'KOSTEN BERECHNEN ➔' : 'CALCULATE MY COST ➔'
+  );
+
+  const finalSlogan = slogan || (
+    locale === 'es' ? 'INICIA TU CÁLCULO DE IMPRESIÓN' : locale === 'de' ? 'STARTEN SIE IHRE DRUCKKALKULATION' : 'START YOUR PRINT CALCULATION'
+  );
 
   return (
     <div
@@ -170,12 +194,12 @@ export const ActionCTA: React.FC<ActionCTAProps> = ({
                 textTransform: 'uppercase'
               }}
             >
-              {slogan}
+              {finalSlogan}
             </div>
           )}
 
           <h2 className="action-cta-title">
-            {title}
+            {finalTitle}
           </h2>
 
           <p style={{
@@ -188,7 +212,7 @@ export const ActionCTA: React.FC<ActionCTAProps> = ({
             fontWeight: 400,
             textWrap: 'pretty'
           }}>
-            {description}
+            {finalDescription}
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem', pointerEvents: 'auto', width: '100%' }}>
@@ -199,7 +223,7 @@ export const ActionCTA: React.FC<ActionCTAProps> = ({
                 onClick={() => trackEvent(events.DECISION_MADE, { action: trackingAction })}
               >
                 <Button size="lg" className="action-cta-btn">
-                  {buttonLabel}
+                  {finalButtonLabel}
                 </Button>
               </Link>
 

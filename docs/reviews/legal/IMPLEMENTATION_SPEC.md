@@ -1,0 +1,98 @@
+# Especificación Técnica de Integración, Versionado y Aceptación Legal (Implementation Spec)
+
+**Fecha de consolidación:** 25 de octubre de 2026  
+**Rama:** feat/comparisons-evidence-and-legal-policy-review  
+**Referencia base:** Commit 8a333d7821e5bfe976accc6b24d6dcc3fb00ab5a  
+**Ámbito:** Arquitectura técnica para la publicación, versionado inmutable, registro de consentimiento y aceptación sin fricciones de los textos legales en PrintPrice Pro.  
+**Nota de alcance lingüístico:** La documentación comparativa (`COMPARISON_COPY_ES_EN_DE.md`) está completada íntegramente en ES, EN y DE. Los 11 borradores de políticas legales están redactados en español como documentos de trabajo interno, incorporando encabezados trilingües indicativos de estado.
+
+---
+
+## 1. Arquitectura de Rutas y Matriz de Acceso por Perfil
+
+Cada documento legal residirá en una ruta canónica accesible de forma pública y permanente. Los perfiles de usuario acceden a los documentos pertinentes según su flujo de navegación:
+
+| Ruta Canónica en la Web | Documento Jurídico | Perfil Destinatario | Momento de Presentación | Tipo de Interacción Exigida |
+| :--- | :--- | :--- | :--- | :--- |
+| /legal/notice | 01_aviso_legal.md | Público general / Todos | Pie de página permanente en todas las páginas. | Consulta informativa (sin aceptación requerida). |
+| /legal/terms | 02_terminos_generales_uso.md | Público general / Usuarios web | Pie de página / Registro de cuenta general. | Casilla desmarcada en registro de cuenta. |
+| /legal/authors | 03_condiciones_autores_particulares.md | Autores independientes y clientes B2C | Paso final de formalización del pedido en /for-authors. | Casilla desmarcada obligatoria antes del cobro. |
+| /legal/publishers | 04_condiciones_editoriales_profesionales.md | Editoriales y empresas compradoras B2B | Alta en cuenta editorial / Envío de orden técnica. | Aceptación expresa en contrato marco digital. |
+| /legal/printhouses | 05_condiciones_adhesion_imprentas.md | Talleres e imprentas asociadas | Onboarding en el Control Plane de imprentas. | Firma electrónica o aceptación B2B reforzada. |
+| /legal/suppliers | 06_condiciones_proveedores_papel.md | Distribuidores y fabricantes de papel | Alta en el catálogo de sustratos (*Paper Hub*). | Firma electrónica o acuerdo marco comercial. |
+| /legal/privacy | 07_politica_privacidad.md | Todos los interesados | Pie de página y junto a todos los formularios de contacto. | Informativa (deber de transparencia Arts. 13-14 RGPD). |
+| /legal/cookies | 08_politica_cookies.md | Todos los visitantes web | Banner de cookies y enlace permanente en footer. | Botones de aceptar / rechazar / configurar (recorrido real de interfaz). |
+| /legal/ai-transparency| 09_politica_transparencia_ia.md | Usuarios de interfaces de agentes (/ai-agent) | Pie de página y aviso informativo en /ai-agent. | Consulta informativa / Transparencia Art. 50 AI Act. |
+| /legal/dpa | 10_acuerdo_encargo_tratamiento_dpa.md | Editoriales e imprentas (B2B) | Integración vía API REST o procesamiento masivo PDF. | Firma digital o anexo contractual vinculante. |
+| /legal/subprocessors | 11_registro_subencargados_proveedores.md| Usuarios registrados y auditores | Enlace público desde la Política de Privacidad y DPA. | Consulta y suscripción a notificaciones de cambios. |
+
+---
+
+## 2. Esquema de Versionado y Fecha de Vigencia
+
+Para evitar discrepancias jurídicas sobre qué versión estaba en vigor en el momento exacto de una transacción, se establece un esquema estricto de versionado inmutable:
+
+1. **Formato de versión:** aYYYY.N (ejemplo: a2026.1, a2026.2).
+2. **Atributos de cabecera obligatorios en cada documento:**
+   `yaml
+   document_id: "terms-general"
+   version: "v2026.1"
+   effective_date: "2026-11-01"
+   last_modified: "2026-10-25"
+   status: "DRAFT_PENDING_APPROVAL" # DRAFT_PENDING_APPROVAL | ACTIVE | ARCHIVED
+   checksum_sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   `
+3. **Repositorio histórico inmutable:** Las versiones sustituidas no se sobreescriben en base de datos ni en disco; se conservan archivadas bajo la ruta /legal/archive/[document_id]/[version] para permitir su consulta fehaciente en caso de litigio durante el plazo de prescripción legal.
+
+---
+
+## 3. Protocolo de Registro de Aceptación (Audit Trail)
+
+Conforme a las directrices de la AEPD y la jurisprudencia comunitaria sobre contratación electrónica, la carga de la prueba de la aceptación recae sobre el prestador.
+
+### 3.1. Estructura de la Evidencia de Aceptación en Base de Datos
+Al registrar una aceptación contractual (p. ej. formalización de pedido o alta de taller), el sistema generará un registro con la siguiente estructura JSON inmutable:
+
+`json
+{
+  "acceptance_id": "acc_9f82c1b4e07a",
+  "user_id": "usr_48291047",
+  "document_id": "terms-authors",
+  "document_version": "v2026.1",
+  "document_sha256": "8a333d7821e5bfe976accc6b24d6dcc3fb00ab5a...",
+  "timestamp_utc": "2026-10-25T14:32:00.124Z",
+  "user_ip_hash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+  "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36...",
+  "method": "CLICKWRAP_CHECKBOX_UNCHECKED_DEFAULT",
+  "context": {
+    "order_id": "ord_88291",
+    "total_net": 1250.00,
+    "currency": "EUR"
+  }
+}
+`
+
+### 3.2. Reglas de Interfaz Prohibidas (Anti-Dark Patterns)
+1. **Cero casillas premarcadas:** Queda terminantemente prohibido utilizar casillas de aceptación de términos contractuales marcadas por defecto (infracción del Art. 22.2 LSSI-CE, Art. 7.2 RGPD y Directiva 2011/83/UE).
+2. **Separación estricta de finalidades:**
+   - La casilla de aceptación de los **Términos de Compra / Fabricación** es independiente.
+   - La **Política de Privacidad** no requiere casilla de «Acepto», sino cláusula informativa: *«Tus datos se tratarán conforme a nuestra Política de Privacidad para tramitar tu pedido»*.
+   - Las comunicaciones comerciales o boletines de marketing deben disponer de su propia **casilla voluntaria e independiente**, nunca vinculada a la formalización del pedido.
+
+---
+
+## 4. Gestión de Retirada y Modificación del Consentimiento
+
+1. **Persistencia local y reapertura:** El botón «Configuración de Cookies» / «Preferencias de cookies» en el pie de página debe permanecer plenamente operativo en todas las vistas mediante el recorrido real de la interfaz en el DOM, permitiendo al usuario reabrir el modal de preferencias en cualquier momento sin recurrir a atajos de eventos JavaScript artificiales.
+2. **Facilidad de revocación (Art. 7.3 RGPD):** Debe ser tan sencillo revocar el consentimiento como otorgarlo. La interfaz permite desmarcar «Analítica y telemetría técnica» en dos clics.
+3. **Purga inmediata de telemetría:** Al guardar la revocación, el script debe ejecutar de forma verificable `localStorage.removeItem('ppos_telemetry_history')` y abstenerse de emitir nuevos eventos.
+
+---
+
+## 5. Procedimiento de Notificación de Cambios Contractuales Relevantes
+
+Para cumplir con el **Reglamento P2B (UE 2019/1150, Art. 3.2)** para imprentas y papeleras, y con la normativa de consumidores para usuarios particulares:
+
+1. **Preaviso obligatorio para imprentas (P2B):** Cualquier modificación en las condiciones de adhesión de talleres o en la comisión del 4 % requerirá un preaviso mínimo de **15 días naturales** notificado por correo electrónico fehaciente antes de su entrada en vigor. Durante este período, la imprenta puede resolver el contrato sin penalización.
+2. **Aviso en la web para usuarios generales:** Publicación de un banner informativo durante los 30 días posteriores a la entrada en vigor de una nueva versión sustancial.
+3. **No aplicación retroactiva:** Las nuevas condiciones solo aplicarán a pedidos formulados con posterioridad a la fecha de entrada en vigor de la nueva versión.

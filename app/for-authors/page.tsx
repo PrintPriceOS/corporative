@@ -278,7 +278,7 @@ export default function ForAuthorsPage() {
                     {locale === 'es' ? 'Herramienta complementaria de visualización: Maqueta 3D Interactiva' : locale === 'de' ? 'Ergänzende 3D-Vorschau: Interaktives Buch-Mockup' : 'Complementary visualization tool: Interactive 3D Mockup'}
                   </span>
                   <span style={{ fontSize: '0.625rem', background: 'var(--accent-container)', color: 'var(--accent-primary)', padding: '0.1rem 0.45rem', borderRadius: 'var(--radius-pill)', fontWeight: 800 }}>
-                    COMPLEMENTARIA
+                    {locale === 'es' ? 'COMPLEMENTARIA' : locale === 'de' ? 'ERGÄNZEND' : 'COMPLEMENTARY'}
                   </span>
                 </div>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>

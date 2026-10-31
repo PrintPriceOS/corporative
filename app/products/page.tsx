@@ -103,7 +103,7 @@ export default function ProductsHubPage() {
     <div className="products-hub-page">
       {/* Hero */}
       <HeroPlatform
-        label="PRINTPRICE PRO / ARQUITECTURA DE PRODUCTO"
+        label={locale === 'es' ? 'PRINTPRICE PRO / ARQUITECTURA DE PRODUCTO' : locale === 'de' ? 'PRINTPRICE PRO / PRODUKTARCHITEKTUR' : 'PRINTPRICE PRO / PRODUCT ARCHITECTURE'}
         title="PRICE IT. FIX IT. PRINT IT."
         slogan={['PRICE IT.', 'FIX IT.', 'PRINT IT.']}
         isHeadlineSlogan={true}
@@ -122,13 +122,17 @@ export default function ProductsHubPage() {
         <Container>
           <div style={{ textAlign: 'center', maxWidth: '750px', margin: '0 auto 3.5rem' }}>
             <span className="pill-badge" style={{ marginBottom: '1rem' }}>
-              PRODUCTOS PRINCIPALES
+              {locale === 'es' ? 'PRODUCTOS PRINCIPALES' : locale === 'de' ? 'HAUPTPRODUKTE' : 'CORE PRODUCTS'}
             </span>
             <h2 style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', marginBottom: '1rem' }}>
-              Qué puedes hacer con PrintPrice Pro
+              {locale === 'es' ? 'Qué puedes hacer con PrintPrice Pro' : locale === 'de' ? 'Was Sie mit PrintPrice Pro tun können' : 'What you can do with PrintPrice Pro'}
             </h2>
             <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem', lineHeight: 1.6 }}>
-              Tres herramientas concebidas para transformar el archivo digital en un libro físico perfecto.
+              {locale === 'es' 
+                ? 'Tres herramientas concebidas para transformar el archivo digital en un libro físico perfecto.'
+                : locale === 'de'
+                ? 'Drei Werkzeuge, um digitale Druckdaten in perfekte physische Bücher zu verwandeln.'
+                : 'Three tools designed to transform digital files into perfect physical books.'}
             </p>
           </div>
 
@@ -199,7 +203,7 @@ export default function ProductsHubPage() {
                       className="btn-secondary"
                       style={{ padding: '0.75rem 1rem', fontSize: '0.9rem' }}
                     >
-                      Detalles
+                      {locale === 'es' ? 'Detalles' : locale === 'de' ? 'Details' : 'Details'}
                     </Link>
                   )}
                 </div>
@@ -214,13 +218,17 @@ export default function ProductsHubPage() {
         <Container>
           <div style={{ maxWidth: '800px', marginBottom: '3rem' }}>
             <span className="technical-text" style={{ fontSize: '0.75rem', color: 'var(--accent-primary)', letterSpacing: '0.15em', fontWeight: 800 }}>
-              HERRAMIENTAS COMPLEMENTARIAS
+              {locale === 'es' ? 'HERRAMIENTAS COMPLEMENTARIAS' : locale === 'de' ? 'ERGÄNZENDE WERKZEUGE' : 'COMPLEMENTARY TOOLS'}
             </span>
             <h2 style={{ fontSize: 'clamp(1.85rem, 3.5vw, 2.5rem)', marginTop: '0.5rem', marginBottom: '0.75rem' }}>
-              Capacidades integradas del ecosistema
+              {locale === 'es' ? 'Capacidades integradas del ecosistema' : locale === 'de' ? 'Integrierte Ökosystem-Funktionen' : 'Integrated ecosystem capabilities'}
             </h2>
             <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', lineHeight: 1.6 }}>
-              Visualización 3D y espacios operativos que complementan los tres productos principales.
+              {locale === 'es'
+                ? 'Visualización 3D y espacios operativos que complementan los tres productos principales.'
+                : locale === 'de'
+                ? '3D-Visualisierung und operative Umgebungen zur Ergänzung der drei Hauptprodukte.'
+                : '3D visualization and operational environments complementing the three core products.'}
             </p>
           </div>
 
@@ -269,7 +277,7 @@ export default function ProductsHubPage() {
                       className="btn-secondary"
                       style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'inline-block' }}
                     >
-                      Acceder ↗
+                      {locale === 'es' ? 'Acceder ↗' : locale === 'de' ? 'Zugang ↗' : 'Access ↗'}
                     </a>
                   ) : (
                     <Link
@@ -277,7 +285,7 @@ export default function ProductsHubPage() {
                       className="btn-secondary"
                       style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', display: 'inline-block' }}
                     >
-                      Ver herramienta
+                      {locale === 'es' ? 'Ver herramienta' : locale === 'de' ? 'Werkzeug ansehen' : 'View tool'}
                     </Link>
                   )}
                 </div>
