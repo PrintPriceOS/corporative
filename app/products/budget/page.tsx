@@ -35,17 +35,18 @@ export default function BudgetPage() {
     {
       label: { es: string; en: string; de: string };
       substrate: string;
-      gsm: string;
-      caliper: string;
+      gsm: { es: string; en: string; de: string };
+      caliper: { es: string; en: string; de: string };
       binding: { es: string; en: string; de: string };
       format: string;
       pages: number;
-      blockMm: string;
-      spineMm: string;
-      netCoverMm: string;
-      bleedCoverMm: string;
-      provenance: string;
-      statusBadge: string;
+      pagesUnit: { es: string; en: string; de: string };
+      blockMm: { es: string; en: string; de: string };
+      spineMm: { es: string; en: string; de: string };
+      netCoverMm: { es: string; en: string; de: string };
+      bleedCoverMm: { es: string; en: string; de: string };
+      provenance: { es: string; en: string; de: string };
+      statusBadge: { es: string; en: string; de: string };
       note: { es: string; en: string; de: string };
     }
   > = {
@@ -56,8 +57,8 @@ export default function BudgetPage() {
         de: 'A. Glattes Offsetpapier (98 µm) · Fadenheftung Softcover'
       },
       substrate: 'Amber Graphic (Woodfree Offset)',
-      gsm: '100 gsm',
-      caliper: '98 µm (Bulk 0.98)',
+      gsm: { es: '100 g/m²', en: '100 gsm', de: '100 g/m²' },
+      caliper: { es: '98 µm (Mano 0,98)', en: '98 µm (Bulk 0.98)', de: '98 µm (Volumen 0,98)' },
       binding: {
         es: 'Rústica cosida con hilo (SEWN)',
         en: 'Thread-sewn softcover (SEWN)',
@@ -65,14 +66,23 @@ export default function BudgetPage() {
       },
       format: '170 × 240 mm',
       pages: 200,
-      blockMm: '9.80 mm',
-      spineMm: '11.5 mm',
-      netCoverMm: '351.5 × 240.0 mm',
-      bleedCoverMm: '357.5 × 246.0 mm',
-      provenance: 'MILL DATASHEET · VERIFIED',
-      statusBadge: 'REFERENCE MODEL VALIDATED',
+      pagesUnit: { es: 'PÁGS.', en: 'PP', de: 'SEITEN' },
+      blockMm: { es: '9,80 mm', en: '9.80 mm', de: '9,80 mm' },
+      spineMm: { es: '11,5 mm', en: '11.5 mm', de: '11,5 mm' },
+      netCoverMm: { es: '351,5 × 240,0 mm', en: '351.5 × 240.0 mm', de: '351,5 × 240,0 mm' },
+      bleedCoverMm: { es: '357,5 × 246,0 mm', en: '357.5 × 246.0 mm', de: '357,5 × 246,0 mm' },
+      provenance: {
+        es: 'FICHA TÉCNICA DE FÁBRICA · VERIFICADO',
+        en: 'MILL DATASHEET · VERIFIED',
+        de: 'WERKSDATENBLATT · GEPRÜFT'
+      },
+      statusBadge: {
+        es: 'MODELO DE REFERENCIA VALIDADO',
+        en: 'REFERENCE MODEL VALIDATED',
+        de: 'REFERENZMODELL VALIDIERT'
+      },
       note: {
-        es: 'Mismo gramaje (100 gsm) con calibre compacto de 98 µm: genera un bloque neto de 9,80 mm y un lomo cosido de 11,5 mm.',
+        es: 'Mismo gramaje (100 g/m²) con calibre compacto de 98 µm: genera un bloque neto de 9,80 mm y un lomo cosido de 11,5 mm.',
         en: 'Same 100 gsm weight with compact 98 µm caliper: produces a 9.80 mm net paper block and an 11.5 mm sewn spine.',
         de: 'Gleiche Grammatur (100 g/m²) mit kompaktem 98 µm Kaliber: ergibt 9,80 mm Buchblock und 11,5 mm Rückenbreite.'
       }
@@ -84,8 +94,8 @@ export default function BudgetPage() {
         de: 'B. Werkdruckpapier 2.0 (175 µm) · Fadenheftung Softcover'
       },
       substrate: 'Holmen Book Cream 2.0',
-      gsm: '100 gsm',
-      caliper: '175 µm (Bulk 1.75)',
+      gsm: { es: '100 g/m²', en: '100 gsm', de: '100 g/m²' },
+      caliper: { es: '175 µm (Mano 1,75)', en: '175 µm (Bulk 1.75)', de: '175 µm (Volumen 1,75)' },
       binding: {
         es: 'Rústica cosida con hilo + Solapas 90 mm',
         en: 'Thread-sewn softcover + 90 mm Flaps',
@@ -93,14 +103,23 @@ export default function BudgetPage() {
       },
       format: '170 × 240 mm',
       pages: 200,
-      blockMm: '17.50 mm',
-      spineMm: '20.0 mm',
-      netCoverMm: '540.0 × 240.0 mm',
-      bleedCoverMm: '546.0 × 246.0 mm',
-      provenance: 'SUPPLIER IMPORT · VERIFIED',
-      statusBadge: 'REFERENCE MODEL VALIDATED',
+      pagesUnit: { es: 'PÁGS.', en: 'PP', de: 'SEITEN' },
+      blockMm: { es: '17,50 mm', en: '17.50 mm', de: '17,50 mm' },
+      spineMm: { es: '20,0 mm', en: '20.0 mm', de: '20,0 mm' },
+      netCoverMm: { es: '540,0 × 240,0 mm', en: '540.0 × 240.0 mm', de: '540,0 × 240,0 mm' },
+      bleedCoverMm: { es: '546,0 × 246,0 mm', en: '546.0 × 246.0 mm', de: '546,0 × 246,0 mm' },
+      provenance: {
+        es: 'CATÁLOGO DE PROVEEDOR · VERIFICADO',
+        en: 'SUPPLIER IMPORT · VERIFIED',
+        de: 'LIEFERANTENKATALOG · GEPRÜFT'
+      },
+      statusBadge: {
+        es: 'MODELO DE REFERENCIA VALIDADO',
+        en: 'REFERENCE MODEL VALIDATED',
+        de: 'REFERENZMODELL VALIDIERT'
+      },
       note: {
-        es: 'Con idéntico gramaje (100 gsm) pero mano 1,75 (175 µm), el lomo crece de 11,5 mm a 20,0 mm (+8,5 mm) e incorpora solapas de 90 mm.',
+        es: 'Con idéntico gramaje (100 g/m²) pero mano 1,75 (175 µm), el lomo crece de 11,5 mm a 20,0 mm (+8,5 mm) e incorpora solapas de 90 mm.',
         en: 'With identical 100 gsm weight but 1.75 bulk (175 µm), the spine expands from 11.5 mm to 20.0 mm (+8.5 mm) plus 90 mm flaps.',
         de: 'Bei identischen 100 g/m², aber 1,75-fachem Volumen (175 µm), wächst der Rücken von 11,5 mm auf 20,0 mm (+8,5 mm) inkl. 90 mm Klappen.'
       }
@@ -111,9 +130,9 @@ export default function BudgetPage() {
         en: 'C. Casebound Hardcover (2.4 mm Greyboard)',
         de: 'C. Hardcover Festeinband (2,4 mm Graupappe)'
       },
-      substrate: 'Munken Print Cream 1.5 + Guardas 140 gsm',
-      gsm: '100 gsm',
-      caliper: '150 µm (Bulk 1.50)',
+      substrate: 'Munken Print Cream 1.5 + Guardas / Endpapers 140 g/m²',
+      gsm: { es: '100 g/m²', en: '100 gsm', de: '100 g/m²' },
+      caliper: { es: '150 µm (Mano 1,50)', en: '150 µm (Bulk 1.50)', de: '150 µm (Volumen 1,50)' },
       binding: {
         es: 'Cartoné cosido · Cartón 2,4 mm · Ceja 2,5 mm',
         en: 'Casebound sewn · 2.4 mm Board · 2.5 mm Overhang',
@@ -121,16 +140,33 @@ export default function BudgetPage() {
       },
       format: '170 × 240 mm',
       pages: 200,
-      blockMm: '15.60 mm',
-      spineMm: '19.5 mm',
-      netCoverMm: '370.5 × 245.0 mm (Rastri 10.5 mm)',
-      bleedCoverMm: '406.5 × 281.0 mm (Turn-in 18.0 mm)',
-      provenance: 'HARDCOVER PROFILE V2 · GOVERNED',
-      statusBadge: 'REQUIRES TECH APPROVAL',
+      pagesUnit: { es: 'PÁGS.', en: 'PP', de: 'SEITEN' },
+      blockMm: { es: '15,60 mm', en: '15.60 mm', de: '15,60 mm' },
+      spineMm: { es: '19,5 mm', en: '19.5 mm', de: '19,5 mm' },
+      netCoverMm: {
+        es: '370,5 × 245,0 mm (Rastri 10,5 mm)',
+        en: '370.5 × 245.0 mm (Rastri 10.5 mm)',
+        de: '370,5 × 245,0 mm (Falz 10,5 mm)'
+      },
+      bleedCoverMm: {
+        es: '406,5 × 281,0 mm (Vuelta 18,0 mm)',
+        en: '406.5 × 281.0 mm (Turn-in 18.0 mm)',
+        de: '406,5 × 281,0 mm (Einschlag 18,0 mm)'
+      },
+      provenance: {
+        es: 'PERFIL TAPA DURA V2 · GOBERNADO',
+        en: 'HARDCOVER PROFILE V2 · GOVERNED',
+        de: 'HARDCOVER-PROFIL V2 · GESTEUERT'
+      },
+      statusBadge: {
+        es: 'REQUIERE VALIDACIÓN TÉCNICA',
+        en: 'REQUIRES TECH APPROVAL',
+        de: 'TECHNISCHE FREIGABE ERFORDERLICH'
+      },
       note: {
-        es: 'Calcula cartón de tapa (165 × 245 mm), canal de bisagra (Rastri 10,5 mm) y vuelta de forro (Turn-in 18,0 mm) gobernado por perfil de planta.',
+        es: 'Calcula cartón de tapa (165 × 245 mm), canal de bisagra (Rastri 10,5 mm) y vuelta de forro (18,0 mm) gobernado por perfil de planta.',
         en: 'Resolves board dimensions (165 × 245 mm), hinge groove (Rastri 10.5 mm), and 18.0 mm turn-in governed by plant profile rules.',
-        de: 'Berechnet Buchdeckel (165 × 245 mm), Falz (Rastri 10,5 mm) und Einschlag (Turn-in 18,0 mm) nach zertifiziertem Betriebsprofil.'
+        de: 'Berechnet Buchdeckel (165 × 245 mm), Falz (Rastri 10,5 mm) und Einschlag (18,0 mm) nach zertifiziertem Betriebsprofil.'
       }
     }
   };
@@ -148,11 +184,11 @@ export default function BudgetPage() {
 
       // Hero Right Card
       liveCardBadge: 'BUDGET WORKSTATION · v5.3',
-      liveCardStatus: 'BPE + SPINE-04 ACTIVE',
+      liveCardStatus: 'BPE + SPINE-04 ACTIVO',
       liveCardTitle: 'Simulación de Cotización y Geometría en Tiempo Real',
       liveCardSpecs: [
         { k: 'Formato & Páginas', v: '170 × 240 mm · 240 págs. (4/4)' },
-        { k: 'Papel Interior (Catálogo)', v: 'Holmen Book Cream 90 gsm (158 µm)' },
+        { k: 'Papel Interior (Catálogo)', v: 'Holmen Book Cream 90 g/m² (158 µm)' },
         { k: 'Encuadernación & Acabado', v: 'Rústica Cosida + Plastificado Soft-Touch' },
         { k: 'Geometría de Lomo (SPINE-04)', v: 'Bloque 18,96 mm → Lomo 21,5 mm' },
         { k: 'Ancho Total de Cubierta', v: '361,5 × 240,0 mm (+3 mm sangre)' }
@@ -166,34 +202,34 @@ export default function BudgetPage() {
       workflowPill: 'FLUJO GUIADO DE 4 ETAPAS',
       workflowTitle: 'De la configuración técnica a la orden de producción certificada',
       workflowSub:
-        'La aplicación budget.printprice.pro guía tanto a autores independientes como a directores de producción editorial a través de un recorrido estructurado con bloqueo de seguridad (stateful cart gating) en cada paso.',
+        'La aplicación budget.printprice.pro guía tanto a autores independientes como a directores de producción editorial a través de un recorrido estructurado con validación de seguridad en cada paso.',
       steps: [
         {
           num: '01',
-          code: 'CONFIGURE SPECS',
+          code: 'CONFIGURAR LIBRO',
           title: 'Configura Especificaciones, Papel o PDF',
           desc: 'Define tirada, formato cerrado (A5, A4, 170×240 mm, 200×200 mm, 220×220 mm o medida personalizada validada), páginas, tintas, encuadernación, o describe el libro al Asistente IA / sube tu PDF para autocompletar.',
           icon: Sliders
         },
         {
           num: '02',
-          code: 'SELECT BPE OFFER',
+          code: 'ELEGIR OFERTA BPE',
           title: 'Compara Ofertas Multi-Impresor (BPE)',
           desc: 'El Book Pricing Engine evalúa simultáneamente los parques de maquinaria de los talleres asociados, detecta el cruce óptimo Digital vs. Offset y devuelve ofertas firmadas criptográficamente con plazos ETA.',
           icon: Calculator
         },
         {
           num: '03',
-          code: 'PRODUCTION PDFS',
+          code: 'ARTES FINALES PDF',
           title: 'Vincula Artes Finales y Preflight',
           desc: 'Sube los archivos PDF de interior y cubierta (o enlaces seguros verificados contra SSRF) con validación binaria %PDF- y lanza la auditoría automática de geometría, sangrado y color.',
           icon: FileSearch
         },
         {
           num: '04',
-          code: 'ORDER INTAKE & TRACKING',
+          code: 'PEDIDO Y SEGUIMIENTO',
           title: 'Contratación, Despacho y Seguimiento',
-          desc: 'El sistema bloquea el checkout hasta que interior y cubierta están validados, genera el paquete de despacho seguro para la imprenta y habilita seguimiento en tiempo real (QUEUED → IN_PRODUCTION → SHIPPED).',
+          desc: 'El sistema bloquea el pago hasta que interior y cubierta están validados, genera el paquete de despacho seguro para la imprenta y habilita seguimiento en tiempo real (EN COLA → EN PRODUCCIÓN → ENVIADO).',
           icon: Truck
         }
       ],
@@ -205,62 +241,62 @@ export default function BudgetPage() {
         'Diseñado con tarjetas redondeadas, tipografía clara y motores deterministas en el servidor: cero estimaciones a ojo y cero fórmulas ocultas en el navegador.',
       capabilities: [
         {
-          badge: '01 / BOOK PRICING ENGINE (BPE)',
+          badge: '01 / MOTOR DE PRECIOS (BPE)',
           title: 'Imposición Determinista y Comparador Multi-Taller',
-          desc: 'Calcula costes reales de producción resolviendo en servidor la imposición en pliegos (B1, B2, SRA3), tiempos de preparación (makeready), curvas de merma de arranque, planchas CTP y operaciones de encuadernación.',
+          desc: 'Calcula costes reales de producción resolviendo en servidor la imposición en pliegos (B1, B2, SRA3), tiempos de preparación, curvas de merma de arranque, planchas CTP y operaciones de encuadernación.',
           bullets: [
-            'Etiquetas automáticas RECOMMENDED BY BPE y BEST TARIFF entre múltiples plantas.',
+            'Etiquetas automáticas de recomendación técnica y mejor tarifa entre múltiples plantas.',
             'Separación estricta entre coste de fabricación, embalaje y transporte en más de 25 países.',
-            'Revisión gobernada de cotizaciones (Quote Revision Review) cuando cambian parámetros técnicos.'
+            'Revisión gobernada de cotizaciones cuando cambian parámetros técnicos del libro.'
           ],
           icon: Cpu
         },
         {
-          badge: '02 / PAPER CATALOG & MICRONS',
-          title: 'Selector Dual de Papel: Presets y Catálogo Maestro Federado',
-          desc: 'Alterna en un clic entre familias estándar (Woodfree Offset, Woodfree MC, Lux Cream, Munken, ArtBoard) y el selector avanzado conectado en vivo al Paper Supplier Hub.',
+          badge: '02 / CATÁLOGO DE PAPEL Y MICRAS',
+          title: 'Selector Dual de Papel: Estándar y Catálogo Maestro Federado',
+          desc: 'Alterna en un clic entre familias estándar (Offset, Estucado MC, Ahuesado, Munken, Cartulina) y el selector avanzado conectado en vivo al Paper Supplier Hub.',
           bullets: [
-            'Atributos físicos verificados: gramaje (70 a 400 gsm), espesor en micras (µm) y factor de mano (bulk).',
-            'Trazabilidad explícita del origen del calibre (Mill Datasheet, Supplier Import, Micrometer Measured).',
-            'Soporte independiente para papel interior, cartulina de cubierta y guardas (endpapers).'
+            'Atributos físicos verificados: gramaje (70 a 400 g/m²), espesor en micras (µm) y factor de mano.',
+            'Trazabilidad explícita del origen del calibre (ficha de fábrica, catálogo de proveedor o micrómetro).',
+            'Soporte independiente para papel interior, cartulina de cubierta y guardas.'
           ],
           icon: Layers
         },
         {
-          badge: '03 / SPINE-04 GEOMETRY ENGINE',
+          badge: '03 / MOTOR GEOMÉTRICO SPINE-04',
           title: 'Calculadora Oficial de Lomo y Desarrollo de Cubierta',
           desc: 'Integración nativa con el motor geométrico del Control Plane (/api/v1/spine/calculate) sin duplicar constantes en el navegador. Calcula el grosor exacto según el calibre real del papel y el tipo de cosido.',
           bullets: [
             'Calcula bloque neto (mm), ancho de lomo (mm) y ancho total de cubierta abierta con y sin sangrado.',
-            'En tapa dura cartoné: resuelve cartón (board), canal de bisagra (Rastri) y vuelta de forro (Turn-in).',
+            'En tapa dura cartoné: resuelve cartón gris, canal de bisagra (Rastri) y vuelta de forro (Turn-in).',
             'Matriz epistémica de 5 niveles de certificación industrial antes de liberar a fabricación.'
           ],
           icon: Ruler
         },
         {
-          badge: '04 / CONVERSATIONAL AI ASSISTANT',
+          badge: '04 / ASISTENTE CONVERSACIONAL IA',
           title: 'Asistente IA con Protección de Conflictos y Auto-Recálculo',
           desc: 'Describe tu proyecto en lenguaje natural ("Quiero imprimir 500 ejemplares en tapa dura cosida, 280 páginas en papel ahuesado A5 con plastificado mate") y el asistente estructura el formulario al instante.',
           bullets: [
-            'Reconocimiento semántico bilingüe de términos técnicos de imprenta y encuadernación.',
-            'Conflict Protection: prioriza siempre los cambios manuales del usuario frente a inferencias de la IA.',
-            'Self-Healing Quotes: recalcula automáticamente las ofertas si un ajuste invalida el presupuesto previo.'
+            'Reconocimiento semántico multilingüe de términos técnicos de imprenta y encuadernación.',
+            'Protección de conflictos: prioriza siempre los cambios manuales del usuario frente a la IA.',
+            'Auto-recálculo: actualiza automáticamente las ofertas si un ajuste invalida el presupuesto previo.'
           ],
           icon: Sparkles
         },
         {
-          badge: '05 / CLIENT-SIDE PDF DIAGNOSTICS',
+          badge: '05 / DIAGNÓSTICO PDF EN CLIENTE',
           title: 'Diagnóstico Binario de PDF al Arrastrar el Archivo',
           desc: 'Antes incluso de subir el arte final al servidor, el analizador local inspecciona el documento PDF en el navegador para extraer su geometría real y prevenir errores de configuración.',
           bullets: [
             'Detección instantánea del número exacto de páginas, orientación (vertical/apaisado) y dimensiones en mm.',
-            'Mapeo inteligente hacia formatos estándar (A5, A4, 170×240 mm) o activación de formato Custom.',
+            'Mapeo inteligente hacia formatos estándar (A5, A4, 170×240 mm) o activación de medida personalizada.',
             'Muestreo cromático por coordenadas (HTML5 Canvas) para distinguir interior en color (4/4) o negro (1/1).'
           ],
           icon: FileSearch
         },
         {
-          badge: '06 / ADVERSARIAL NODE SECURITY',
+          badge: '06 / SEGURIDAD ADVERSARIAL NODE',
           title: 'Seguridad Criptográfica y Gestión de Excepciones en Planta',
           desc: 'Arquitectura endurecida (Adversarial Node v5.3) que protege tanto al comprador como al taller gráfico frente a manipulaciones de precio o archivos defectuosos.',
           bullets: [
@@ -568,34 +604,34 @@ export default function BudgetPage() {
       workflowPill: 'GEFÜHRTER 4-STUFEN-WORKFLOW',
       workflowTitle: 'Von der technischen Buchspezifikation zum zertifizierten Fertigungsauftrag',
       workflowSub:
-        'Die Plattform budget.printprice.pro führt Autoren und Verlagshersteller durch einen vierstufigen Prozess mit verbindlicher Dateiprüfung (Stateful Cart Gating) vor der Produktionsfreigabe.',
+        'Die Plattform budget.printprice.pro führt Autoren und Verlagshersteller durch einen vierstufigen Prozess mit verbindlicher Dateiprüfung vor der Produktionsfreigabe.',
       steps: [
         {
           num: '01',
-          code: 'CONFIGURE SPECS',
+          code: 'SPEZIFIKATIONEN',
           title: 'Spezifikationen, Katalogpapier oder PDF wählen',
           desc: 'Auflage, Endformat (A5, A4, 170×240 mm, 200×200 mm, 220×220 mm oder geprüftes Wunschformat), Seitenzahl, Farbigkeit und Bindung festlegen – oder per KI-Assistent / PDF-Upload automatisch ausfüllen.',
           icon: Sliders
         },
         {
           num: '02',
-          code: 'SELECT BPE OFFER',
+          code: 'BPE-ANGEBOT WÄHLEN',
           title: 'Multi-Druckerei-Angebote (BPE) vergleichen',
           desc: 'Die Book Pricing Engine prüft parallel die Maschinenparks der Partnerbetriebe, ermittelt den optimalen Digital-/Offset-Schnittpunkt und liefert kryptografisch signierte Angebote inkl. Lieferzeit.',
           icon: Calculator
         },
         {
           num: '03',
-          code: 'PRODUCTION PDFS',
+          code: 'PRODUKTIONS-PDFS',
           title: 'Produktions-PDFs & Preflight verknüpfen',
           desc: 'Laden Sie Innenteil- und Umschlag-PDFs hoch (inkl. %PDF- Binärprüfung und SSRF-Schutz) und starten Sie die automatische Prüfung von Geometrie, Beschnitt und Farbraum.',
           icon: FileSearch
         },
         {
           num: '04',
-          code: 'ORDER INTAKE & TRACKING',
-          title: 'Auftragsfreigabe, Dispatch & Live-Tracking',
-          desc: 'Der Checkout wird erst nach erfolgreicher Validierung von Inhalt und Umschlag freigegeben, erzeugt das sichere Produktionspaket für die Druckerei und aktiviert das Echtzeit-Tracking (QUEUED → IN_PRODUCTION → SHIPPED).',
+          code: 'AUFTRAG & TRACKING',
+          title: 'Auftragsfreigabe, Versand & Live-Tracking',
+          desc: 'Die Bestellung wird erst nach erfolgreicher Validierung von Inhalt und Umschlag freigegeben, erzeugt das sichere Produktionspaket für die Druckerei und aktiviert das Echtzeit-Tracking (WARTESCHLANGE → IM DRUCK → VERSANDT).',
           icon: Truck
         }
       ],
@@ -611,20 +647,20 @@ export default function BudgetPage() {
           title: 'Deterministische Bogenmontage & Betriebsvergleich',
           desc: 'Berechnet reale Herstellkosten auf dem Server anhand von Bogenformaten (B1, B2, SRA3), Rüstzeiten, Anlaufmakulatur, CTP-Platten und Buchbindereiprozessen.',
           bullets: [
-            'Automatische Kennzeichnung von RECOMMENDED BY BPE und BEST TARIFF über Partnerbetriebe hinweg.',
+            'Automatische Empfehlungs- und Bestpreis-Kennzeichnung über Partnerbetriebe hinweg.',
             'Strikte Trennung zwischen Druckfertigung, Verpackung und Versand in über 25 Länder.',
-            'Gesteuerter Quote-Revision-Prozess bei nachträglichen Spezifikationsänderungen.'
+            'Gesteuerter Angebotsrevisions-Prozess bei nachträglichen Spezifikationsänderungen.'
           ],
           icon: Cpu
         },
         {
-          badge: '02 / PAPER CATALOG & MICRONS',
-          title: 'Dualer Papierselektor: Standard-Presets & Föderierter Hauptkatalog',
+          badge: '02 / PAPIERKATALOG & MIKROMETER',
+          title: 'Dualer Papierselektor: Standard-Papiere & Föderierter Hauptkatalog',
           desc: 'Wechseln Sie per Klick zwischen Standardpapieren (Offset, Bilderdruck MC, Lux Cream, Munken, Chromokarton) und dem erweiterten Katalog des Paper Supplier Hub.',
           bullets: [
             'Verifizierte physikalische Werte: Grammatur (70 bis 400 g/m²), Papierdicke in Mikrometern (µm) und Volumen.',
-            'Explizite Herkunftsnachweise des Kalibers (Mill Datasheet, Supplier Import, Micrometer Measured).',
-            'Separate Materialauswahl für Buchblock, Umschlagkarton und Vorsatzpapier (Endpapers).'
+            'Explizite Herkunftsnachweise des Kalibers (Werksdatenblatt, Lieferantenkatalog oder Mikrometer-Messung).',
+            'Separate Materialauswahl für Buchblock, Umschlagkarton und Vorsatzpapier.'
           ],
           icon: Layers
         },
@@ -640,18 +676,18 @@ export default function BudgetPage() {
           icon: Ruler
         },
         {
-          badge: '04 / CONVERSATIONAL AI ASSISTANT',
+          badge: '04 / KONVERSATIONALER KI-ASSISTENT',
           title: 'KI-Spezifikationsassistent mit Konfliktschutz',
           desc: 'Beschreiben Sie Ihr Projekt in natürlicher Sprache („500 Exemplare Hardcover fadengeheftet, 280 Seiten A5 auf Werkdruckpapier mit Mattfolienkaschierung“) und das Formular wird sofort strukturiert.',
           bullets: [
             'Semantische Erkennung drucktechnischer Fachbegriffe für Papier, Format und Weiterverarbeitung.',
-            'Conflict Protection: Manuelle Formularänderungen des Nutzers haben stets Vorrang vor KI-Vorschlägen.',
-            'Self-Healing Quotes: Automatische Neukalkulation, sobald geänderte Parameter ein Angebot ungültig machen.'
+            'Konfliktschutz: Manuelle Formularänderungen des Nutzers haben stets Vorrang vor KI-Vorschlägen.',
+            'Automatische Neukalkulation, sobald geänderte Parameter ein vorheriges Angebot ungültig machen.'
           ],
           icon: Sparkles
         },
         {
-          badge: '05 / CLIENT-SIDE PDF DIAGNOSTICS',
+          badge: '05 / CLIENTSEITIGE PDF-DIAGNOSE',
           title: 'Lokale PDF-Binärdiagnose per Drag & Drop',
           desc: 'Noch vor dem Server-Upload analysiert der Browser-Parser die PDF-Binärstruktur lokal, um reale Seitenmaße auszulesen und Fehleinstellungen zu verhindern.',
           bullets: [
@@ -662,7 +698,7 @@ export default function BudgetPage() {
           icon: FileSearch
         },
         {
-          badge: '06 / ADVERSARIAL NODE SECURITY',
+          badge: '06 / ADVERSARIAL-NODE-SICHERHEIT',
           title: 'Kryptografische Angebotssignatur & Reklamations-Pipeline',
           desc: 'Gehärtete Adversarial-Node-Architektur (v5.3) zum Schutz von Auftraggebern und Druckereien vor Preismanipulation und fehlerhaften Druckdaten.',
           bullets: [
@@ -1150,9 +1186,9 @@ export default function BudgetPage() {
               }}
             >
               <span className="technical-text" style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-primary)' }}>
-                {activeSpine.format} · {activeSpine.pages} PP
+                {activeSpine.format} · {activeSpine.pages} {activeSpine.pagesUnit[locale] || activeSpine.pagesUnit.es}
               </span>
-              <span className="badge-available">{activeSpine.statusBadge}</span>
+              <span className="badge-available">{activeSpine.statusBadge[locale] || activeSpine.statusBadge.es}</span>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.88rem' }}>
@@ -1163,7 +1199,7 @@ export default function BudgetPage() {
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem' }}>
                 <span style={{ color: 'var(--text-secondary)' }}>{t.spineMetrics.caliper}:</span>
                 <span className="technical-text" style={{ fontWeight: 700, color: 'var(--accent-primary)', textAlign: 'right' }}>
-                  {activeSpine.gsm} · {activeSpine.caliper}
+                  {activeSpine.gsm[locale] || activeSpine.gsm.es} · {activeSpine.caliper[locale] || activeSpine.caliper.es}
                 </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem' }}>
@@ -1175,7 +1211,7 @@ export default function BudgetPage() {
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem' }}>
                 <span style={{ color: 'var(--text-secondary)' }}>{t.spineMetrics.block}:</span>
                 <span className="technical-text" style={{ fontWeight: 700 }}>
-                  {activeSpine.blockMm}
+                  {activeSpine.blockMm[locale] || activeSpine.blockMm.es}
                 </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem' }}>
@@ -1188,25 +1224,25 @@ export default function BudgetPage() {
                     color: 'var(--accent-primary)'
                   }}
                 >
-                  {activeSpine.spineMm}
+                  {activeSpine.spineMm[locale] || activeSpine.spineMm.es}
                 </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem' }}>
                 <span style={{ color: 'var(--text-secondary)' }}>{t.spineMetrics.netCover}:</span>
                 <span className="technical-text" style={{ fontWeight: 700, textAlign: 'right' }}>
-                  {activeSpine.netCoverMm}
+                  {activeSpine.netCoverMm[locale] || activeSpine.netCoverMm.es}
                 </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem' }}>
                 <span style={{ color: 'var(--text-secondary)' }}>{t.spineMetrics.bleedCover}:</span>
                 <span className="technical-text" style={{ fontWeight: 700, textAlign: 'right' }}>
-                  {activeSpine.bleedCoverMm}
+                  {activeSpine.bleedCoverMm[locale] || activeSpine.bleedCoverMm.es}
                 </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem' }}>
                 <span style={{ color: 'var(--text-secondary)' }}>{t.spineMetrics.provenance}:</span>
                 <span className="technical-text" style={{ fontSize: '0.76rem', color: 'var(--text-muted)' }}>
-                  {activeSpine.provenance}
+                  {activeSpine.provenance[locale] || activeSpine.provenance.es}
                 </span>
               </div>
             </div>
@@ -1316,7 +1352,7 @@ export default function BudgetPage() {
                     transform: 'rotate(180deg)'
                   }}
                 >
-                  {activeSpine.spineMm}
+                  {activeSpine.spineMm[locale] || activeSpine.spineMm.es}
                 </span>
               </div>
 
