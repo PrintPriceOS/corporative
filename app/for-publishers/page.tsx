@@ -180,6 +180,12 @@ export default function ForPublishersPage() {
           desc: 'Inspecciona en 360° el lomo real calculado (PHASE-11A), ceja de cartoné (3 mm) y esquinas TrimBox/BleedBox, emite firma digital SHA-256, sigue los 6 hitos de planta en vivo y descarga albaranes POD y certificados FSC/PEFC.',
           icon: PackageCheck,
         },
+        {
+          badge: '08 / ESCROW & POD SPLIT-PAYOUT',
+          title: 'Escrow Comercial Garantizado y Liquidación por POD',
+          desc: 'Tus fondos quedan protegidos en Escrow tras aprobar el libro en 3D (FUNDS_LOCKED_ON_PROOF_APPROVAL) y solo se liberan automáticamente al recibir el Albarán POD firmado en distribuidora, segregando Fabricación ≠ Embalaje ≠ Transporte.',
+          icon: ShieldCheck,
+        },
       ],
 
       // FAQ
@@ -358,6 +364,12 @@ export default function ForPublishersPage() {
           desc: 'Inspect true 3D spine width (PHASE-11A), 3 mm hardcover overhang, and TrimBox/BleedBox corners in 360°, issue SHA-256 press sign-off, track 6 live manufacturing milestones, and download signed PODs and FSC/PEFC certificates.',
           icon: PackageCheck,
         },
+        {
+          badge: '08 / ESCROW & POD SPLIT-PAYOUT',
+          title: 'Guaranteed Commercial Escrow & Signed POD Settlement',
+          desc: 'Funds are locked in commercial Escrow upon 3D proof sign-off (FUNDS_LOCKED_ON_PROOF_APPROVAL) and automatically released via Split-Payout only after signed POD at the distributor dock, strictly isolating Mfg ≠ Pack ≠ Freight.',
+          icon: ShieldCheck,
+        },
       ],
 
       faqHeading: 'Frequently Asked Questions for Publishing Production Teams',
@@ -534,6 +546,12 @@ export default function ForPublishersPage() {
           title: 'Parametrischer 3D-Softproof & "APPROVE FOR PRESS"',
           desc: 'Prüfen Sie in 360° die exakte Rückenbreite (PHASE-11A), 3 mm Buchdecken-Überstand und TrimBox/BleedBox-Ecken, erteilen Sie die digitale SHA-256-Druckfreigabe, verfolgen Sie 6 Live-Meilensteine und laden Sie signierte POD-Lieferscheine herunter.',
           icon: PackageCheck,
+        },
+        {
+          badge: '08 / ESCROW & POD SPLIT-PAYOUT',
+          title: 'Treuhand-Escrow & Automatische POD-Split-Auszahlung',
+          desc: 'Ihr Budget wird nach der 3D-Druckfreigabe im Treuhand-Escrow gesichert (FUNDS_LOCKED_ON_PROOF_APPROVAL) und erst nach signiertem Abliefernachweis (POD) getrennt nach Druck ≠ Verpackung ≠ Fracht freigegeben.',
+          icon: ShieldCheck,
         },
       ],
 

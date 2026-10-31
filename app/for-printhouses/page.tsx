@@ -235,13 +235,13 @@ export default function ForPrinthousesPage() {
           icon: FileSearch
         },
         {
-          badge: 'MÓDULO 04 · /MANUFACTURING (PHASE-11B IMPOSITION)',
-          title: 'Imposición Dinámica, Planchas CTP y Cola de Planta',
-          desc: 'Descompone automáticamente páginas en signaturas (32, 16, 8, 4 pp) ajustadas a formatos B1/B2/SRA3, aplica compensación de arrastre (creep) y calcula mermas de puesta a punto.',
+          badge: 'MÓDULO 04 · /MANUFACTURING (PHASE-11B + 12B JDF 1.7)',
+          title: 'Imposición Dinámica, Tickets CIP4 JDF 1.7 y Señales JMF',
+          desc: 'Descompone automáticamente páginas en signaturas (32, 16, 8, 4 pp) ajustadas a formatos B1/B2/SRA3, exporta tickets XML CIP4 JDF 1.7 (Heidelberg Prinect / Kodak Prinergy / HP Indigo) e ingiere señales JMF en vivo.',
           bullets: [
             'Trazado editorial automático (ej. 240 pp en B1 → 7×32pp + 1×16pp = 64 planchas CTP CMYK 4/4).',
-            'Compensación progresiva de arrastre (Creep) en caballete y mermas Offset vs Rotativa vs Digital.',
-            'Enrutamiento directo de signaturas y planchas a cada prensa con telemetría de 6 hitos en vivo.'
+            'Exportación directa JDF 1.7 XML con StrippingParams, lomo físico en mm (11A) y límite TAC FOGRA39.',
+            'Puente JMF de planta y Mantenimiento Predictivo OEE (12C) con bloqueo preventivo al ≥ 95% de desgaste.'
           ],
           icon: Cpu
         },
@@ -257,13 +257,13 @@ export default function ForPrinthousesPage() {
           icon: Layers
         },
         {
-          badge: 'MÓDULO 06 · /OPS/MARKETPLACE & /OPS/FINANCIALS',
-          title: 'Gobierno Comercial, Finanzas y Auditoría (/audit)',
-          desc: 'Supervisa qué familias de productos están publicadas en la red, audita liquidaciones financieras por pedido y consulta el registro inmutable de eventos de seguridad.',
+          badge: 'MÓDULO 06 · /OPS/FINANCIALS (PHASE-12A ESCROW & POD)',
+          title: 'Escrow Comercial, Split-Payout y Conciliación EPAL',
+          desc: 'Garantía financiera total: los fondos del editor quedan bloqueados al aprobar la prueba 3D y se liquidan automáticamente al firmarse el POD, abonándote 15,00 €/palet si el transportista no devuelve tus Euro-palets EPAL.',
           bullets: [
-            'Activación o pausa instantánea de líneas de producto según la ocupación de tu taller.',
-            'Aislamiento estricto Multi-Tenant: ningún competidor puede ver tus tarifas ni tus máquinas.',
-            'Registros de auditoría completos de quién modificó una tarifa, aprobó un archivo o liberó un envío.'
+            'Segregación matemática inviolable: Fabricación ≠ Embalaje ≠ Transporte ≠ Comisión de plataforma.',
+            'Deducción automática al transportista (15,00 €/palet tras 14 días) acreditada directo a tu imprenta.',
+            'Aislamiento estricto Multi-Tenant y registro inmutable de auditoría financiera por pedido.'
           ],
           icon: Scale
         }
@@ -576,13 +576,13 @@ export default function ForPrinthousesPage() {
           icon: FileSearch
         },
         {
-          badge: 'MODULE 04 · /MANUFACTURING (PHASE-11B IMPOSITION)',
-          title: 'Dynamic Imposition, CTP Plates & Press Queue',
-          desc: 'Automatically decomposes pages into folding signatures (32, 16, 8, 4 pp) across B1/B2/SRA3 sheets, applies progressive saddle-stitch creep, and models make-ready waste.',
+          badge: 'MODULE 04 · /MANUFACTURING (PHASE-11B + 12B JDF 1.7)',
+          title: 'Dynamic Imposition, CIP4 JDF 1.7 Tickets & JMF Bridge',
+          desc: 'Automatically decomposes pages into folding signatures (32, 16, 8, 4 pp) across B1/B2/SRA3 sheets, exports CIP4 JDF 1.7 XML job tickets (Heidelberg Prinect / Kodak Prinergy / HP Indigo), and ingests live JMF signals.',
           bullets: [
             'Editorial signature breakdown (e.g., 240 pp on B1 → 7×32pp + 1×16pp = 64 CMYK 4/4 CTP plates).',
-            'Progressive creep shingling and technical make-ready waste for Sheetfed Offset, Web Rotary, and Digital.',
-            'Direct signature routing to target presses with 6-stage real-time publisher telemetry.'
+            '1-Click CIP4 JDF 1.7 XML export embedding StrippingParams, Phase 11A spine width, and FOGRA39 TAC.',
+            'Live JMF press telemetry bridge and Predictive OEE Maintenance (12C) with ≥ 95% wear routing lock.'
           ],
           icon: Cpu
         },
@@ -598,13 +598,13 @@ export default function ForPrinthousesPage() {
           icon: Layers
         },
         {
-          badge: 'MODULE 06 · /OPS/MARKETPLACE & /OPS/FINANCIALS',
-          title: 'Commercial Governance, Financials & Audit (/audit)',
-          desc: 'Control which product families are live on the network, review per-order financial settlements, and inspect the immutable security audit log.',
+          badge: 'MODULE 06 · /OPS/FINANCIALS (PHASE-12A ESCROW & POD)',
+          title: 'Commercial Escrow, Split-Payout & EPAL Reconciliation',
+          desc: 'Zero payment risk: publisher funds are locked in Escrow upon 3D proof sign-off and automatically settled on signed POD, crediting €15.00/pallet to your plant if the carrier fails to return EPAL Euro-pallets.',
           bullets: [
-            'Instant activation or pausing of product lines based on current plant utilization.',
-            'Strict Multi-Tenant isolation: no competitor can ever view your rates or machine profiles.',
-            'Complete Audit Logs recording who modified a rate, approved a file, or released a shipment.'
+            'Strict mathematical segregation: Manufacturing ≠ Packaging ≠ Freight ≠ Platform Fee.',
+            'Automated €15.00/pallet carrier deduction after 14 days credited directly to your printhouse payout.',
+            'Strict Multi-Tenant isolation and immutable per-order financial settlement audit trail.'
           ],
           icon: Scale
         }
@@ -917,13 +917,13 @@ export default function ForPrinthousesPage() {
           icon: FileSearch
         },
         {
-          badge: 'MODUL 04 · /MANUFACTURING (PHASE-11B IMPOSITION)',
-          title: 'Dynamische Ausschießplanung, CTP-Platten & Druckwarteschlange',
-          desc: 'Zerlegt Buchumfänge automatisch in Falzbögen (32, 16, 8, 4 S.) für B1/B2/SRA3-Formate, berechnet den Bundzuwachs (Creep) und kalkuliert Einrichtemakulatur.',
+          badge: 'MODUL 04 · /MANUFACTURING (PHASE-11B + 12B JDF 1.7)',
+          title: 'Dynamische Ausschießplanung, CIP4 JDF 1.7 & JMF-Brücke',
+          desc: 'Zerlegt Buchumfänge automatisch in Falzbögen (32, 16, 8, 4 S.) für B1/B2/SRA3-Formate, exportiert CIP4 JDF 1.7 XML-Tickets (Heidelberg Prinect / Kodak Prinergy / HP Indigo) und verarbeitet Live-JMF-Signale.',
           bullets: [
             'Automatische Falzbogen-Zerlegung (z. B. 240 S. auf B1 → 7×32er + 1×16er = 64 CMYK-CTP-Platten).',
-            'Progressiver Bundzuwachs-Ausgleich (Creep) bei Rückendrahtheftung sowie Bogenoffset-/Rollen-/Digital-Makulatur.',
-            'Direktes Routing an die Zielmaschine mit 6-stufiger Echtzeit-Telemetrie für den Verlag.'
+            'Direkter CIP4 JDF 1.7 XML-Export inkl. StrippingParams, exakter Rückenbreite (11A) und FOGRA39-TAC.',
+            'JMF-Maschinentelemetrie & Prädiktive OEE-Wartung (12C) mit präventiver Routing-Sperre ab ≥ 95% Verschleiß.'
           ],
           icon: Cpu
         },
@@ -939,13 +939,13 @@ export default function ForPrinthousesPage() {
           icon: Layers
         },
         {
-          badge: 'MODUL 06 · /OPS/MARKETPLACE & /OPS/FINANCIALS',
-          title: 'Kaufmännische Steuerung, Finanzen & Audit (/audit)',
-          desc: 'Steuern Sie freigeschaltete Produktfamilien im Netzwerk, prüfen Sie Auftragsabrechnungen und nutzen Sie das unveränderliche Sicherheits-Audit-Protokoll.',
+          badge: 'MODUL 06 · /OPS/FINANCIALS (PHASE-12A ESCROW & POD)',
+          title: 'Treuhand-Escrow, Split-Payout & EPAL-Palettenausgleich',
+          desc: 'Volle Zahlungssicherheit: Verlagsgelder werden bei 3D-Druckfreigabe im Escrow gesichert und bei signiertem POD automatisch ausgezahlt – inkl. 15,00 €/Palette Gutschrift bei nicht getauschten EPAL-Europaletten.',
           bullets: [
-            'Sofortiges Aktivieren oder Pausieren von Produktlinien je nach aktueller Werksauslastung.',
-            'Strikte Multi-Tenant-Isolation: Kein Wettbewerber sieht Ihre Tarife oder Maschinenprofile.',
-            'Lückenlose Audit-Logs über jede Tarifänderung, Dateifreigabe oder Versandbuchung.'
+            'Strikte Kostentrennung: Fertigung ≠ Verpackung ≠ Fracht ≠ Plattformgebühr.',
+            'Automatischer Speditionsabzug (15,00 €/Palette nach 14 Tagen) direkt zugunsten Ihrer Druckerei.',
+            'Strikte Multi-Tenant-Isolation und unveränderliches Finanz-Audit-Protokoll pro Auftrag.'
           ],
           icon: Scale
         }
