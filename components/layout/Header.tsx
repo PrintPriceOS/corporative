@@ -157,19 +157,20 @@ export const Header: React.FC = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            paddingTop: '0.875rem',
-            paddingBottom: '0.875rem',
+            gap: 'clamp(0.75rem, 1.5vw, 1.5rem)',
+            paddingTop: '0.7rem',
+            paddingBottom: '0.7rem',
           }}
         >
           {/* Logo */}
           <Link
             href="/"
             style={{
-              fontSize: 'clamp(1rem, 3.8vw, 1.25rem)',
+              fontSize: 'clamp(1rem, 3.5vw, 1.2rem)',
               fontWeight: 800,
               display: 'flex',
               alignItems: 'center',
-              gap: 'clamp(0.4rem, 1.5vw, 0.65rem)',
+              gap: 'clamp(0.4rem, 1.2vw, 0.55rem)',
               color: 'var(--text-primary)',
               textDecoration: 'none',
               letterSpacing: '-0.02em',
@@ -177,7 +178,7 @@ export const Header: React.FC = () => {
               flexShrink: 0,
             }}
           >
-            <Logo size={28} />
+            <Logo size={26} />
             <span>
               <span style={{ color: 'var(--accent-primary)' }}>PrintPrice</span> Pro
             </span>
@@ -190,15 +191,18 @@ export const Header: React.FC = () => {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 'clamp(0.4rem, 0.9vw, 1.25rem)',
-              fontSize: '0.875rem',
+              justifyContent: 'center',
+              gap: 'clamp(0.75rem, 1.35vw, 1.5rem)',
+              fontSize: '0.84rem',
               fontWeight: 600,
               color: 'var(--text-secondary)',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
             }}
             aria-label={locale === 'es' ? 'Navegación principal' : locale === 'de' ? 'Hauptnavigation' : 'Main navigation'}
           >
             {/* 1. PRODUCTOS Dropdown (Qué puedes hacer) */}
-            <div ref={productsDropdownRef} style={{ position: 'relative' }}>
+            <div ref={productsDropdownRef} style={{ position: 'relative', flexShrink: 0 }}>
               <button
                 type="button"
                 onClick={() => {
@@ -217,19 +221,21 @@ export const Header: React.FC = () => {
                   color: isProductsOpen ? 'var(--text-primary)' : 'inherit',
                   font: 'inherit',
                   cursor: 'pointer',
-                  display: 'flex',
+                  display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '0.35rem',
-                  padding: '0.4rem 0.25rem',
+                  gap: '0.3rem',
+                  padding: '0.35rem 0.15rem',
+                  whiteSpace: 'nowrap',
                 }}
               >
-                <span>{dict.nav.products}</span>
+                <span style={{ whiteSpace: 'nowrap' }}>{dict.nav.products}</span>
                 <span
                   style={{
-                    fontSize: '0.7rem',
+                    fontSize: '0.65rem',
                     transition: 'transform 0.2s ease',
                     transform: isProductsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
                     opacity: 0.6,
+                    lineHeight: 1,
                   }}
                 >
                   ▼
@@ -253,6 +259,7 @@ export const Header: React.FC = () => {
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '0.35rem',
+                    whiteSpace: 'normal',
                   }}
                 >
                   <div style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.05em', padding: '0.25rem 0.5rem', textTransform: 'uppercase' }}>
@@ -358,7 +365,7 @@ export const Header: React.FC = () => {
             </div>
 
             {/* 2. PÚBLICOS Dropdown (Para quién) */}
-            <div ref={whoDropdownRef} style={{ position: 'relative' }}>
+            <div ref={whoDropdownRef} style={{ position: 'relative', flexShrink: 0 }}>
               <button
                 type="button"
                 onClick={() => {
@@ -377,19 +384,21 @@ export const Header: React.FC = () => {
                   color: isWhoOpen ? 'var(--text-primary)' : 'inherit',
                   font: 'inherit',
                   cursor: 'pointer',
-                  display: 'flex',
+                  display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '0.35rem',
-                  padding: '0.4rem 0.25rem',
+                  gap: '0.3rem',
+                  padding: '0.35rem 0.15rem',
+                  whiteSpace: 'nowrap',
                 }}
               >
-                <span>{dict.nav.forWhom}</span>
+                <span style={{ whiteSpace: 'nowrap' }}>{dict.nav.forWhom}</span>
                 <span
                   style={{
-                    fontSize: '0.7rem',
+                    fontSize: '0.65rem',
                     transition: 'transform 0.2s ease',
                     transform: isWhoOpen ? 'rotate(180deg)' : 'rotate(0deg)',
                     opacity: 0.6,
+                    lineHeight: 1,
                   }}
                 >
                   ▼
@@ -413,6 +422,7 @@ export const Header: React.FC = () => {
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '0.35rem',
+                    whiteSpace: 'normal',
                   }}
                 >
                   <div style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--accent-primary)', letterSpacing: '0.05em', padding: '0.25rem 0.5rem', textTransform: 'uppercase' }}>
@@ -460,30 +470,30 @@ export const Header: React.FC = () => {
             </div>
 
             {/* Direct Links */}
-            <Link href="/#comparativas" style={{ color: 'inherit', textDecoration: 'none' }}>
+            <Link href="/#comparativas" style={{ color: 'inherit', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
               {dict.nav.comparisons}
             </Link>
 
-            <Link href="/developers" style={{ color: 'inherit', textDecoration: 'none' }}>
-              {dict.nav.developers}
+            <Link href="/developers" style={{ color: 'inherit', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
+              {locale === 'es' ? 'Desarrolladores' : locale === 'de' ? 'Entwickler & API' : 'Developers & API'}
             </Link>
 
             <a
               href="https://docs.printprice.pro/docs/"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: 'inherit', textDecoration: 'none' }}
+              style={{ color: 'inherit', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}
             >
-              {dict.nav.docs} ↗
+              {locale === 'es' ? 'Documentación' : locale === 'de' ? 'Dokumentation' : 'Docs'} ↗
             </a>
 
-            <Link href="/contact" style={{ color: 'inherit', textDecoration: 'none' }}>
+            <Link href="/contact" style={{ color: 'inherit', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
               {dict.nav.contact}
             </Link>
           </nav>
 
           {/* Action CTAs, Language Selector & Theme Toggle */}
-          <div className="desktop-only" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.4rem, 0.8vw, 0.75rem)', flexShrink: 0 }}>
+          <div className="desktop-only" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.4rem, 0.7vw, 0.65rem)', flexShrink: 0, whiteSpace: 'nowrap' }}>
             <LanguageSelector />
             <ThemeToggle />
 
@@ -496,9 +506,9 @@ export const Header: React.FC = () => {
                 border: 'none',
                 color: 'var(--text-primary)',
                 fontWeight: 600,
-                fontSize: '0.875rem',
+                fontSize: '0.84rem',
                 cursor: 'pointer',
-                padding: '0.45rem clamp(0.5rem, 0.8vw, 0.75rem)',
+                padding: '0.4rem clamp(0.45rem, 0.7vw, 0.65rem)',
                 borderRadius: 'var(--radius-btn)',
                 whiteSpace: 'nowrap',
               }}
@@ -511,7 +521,7 @@ export const Header: React.FC = () => {
               type="button"
               onClick={() => setIsStartModalOpen(true)}
               className="btn-primary"
-              style={{ padding: '0.5rem clamp(0.75rem, 1vw, 1.25rem)', fontSize: '0.875rem', whiteSpace: 'nowrap' }}
+              style={{ padding: '0.45rem clamp(0.75rem, 0.9vw, 1.1rem)', fontSize: '0.84rem', whiteSpace: 'nowrap' }}
             >
               {dict.nav.start}
             </button>

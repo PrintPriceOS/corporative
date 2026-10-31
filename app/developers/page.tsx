@@ -356,7 +356,7 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
         }
       ],
       ctaFinalTitle: '¿Listo para conectar tu ERP, e-commerce o flujo editorial?',
-      ctaFinalDesc: 'Solicita credenciales de партнер o explora los contratos interactivos en nuestro portal de documentación técnica.',
+      ctaFinalDesc: 'Solicita credenciales de partner o explora los contratos interactivos en nuestro portal de documentación técnica.',
       ctaFinalBtn: 'Solicitar acceso API ➔'
     },
     en: {

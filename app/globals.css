@@ -104,8 +104,8 @@ h1, h2, h3, h4, h5, h6 {
   word-break: normal;
   text-wrap: balance;
   -webkit-text-wrap: balance;
-  hyphens: auto;
-  -webkit-hyphens: auto;
+  hyphens: none;
+  -webkit-hyphens: none;
 }
 
 p, a, span, button, td, th {
