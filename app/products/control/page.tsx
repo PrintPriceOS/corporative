@@ -263,6 +263,51 @@ export default function ControlPage() {
         primaryAction={{ label: t.heroCtaPrimary, href: "https://control.printprice.pro" }}
         secondaryAction={{ label: t.heroCtaSecondary, href: "#preview" }}
         variant="particles"
+        rightContent={
+          <div
+            className="rounded-card"
+            style={{
+              background: 'rgba(19, 19, 20, 0.92)',
+              border: '1px solid rgba(220, 0, 0, 0.35)',
+              padding: '1.5rem 1.75rem',
+              backdropFilter: 'blur(12px)',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.55)',
+              maxWidth: '470px',
+              marginLeft: 'auto',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.75rem' }}>
+              <span className="technical-text" style={{ fontSize: '0.72rem', fontWeight: 800, color: '#dc0000', letterSpacing: '0.1em' }}>
+                CONTROL PLANE (:8081) · RBAC
+              </span>
+              <span className="technical-text" style={{ fontSize: '0.65rem', background: 'rgba(34, 197, 94, 0.15)', color: '#22c55e', padding: '0.15rem 0.55rem', borderRadius: 'var(--radius-pill)', fontWeight: 700 }}>
+                {t.statusFeed}
+              </span>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.7rem', fontSize: '0.8rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
+                <span style={{ color: '#a1a1aa' }}>Printhouse Setup Hub:</span>
+                <span className="technical-text" style={{ fontWeight: 700, color: '#f4f4f5' }}>12 Modules (/printhouse/setup)</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
+                <span style={{ color: '#a1a1aa' }}>3D Logistics &amp; Cubing:</span>
+                <span className="technical-text" style={{ fontWeight: 700, color: '#22c55e' }}>POST /api/logistics/calculate-quote</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
+                <span style={{ color: '#a1a1aa' }}>Paper Supplier Hub:</span>
+                <span className="technical-text" style={{ fontWeight: 700, color: '#f4f4f5' }}>GET /api/admin/materials/catalog</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
+                <span style={{ color: '#a1a1aa' }}>Editorial Dock Profiles:</span>
+                <span className="technical-text" style={{ fontWeight: 700, color: '#ffb4a8' }}>Zeitfracht · VVA Arvato · FBA</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
+                <span style={{ color: '#a1a1aa' }}>Tenant Isolation:</span>
+                <span className="technical-text" style={{ fontWeight: 700, color: '#f4f4f5' }}>JWT + X-Tenant-Id Guard</span>
+              </div>
+            </div>
+          </div>
+        }
       />
 
       {/* Authority Tagline */}
@@ -299,7 +344,7 @@ export default function ControlPage() {
             </div>
           </div>
 
-          <div style={{ 
+          <div className="rounded-card" style={{ 
             background: 'var(--bg-primary)', 
             border: '1px solid var(--border-color)', 
             padding: '2.5rem',
@@ -348,8 +393,8 @@ export default function ControlPage() {
         }}>
           {t.features.map((feature, i) => (
             <div key={i} style={{ height: '100%' }}>
-              <SystemCardHover borderRadius={0}>
-                <div style={{
+              <SystemCardHover borderRadius={16}>
+                <div className="rounded-card" style={{
                   padding: '2.5rem',
                   position: 'relative',
                   overflow: 'hidden',
@@ -364,6 +409,7 @@ export default function ControlPage() {
                       width: '3.5rem', 
                       alignItems: 'center', 
                       justifyContent: 'center', 
+                      borderRadius: '12px',
                       border: '1px solid var(--border-color)', 
                       background: 'rgba(255,255,255,0.03)' 
                     }}>
@@ -398,15 +444,16 @@ export default function ControlPage() {
           </p>
         </div>
 
-        <div style={{ 
+        <div className="rounded-card" style={{ 
           background: 'var(--bg-secondary)', 
           padding: '2px', 
           border: '1px solid var(--border-color)', 
           boxShadow: '0 40px 80px rgba(0,0,0,0.2)',
           maxWidth: '1200px',
-          margin: '0 auto'
+          margin: '0 auto',
+          overflow: 'hidden'
         }}>
-          <div style={{ background: 'var(--bg-primary)', padding: 'clamp(2rem, 5vw, 3.5rem)', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ background: 'var(--bg-primary)', padding: 'clamp(2rem, 5vw, 3.5rem)', position: 'relative', overflow: 'hidden', borderRadius: '14px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', flexWrap: 'wrap', gap: '1rem' }}>
               <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
                 <span className="technical-text" style={{ fontSize: '0.7rem', fontWeight: 900 }}>{t.statusEnv}</span>

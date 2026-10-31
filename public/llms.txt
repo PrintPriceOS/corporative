@@ -25,3 +25,4 @@ PrintPriceOS connects authors, publishing houses, industrial print plants (sheet
 - **Logistics REST API Reference**: https://docs.printprice.pro/docs/api/logistics-api
 - **API Contracts & Overview**: https://docs.printprice.pro/docs/api/overview
 - **Extended LLM Context**: https://printprice.pro/llms-full.txt
+

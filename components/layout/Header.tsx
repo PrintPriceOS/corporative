@@ -157,20 +157,21 @@ export const Header: React.FC = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: 'clamp(0.75rem, 1.5vw, 1.5rem)',
-            paddingTop: '0.7rem',
-            paddingBottom: '0.7rem',
+            gap: 'clamp(0.5rem, 1.1vw, 1.25rem)',
+            paddingTop: '0.6rem',
+            paddingBottom: '0.6rem',
+            flexWrap: 'nowrap',
           }}
         >
           {/* Logo */}
           <Link
             href="/"
             style={{
-              fontSize: 'clamp(1rem, 3.5vw, 1.2rem)',
+              fontSize: 'clamp(0.95rem, 1.5vw, 1.15rem)',
               fontWeight: 800,
               display: 'flex',
               alignItems: 'center',
-              gap: 'clamp(0.4rem, 1.2vw, 0.55rem)',
+              gap: '0.45rem',
               color: 'var(--text-primary)',
               textDecoration: 'none',
               letterSpacing: '-0.02em',
@@ -178,8 +179,8 @@ export const Header: React.FC = () => {
               flexShrink: 0,
             }}
           >
-            <Logo size={26} />
-            <span>
+            <Logo size={24} />
+            <span style={{ whiteSpace: 'nowrap' }}>
               <span style={{ color: 'var(--accent-primary)' }}>PrintPrice</span> Pro
             </span>
           </Link>
@@ -192,12 +193,13 @@ export const Header: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: 'clamp(0.75rem, 1.35vw, 1.5rem)',
-              fontSize: '0.84rem',
+              gap: 'clamp(0.55rem, 1vw, 1.2rem)',
+              fontSize: 'clamp(0.78rem, 0.88vw, 0.85rem)',
               fontWeight: 600,
               color: 'var(--text-secondary)',
               whiteSpace: 'nowrap',
               flexShrink: 0,
+              flexWrap: 'nowrap',
             }}
             aria-label={locale === 'es' ? 'Navegación principal' : locale === 'de' ? 'Hauptnavigation' : 'Main navigation'}
           >
@@ -475,7 +477,7 @@ export const Header: React.FC = () => {
             </Link>
 
             <Link href="/developers" style={{ color: 'inherit', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
-              {locale === 'es' ? 'Desarrolladores' : locale === 'de' ? 'Entwickler & API' : 'Developers & API'}
+              {locale === 'es' ? 'Desarrolladores' : locale === 'de' ? 'Entwickler' : 'Developers'}
             </Link>
 
             <a
@@ -484,7 +486,7 @@ export const Header: React.FC = () => {
               rel="noopener noreferrer"
               style={{ color: 'inherit', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}
             >
-              {locale === 'es' ? 'Documentación' : locale === 'de' ? 'Dokumentation' : 'Docs'} ↗
+              {locale === 'es' ? 'Docs' : locale === 'de' ? 'Doku' : 'Docs'} ↗
             </a>
 
             <Link href="/contact" style={{ color: 'inherit', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
@@ -493,7 +495,7 @@ export const Header: React.FC = () => {
           </nav>
 
           {/* Action CTAs, Language Selector & Theme Toggle */}
-          <div className="desktop-only" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.4rem, 0.7vw, 0.65rem)', flexShrink: 0, whiteSpace: 'nowrap' }}>
+          <div className="desktop-only" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(0.35rem, 0.55vw, 0.6rem)', flexShrink: 0, whiteSpace: 'nowrap', flexWrap: 'nowrap' }}>
             <LanguageSelector />
             <ThemeToggle />
 
@@ -506,9 +508,9 @@ export const Header: React.FC = () => {
                 border: 'none',
                 color: 'var(--text-primary)',
                 fontWeight: 600,
-                fontSize: '0.84rem',
+                fontSize: 'clamp(0.78rem, 0.88vw, 0.84rem)',
                 cursor: 'pointer',
-                padding: '0.4rem clamp(0.45rem, 0.7vw, 0.65rem)',
+                padding: '0.35rem clamp(0.4rem, 0.6vw, 0.6rem)',
                 borderRadius: 'var(--radius-btn)',
                 whiteSpace: 'nowrap',
               }}
@@ -521,7 +523,7 @@ export const Header: React.FC = () => {
               type="button"
               onClick={() => setIsStartModalOpen(true)}
               className="btn-primary"
-              style={{ padding: '0.45rem clamp(0.75rem, 0.9vw, 1.1rem)', fontSize: '0.84rem', whiteSpace: 'nowrap' }}
+              style={{ padding: '0.4rem clamp(0.65rem, 0.85vw, 1rem)', fontSize: 'clamp(0.78rem, 0.88vw, 0.84rem)', whiteSpace: 'nowrap' }}
             >
               {dict.nav.start}
             </button>

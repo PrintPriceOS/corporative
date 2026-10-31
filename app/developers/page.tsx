@@ -258,7 +258,7 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
   const texts = {
     es: {
       heroLabel: 'DEVELOPER HUB · CONTROL PLANE & INTELLIGENCE LAYER API',
-      heroTitle: 'INFRAESTRUCTURA PROGRAMÁTICA PARA PRODUCCIÓN GRÁFICA Y LOGÍSTICA 3D',
+      heroTitle: 'APIs INDUSTRIALES DE PRODUCCIÓN GRÁFICA Y LOGÍSTICA 3D',
       heroSlogan: ['CALCULA.', 'VALIDA.', 'CUBICA Y ENRUTA VÍA API.'],
       heroSub:
         'Integra el motor determinista de costes (Book Pricing Engine), el solucionador de cubicaje 3D sobre Euro-palets EPAL, la federación de papel y la inspección PDF preflight mediante contratos REST OpenAPI 3.1 con aislamiento estricto de costes y multi-tenancy.',
@@ -361,7 +361,7 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
     },
     en: {
       heroLabel: 'DEVELOPER HUB · CONTROL PLANE & INTELLIGENCE LAYER API',
-      heroTitle: 'PROGRAMMATIC INFRASTRUCTURE FOR PRINT MANUFACTURING & 3D LOGISTICS',
+      heroTitle: 'INDUSTRIAL API INFRASTRUCTURE FOR PRINT & 3D LOGISTICS',
       heroSlogan: ['PRICE IT.', 'FIX IT.', 'CUBE & ROUTE VIA API.'],
       heroSub:
         'Integrate the deterministic Book Pricing Engine (BPE), 3D EPAL Euro-pallet cubing solver, substrate catalog federation, and automated PDF preflight via OpenAPI 3.1 REST contracts with strict cost segregation and multi-tenant isolation.',
@@ -464,7 +464,7 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
     },
     de: {
       heroLabel: 'DEVELOPER HUB · CONTROL PLANE & INTELLIGENCE LAYER API',
-      heroTitle: 'PROGRAMMIERBARE INFRASTRUKTUR FÜR DRUCKPRODUKTION & 3D-LOGISTIK',
+      heroTitle: 'INDUSTRIELLE API-PLATTFORM FÜR DRUCK & 3D-LOGISTIK',
       heroSlogan: ['KALKULIEREN.', 'PRÜFEN.', 'PALETTIEREN & ROUTEN VIA API.'],
       heroSub:
         'Integrieren Sie die deterministische Book Pricing Engine (BPE), den 3D-EPAL-Palettierungsrechner, den Paper Supplier Hub und das automatisierte PDF-Preflight über OpenAPI 3.1 REST-Verträge mit strikter Kostentrennung und Mandantenfähigkeit.',
@@ -591,10 +591,11 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
         variant="particles"
         rightContent={
           <div
+            className="rounded-card"
             style={{
               background: '#0e0e0f',
               border: '1px solid rgba(220, 0, 0, 0.35)',
-              padding: '1.75rem',
+              padding: '1.5rem 1.75rem',
               boxShadow: '0 0 28px rgba(220, 0, 0, 0.14)',
               maxWidth: '480px',
               marginLeft: 'auto'
@@ -951,8 +952,9 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
         >
           {t.modules.map((mod) => (
             <div key={mod.id} style={{ height: '100%' }}>
-              <SystemCardHover borderRadius={0}>
+              <SystemCardHover borderRadius={16}>
                 <div
+                  className="rounded-card"
                   style={{
                     padding: '2.25rem 2rem',
                     height: '100%',
@@ -1050,6 +1052,7 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
           {t.secItems.map((item, idx) => (
             <div
               key={idx}
+              className="rounded-card"
               style={{
                 padding: '2.25rem 2rem',
                 background: '#131314',
@@ -1127,6 +1130,7 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
               href={linkItem.href}
               target="_blank"
               rel="noopener noreferrer"
+              className="rounded-card"
               style={{
                 padding: '1.85rem',
                 background: '#0e0e0f',

@@ -926,6 +926,51 @@ export default function PreflightProductPage() {
           href: '#demo-report'
         }}
         variant="particles"
+        rightContent={
+          <div
+            className="rounded-card"
+            style={{
+              background: 'rgba(19, 19, 20, 0.92)',
+              border: '1px solid rgba(220, 0, 0, 0.35)',
+              padding: '1.5rem 1.75rem',
+              backdropFilter: 'blur(12px)',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.55)',
+              maxWidth: '470px',
+              marginLeft: 'auto',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.75rem' }}>
+              <span className="technical-text" style={{ fontSize: '0.72rem', fontWeight: 800, color: '#dc0000', letterSpacing: '0.1em' }}>
+                PREFLIGHT ENGINE · REST API
+              </span>
+              <span className="technical-text" style={{ fontSize: '0.65rem', background: 'rgba(34, 197, 94, 0.15)', color: '#22c55e', padding: '0.15rem 0.55rem', borderRadius: 'var(--radius-pill)', fontWeight: 700 }}>
+                PDF/X-1a · PDF/X-4
+              </span>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.7rem', fontSize: '0.8rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
+                <span style={{ color: '#a1a1aa' }}>{locale === 'es' ? 'Análisis Forense:' : locale === 'de' ? 'Forensische Prüfung:' : 'Forensic Analysis:'}</span>
+                <span className="technical-text" style={{ fontWeight: 700, color: '#f4f4f5' }}>POST /api/preflight/analyze</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
+                <span style={{ color: '#a1a1aa' }}>{locale === 'es' ? 'Remediación Asistida:' : locale === 'de' ? 'Auto-Korrektur:' : 'Assisted Autofix:'}</span>
+                <span className="technical-text" style={{ fontWeight: 700, color: '#22c55e' }}>POST /api/preflight/autofix</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
+                <span style={{ color: '#a1a1aa' }}>{locale === 'es' ? 'Geometría de Lomo:' : locale === 'de' ? 'Buchrücken-Abgleich:' : 'Spine Geometry:'}</span>
+                <span className="technical-text" style={{ fontWeight: 700, color: '#ffb4a8' }}>SPINE-04 (±0.5 mm Tol.)</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
+                <span style={{ color: '#a1a1aa' }}>{locale === 'es' ? 'Cajas de Página:' : locale === 'de' ? 'Seitenrahmen:' : 'Page Boxes:'}</span>
+                <span className="technical-text" style={{ fontWeight: 700, color: '#f4f4f5' }}>TrimBox · BleedBox (+3 mm)</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.75rem' }}>
+                <span style={{ color: '#a1a1aa' }}>{locale === 'es' ? 'Trazabilidad:' : locale === 'de' ? 'Nachvollziehbarkeit:' : 'Audit Evidence:'}</span>
+                <span className="technical-text" style={{ fontWeight: 700, color: '#f4f4f5' }}>SHA-256 + Evidence ID</span>
+              </div>
+            </div>
+          </div>
+        }
       />
 
       {/* Slogan Brand Bar */}

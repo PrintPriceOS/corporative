@@ -82,9 +82,9 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
       <Section 
         background={backgroundEffect}
         style={{ 
-          paddingTop: 'clamp(2.25rem, 5vh, 4.25rem)',
-          paddingBottom: 'clamp(2.5rem, 5.5vh, 4.5rem)',
-          minHeight: 'calc(100dvh - 64px)',
+          paddingTop: 'clamp(1.5rem, 3.5vh, 3rem)',
+          paddingBottom: 'clamp(1.75rem, 4vh, 3.25rem)',
+          minHeight: 'calc(100dvh - 60px)',
           display: 'flex',
           alignItems: 'center',
           position: 'relative', 
@@ -97,42 +97,42 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
         <style>{`
           .hero-label {
             color: #dc0000;
-            font-size: clamp(0.68rem, 1.3vw, 0.78rem);
+            font-size: clamp(0.66rem, 1.15vw, 0.75rem);
             text-transform: uppercase;
-            letter-spacing: 0.14rem;
-            margin-bottom: clamp(0.85rem, 2vh, 1.25rem);
+            letter-spacing: 0.13rem;
+            margin-bottom: clamp(0.6rem, 1.5vh, 1rem);
             display: inline-flex;
             align-items: center;
-            gap: 0.65rem;
+            gap: 0.6rem;
             font-weight: 700;
-            line-height: 1.35;
+            line-height: 1.3;
           }
           .hero-title {
-            font-size: clamp(1.95rem, 3.6vw, 3.15rem);
-            line-height: 1.08;
-            letter-spacing: -0.035em;
-            margin-bottom: clamp(0.75rem, 1.8vh, 1.15rem);
+            font-size: clamp(1.75rem, 2.75vw, 2.55rem);
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: clamp(0.6rem, 1.5vh, 1rem);
             color: #e5e2e3;
             text-wrap: balance;
             overflow-wrap: normal;
-            word-break: normal;
+            word-break: keep-all;
             hyphens: none;
             -webkit-hyphens: none;
           }
           .hero-slogan-headline {
-            font-size: clamp(2.35rem, 5.8vw, 4.4rem);
-            line-height: 0.96;
-            letter-spacing: -0.055em;
-            margin-bottom: clamp(0.85rem, 2vh, 1.25rem);
+            font-size: clamp(2.1rem, 4.8vw, 3.8rem);
+            line-height: 0.98;
+            letter-spacing: -0.045em;
+            margin-bottom: clamp(0.65rem, 1.6vh, 1.1rem);
             color: #e5e2e3;
             display: flex;
             flex-direction: column;
           }
           .hero-subheadline {
-            font-size: clamp(0.95rem, 1.35vw, 1.125rem);
+            font-size: clamp(0.9rem, 1.15vw, 1.05rem);
             color: #8d8d91;
-            line-height: 1.55;
-            margin-bottom: clamp(1.35rem, 3vh, 2.25rem);
+            line-height: 1.52;
+            margin-bottom: clamp(1.1rem, 2.4vh, 1.65rem);
             max-width: 640px;
             font-weight: 500;
             letter-spacing: -0.01em;
@@ -141,9 +141,9 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
           }
           .hero-slogan-inline {
             display: flex;
-            gap: 1.15rem;
-            margin-bottom: clamp(1rem, 2.2vh, 1.5rem);
-            font-size: clamp(0.78rem, 1.25vw, 0.98rem);
+            gap: 1rem;
+            margin-bottom: clamp(0.75rem, 1.8vh, 1.15rem);
+            font-size: clamp(0.75rem, 1.1vw, 0.9rem);
             font-weight: 900;
             letter-spacing: 0.08em;
             color: #8d8d91;
@@ -152,23 +152,23 @@ export const HeroPlatform: React.FC<HeroPlatformProps> = ({
           .hero-actions {
             display: flex;
             flex-direction: column;
-            gap: 0.9rem;
+            gap: 0.7rem;
             align-items: flex-start;
             transition: opacity 1s ease;
           }
           .hero-buttons-row {
             display: flex;
-            gap: 0.85rem;
+            gap: 0.75rem;
             align-items: center;
             flex-wrap: wrap;
           }
           .hero-btn {
             white-space: nowrap;
-            padding: 0.85rem 1.65rem;
+            padding: 0.75rem 1.5rem;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-height: 46px;
+            min-height: 44px;
             box-sizing: border-box;
           }
           @media (max-width: 768px) {

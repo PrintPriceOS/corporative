@@ -100,7 +100,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-primary);
   line-height: 1.2;
   letter-spacing: -0.025em;
-  overflow-wrap: break-word;
+  overflow-wrap: normal;
   word-break: normal;
   text-wrap: balance;
   -webkit-text-wrap: balance;
@@ -108,7 +108,7 @@ h1, h2, h3, h4, h5, h6 {
   -webkit-hyphens: none;
 }
 
-p, a, span, button, td, th {
+p, a, button, td, th {
   overflow-wrap: break-word;
 }
 

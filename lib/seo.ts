@@ -1,6 +1,9 @@
 import { Metadata } from 'next';
 
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://printprice.pro';
+export const INDEXNOW_KEY =
+  process.env.NEXT_PUBLIC_INDEXNOW_KEY || '7f8a9b2c4d6e1f3a5b7c9d0e2f4a6b8c';
+export const INDEXNOW_KEY_LOCATION = `${BASE_URL}/${INDEXNOW_KEY}.txt`;
 
 export const SEO_DATA = {
   titleTemplate: '%s | PrintPrice Pro',
@@ -104,6 +107,16 @@ export function constructMetadata({
         'max-video-preview': -1,
         'max-image-preview': 'large',
         'max-snippet': -1,
+      },
+    },
+    verification: {
+      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
+      yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION || undefined,
+      other: {
+        ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+          ? { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
+          : {}),
+        'indexnow-key': INDEXNOW_KEY,
       },
     },
     icons: {

@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
-import { constructMetadata, getBreadcrumbJsonLd } from '@/lib/seo';
+import { constructMetadata, getBreadcrumbJsonLd, getSoftwareApplicationJsonLd } from '@/lib/seo';
 
 export const metadata: Metadata = constructMetadata({
-  title: 'Control Plane | Consola Operativa para Imprentas y Proveedores',
-  description: 'Espacio operativo oficial de PrintPrice OS para imprentas y proveedores de papel: perfilado de máquinas, matrices de acabado y recepción de trabajos preflight.',
+  title: 'Control Plane (:8081) — Consola Operativa Multi-Tenant, RBAC & Logística 3D | PrintPrice Pro',
+  description:
+    'Consola operativa oficial de PrintPrice OS (control.printprice.pro): configuración de 12 módulos de taller, Paper Supplier Hub, motor de cubicaje 3D EPAL (Zeitfracht / Arvato) y API REST gobernada.',
   canonical: '/products/control',
 });
 
@@ -13,12 +14,23 @@ const breadcrumbs = getBreadcrumbJsonLd([
   { name: 'Control Plane', path: '/products/control' },
 ]);
 
+const controlAppJsonLd = getSoftwareApplicationJsonLd({
+  name: 'PrintPriceOS Control Plane (:8081)',
+  description:
+    'Multi-tenant B2B operating console for print houses and paper suppliers featuring RBAC governance, 12-module facility setup, 3D EPAL logistics cubing, and preflight worker orchestration.',
+  path: '/products/control',
+});
+
 export default function ControlLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(controlAppJsonLd) }}
       />
       {children}
     </>

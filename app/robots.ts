@@ -1,12 +1,12 @@
 import { MetadataRoute } from 'next';
-import { BASE_URL } from '@/lib/seo';
+import { BASE_URL, INDEXNOW_KEY } from '@/lib/seo';
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
+        allow: ['/', `/${INDEXNOW_KEY}.txt`, '/llms.txt', '/llms-full.txt'],
         disallow: [
           '/api/',
           '/_next/',
