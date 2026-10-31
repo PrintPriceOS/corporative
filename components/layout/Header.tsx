@@ -464,8 +464,12 @@ export const Header: React.FC = () => {
               {dict.nav.comparisons}
             </Link>
 
+            <Link href="/developers" style={{ color: 'inherit', textDecoration: 'none' }}>
+              {dict.nav.developers}
+            </Link>
+
             <a
-              href="https://docs.printprice.pro/"
+              href="https://docs.printprice.pro/docs/"
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: 'inherit', textDecoration: 'none' }}
@@ -657,7 +661,7 @@ export const Header: React.FC = () => {
             <Link href="/#comparativas" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
               {dict.nav.comparisons}
             </Link>
-            <a href="https://docs.printprice.pro/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
+            <a href="https://docs.printprice.pro/docs/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
               {dict.nav.docs} ↗
             </a>
             <a href="https://control.printprice.pro/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>

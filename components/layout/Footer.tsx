@@ -216,8 +216,13 @@ export const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a href="https://docs.printprice.pro/" target="_blank" rel="noopener noreferrer" style={linkStyle}>
+                <a href="https://docs.printprice.pro/docs/" target="_blank" rel="noopener noreferrer" style={linkStyle}>
                   {dict.nav.docs} ↗
+                </a>
+              </li>
+              <li>
+                <a href="https://docs.printprice.pro/docs/engines/logistics-cubing-engine" target="_blank" rel="noopener noreferrer" style={linkStyle}>
+                  3D Cubing &amp; Logistics Engine ?
                 </a>
               </li>
               <li>

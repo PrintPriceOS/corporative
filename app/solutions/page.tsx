@@ -14,11 +14,11 @@ export default function SolutionsHub() {
       heroLabel: 'ESCENARIOS DE PRODUCCIÓN GRÁFICA',
       heroTitle: 'DISEÑADO PARA CADA ENTORNO PRODUCTIVO',
       heroSlogan: ["PRICE IT.", "FIX IT.", "PRINT IT."],
-      heroSub: 'Calcula costes, audita PDFs y conecta con talleres asociados con independencia del segmento gráfico: editorial, packaging, folletos o gran formato.',
+      heroSub: 'Calcula costes, audita PDFs, cubica palets EPAL en 3D y conecta con talleres asociados con independencia del segmento gráfico: editorial, packaging, folletos o gran formato.',
       heroCtaPrimary: 'Iniciar cotización ➔',
       heroCtaSecondary: 'Ver casos de uso ↓',
       gridTitle: 'Sectores y aplicaciones gráficas',
-      gridSubtitle: 'Flujos específicos adaptados a las particularidades mecánicas de cada tipo de trabajo.',
+      gridSubtitle: 'Flujos específicos adaptados a las particularidades mecánicas y logísticas de cada tipo de trabajo.',
       solutions: [
         {
           name: "Libros y Sector Editorial",
@@ -27,6 +27,14 @@ export default function SolutionsHub() {
           href: "/for-publishers",
           ctaText: "Ver solución editorial ➔",
           icon: "layers"
+        },
+        {
+          name: "Smart Shipping & Logística 3D Editorial",
+          description: "Cálculo de masa neta guillotinada (cartón gris a 1,20 g/cm³), encajado FEFCO 0201 (≤ 15 kg), apilado entrelazado en Euro-Palets EPAL (1200×800 mm), cumplimiento Zeitfracht Erfurt / VVA Arvato, peso tasable LDM y optimizador ΔQ- / ΔQ+.",
+          code: "LOGISTICS 3D",
+          href: "/#smart-shipping-logistics",
+          ctaText: "Ver motor de logística 3D ➔",
+          icon: "box"
         },
         {
           name: "Packaging y Estuchería",
@@ -54,19 +62,19 @@ export default function SolutionsHub() {
         }
       ],
       ctaSlogan: 'CAPACIDAD DE PLATAFORMA',
-      ctaTitle: 'Un sistema determinista para cada flujo gráfico',
-      ctaDesc: 'PrintPrice Pro estandariza especificaciones y calcula presupuestos con matrices de máquinas reales.',
+      ctaTitle: 'Un sistema determinista para cada flujo gráfico y logístico',
+      ctaDesc: 'PrintPrice Pro estandariza especificaciones, calcula presupuestos con matrices de máquinas reales y valida el cubicaje 3D hacia distribuidoras editoriales.',
       ctaBtn: 'Comenzar un proyecto ➔'
     },
     en: {
       heroLabel: 'PRINT MANUFACTURING SCENARIOS',
       heroTitle: 'ENGINEERED FOR EVERY PRINT SEGMENT',
       heroSlogan: ["PRICE IT.", "FIX IT.", "PRINT IT."],
-      heroSub: 'Calculate costs, validate PDFs, and route production regardless of print segment: books, packaging, commercial collateral, or large format.',
+      heroSub: 'Calculate costs, validate PDFs, cube 3D EPAL Euro-pallets, and route production regardless of print segment: books, editorial logistics, packaging, commercial collateral, or large format.',
       heroCtaPrimary: 'Start project estimation ➔',
       heroCtaSecondary: 'Explore use cases ↓',
       gridTitle: 'Print Verticals & Segments',
-      gridSubtitle: 'Specialized workflows calibrated to the exact mechanical requirements of each product type.',
+      gridSubtitle: 'Specialized workflows calibrated to the exact mechanical and logistics requirements of each product type.',
       solutions: [
         {
           name: "Book Publishing",
@@ -75,6 +83,14 @@ export default function SolutionsHub() {
           href: "/for-publishers",
           ctaText: "Explore publishing solution ➔",
           icon: "layers"
+        },
+        {
+          name: "Smart Shipping & 3D Editorial Logistics",
+          description: "Trimmed book mass (including 1.20 g/cm³ hardcover greyboard), ergonomic FEFCO 0201 carton packing (≤ 15 kg), interlocked EPAL pallet stacking (1200×800 mm), Zeitfracht Erfurt / VVA Arvato dock compliance, LDM freight, and ΔQ- / ΔQ+ run optimizer.",
+          code: "LOGISTICS 3D",
+          href: "/#smart-shipping-logistics",
+          ctaText: "Explore 3D logistics engine ➔",
+          icon: "box"
         },
         {
           name: "Packaging & Folding Cartons",
@@ -102,19 +118,19 @@ export default function SolutionsHub() {
         }
       ],
       ctaSlogan: 'PLATFORM CAPABILITY',
-      ctaTitle: 'One deterministic system for every print vertical',
-      ctaDesc: 'PrintPrice Pro standardizes specifications and calculates budgets against verified press capabilities.',
+      ctaTitle: 'One deterministic system for every print & logistics vertical',
+      ctaDesc: 'PrintPrice Pro standardizes specifications, calculates budgets against verified press capabilities, and enforces editorial warehouse compliance.',
       ctaBtn: 'Start project estimation ➔'
     },
     de: {
       heroLabel: 'DRUCKPRODUKTIONS-SZENARIEN',
       heroTitle: 'FÜR JEDES DRUCKSEGMENT ENTWICKELT',
       heroSlogan: ["PRICE IT.", "FIX IT.", "PRINT IT."],
-      heroSub: 'Kalkulieren Sie Kosten, prüfen Sie Druckdaten und verbinden Sie sich mit Partnerdruckereien – für Bücher, Verpackungen, Akzidenzdruck oder Großformat.',
+      heroSub: 'Kalkulieren Sie Kosten, prüfen Sie Druckdaten, berechnen Sie 3D-EPAL-Paletten und verbinden Sie sich mit Partnerdruckereien – für Bücher, Verlagsauslieferung, Verpackungen, Akzidenzdruck oder Großformat.',
       heroCtaPrimary: 'Kalkulation starten ➔',
       heroCtaSecondary: 'Anwendungsfälle ansehen ↓',
       gridTitle: 'Drucksegmente & Branchenlösungen',
-      gridSubtitle: 'Spezifische Workflows, exakt abgestimmt auf die mechanischen Anforderungen jedes Produkttyps.',
+      gridSubtitle: 'Spezifische Workflows, exakt abgestimmt auf die mechanischen und logistischen Anforderungen jedes Produkttyps.',
       solutions: [
         {
           name: "Buch- & Verlagswesen",
@@ -123,6 +139,14 @@ export default function SolutionsHub() {
           href: "/for-publishers",
           ctaText: "Verlagslösung ansehen ➔",
           icon: "layers"
+        },
+        {
+          name: "Smart Shipping & 3D-Verlagslogistik",
+          description: "Beschnittenes Buchnettogewicht (inkl. 1,20 g/cm³ Graupappe), FEFCO 0201 Kartonpackung (≤ 15 kg), Kreuzverband auf EPAL-Europaletten (1200×800 mm), Zeitfracht Erfurt / VVA Arvato Compliance, LDM-Fracht und ΔQ- / ΔQ+ Auflagenoptimierer.",
+          code: "LOGISTIK 3D",
+          href: "/#smart-shipping-logistics",
+          ctaText: "3D-Logistik-Engine ansehen ➔",
+          icon: "box"
         },
         {
           name: "Verpackung & Faltschachteln",
@@ -150,8 +174,8 @@ export default function SolutionsHub() {
         }
       ],
       ctaSlogan: 'PLATTFORMKAPAZITÄT',
-      ctaTitle: 'Ein deterministisches System für jeden Druckbereich',
-      ctaDesc: 'PrintPrice Pro standardisiert Spezifikationen und kalkuliert Angebote nach realen Maschinenparametern.',
+      ctaTitle: 'Ein deterministisches System für jeden Druck- und Logistikbereich',
+      ctaDesc: 'PrintPrice Pro standardisiert Spezifikationen, kalkuliert Angebote nach realen Maschinenparametern und sichert die Richtlinien der Verlagsauslieferungen.',
       ctaBtn: 'Projekt starten ➔'
     }
   };
