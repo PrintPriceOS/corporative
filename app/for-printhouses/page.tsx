@@ -306,6 +306,13 @@ export default function ForPrinthousesPage() {
         { title: 'Límite de Altura', val: '1.200 mm (Zeitfracht) / 1.300 mm (VVA)' },
         { title: 'Retranqueo: 30 mm', val: 'Cero desbordamiento perimetral' }
       ],
+      carrierProtocolCard: {
+        badge: 'GOBERNANZA LOGÍSTICA · PPOS-LOG-SLA-2026.1',
+        title: 'Protocolo de Integración y Condiciones de Servicio de Transporte',
+        desc: 'Marco vinculante de cumplimiento para transportistas de la red PrintPriceOS: tasación 0,40 LDM / Euro-Palet EPAL (1.850 kg/LDM, no apilable en tránsito), cita previa obligatoria en hubs editoriales (Zeitfracht Erfurt GLN 4026635000006 y VVA Arvato Gütersloh GLN 4002693000002), circuito de canje EPAL Palettenschein (14 días / 15,00 € por no restitución) y trazabilidad GS1-128 SSCC-18.',
+        linkLabel: 'Consultar Protocolo Oficial de Transporte ➔',
+        linkHref: 'https://docs.printprice.pro/docs/logistics/carrier-service-protocol'
+      },
 
       // Section 5: 6 Strategic Benefits for Printhouses
       benPill: 'VENTAJAS COMPETITIVAS PARA TU TALLER',
@@ -640,6 +647,13 @@ export default function ForPrinthousesPage() {
         { title: 'Max Height Limit', val: '1,200 mm (Zeitfracht) / 1,300 mm (VVA)' },
         { title: 'Edge Margin: 30 mm', val: 'Zero overhang • 30 mm setback' }
       ],
+      carrierProtocolCard: {
+        badge: 'CARRIER GOVERNANCE · PPOS-LOG-SLA-2026.1',
+        title: 'Carrier Integration Protocol & Transport Service Conditions',
+        desc: 'Binding operational framework for carriers serving the PrintPriceOS manufacturing network: 0.40 LDM / Euro-Pallet EPAL conversion (1,850 kg/LDM, strict non-stackable transit), mandatory dock slot booking at editorial hubs (Zeitfracht Erfurt GLN 4026635000006 & VVA Arvato Gütersloh GLN 4002693000002), 14-day EPAL Palettenschein voucher (15.00 EUR non-return fee), and GS1-128 SSCC-18 scanning.',
+        linkLabel: 'Read Official Carrier Service Protocol ➔',
+        linkHref: 'https://docs.printprice.pro/docs/logistics/carrier-service-protocol'
+      },
 
       // Section 5: 6 Strategic Benefits
       benPill: 'COMPETITIVE ADVANTAGES FOR YOUR PLANT',
@@ -974,6 +988,13 @@ export default function ForPrinthousesPage() {
         { title: 'Max. Gesamthöhe', val: '1.200 mm (Zeitfracht) / 1.300 mm (VVA)' },
         { title: 'Randrücksprung: 30 mm', val: 'Kein Überstand • 30 mm Rücksprung' }
       ],
+      carrierProtocolCard: {
+        badge: 'TRANSPORT-GOVERNANCE · PPOS-LOG-SLA-2026.1',
+        title: 'Speditions-Integrationsprotokoll & Transport-Servicebedingungen',
+        desc: 'Verbindlicher Betriebsstandard für Speditionen im PrintPriceOS-Fertigungsnetzwerk: 0,40 LDM / EPAL-Europalette (1.850 kg/LDM, nicht stapelbar im Transit), verbindliche Zeitfensterbuchung (Avis) bei Verlagsauslieferungen (Zeitfracht Erfurt GLN 4026635000006 & VVA Arvato Gütersloh GLN 4002693000002), 14-Tage-EPAL-Palettenschein (15,00 EUR Ausgleichsgebühr) sowie GS1-128 SSCC-18 Scanpflicht.',
+        linkLabel: 'Offizielles Transportprotokoll öffnen ➔',
+        linkHref: 'https://docs.printprice.pro/docs/logistics/carrier-service-protocol'
+      },
 
       // Section 5: 6 Strategic Benefits
       benPill: 'WETTBEWERBSVORTEILE FÜR IHREN BETRIEB',
@@ -1725,6 +1746,53 @@ export default function ForPrinthousesPage() {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+
+          {/* Carrier Service Protocol Governance Card */}
+          <div
+            className="rounded-card"
+            style={{
+              marginTop: '1.75rem',
+              padding: '1.65rem 1.85rem',
+              border: '1px solid rgba(220, 0, 0, 0.35)',
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '1.25rem'
+            }}
+          >
+            <div style={{ flex: '1 1 540px' }}>
+              <div
+                style={{
+                  fontSize: '0.7rem',
+                  fontWeight: 800,
+                  color: 'var(--accent-primary)',
+                  letterSpacing: '0.06em',
+                  fontFamily: 'var(--font-mono)',
+                  marginBottom: '0.35rem'
+                }}
+              >
+                {t.carrierProtocolCard.badge}
+              </div>
+              <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.45rem' }}>
+                {t.carrierProtocolCard.title}
+              </h3>
+              <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
+                {t.carrierProtocolCard.desc}
+              </p>
+            </div>
+            <div style={{ flexShrink: 0 }}>
+              <a
+                href={t.carrierProtocolCard.linkHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary"
+                style={{ padding: '0.7rem 1.25rem', fontSize: '0.84rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+              >
+                <span>{t.carrierProtocolCard.linkLabel}</span>
+              </a>
             </div>
           </div>
         </Container>
