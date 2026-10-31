@@ -5,6 +5,38 @@ export const INDEXNOW_KEY =
   process.env.NEXT_PUBLIC_INDEXNOW_KEY || '7f8a9b2c4d6e1f3a5b7c9d0e2f4a6b8c';
 export const INDEXNOW_KEY_LOCATION = `${BASE_URL}/${INDEXNOW_KEY}.txt`;
 
+export const OG_IMAGES = {
+  default: `${BASE_URL}/images/og/og-default.jpg`,
+  priceIt: `${BASE_URL}/images/og/og-price-it.jpg`,
+  fixIt: `${BASE_URL}/images/og/og-fix-it.jpg`,
+  printIt: `${BASE_URL}/images/og/og-print-it.jpg`,
+} as const;
+
+export const OG_IMAGE_ALTS = {
+  default: 'PrintPriceOS — Industrial Intelligence Layer, 3D Logistics & GEO Search Engine',
+  priceIt: 'PrintPriceOS — Automated Industrial Book Estimation & Landed Cost (PRICE IT)',
+  fixIt: 'PrintPriceOS — Automated PDF Preflight, Bleed Normalization & Spine Verification (FIX IT)',
+  printIt: 'PrintPriceOS — High-Speed Print Production Control Plane & Plant Telemetry (PRINT IT)',
+} as const;
+
+const ROUTE_OG_CONFIG: Record<string, { image: string; alt: string }> = {
+  '': { image: OG_IMAGES.priceIt, alt: OG_IMAGE_ALTS.priceIt },
+  '/': { image: OG_IMAGES.priceIt, alt: OG_IMAGE_ALTS.priceIt },
+  '/products/budget': { image: OG_IMAGES.priceIt, alt: OG_IMAGE_ALTS.priceIt },
+  '/for-publishers': { image: OG_IMAGES.priceIt, alt: OG_IMAGE_ALTS.priceIt },
+  '/for-authors': { image: OG_IMAGES.priceIt, alt: OG_IMAGE_ALTS.priceIt },
+  '/products/preflight': { image: OG_IMAGES.fixIt, alt: OG_IMAGE_ALTS.fixIt },
+  '/products/mockup': { image: OG_IMAGES.fixIt, alt: OG_IMAGE_ALTS.fixIt },
+  '/for-printhouses': { image: OG_IMAGES.printIt, alt: OG_IMAGE_ALTS.printIt },
+  '/products/control': { image: OG_IMAGES.printIt, alt: OG_IMAGE_ALTS.printIt },
+  '/products/print': { image: OG_IMAGES.printIt, alt: OG_IMAGE_ALTS.printIt },
+  '/for-paper-suppliers': { image: OG_IMAGES.printIt, alt: OG_IMAGE_ALTS.printIt },
+  '/developers': { image: OG_IMAGES.printIt, alt: OG_IMAGE_ALTS.printIt },
+  '/solutions': { image: OG_IMAGES.printIt, alt: OG_IMAGE_ALTS.printIt },
+  '/products': { image: OG_IMAGES.default, alt: OG_IMAGE_ALTS.default },
+  '/platform': { image: OG_IMAGES.default, alt: OG_IMAGE_ALTS.default },
+};
+
 export const SEO_DATA = {
   titleTemplate: '%s | PrintPrice Pro',
   defaultTitle:
@@ -29,13 +61,14 @@ export const SEO_DATA = {
     'PrintPrice Pro',
     'price it fix it print it',
   ],
-  ogImage: '/og/home.png',
+  ogImage: OG_IMAGES.priceIt,
 };
 
 export function constructMetadata({
   title = SEO_DATA.defaultTitle,
   description = SEO_DATA.description,
-  image = SEO_DATA.ogImage,
+  image,
+  imageAlt,
   noIndex = false,
   canonical = '',
   type = 'website',
@@ -44,6 +77,7 @@ export function constructMetadata({
   title?: string;
   description?: string;
   image?: string;
+  imageAlt?: string;
   noIndex?: boolean;
   canonical?: string;
   type?: string;
@@ -57,9 +91,15 @@ export function constructMetadata({
     ? `/${canonical}`
     : '';
   const canonicalUrl = `${BASE_URL}${cleanPath}`;
-  const fullImageUrl = image.startsWith('http')
-    ? image
-    : `${BASE_URL}${image.startsWith('/') ? image : `/${image}`}`;
+  const routeOg = ROUTE_OG_CONFIG[cleanPath] || {
+    image: OG_IMAGES.default,
+    alt: OG_IMAGE_ALTS.default,
+  };
+  const resolvedImage = image || routeOg.image;
+  const resolvedImageAlt = imageAlt || routeOg.alt;
+  const fullImageUrl = resolvedImage.startsWith('http')
+    ? resolvedImage
+    : `${BASE_URL}${resolvedImage.startsWith('/') ? resolvedImage : `/${resolvedImage}`}`;
 
   return {
     title: finalTitle,
@@ -78,7 +118,7 @@ export function constructMetadata({
           url: fullImageUrl,
           width: 1200,
           height: 630,
-          alt: 'PrintPriceOS — Industrial Intelligence Layer for Book Printing & 3D Logistics',
+          alt: resolvedImageAlt,
         },
       ],
       type: type as any,

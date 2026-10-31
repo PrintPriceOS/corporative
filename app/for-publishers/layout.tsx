@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
-import { constructMetadata, getBreadcrumbJsonLd, getSoftwareApplicationJsonLd } from '@/lib/seo';
+import { constructMetadata, getBreadcrumbJsonLd, getSoftwareApplicationJsonLd, OG_IMAGES, OG_IMAGE_ALTS } from '@/lib/seo';
 
 export const metadata: Metadata = constructMetadata({
   title: 'Software Editorial, Coste Landed y Logística 3D (Zeitfracht / Arvato) | PrintPrice Pro',
   description:
     'Optimiza tiradas editoriales y reediciones con matrices Digital vs. Offset, desglose estricto Mfg ≠ Pack ≠ Freight, optimizador de tirada ΔQ- / ΔQ+ y cumplimiento logístico 3D EPAL para Zeitfracht Erfurt, VVA Arvato y Amazon FBA.',
   canonical: '/for-publishers',
+  image: OG_IMAGES.priceIt,
+  imageAlt: OG_IMAGE_ALTS.priceIt,
 });
 
 const breadcrumbs = getBreadcrumbJsonLd([

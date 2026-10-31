@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
-import { constructMetadata, getBreadcrumbJsonLd, getSoftwareApplicationJsonLd } from '@/lib/seo';
+import { constructMetadata, getBreadcrumbJsonLd, getSoftwareApplicationJsonLd, OG_IMAGES, OG_IMAGE_ALTS } from '@/lib/seo';
 
 export const metadata: Metadata = constructMetadata({
   title: 'Comprueba tu PDF antes de imprimir | PrintPrice Preflight',
   description: 'Identifica problemas técnicos en tu PDF (sangrado, resolución de imágenes, fuentes, espacios de color) y prepara tu archivo para imprenta con PrintPrice Preflight.',
   canonical: '/products/preflight',
+  image: OG_IMAGES.fixIt,
+  imageAlt: OG_IMAGE_ALTS.fixIt,
 });
 
 const breadcrumbs = getBreadcrumbJsonLd([

@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
-import { constructMetadata, getBreadcrumbJsonLd, getSoftwareApplicationJsonLd } from '@/lib/seo';
+import { constructMetadata, getBreadcrumbJsonLd, getSoftwareApplicationJsonLd, OG_IMAGES, OG_IMAGE_ALTS } from '@/lib/seo';
 
 export const metadata: Metadata = constructMetadata({
   title: 'Control Plane (:8081) — Consola Operativa Multi-Tenant, RBAC & Logística 3D | PrintPrice Pro',
   description:
     'Consola operativa oficial de PrintPrice OS (control.printprice.pro): configuración de 12 módulos de taller, Paper Supplier Hub, motor de cubicaje 3D EPAL (Zeitfracht / Arvato) y API REST gobernada.',
   canonical: '/products/control',
+  image: OG_IMAGES.printIt,
+  imageAlt: OG_IMAGE_ALTS.printIt,
 });
 
 const breadcrumbs = getBreadcrumbJsonLd([

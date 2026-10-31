@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
-import { constructMetadata, getBreadcrumbJsonLd, getSoftwareApplicationJsonLd } from '@/lib/seo';
+import { constructMetadata, getBreadcrumbJsonLd, getSoftwareApplicationJsonLd, OG_IMAGES, OG_IMAGE_ALTS } from '@/lib/seo';
 
 export const metadata: Metadata = constructMetadata({
   title: 'Calculador de Costes de Impresión y Geometría de Lomo (Price It) | PrintPrice Pro',
   description:
     'Calcula presupuestos de impresión de libros en segundos en budget.printprice.pro. Imposición en servidor BPE, selector de papel con micras (µm), calculadora de lomo SPINE-04, diagnóstico PDF y asistente IA.',
   canonical: '/products/budget',
+  image: OG_IMAGES.priceIt,
+  imageAlt: OG_IMAGE_ALTS.priceIt,
 });
 
 const breadcrumbs = getBreadcrumbJsonLd([
