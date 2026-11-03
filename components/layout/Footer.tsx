@@ -230,6 +230,11 @@ export const Footer: React.FC = () => {
                   {dict.nav.developers}
                 </Link>
               </li>
+              <li>
+                <Link href="/faq" style={linkStyle}>
+                  {dict.nav.faq}
+                </Link>
+              </li>
             </ul>
           </div>
 

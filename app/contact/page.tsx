@@ -66,13 +66,13 @@ export default function ContactPage() {
         {
           id: "developer" as UserType,
           title: "Desarrolladores & Software",
-          category: "INTEGRACIÓN TÉCNICA",
-          description: "Integra cálculo de costes, validación de PDFs y enrutamiento directamente en tu ERP o tienda online mediante API.",
-          cta: "Solicitar acceso API ➔",
-          subtext: "→ Escribe a api-support@printprice.pro",
-          reason: "Según tu exploración de endpoints y esquemas",
+          category: "INTEGRACIÓN TÉCNICA AUTOSERVICIO",
+          description: "Genera al instante tu Sandbox API Key (pp_test_*) para cálculo determinista de costes BPE, validación PDF 2 GB y cubicaje logístico 3D EPAL sin esperas ni correos manuales.",
+          cta: "Obtener API Key Instantánea ➔",
+          subtext: "Acceso Sandbox Instantáneo • 1.000 llamadas/mes gratis • Sin tarjeta de crédito",
+          reason: "Según tu exploración de endpoints y esquemas OpenAPI 3.1",
           icon: "developer",
-          href: "mailto:api-support@printprice.pro?subject=Solicitud%20de%20Acceso%20API%20PrintPrice%20OS"
+          href: "https://control.printprice.pro/developers"
         },
         {
           id: "print_house" as UserType,
@@ -130,13 +130,13 @@ export default function ContactPage() {
         {
           id: "developer" as UserType,
           title: "Developers & Software",
-          category: "TECHNICAL INTEGRATION",
-          description: "Integrate pricing engines, PDF validation, and order routing into your ERP or storefront via REST API.",
-          cta: "Request API access ➔",
-          subtext: "→ Write to api-support@printprice.pro",
+          category: "SELF-SERVICE TECHNICAL INTEGRATION",
+          description: "Provision your instant Sandbox API Key (pp_test_*) for 5-axis BPE pricing, 2 GB PDF/X-4 preflight, and 3D EPAL cubing directly in the Developer Hub.",
+          cta: "Get Instant API Key ➔",
+          subtext: "Instant Sandbox Access • 1,000 free monthly calls • No credit card required",
           reason: "Based on your technical API exploration",
           icon: "developer",
-          href: "mailto:api-support@printprice.pro?subject=PrintPrice%20OS%20API%20Access%20Request"
+          href: "https://control.printprice.pro/developers"
         },
         {
           id: "print_house" as UserType,
@@ -194,13 +194,13 @@ export default function ContactPage() {
         {
           id: "developer" as UserType,
           title: "Entwickler & Software",
-          category: "TECHNISCHE INTEGRATION",
-          description: "Integrieren Sie Preiskalkulation, PDF-Preflight und Fertigungsrouting via REST-API direkt in Ihr MIS oder Webshop.",
-          cta: "API-Zugang anfragen ➔",
-          subtext: "→ E-Mail an api-support@printprice.pro",
+          category: "SELF-SERVICE API-INTEGRATION",
+          description: "Erstellen Sie sofort Ihren kostenlosen Sandbox-API-Key (pp_test_*) für BPE-Preiskalkulation, 2 GB PDF-Preflight und 3D-EPAL-Palettierung im Developer Hub.",
+          cta: "Sofortigen API-Key erhalten ➔",
+          subtext: "Sofortiger Sandbox-Zugang • 1.000 Gratis-Aufrufe/Monat • Keine Kreditkarte erforderlich",
           reason: "Basierend auf Ihrem Interesse an Entwickler-Tools",
           icon: "developer",
-          href: "mailto:api-support@printprice.pro?subject=PrintPrice%20OS%20API%20Zugangsanfrage"
+          href: "https://control.printprice.pro/developers"
         },
         {
           id: "print_house" as UserType,
@@ -367,6 +367,17 @@ export default function ContactPage() {
                       <span className="technical-text" style={{ fontSize: '0.7rem', opacity: 0.6, marginLeft: '4px' }}>
                         {recommendedRoute.subtext}
                       </span>
+                      {recommendedRoute.id === 'developer' && (
+                        <a
+                          href="https://docs.printprice.pro/docs/api/overview"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="technical-text"
+                          style={{ fontSize: '0.72rem', color: 'var(--accent-primary)', fontWeight: 800, textDecoration: 'none', marginLeft: '4px', marginTop: '2px' }}
+                        >
+                          Explore API Reference (OpenAPI 3.1) ↗
+                        </a>
+                      )}
                     </div>
                     
                     <button 
@@ -432,6 +443,17 @@ export default function ContactPage() {
                     {route.cta}
                   </Button>
                   <span className="technical-text" style={{ fontSize: '0.7rem', opacity: 0.6, marginLeft: '2px' }}>{route.subtext}</span>
+                  {route.id === 'developer' && (
+                    <a
+                      href="https://docs.printprice.pro/docs/api/overview"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="technical-text"
+                      style={{ fontSize: '0.72rem', color: 'var(--accent-primary)', fontWeight: 800, textDecoration: 'none', marginLeft: '2px', marginTop: '2px' }}
+                    >
+                      Explore API Reference (OpenAPI 3.1) ↗
+                    </a>
+                  )}
                 </div>
               </div>
             ))}

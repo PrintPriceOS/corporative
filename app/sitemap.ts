@@ -28,6 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/governance', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/contact', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/contact/partner', priority: 0.7, changeFrequency: 'monthly' },
+    { path: '/faq', priority: 0.85, changeFrequency: 'weekly' },
     { path: '/legal', priority: 0.7, changeFrequency: 'monthly' },
     { path: '/legal/terms-of-service', priority: 0.5, changeFrequency: 'yearly' },
     { path: '/legal/privacy-policy', priority: 0.5, changeFrequency: 'yearly' },

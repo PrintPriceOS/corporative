@@ -264,7 +264,7 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
         'Integra el motor determinista de costes (Book Pricing Engine), el solucionador de cubicaje 3D sobre Euro-palets EPAL, la federación de papel y la inspección PDF preflight mediante contratos REST OpenAPI 3.1 con aislamiento estricto de costes y multi-tenancy.',
       ctaReadDocs: 'Read the Docs ➔',
       ctaApiRef: 'API Reference ➔',
-      ctaRequestAccess: 'Solicitar credenciales API',
+      ctaRequestAccess: 'Obtener API Key Instantánea (pp_test_*)',
       showcaseTitle: 'Integración Interactiva & Segregación Estricta de Costes',
       showcaseSub:
         'Cada respuesta del Control Plane separa matemáticamente el coste industrial de fabricación (manufacturingPrice), los consumibles de embalaje EPAL/FEFCO (packagingMaterialsCostEur) y el flete de transporte tasado por LDM o escalones de palets (carrierFreightCostEur).',
@@ -356,8 +356,8 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
         }
       ],
       ctaFinalTitle: '¿Listo para conectar tu ERP, e-commerce o flujo editorial?',
-      ctaFinalDesc: 'Solicita credenciales de partner o explora los contratos interactivos en nuestro portal de documentación técnica.',
-      ctaFinalBtn: 'Solicitar acceso API ➔'
+      ctaFinalDesc: 'Genera tu Sandbox API Key al instante (1.000 llamadas/mes gratis, sin tarjeta) o desbloquea llaves Live de producción en el Developer Hub.',
+      ctaFinalBtn: 'Obtener API Key Instantánea ➔'
     },
     en: {
       heroLabel: 'DEVELOPER HUB · CONTROL PLANE & INTELLIGENCE LAYER API',
@@ -367,7 +367,7 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
         'Integrate the deterministic Book Pricing Engine (BPE), 3D EPAL Euro-pallet cubing solver, substrate catalog federation, and automated PDF preflight via OpenAPI 3.1 REST contracts with strict cost segregation and multi-tenant isolation.',
       ctaReadDocs: 'Read the Docs ➔',
       ctaApiRef: 'API Reference ➔',
-      ctaRequestAccess: 'Request API Credentials',
+      ctaRequestAccess: 'Get Instant API Key (pp_test_*)',
       showcaseTitle: 'Interactive Integration & Strict Cost Segregation',
       showcaseSub:
         'Every Control Plane response mathematically decouples print manufacturing costs (manufacturingPrice), EPAL/FEFCO packaging consumables (packagingMaterialsCostEur), and LDM/stepped-pallet carrier freight (carrierFreightCostEur).',
@@ -459,8 +459,8 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
         }
       ],
       ctaFinalTitle: 'Ready to connect your ERP, storefront, or publishing workflow?',
-      ctaFinalDesc: 'Request partner API credentials or inspect the live OpenAPI 3.1 specifications in our developer documentation portal.',
-      ctaFinalBtn: 'Request API Access ➔'
+      ctaFinalDesc: 'Provision your instant Sandbox API Key (1,000 free monthly calls, no credit card required) or unlock Production Live keys in the Developer Hub.',
+      ctaFinalBtn: 'Get Instant API Key ➔'
     },
     de: {
       heroLabel: 'DEVELOPER HUB · CONTROL PLANE & INTELLIGENCE LAYER API',
@@ -470,7 +470,7 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
         'Integrieren Sie die deterministische Book Pricing Engine (BPE), den 3D-EPAL-Palettierungsrechner, den Paper Supplier Hub und das automatisierte PDF-Preflight über OpenAPI 3.1 REST-Verträge mit strikter Kostentrennung und Mandantenfähigkeit.',
       ctaReadDocs: 'Read the Docs ➔',
       ctaApiRef: 'API Reference ➔',
-      ctaRequestAccess: 'API-Zugangsdaten anfordern',
+      ctaRequestAccess: 'Sofortigen API-Key erhalten (pp_test_*)',
       showcaseTitle: 'Interaktive Integration & Strikte Kostentrennung',
       showcaseSub:
         'Jede Antwort der Control Plane trennt mathematisch exakt zwischen reinen Herstellkosten (manufacturingPrice), EPAL/FEFCO-Verpackungsmaterial (packagingMaterialsCostEur) und Speditionsfracht nach Lademetern oder Palettenstaffeln (carrierFreightCostEur).',
@@ -562,8 +562,8 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
         }
       ],
       ctaFinalTitle: 'Bereit, Ihr ERP, Ihren Shop oder Ihr Verlagssystem anzubinden?',
-      ctaFinalDesc: 'Fordern Sie Partner-API-Zugangsdaten an oder prüfen Sie die OpenAPI 3.1 Spezifikationen im Dokumentationsportal.',
-      ctaFinalBtn: 'API-Zugang anfragen ➔'
+      ctaFinalDesc: 'Erstellen Sie sofort Ihren kostenlosen Sandbox-API-Key (1.000 Gratis-Aufrufe/Monat, keine Kreditkarte erforderlich) im Developer Hub.',
+      ctaFinalBtn: 'Sofortigen API-Key erhalten ➔'
     }
   };
 
@@ -676,8 +676,8 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
                 flexWrap: 'wrap'
               }}
             >
-              <Link
-                href="/contact#api-access"
+              <a
+                href="https://control.printprice.pro/developers"
                 style={{
                   fontSize: '0.78rem',
                   color: '#ffb4a8',
@@ -686,7 +686,7 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
                 }}
               >
                 {t.ctaRequestAccess} ➔
-              </Link>
+              </a>
               <a
                 href="https://docs.printprice.pro/openapi/printprice-partner-api.bundle.yaml"
                 target="_blank"
@@ -1186,13 +1186,13 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
 
       {/* 6. CTA FINAL */}
       <ActionCTA
-        slogan="API & DEVELOPER HUB · PRINTPRICE OS"
+        slogan="SELF-SERVICE DEVELOPER HUB · INSTANT SANDBOX ACCESS • 1,000 FREE CALLS/MO"
         title={t.ctaFinalTitle}
         description={t.ctaFinalDesc}
         buttonLabel={t.ctaFinalBtn}
-        buttonHref="/contact#api-access"
+        buttonHref="https://control.printprice.pro/developers"
         secondaryButtonLabel={t.ctaReadDocs}
-        secondaryButtonHref="https://docs.printprice.pro/docs/"
+        secondaryButtonHref="https://docs.printprice.pro/docs/api/overview"
         trackingAction="developers_cta_access"
       />
     </div>

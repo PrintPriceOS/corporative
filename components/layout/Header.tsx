@@ -489,6 +489,10 @@ export const Header: React.FC = () => {
               {locale === 'es' ? 'Docs' : locale === 'de' ? 'Doku' : 'Docs'} ↗
             </a>
 
+            <Link href="/faq" style={{ color: 'inherit', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
+              FAQ
+            </Link>
+
             <Link href="/contact" style={{ color: 'inherit', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
               {dict.nav.contact}
             </Link>
@@ -683,6 +687,9 @@ export const Header: React.FC = () => {
             </a>
             <Link href="/developers" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
               {dict.nav.developers}
+            </Link>
+            <Link href="/faq" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
+              FAQ
             </Link>
             <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
               {dict.nav.contact}

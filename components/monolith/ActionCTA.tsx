@@ -5,6 +5,7 @@ import { Container } from '../ui/Container';
 import { Button } from '../ui/Button';
 import Link from 'next/link';
 import ShapeGrid from '../ui/ShapeGrid';
+import { TechnicalCtaBackdropSvg } from '@/components/blueprints/TechnicalCtaBackdropSvg';
 import { trackEvent, events } from '@/lib/telemetry';
 import { useLocale } from '@/lib/i18n';
 
@@ -102,6 +103,7 @@ export const ActionCTA: React.FC<ActionCTAProps> = ({
           shape="square"
           hoverTrailAmount={12}
         />
+        <div style={{ position: "absolute", inset: 0, opacity: 0.72, pointerEvents: "none" }}><TechnicalCtaBackdropSvg theme="dark" /></div>
       </div>
 
       {/* 2. GRADIENT VIGNETTE (Adds depth and focus) */}
