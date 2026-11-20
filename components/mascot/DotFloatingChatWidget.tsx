@@ -2,17 +2,45 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { DotChatAvatar, DotChatState } from './DotChatAvatar';
-import { X, Send, Sparkles, RotateCcw } from 'lucide-react';
+import { X, Send, Sparkles, RotateCcw, ExternalLink } from 'lucide-react';
 import { useLocale } from '@/lib/i18n';
+import { ChatCta, resolveConciergeKnowledge } from '@/lib/dot-knowledge';
 
-interface ChatMessage {
+export interface ChatMessage {
   id: string;
   sender: 'user' | 'bot';
   text: string;
+  ctas?: ChatCta[];
+}
+
+function renderFormattedMessage(text: string) {
+  const lines = text.split('\n');
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+      {lines.map((line, lIdx) => {
+        if (!line.trim()) return null;
+        const parts = line.split(/(\*\*[^*]+\*\*)/g);
+        return (
+          <p key={lIdx} style={{ margin: 0 }}>
+            {parts.map((part, pIdx) => {
+              if (part.startsWith('**') && part.endsWith('**')) {
+                return (
+                  <strong key={pIdx} style={{ color: '#ffffff', fontWeight: 700 }}>
+                    {part.slice(2, -2)}
+                  </strong>
+                );
+              }
+              return <span key={pIdx}>{part}</span>;
+            })}
+          </p>
+        );
+      })}
+    </div>
+  );
 }
 
 export const DotFloatingChatWidget: React.FC = () => {
-  const { locale } = useLocale();
+  const { locale, dict } = useLocale();
   const [isOpen, setIsOpen] = useState(false);
   const [chatState, setChatState] = useState<DotChatState>('idle');
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -22,17 +50,18 @@ export const DotFloatingChatWidget: React.FC = () => {
   const typingTimerRef = useRef<NodeJS.Timeout | null>(null);
   const sequenceTimersRef = useRef<NodeJS.Timeout[]>([]);
 
-  // Mensaje de bienvenida inicial según locale
+  // Sincronizar mensaje de bienvenida según locale si la conversación está limpia
   useEffect(() => {
-    const welcome =
-      locale === 'es'
-        ? '¡Hola! Soy **Dot**, el asistente inteligente de **PrintPrice.pro**. Puedo ayudarte a calcular presupuestos de tirada, resolver el grosor de lomo (SPINE-01), verificar requisitos PDF o consultar el catálogo de papel.'
-        : locale === 'de'
-        ? 'Hallo! Ich bin **Dot**, die KI von **PrintPrice.pro**. Ich helfe Ihnen bei der Druckauflagenkalkulation, Buchrückengeometrie (SPINE-01), PDF-Preflight und Bedruckstoffen.'
-        : 'Hello! I am **Dot**, the **PrintPrice.pro** intelligent print assistant. I can help you calculate run quotes, certified spine geometry (SPINE-01), PDF preflight checks, or query materials.';
-
-    setMessages([{ id: 'init-1', sender: 'bot', text: welcome }]);
-  }, [locale]);
+    setMessages((prev) => {
+      if (
+        prev.length === 0 ||
+        (prev.length === 1 && (prev[0].id.startsWith('init-') || prev[0].id.startsWith('reset-')))
+      ) {
+        return [{ id: `init-${locale}`, sender: 'bot', text: dict.dotChat.welcomeMessage }];
+      }
+      return prev;
+    });
+  }, [locale, dict.dotChat.welcomeMessage]);
 
   // Auto scroll al final de la conversación
   useEffect(() => {
@@ -77,7 +106,7 @@ export const DotFloatingChatWidget: React.FC = () => {
     }
   };
 
-  const executeBotResponse = (userPrompt: string) => {
+  const executeBotResponse = async (userPrompt: string) => {
     sequenceTimersRef.current.forEach((t) => clearTimeout(t));
     sequenceTimersRef.current = [];
 
@@ -86,59 +115,66 @@ export const DotFloatingChatWidget: React.FC = () => {
     setMessages((prev) => [...prev, userMsg]);
     setInputValue('');
 
-    // 1. Fase THINKING (Llamada al motor MCP / BPE)
+    // 1. Fase THINKING (Consulta a la base de conocimiento comercial)
     setChatState('thinking');
     setIsTyping(true);
 
-    const lower = userPrompt.toLowerCase();
-    let replyText =
-      locale === 'es'
-        ? 'He verificado los datos con el motor determinista de PrintPrice OS. El imposicionado en pliego 70×100 cm minimiza la merma técnica al **4.2%** con firma HMAC validada.'
-        : locale === 'de'
-        ? 'Die Druckdaten wurden mit dem deterministischen PrintPrice OS Rechenkern verifiziert. Die Bogenmontage optimiert den Verschnitt auf **4.2%**.'
-        : 'Verified against PrintPrice OS deterministic engine. Sheet signature yield on 70×100 cm minimizes scrap to **4.2%** with valid HMAC signature.';
+    try {
+      const res = await fetch('/api/concierge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: userPrompt, locale }),
+      });
 
-    if (lower.includes('1.000') || lower.includes('1000') || lower.includes('libro') || lower.includes('buch') || lower.includes('book')) {
-      replyText =
-        locale === 'es'
-          ? '📚 **Presupuesto para 1.000 libros A5** (160 págs, offset 90g + cubierta estucada 300g mate): **1.420,00 €** (1,42 €/ud). Transporte EPAL y merma desglosados.'
-          : locale === 'de'
-          ? '📚 **Kalkulation für 1.000 Bücher A5** (160 Seiten, 90g Offset + 300g Umschlag): **1.420,00 €** (1,42 €/Stk). Fracht und Rüstkosten getrennt.'
-          : '📚 **Quote for 1,000 A5 Books** (160 pages, 90gsm offset + 300gsm matte cover): **€1,420.00** (€1.42/unit). Segregated EPAL freight & plates.';
-    } else if (lower.includes('lomo') || lower.includes('spine') || lower.includes('rücken')) {
-      replyText =
-        locale === 'es'
-          ? '📏 **Cálculo de lomo SPINE-01:** Para 240 páginas en papel ahuesado 80g (volumen 1.3), el lomo neto fresado PUR mide exactamente **13,2 mm** (+ 1,5 mm de canal bisagra).'
-          : locale === 'de'
-          ? '📏 **Rückenbreite SPINE-01:** Für 240 Seiten Werkdruck 80g (Volumen 1.3) beträgt der PUR-Rücken exakt **13,2 mm**.'
-          : '📏 **SPINE-01 Geometry:** For 240 pages on 80gsm cream book paper (bulk 1.3), the exact milled PUR spine is **13.2 mm**.';
-    } else if (lower.includes('pdf') || lower.includes('preflight') || lower.includes('sangrado')) {
-      replyText =
-        locale === 'es'
-          ? '📐 **Preflight 6-Axis:** Perfil CMYK ISO Coated v2 verificado, sangrado de 3 mm correcto y resolución de imagen a 300 dpi sin fuentes incrustadas faltantes.'
-          : locale === 'de'
-          ? '📐 **Preflight 6-Achsen:** CMYK ISO Coated v2 bestätigt, 3 mm Beschnitt vorhanden und 300 DPI Bildauflösung.'
-          : '📐 **6-Axis Preflight:** CMYK ISO Coated v2 verified, 3 mm bleed intact, and 300 DPI resolution compliant.';
-    }
+      let replyText = '';
+      let replyCtas: ChatCta[] | undefined;
 
-    // 2. Fase SPEAKING (Generación de texto) tras 1.4s
-    const t1 = setTimeout(() => {
+      if (res.ok) {
+        const data = await res.json();
+        replyText = data.reply;
+        replyCtas = data.ctas;
+      } else {
+        const local = resolveConciergeKnowledge(userPrompt, locale);
+        replyText = local.text;
+        replyCtas = local.ctas;
+      }
+
+      // 2. Fase SPEAKING
       setChatState('speaking');
       setIsTyping(false);
-      setMessages((prev) => [...prev, { id: `b-${Date.now()}`, sender: 'bot', text: replyText }]);
-    }, 1400);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `b-${Date.now()}`,
+          sender: 'bot',
+          text: replyText,
+          ctas: replyCtas,
+        },
+      ]);
 
-    // 3. Fase SUCCESS (Presupuesto listo) tras 2.8s
-    const t2 = setTimeout(() => {
-      setChatState('success');
-    }, 2800);
-
-    // 4. Retorno suave a IDLE tras 4.0s
-    const t3 = setTimeout(() => {
-      setChatState('idle');
-    }, 4000);
-
-    sequenceTimersRef.current.push(t1, t2, t3);
+      const t1 = setTimeout(() => {
+        setChatState('idle');
+      }, 2500);
+      sequenceTimersRef.current.push(t1);
+    } catch {
+      // Fallback local robusto
+      const local = resolveConciergeKnowledge(userPrompt, locale);
+      setChatState('speaking');
+      setIsTyping(false);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `b-${Date.now()}`,
+          sender: 'bot',
+          text: local.text,
+          ctas: local.ctas,
+        },
+      ]);
+      const t1 = setTimeout(() => {
+        setChatState('idle');
+      }, 2500);
+      sequenceTimersRef.current.push(t1);
+    }
   };
 
   const handleFormSubmit = (e: React.FormEvent) => {
@@ -148,19 +184,17 @@ export const DotFloatingChatWidget: React.FC = () => {
   };
 
   const handleResetChat = () => {
+    sequenceTimersRef.current.forEach((t) => clearTimeout(t));
+    sequenceTimersRef.current = [];
     setMessages([
       {
-        id: 'reset-1',
+        id: `reset-${Date.now()}`,
         sender: 'bot',
-        text:
-          locale === 'es'
-            ? 'Conversación reiniciada. ¿Qué cálculo gráfico deseas resolver hoy?'
-            : locale === 'de'
-            ? 'Chat zurückgesetzt. Welche Druckkalkulation möchten Sie durchführen?'
-            : 'Conversation reset. What technical print calculation can I solve for you today?',
+        text: dict.dotChat.resetMessage,
       },
     ]);
     setChatState('idle');
+    setIsTyping(false);
   };
 
   return (
@@ -198,8 +232,8 @@ export const DotFloatingChatWidget: React.FC = () => {
             }}
             className="desktop-only"
           >
-            <Sparkles size={13} color="#E5352B" />
-            <span>Dot · {locale === 'es' ? 'Asistente IA' : locale === 'de' ? 'KI-Assistent' : 'AI Assistant'}</span>
+            <Sparkles size={13} color="#dc0000" />
+            <span>{dict.dotChat.triggerBadge}</span>
           </div>
         )}
 
@@ -217,8 +251,8 @@ export const DotFloatingChatWidget: React.FC = () => {
             height: '56px',
             borderRadius: '50%',
             background: '#131314',
-            border: '2px solid #E5352B',
-            boxShadow: '0 10px 30px rgba(229, 53, 43, 0.35)',
+            border: '2px solid #dc0000',
+            boxShadow: '0 10px 30px rgba(220, 0, 0, 0.35)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -227,8 +261,8 @@ export const DotFloatingChatWidget: React.FC = () => {
             outline: 'none',
             transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
           }}
-          aria-label="Abrir asistente Dot PrintPrice"
-          title="Dot · PrintPrice AI"
+          aria-label={dict.dotChat.triggerAria}
+          title={dict.dotChat.triggerBadge}
         >
           {isOpen ? (
             <X size={24} color="#ffffff" />
@@ -245,8 +279,8 @@ export const DotFloatingChatWidget: React.FC = () => {
             position: 'fixed',
             bottom: '5.5rem',
             right: '1.5rem',
-            width: 'min(390px, 92vw)',
-            height: '540px',
+            width: 'min(410px, 94vw)',
+            height: '560px',
             maxHeight: 'calc(100vh - 7rem)',
             borderRadius: '20px',
             background: '#111114',
@@ -276,7 +310,7 @@ export const DotFloatingChatWidget: React.FC = () => {
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                   <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#ffffff' }}>
-                    Dot
+                    {dict.dotChat.headerTitle}
                   </span>
                   <span
                     style={{
@@ -290,14 +324,10 @@ export const DotFloatingChatWidget: React.FC = () => {
                 </div>
                 <div style={{ fontSize: '0.72rem', color: '#9ca3af' }}>
                   {chatState === 'thinking'
-                    ? locale === 'es'
-                      ? 'Calculando pliegos y tarifas...'
-                      : 'Calculating in MCP...'
+                    ? dict.dotChat.statusThinking
                     : chatState === 'listening'
-                    ? locale === 'es'
-                      ? 'Escuchando tu consulta...'
-                      : 'Listening...'
-                    : 'PrintPrice OS Engine · Online'}
+                    ? dict.dotChat.statusListening
+                    : dict.dotChat.headerSubtitle}
                 </div>
               </div>
             </div>
@@ -314,7 +344,7 @@ export const DotFloatingChatWidget: React.FC = () => {
                   padding: '0.35rem',
                   borderRadius: '6px',
                 }}
-                title={locale === 'es' ? 'Reiniciar' : 'Reset'}
+                title={dict.dotChat.resetTitle}
               >
                 <RotateCcw size={15} />
               </button>
@@ -329,7 +359,7 @@ export const DotFloatingChatWidget: React.FC = () => {
                   padding: '0.35rem',
                   borderRadius: '6px',
                 }}
-                title={locale === 'es' ? 'Cerrar' : 'Close'}
+                title={dict.dotChat.closeTitle}
               >
                 <X size={18} />
               </button>
@@ -358,11 +388,11 @@ export const DotFloatingChatWidget: React.FC = () => {
               >
                 <div
                   style={{
-                    maxWidth: '85%',
-                    padding: '0.65rem 0.95rem',
+                    maxWidth: '88%',
+                    padding: '0.75rem 1rem',
                     borderRadius:
                       msg.sender === 'user' ? '14px 14px 2px 14px' : '14px 14px 14px 2px',
-                    background: msg.sender === 'user' ? '#E5352B' : '#18181b',
+                    background: msg.sender === 'user' ? '#dc0000' : '#18181b',
                     border:
                       msg.sender === 'user'
                         ? 'none'
@@ -372,22 +402,61 @@ export const DotFloatingChatWidget: React.FC = () => {
                     lineHeight: 1.5,
                   }}
                 >
-                  {msg.text}
+                  {renderFormattedMessage(msg.text)}
+
+                  {/* CTAs de acción directa */}
+                  {msg.ctas && msg.ctas.length > 0 && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', marginTop: '0.75rem' }}>
+                      {msg.ctas.map((cta, idx) => (
+                        <a
+                          key={idx}
+                          href={cta.href}
+                          target={cta.external !== false && cta.href.startsWith('http') ? '_blank' : '_self'}
+                          rel={cta.external !== false && cta.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.35rem',
+                            padding: '0.4rem 0.75rem',
+                            borderRadius: '6px',
+                            background: 'rgba(220, 0, 0, 0.15)',
+                            border: '1px solid rgba(220, 0, 0, 0.5)',
+                            color: '#ffffff',
+                            fontSize: '0.75rem',
+                            fontWeight: 700,
+                            textDecoration: 'none',
+                            transition: 'all 0.15s ease',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = '#dc0000';
+                            e.currentTarget.style.borderColor = '#dc0000';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = 'rgba(220, 0, 0, 0.15)';
+                            e.currentTarget.style.borderColor = 'rgba(220, 0, 0, 0.5)';
+                          }}
+                        >
+                          <span>{cta.label}</span>
+                          <ExternalLink size={12} style={{ opacity: 0.85 }} />
+                        </a>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
 
             {isTyping && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#9ca3af', fontSize: '0.75rem' }}>
-                <span className="dot-pulse-ring" style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#E5352B' }} />
-                <span>Dot está calculando...</span>
+                <span className="dot-pulse-ring" style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#dc0000' }} />
+                <span>{dict.dotChat.statusThinking}</span>
               </div>
             )}
 
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Píldoras rápidas de prueba */}
+          {/* 4 Píldoras Rápidas Comerciales */}
           <div
             style={{
               padding: '0.5rem 0.75rem',
@@ -396,56 +465,43 @@ export const DotFloatingChatWidget: React.FC = () => {
               display: 'flex',
               gap: '0.4rem',
               overflowX: 'auto',
+              scrollbarWidth: 'none',
             }}
           >
-            <button
-              type="button"
-              onClick={() => executeBotResponse('Calcular presupuesto 1.000 libros A5')}
-              style={{
-                flexShrink: 0,
-                padding: '0.25rem 0.55rem',
-                borderRadius: '6px',
-                background: '#1c1c1f',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: '#d1d5db',
-                fontSize: '0.72rem',
-                cursor: 'pointer',
-              }}
-            >
-              📚 Cotizar 1.000 libros
-            </button>
-            <button
-              type="button"
-              onClick={() => executeBotResponse('Grosor lomo 240 págs')}
-              style={{
-                flexShrink: 0,
-                padding: '0.25rem 0.55rem',
-                borderRadius: '6px',
-                background: '#1c1c1f',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: '#d1d5db',
-                fontSize: '0.72rem',
-                cursor: 'pointer',
-              }}
-            >
-              📏 Grosor lomo
-            </button>
-            <button
-              type="button"
-              onClick={() => executeBotResponse('Verificar PDF y sangrado 3mm')}
-              style={{
-                flexShrink: 0,
-                padding: '0.25rem 0.55rem',
-                borderRadius: '6px',
-                background: '#1c1c1f',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: '#d1d5db',
-                fontSize: '0.72rem',
-                cursor: 'pointer',
-              }}
-            >
-              📐 Preflight PDF
-            </button>
+            {[
+              dict.dotChat.chips.whatIs,
+              dict.dotChat.chips.publishersAuthors,
+              dict.dotChat.chips.printersSuppliers,
+              dict.dotChat.chips.aiAgentsMcp,
+            ].map((chipText, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => executeBotResponse(chipText)}
+                style={{
+                  flexShrink: 0,
+                  padding: '0.3rem 0.65rem',
+                  borderRadius: '6px',
+                  background: '#1c1c1f',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  color: '#e5e7eb',
+                  fontSize: '0.72rem',
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  transition: 'border-color 0.15s, background 0.15s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#dc0000';
+                  e.currentTarget.style.background = '#27272a';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
+                  e.currentTarget.style.background = '#1c1c1f';
+                }}
+              >
+                {chipText}
+              </button>
+            ))}
           </div>
 
           {/* Formulario Input */}
@@ -466,13 +522,7 @@ export const DotFloatingChatWidget: React.FC = () => {
               onChange={handleInputChange}
               onFocus={handleInputFocus}
               onBlur={handleInputBlur}
-              placeholder={
-                locale === 'es'
-                  ? 'Consulta técnica de libro, tirada o papel...'
-                  : locale === 'de'
-                  ? 'Technische Frage zu Buch, Auflage...'
-                  : 'Ask about book specs, runs, spine...'
-              }
+              placeholder={dict.dotChat.inputPlaceholder}
               style={{
                 flex: 1,
                 padding: '0.6rem 0.85rem',
@@ -490,7 +540,7 @@ export const DotFloatingChatWidget: React.FC = () => {
               style={{
                 padding: '0.6rem 0.85rem',
                 borderRadius: '10px',
-                background: inputValue.trim() ? '#E5352B' : 'rgba(255, 255, 255, 0.06)',
+                background: inputValue.trim() ? '#dc0000' : 'rgba(255, 255, 255, 0.06)',
                 border: 'none',
                 color: '#ffffff',
                 cursor: inputValue.trim() ? 'pointer' : 'default',
@@ -499,7 +549,7 @@ export const DotFloatingChatWidget: React.FC = () => {
                 justifyContent: 'center',
                 transition: 'background 0.15s ease',
               }}
-              aria-label="Enviar mensaje"
+              aria-label={dict.dotChat.sendAria}
             >
               <Send size={15} />
             </button>

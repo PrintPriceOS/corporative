@@ -379,6 +379,27 @@ export interface Translations {
     copy: string;
     copied: string;
   };
+  dotChat: {
+    triggerAria: string;
+    triggerBadge: string;
+    headerTitle: string;
+    headerSubtitle: string;
+    statusOnline: string;
+    statusListening: string;
+    statusThinking: string;
+    resetTitle: string;
+    closeTitle: string;
+    inputPlaceholder: string;
+    sendAria: string;
+    welcomeMessage: string;
+    resetMessage: string;
+    chips: {
+      whatIs: string;
+      publishersAuthors: string;
+      printersSuppliers: string;
+      aiAgentsMcp: string;
+    };
+  };
 }
 
 const dictionaries: Record<Locale, Translations> = { es, en, de };
