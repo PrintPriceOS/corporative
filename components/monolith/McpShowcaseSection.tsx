@@ -253,7 +253,7 @@ tools:
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <DotInteractiveHero size={220} enableEyeTracking={true} interactiveTags={true} />
+            <DotInteractiveHero size={220} enableEyeTracking={true} />
           </div>
         </div>
 

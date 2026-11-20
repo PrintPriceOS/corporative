@@ -6,63 +6,17 @@ import './dot-ppp.css';
 export interface DotInteractiveHeroProps {
   size?: number;
   enableEyeTracking?: boolean;
-  interactiveTags?: boolean;
+  interactiveTags?: boolean; // Kept for backwards compatibility, no tags rendered
   className?: string;
   glow?: boolean;
   onToolSelect?: (tool: string) => void;
 }
 
-interface ToolTag {
-  id: string;
-  label: string;
-  color: string;
-  dotColor: string;
-  position: React.CSSProperties;
-  targetOffset: { x: number; y: number };
-}
-
-const DEFAULT_TOOL_TAGS: ToolTag[] = [
-  {
-    id: 'calc_spine',
-    label: 'calc_spine()',
-    color: '#e5e7eb',
-    dotColor: '#E5352B',
-    position: { top: '8px', left: '-20px' },
-    targetOffset: { x: -14, y: -10 },
-  },
-  {
-    id: 'preflight_pdf',
-    label: 'preflight_pdf()',
-    color: '#e5e7eb',
-    dotColor: '#10b981',
-    position: { top: '16px', right: '-24px' },
-    targetOffset: { x: 14, y: -8 },
-  },
-  {
-    id: 'imposition_sheet',
-    label: 'imposition_sheet()',
-    color: '#e5e7eb',
-    dotColor: '#f59e0b',
-    position: { bottom: '24px', left: '-28px' },
-    targetOffset: { x: -12, y: 11 },
-  },
-  {
-    id: 'pallet_3d',
-    label: 'pallet_3d()',
-    color: '#e5e7eb',
-    dotColor: '#38bdf8',
-    position: { bottom: '20px', right: '-20px' },
-    targetOffset: { x: 13, y: 10 },
-  },
-];
-
 export const DotInteractiveHero: React.FC<DotInteractiveHeroProps> = ({
   size = 220,
   enableEyeTracking = true,
-  interactiveTags = false,
   className = '',
   glow = true,
-  onToolSelect,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const bodyRef = useRef<SVGGElement | null>(null);
@@ -72,7 +26,6 @@ export const DotInteractiveHero: React.FC<DotInteractiveHeroProps> = ({
   const eyeRRef = useRef<SVGCircleElement | null>(null);
 
   const [squish, setSquish] = useState('scale(1, 1)');
-  const [activeTool, setActiveTool] = useState<string | null>(null);
 
   // Targets de interpolación física
   const physicsRef = useRef({
@@ -80,12 +33,7 @@ export const DotInteractiveHero: React.FC<DotInteractiveHeroProps> = ({
     targetY: 0,
     currentX: 0,
     currentY: 0,
-    scaleX: 1,
-    scaleY: 1,
-    velScaleX: 0,
-    velScaleY: 0,
     isHovered: false,
-    lockTarget: null as { x: number; y: number } | null,
   });
 
   // Parpadeo orgánico autónomo
@@ -116,7 +64,6 @@ export const DotInteractiveHero: React.FC<DotInteractiveHeroProps> = ({
     let rafId = 0;
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (physicsRef.current.lockTarget) return; // Si está mirando una herramienta fijada
       if (!containerRef.current) return;
 
       const rect = containerRef.current.getBoundingClientRect();
@@ -135,10 +82,8 @@ export const DotInteractiveHero: React.FC<DotInteractiveHeroProps> = ({
     };
 
     const handleMouseLeave = () => {
-      if (!physicsRef.current.lockTarget) {
-        physicsRef.current.targetX = 0;
-        physicsRef.current.targetY = 0;
-      }
+      physicsRef.current.targetX = 0;
+      physicsRef.current.targetY = 0;
       physicsRef.current.isHovered = false;
     };
 
@@ -190,21 +135,6 @@ export const DotInteractiveHero: React.FC<DotInteractiveHeroProps> = ({
     setTimeout(() => setSquish('scale(1, 1)'), 320);
   }, []);
 
-  // Control magnético al posarse sobre una herramienta MCP
-  const handleTagHover = (tag: ToolTag | null) => {
-    if (tag) {
-      physicsRef.current.lockTarget = tag.targetOffset;
-      physicsRef.current.targetX = tag.targetOffset.x;
-      physicsRef.current.targetY = tag.targetOffset.y;
-      setActiveTool(tag.id);
-    } else {
-      physicsRef.current.lockTarget = null;
-      physicsRef.current.targetX = 0;
-      physicsRef.current.targetY = 0;
-      setActiveTool(null);
-    }
-  };
-
   return (
     <div
       ref={containerRef}
@@ -230,61 +160,6 @@ export const DotInteractiveHero: React.FC<DotInteractiveHeroProps> = ({
         />
       )}
 
-      {/* Etiquetas interactivas flotantes MCP */}
-      {interactiveTags && (
-        <div
-          style={{
-            position: 'absolute',
-            inset: '-30px',
-            pointerEvents: 'none',
-            zIndex: 10,
-          }}
-        >
-          {DEFAULT_TOOL_TAGS.map((tag) => (
-            <button
-              key={tag.id}
-              type="button"
-              onMouseEnter={() => handleTagHover(tag)}
-              onMouseLeave={() => handleTagHover(null)}
-              onClick={() => {
-                handleBounce();
-                onToolSelect?.(tag.id);
-              }}
-              style={{
-                position: 'absolute',
-                ...tag.position,
-                pointerEvents: 'auto',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.4rem',
-                padding: '0.35rem 0.75rem',
-                borderRadius: '9999px',
-                background: activeTool === tag.id ? 'rgba(229, 53, 43, 0.15)' : 'rgba(15, 23, 42, 0.85)',
-                border: activeTool === tag.id ? '1px solid #E5352B' : '1px solid rgba(255, 255, 255, 0.15)',
-                color: activeTool === tag.id ? '#ffffff' : '#e2e8f0',
-                fontSize: '0.725rem',
-                fontFamily: 'JetBrains Mono, monospace',
-                fontWeight: 600,
-                cursor: 'pointer',
-                backdropFilter: 'blur(8px)',
-                transition: 'all 0.2s ease',
-                boxShadow: activeTool === tag.id ? '0 0 16px rgba(229, 53, 43, 0.4)' : '0 4px 12px rgba(0, 0, 0, 0.25)',
-              }}
-            >
-              <span
-                style={{
-                  width: '6px',
-                  height: '6px',
-                  borderRadius: '50%',
-                  background: tag.dotColor,
-                }}
-              />
-              <span>{tag.label}</span>
-            </button>
-          ))}
-        </div>
-      )}
-
       {/* Contenedor de Flotación Gravedad Cero + Squash & Stretch */}
       <div
         className="dot-hero-float"
@@ -300,7 +175,7 @@ export const DotInteractiveHero: React.FC<DotInteractiveHeroProps> = ({
           zIndex: 2,
           overflow: 'visible',
         }}
-        title="Haz clic sobre Dot o mueve el ratón"
+        title="Dot (dot_ppp) · Click to interact"
       >
         {/* Esfera SVG con transformaciones elásticas */}
         <div

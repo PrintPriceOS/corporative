@@ -166,7 +166,7 @@ export const ActionCTA: React.FC<ActionCTAProps> = ({
 
         <Container>
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.75rem' }}>
-            <DotInteractiveHero size={140} enableEyeTracking={true} interactiveTags={false} />
+            <DotInteractiveHero size={140} enableEyeTracking={true} />
           </div>
 
           {slogan === 'PRICE IT. FIX IT. PRINT IT.' ? (
