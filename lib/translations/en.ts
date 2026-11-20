@@ -381,6 +381,8 @@ export const en: Translations = {
     statusListening: 'Listening to your query...',
     statusThinking: 'Dotty is thinking...',
     resetTitle: 'Reset conversation',
+    expandTitle: 'Expand view',
+    collapseTitle: 'Collapse view',
     closeTitle: 'Close chat',
     inputPlaceholder: 'Ask Dotty about products, print shops, publishers or MCP...',
     sendAria: 'Send message',

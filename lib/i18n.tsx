@@ -388,6 +388,8 @@ export interface Translations {
     statusListening: string;
     statusThinking: string;
     resetTitle: string;
+    expandTitle: string;
+    collapseTitle: string;
     closeTitle: string;
     inputPlaceholder: string;
     sendAria: string;

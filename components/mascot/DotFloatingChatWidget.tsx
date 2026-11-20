@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { DotChatAvatar, DotChatState } from './DotChatAvatar';
-import { X, Send, Sparkles, RotateCcw, ExternalLink } from 'lucide-react';
+import { X, Send, Sparkles, RotateCcw, ExternalLink, Maximize2, Minimize2 } from 'lucide-react';
 import { useLocale } from '@/lib/i18n';
 import { ChatCta, resolveConciergeKnowledge } from '@/lib/dot-knowledge';
 
@@ -42,6 +42,7 @@ function renderFormattedMessage(text: string) {
 export const DotFloatingChatWidget: React.FC = () => {
   const { locale, dict } = useLocale();
   const [isOpen, setIsOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [chatState, setChatState] = useState<DotChatState>('idle');
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -78,6 +79,7 @@ export const DotFloatingChatWidget: React.FC = () => {
       setTimeout(() => setChatState('idle'), 1200);
     } else {
       setIsOpen(false);
+      setIsExpanded(false);
       setChatState('idle');
     }
   };
@@ -288,21 +290,27 @@ export const DotFloatingChatWidget: React.FC = () => {
         <div
           style={{
             position: 'fixed',
-            bottom: '5.5rem',
+            bottom: isExpanded ? '1.5rem' : '5.5rem',
             right: '1.5rem',
-            width: 'min(410px, 94vw)',
-            height: '560px',
-            maxHeight: 'calc(100vh - 7rem)',
+            width: isExpanded ? 'min(840px, calc(100vw - 3rem))' : 'min(410px, 94vw)',
+            height: isExpanded ? 'min(820px, calc(100vh - 3rem))' : '560px',
+            maxHeight: isExpanded ? 'calc(100vh - 3rem)' : 'calc(100vh - 7rem)',
             borderRadius: '20px',
             background: '#111114',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
-            boxShadow: '0 20px 50px rgba(0, 0, 0, 0.75)',
+            border: isExpanded
+              ? '1px solid rgba(220, 0, 0, 0.4)'
+              : '1px solid rgba(255, 255, 255, 0.12)',
+            boxShadow: isExpanded
+              ? '0 25px 60px rgba(0, 0, 0, 0.85), 0 0 30px rgba(220, 0, 0, 0.12)'
+              : '0 20px 50px rgba(0, 0, 0, 0.75)',
             zIndex: 9999,
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',
             fontFamily: 'var(--font-sans)',
             backdropFilter: 'blur(16px)',
+            transition:
+              'width 0.28s cubic-bezier(0.16, 1, 0.3, 1), height 0.28s cubic-bezier(0.16, 1, 0.3, 1), max-height 0.28s ease, bottom 0.28s ease, border-color 0.28s ease',
           }}
         >
           {/* Cabecera del Chat con Dot reactivo */}
@@ -354,14 +362,48 @@ export const DotFloatingChatWidget: React.FC = () => {
                   cursor: 'pointer',
                   padding: '0.35rem',
                   borderRadius: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'color 0.15s ease',
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#ffffff')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#9ca3af')}
                 title={dict.dotChat.resetTitle}
+                aria-label={dict.dotChat.resetTitle}
               >
                 <RotateCcw size={15} />
               </button>
               <button
                 type="button"
-                onClick={() => setIsOpen(false)}
+                onClick={() => setIsExpanded((prev) => !prev)}
+                style={{
+                  background: isExpanded ? 'rgba(220, 0, 0, 0.15)' : 'transparent',
+                  border: isExpanded ? '1px solid rgba(220, 0, 0, 0.4)' : '1px solid transparent',
+                  color: isExpanded ? '#ffffff' : '#9ca3af',
+                  cursor: 'pointer',
+                  padding: '0.35rem',
+                  borderRadius: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.15s ease',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#ffffff')}
+                onMouseLeave={(e) => {
+                  if (!isExpanded) e.currentTarget.style.color = '#9ca3af';
+                }}
+                title={isExpanded ? dict.dotChat.collapseTitle : dict.dotChat.expandTitle}
+                aria-label={isExpanded ? dict.dotChat.collapseTitle : dict.dotChat.expandTitle}
+              >
+                {isExpanded ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsExpanded(false);
+                }}
                 style={{
                   background: 'transparent',
                   border: 'none',
@@ -369,8 +411,15 @@ export const DotFloatingChatWidget: React.FC = () => {
                   cursor: 'pointer',
                   padding: '0.35rem',
                   borderRadius: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'color 0.15s ease',
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#ffffff')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#9ca3af')}
                 title={dict.dotChat.closeTitle}
+                aria-label={dict.dotChat.closeTitle}
               >
                 <X size={18} />
               </button>
@@ -399,8 +448,8 @@ export const DotFloatingChatWidget: React.FC = () => {
               >
                 <div
                   style={{
-                    maxWidth: '88%',
-                    padding: '0.75rem 1rem',
+                    maxWidth: isExpanded ? '92%' : '88%',
+                    padding: isExpanded ? '0.85rem 1.15rem' : '0.75rem 1rem',
                     borderRadius:
                       msg.sender === 'user' ? '14px 14px 2px 14px' : '14px 14px 14px 2px',
                     background: msg.sender === 'user' ? '#dc0000' : '#18181b',
@@ -409,8 +458,8 @@ export const DotFloatingChatWidget: React.FC = () => {
                         ? 'none'
                         : '1px solid rgba(255, 255, 255, 0.08)',
                     color: '#ffffff',
-                    fontSize: '0.82rem',
-                    lineHeight: 1.5,
+                    fontSize: isExpanded ? '0.86rem' : '0.82rem',
+                    lineHeight: 1.55,
                   }}
                 >
                   {renderFormattedMessage(msg.text)}

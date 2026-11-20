@@ -381,6 +381,8 @@ export const de: Translations = {
     statusListening: 'Ihre Anfrage wird verarbeitet...',
     statusThinking: 'Dotty denkt nach...',
     resetTitle: 'Gespräch zurücksetzen',
+    expandTitle: 'Ansicht vergrößern',
+    collapseTitle: 'Ansicht verkleinern',
     closeTitle: 'Chat schließen',
     inputPlaceholder: 'Frage an Dotty zu Modulen, Druckereien, Verlagen oder MCP...',
     sendAria: 'Nachricht senden',
