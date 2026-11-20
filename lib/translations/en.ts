@@ -379,7 +379,7 @@ export const en: Translations = {
     headerSubtitle: 'AI Assistant · PrintPrice Pro',
     statusOnline: 'PrintPrice OS Engine · Online',
     statusListening: 'Listening to your query...',
-    statusThinking: 'Searching knowledge base...',
+    statusThinking: 'Dotty is thinking...',
     resetTitle: 'Reset conversation',
     closeTitle: 'Close chat',
     inputPlaceholder: 'Ask Dotty about products, print shops, publishers or MCP...',

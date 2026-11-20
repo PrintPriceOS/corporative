@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  detectLocaleFromPrompt,
-  resolveConciergeKnowledge,
-  SupportedLocale,
-} from '@/lib/dot-knowledge';
+import { detectLocaleFromPrompt, SupportedLocale } from '@/lib/dot-knowledge';
+import { generateDottyReply, ChatMessageTurn } from '@/lib/dotty-knowledge';
 
 export const runtime = 'nodejs';
 
@@ -28,18 +25,41 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Extract multi-turn history if provided
+    const rawHistory = Array.isArray(body.history)
+      ? body.history
+      : Array.isArray(body.messages)
+      ? body.messages
+      : [];
+
+    const history: ChatMessageTurn[] = [];
+    for (const item of rawHistory) {
+      if (
+        item &&
+        (item.role === 'user' || item.role === 'assistant') &&
+        typeof item.content === 'string' &&
+        item.content.trim()
+      ) {
+        history.push({
+          role: item.role,
+          content: item.content.trim(),
+        });
+      }
+    }
+
     // Determine target locale (prompt language takes precedence over UI locale)
     const effectiveLocale: SupportedLocale = detectLocaleFromPrompt(rawPrompt, requestedLocale);
 
-    // Resolve concierge knowledge answer
-    const answer = resolveConciergeKnowledge(rawPrompt, effectiveLocale);
+    // Call Dotty LLM Reasoning Engine (with automatic graceful fallback)
+    const result = await generateDottyReply(history, rawPrompt, effectiveLocale);
 
     return NextResponse.json(
       {
-        reply: answer.text,
-        ctas: answer.ctas || [],
-        detectedLocale: effectiveLocale,
-        intent: answer.intent,
+        reply: result.reply,
+        ctas: result.ctas || [],
+        detectedLocale: result.detectedLocale,
+        intent: result.intent,
+        source: result.source,
       },
       {
         status: 200,

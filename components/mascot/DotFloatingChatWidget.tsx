@@ -120,10 +120,21 @@ export const DotFloatingChatWidget: React.FC = () => {
     setIsTyping(true);
 
     try {
+      const history = messages
+        .filter((m) => m.text && m.text.trim())
+        .map((m) => ({
+          role: m.sender === 'user' ? 'user' : 'assistant',
+          content: m.text,
+        }));
+
       const res = await fetch('/api/concierge', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: userPrompt, locale }),
+        body: JSON.stringify({
+          prompt: userPrompt,
+          locale,
+          history,
+        }),
       });
 
       let replyText = '';
