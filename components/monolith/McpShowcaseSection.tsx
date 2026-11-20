@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Container } from '../ui/Container';
 import { useLocale } from '@/lib/i18n';
+import { DotInteractiveHero } from '@/components/mascot';
 import { Terminal, Cpu, ExternalLink, Copy, Check, Wrench, Layers } from 'lucide-react';
 
 interface McpShowcaseSectionProps {
@@ -120,125 +121,139 @@ tools:
       />
 
       <Container>
-        {/* Header Block */}
-        <div style={{ maxWidth: '820px', marginBottom: '3.5rem' }}>
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.25rem 0.75rem',
-              borderRadius: '9999px',
-              background: 'rgba(220, 0, 0, 0.12)',
-              border: '1px solid rgba(220, 0, 0, 0.35)',
-              fontSize: '0.725rem',
-              fontWeight: 800,
-              letterSpacing: '0.08em',
-              color: '#ffb4a8',
-              marginBottom: '1.25rem',
-              textTransform: 'uppercase',
-            }}
-          >
-            <span
+        {/* Header Block with Dot Interactive Mascot */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))',
+            gap: '2.5rem',
+            alignItems: 'center',
+            marginBottom: '3.5rem',
+          }}
+        >
+          <div style={{ maxWidth: '820px' }}>
+            <div
               style={{
-                width: '6px',
-                height: '6px',
-                borderRadius: '50%',
-                background: '#dc0000',
-                boxShadow: '0 0 8px #dc0000',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0.25rem 0.75rem',
+                borderRadius: '9999px',
+                background: 'rgba(220, 0, 0, 0.12)',
+                border: '1px solid rgba(220, 0, 0, 0.35)',
+                fontSize: '0.725rem',
+                fontWeight: 800,
+                letterSpacing: '0.08em',
+                color: '#ffb4a8',
+                marginBottom: '1.25rem',
+                textTransform: 'uppercase',
               }}
-            />
-            {dict.mcpSection.badge}
+            >
+              <span
+                style={{
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  background: '#dc0000',
+                  boxShadow: '0 0 8px #dc0000',
+                }}
+              />
+              {dict.mcpSection.badge}
+            </div>
+
+            <h2
+              style={{
+                fontSize: 'clamp(2rem, 4.5vw, 3.25rem)',
+                fontWeight: 800,
+                letterSpacing: '-0.03em',
+                lineHeight: 1.15,
+                color: '#ffffff',
+                marginBottom: '1.25rem',
+              }}
+            >
+              {dict.mcpSection.title}
+            </h2>
+
+            <p
+              style={{
+                fontSize: 'clamp(1rem, 1.8vw, 1.15rem)',
+                color: '#d1d5db',
+                lineHeight: 1.6,
+                marginBottom: '1rem',
+              }}
+            >
+              {dict.mcpSection.subtitle}
+            </p>
+
+            <p
+              style={{
+                fontSize: '0.925rem',
+                color: '#9ca3af',
+                lineHeight: 1.65,
+                marginBottom: '1.75rem',
+              }}
+            >
+              {dict.mcpSection.description}
+            </p>
+
+            {/* Capability badges */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.65rem' }}>
+              <span
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  padding: '0.35rem 0.85rem',
+                  borderRadius: '6px',
+                  background: '#18181b',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  fontSize: '0.78rem',
+                  fontWeight: 700,
+                  color: '#e5e7eb',
+                }}
+              >
+                <Wrench size={14} color="#dc0000" />
+                {dict.mcpSection.pill1}
+              </span>
+              <span
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  padding: '0.35rem 0.85rem',
+                  borderRadius: '6px',
+                  background: '#18181b',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  fontSize: '0.78rem',
+                  fontWeight: 700,
+                  color: '#e5e7eb',
+                }}
+              >
+                <Layers size={14} color="#dc0000" />
+                {dict.mcpSection.pill2}
+              </span>
+              <span
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  padding: '0.35rem 0.85rem',
+                  borderRadius: '6px',
+                  background: 'rgba(220, 0, 0, 0.1)',
+                  border: '1px solid rgba(220, 0, 0, 0.25)',
+                  fontSize: '0.78rem',
+                  fontWeight: 700,
+                  color: '#ffb4a8',
+                }}
+              >
+                <Cpu size={14} color="#dc0000" />
+                {dict.mcpSection.pill3}
+              </span>
+            </div>
           </div>
 
-          <h2
-            style={{
-              fontSize: 'clamp(2rem, 4.5vw, 3.25rem)',
-              fontWeight: 800,
-              letterSpacing: '-0.03em',
-              lineHeight: 1.15,
-              color: '#ffffff',
-              marginBottom: '1.25rem',
-            }}
-          >
-            {dict.mcpSection.title}
-          </h2>
-
-          <p
-            style={{
-              fontSize: 'clamp(1rem, 1.8vw, 1.15rem)',
-              color: '#d1d5db',
-              lineHeight: 1.6,
-              marginBottom: '1rem',
-            }}
-          >
-            {dict.mcpSection.subtitle}
-          </p>
-
-          <p
-            style={{
-              fontSize: '0.925rem',
-              color: '#9ca3af',
-              lineHeight: 1.65,
-              marginBottom: '1.75rem',
-            }}
-          >
-            {dict.mcpSection.description}
-          </p>
-
-          {/* Capability badges */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.65rem' }}>
-            <span
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.45rem',
-                padding: '0.35rem 0.85rem',
-                borderRadius: '6px',
-                background: '#18181b',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                fontSize: '0.78rem',
-                fontWeight: 700,
-                color: '#e5e7eb',
-              }}
-            >
-              <Wrench size={14} color="#dc0000" />
-              {dict.mcpSection.pill1}
-            </span>
-            <span
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.45rem',
-                padding: '0.35rem 0.85rem',
-                borderRadius: '6px',
-                background: '#18181b',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                fontSize: '0.78rem',
-                fontWeight: 700,
-                color: '#e5e7eb',
-              }}
-            >
-              <Layers size={14} color="#dc0000" />
-              {dict.mcpSection.pill2}
-            </span>
-            <span
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.45rem',
-                padding: '0.35rem 0.85rem',
-                borderRadius: '6px',
-                background: 'rgba(220, 0, 0, 0.1)',
-                border: '1px solid rgba(220, 0, 0, 0.25)',
-                fontSize: '0.78rem',
-                fontWeight: 700,
-                color: '#ffb4a8',
-              }}
-            >
-              <Cpu size={14} color="#dc0000" />
-              {dict.mcpSection.pill3}
-            </span>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <DotInteractiveHero size={220} enableEyeTracking={true} interactiveTags={true} />
           </div>
         </div>
 

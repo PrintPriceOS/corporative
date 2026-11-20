@@ -4,6 +4,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { TelemetryProvider } from "@/components/providers/TelemetryProvider";
 import { CookieBanner } from '@/components/monolith/CookieBanner';
+import { DotFloatingChatWidget } from '@/components/mascot';
 
 import { Manrope, Space_Grotesk, Inter } from "next/font/google";
 
@@ -55,6 +56,7 @@ export default function RootLayout({
               </main>
               <Footer />
               <CookieBanner />
+              <DotFloatingChatWidget />
             </TelemetryProvider>
           </LocaleProvider>
         </ThemeProvider>

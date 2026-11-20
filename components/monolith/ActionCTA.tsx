@@ -6,6 +6,7 @@ import { Button } from '../ui/Button';
 import Link from 'next/link';
 import ShapeGrid from '../ui/ShapeGrid';
 import { TechnicalCtaBackdropSvg } from '@/components/blueprints/TechnicalCtaBackdropSvg';
+import { DotInteractiveHero } from '@/components/mascot';
 import { trackEvent, events } from '@/lib/telemetry';
 import { useLocale } from '@/lib/i18n';
 
@@ -164,6 +165,10 @@ export const ActionCTA: React.FC<ActionCTAProps> = ({
         `}</style>
 
         <Container>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.75rem' }}>
+            <DotInteractiveHero size={140} enableEyeTracking={true} interactiveTags={false} />
+          </div>
+
           {slogan === 'PRICE IT. FIX IT. PRINT IT.' ? (
             <div
               style={{

@@ -6,6 +6,7 @@ import { HeroPlatform } from '@/components/monolith/HeroPlatform';
 import { ActionCTA } from '@/components/monolith/ActionCTA';
 import { Container } from '@/components/ui/Container';
 import { Section } from '@/components/ui/Section';
+import { DotChatAvatar } from '@/components/mascot';
 import { useLocale } from '@/lib/i18n';
 import {
   Calculator,
@@ -814,35 +815,36 @@ export default function BudgetPage() {
             <div
               style={{
                 display: 'flex',
-                justifyContent: 'space-between',
                 alignItems: 'center',
-                paddingBottom: '0.75rem',
+                gap: '0.85rem',
                 marginBottom: '1rem',
                 borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-                gap: '0.5rem',
-                flexWrap: 'wrap'
+                paddingBottom: '0.75rem',
               }}
             >
-              <span
-                className="technical-text"
-                style={{ fontSize: '0.7rem', fontWeight: 800, color: '#dc0000', letterSpacing: '0.1em' }}
-              >
-                {t.liveCardBadge}
-              </span>
-              <span
-                className="technical-text"
-                style={{
-                  fontSize: '0.625rem',
-                  padding: '0.2rem 0.55rem',
-                  borderRadius: 'var(--radius-pill)',
-                  background: 'rgba(34, 197, 94, 0.14)',
-                  color: '#22c55e',
-                  border: '1px solid rgba(34, 197, 94, 0.3)',
-                  fontWeight: 700
-                }}
-              >
-                {t.liveCardStatus}
-              </span>
+              <DotChatAvatar size={38} state="thinking" />
+              <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                <span
+                  className="technical-text"
+                  style={{ fontSize: '0.7rem', fontWeight: 800, color: '#dc0000', letterSpacing: '0.1em' }}
+                >
+                  {t.liveCardBadge}
+                </span>
+                <span
+                  className="technical-text"
+                  style={{
+                    fontSize: '0.625rem',
+                    padding: '0.2rem 0.55rem',
+                    borderRadius: 'var(--radius-pill)',
+                    background: 'rgba(34, 197, 94, 0.14)',
+                    color: '#22c55e',
+                    border: '1px solid rgba(34, 197, 94, 0.3)',
+                    fontWeight: 700
+                  }}
+                >
+                  {t.liveCardStatus}
+                </span>
+              </div>
             </div>
 
             <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#f4f4f5', marginBottom: '0.85rem' }}>
