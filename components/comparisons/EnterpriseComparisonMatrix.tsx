@@ -714,6 +714,9 @@ export const EnterpriseComparisonMatrix: React.FC = () => {
           <div
             style={{
               display: 'inline-flex',
+              maxWidth: '100%',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
               marginTop: '2rem',
               padding: '5px',
               borderRadius: '9999px',
