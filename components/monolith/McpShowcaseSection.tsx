@@ -42,14 +42,14 @@ export const McpShowcaseSection: React.FC<McpShowcaseSectionProps> = ({ id = 'mc
       ),
     },
     npx: {
-      title: 'Stdio Local (NPM CLI)',
-      subtitle: 'Ejecución en local con transporte Stdio y Node.js 18+',
+      title: 'Stdio Local (GitHub Release / CLI)',
+      subtitle: 'Ejecución en local con transporte Stdio y Node.js 18+ sin instalación previa',
       code: JSON.stringify(
         {
           mcpServers: {
-            'ppos-mcp-server': {
+            'printpricepro': {
               command: 'npx',
-              args: ['-y', '@ppos/mcp-server'],
+              args: ['-y', 'github:PrintPriceOS/ppos-mcp-server#v1.1.0'],
             },
           },
         },
