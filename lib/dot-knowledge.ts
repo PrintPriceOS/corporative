@@ -347,7 +347,7 @@ Enables AI agents to interact directly and deterministically with PrintPrice OS 
     if (locale === 'es') {
       return {
         intent: 'calculate_quote_redirect',
-        text: `Como **guía comercial**, no ejecuto cálculos directos en esta ventana de chat para garantizar que tus costes se resuelvan con precisión estricta.
+        text: `Como **asistente de IA (Dotty)**, no ejecuto cálculos directos en esta ventana de chat para garantizar que tus costes se resuelvan con precisión estricta.
 
 Para obtener el presupuesto técnico de tu tirada con tarifas actualizadas de papel en kilogramos, planchas CTP, puesta a punto, horas de máquina y flete segregado, utiliza el módulo oficial **Price it (Budget Engine)**:`,
         ctas: [
@@ -359,7 +359,7 @@ Para obtener el presupuesto técnico de tu tirada con tarifas actualizadas de pa
     if (locale === 'de') {
       return {
         intent: 'calculate_quote_redirect',
-        text: `Als **Vertriebsberater** führe ich in diesem Chat-Fenster keine direkten Maschinenberechnungen durch, um höchste mathematische Präzision zu gewährleisten.
+        text: `Als **KI-Assistentin (Dotty)** führe ich in diesem Chat-Fenster keine direkten Maschinenberechnungen durch, um höchste mathematische Präzision zu gewährleisten.
 
 Für eine exakte Produktionskalkulation mit aktuellen Kilopreisen für Bedruckstoffe, CTP-Druckplatten, Rüstzeiten, Maschinenstundensätzen und getrenntem Frachtausweis nutzen Sie bitte das offizielle Modul **Price it (Budget Engine)**:`,
         ctas: [
@@ -370,7 +370,7 @@ Für eine exakte Produktionskalkulation mit aktuellen Kilopreisen für Bedruckst
     }
     return {
       intent: 'calculate_quote_redirect',
-      text: `As your **commercial concierge**, I do not perform machine calculations directly inside this chat window to ensure absolute mathematical precision.
+      text: `As your **AI Assistant (Dotty)**, I do not perform machine calculations directly inside this chat window to ensure absolute mathematical precision.
 
 To get an authoritative manufacturing estimate with live paper kg rates, CTP plates, make-ready, press hours, and segregated EPAL freight, please use the official **Price it (Budget Engine)**:`,
       ctas: [
