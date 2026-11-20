@@ -65,21 +65,30 @@ name: printprice-mcp-orchestrator
 description: Deterministic 5-axis book pricing, spine geometry, EPAL pallet cubing, and PDF preflight.
 mcp_server: "https://mcp.printprice.pro/mcp"
 tools:
-  - ppos_calculate_full_production
-  - ppos_calculate_spine
-  - ppos_calculate_pallet_cubing
-  - ppos_run_pdf_preflight
-  - ppos_query_materials_catalog`,
+  - ppos_search_paper_catalog
+  - ppos_calculate_book_estimate
+  - ppos_get_marketplace_offers
+  - ppos_calculate_crossover_curve
+  - ppos_calculate_spine_geometry
+  - ppos_calculate_logistics_cubing_quote
+  - ppos_plan_sheet_imposition
+  - ppos_inspect_preflight
+  - ppos_validate_machine_substrate
+  - ppos_manage_marketplace_order`,
     },
   };
 
   const TOOLS_LIST = [
-    { name: 'ppos_calculate_full_production', desc: '5-Axis BPE print engine pricing & break-even curves' },
-    { name: 'ppos_calculate_spine', desc: 'Certified SPINE-01 spine & cover wrap geometry' },
-    { name: 'ppos_calculate_pallet_cubing', desc: '3D EPAL Euro-pallet packing & LDM carrier cubing' },
-    { name: 'ppos_query_materials_catalog', desc: 'Federated 3,133+ paper substrates & bulk directory' },
-    { name: 'ppos_calculate_imposition', desc: 'Sheet signature layouts & trim yield optimization' },
-    { name: 'ppos_run_pdf_preflight', desc: '6-axis PDF preflight verification (TrimBox, ICC, DPI)' },
+    { name: 'ppos_search_paper_catalog', desc: 'Bilingual substrate catalog with verified caliper & micron precision' },
+    { name: 'ppos_calculate_book_estimate', desc: '5-Axis BPE industrial cost breakdown & digital vs offset crossover' },
+    { name: 'ppos_get_marketplace_offers', desc: 'Multi-printhouse commercial bids with BPE fallback detection' },
+    { name: 'ppos_calculate_crossover_curve', desc: 'Run-length scaling comparison curve & threshold Q*' },
+    { name: 'ppos_calculate_spine_geometry', desc: 'Certified SPINE-01 spine bulk, swell & open cover wrap template' },
+    { name: 'ppos_calculate_logistics_cubing_quote', desc: '3D FEFCO & EPAL pallet packing, dock rules & deltaQ optimization' },
+    { name: 'ppos_plan_sheet_imposition', desc: 'Industrial sheet imposition (B1/B2/SRA3/Web Rotary) & creep compensation' },
+    { name: 'ppos_inspect_preflight', desc: '6-axis PDF preflight verification (spine, bleed, TAC, DPI) & MAGIC_FIX' },
+    { name: 'ppos_validate_machine_substrate', desc: 'Mechanical compatibility between press constraints & paper specs' },
+    { name: 'ppos_manage_marketplace_order', desc: 'Complete marketplace order lifecycle (create, get, offers, files, bind)' },
   ];
 
   return (
@@ -521,6 +530,29 @@ tools:
             }}
           >
             <span>{dict.mcpSection.ctaSecondary}</span>
+          </a>
+
+          <a
+            href="https://mcp.printprice.pro/llms.txt"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.85rem 1.4rem',
+              background: 'rgba(255, 255, 255, 0.05)',
+              color: '#d1d5db',
+              borderRadius: '8px',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              fontSize: '0.85rem',
+              fontWeight: 700,
+              textDecoration: 'none',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            <Terminal size={15} color="#9ca3af" />
+            <span>llms.txt (AI Manifest)</span>
           </a>
         </div>
       </Container>
