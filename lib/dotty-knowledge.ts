@@ -116,6 +116,11 @@ const FALLBACK_LLMS_TXT = `# PrintPrice OS MCP Server (@ppos/mcp-server)
 Official Model Context Protocol server for industrial print engineering, calculation, logistics, and prepress.
 - Remote Endpoint: https://mcp.printprice.pro/mcp (Streamable HTTP / SSE)
 - Local stdio: npx -y github:PrintPriceOS/ppos-mcp-server#v1.1.0
+- Commercial Model:
+  * Print House License: 500 EUR/year (full Control Plane access).
+  * Marketplace Transaction Fee: 4% per awarded print order.
+  * Developer & AI Agent Access: 45 EUR/month (API Keys & MCP endpoint access).
+  * Publishers & Authors: No mandatory monthly subscription (pay-per-run).
 - Resources: ppos://catalog/papers (3,133+ substrates), ppos://spine/profiles (SPINE-01), ppos://logistics/warehouses (EPAL), ppos://preflight/capabilities (6-axis).
 - Tools: ppos_search_paper_catalog, ppos_calculate_book_estimate, ppos_get_marketplace_offers, ppos_calculate_crossover_curve, ppos_calculate_spine_geometry, ppos_calculate_logistics_cubing_quote, ppos_plan_sheet_imposition, ppos_inspect_preflight, ppos_validate_machine_substrate, ppos_manage_marketplace_order.`;
 
@@ -175,9 +180,17 @@ REGLA DE ORO INVIOLABLE (SEGURIDAD Y CÁLCULO):
   3. Adjunta el botón CTA exacto para abrir Price it (https://budget.printprice.pro/) o conectar vía MCP (https://mcp.printprice.pro/).
 
 CONOCIMIENTO INTEGRAL DEL ECOSISTEMA:
-1. MODELO COMERCIAL:
-   - CERO SUSCRIPCIONES MENSUALES OBLIGATORIAS para cotizar o revisar archivos. No hay cuotas ocultas para autores o editoriales.
-   - Presupuestos en 5 ejes técnicos (papel por kg, planchas CTP, puesta a punto, horas de prensa y transporte EPAL segregado).
+1. MODELO COMERCIAL Y TARIFAS OFICIALES (CRÍTICO: INFORMACIÓN EXACTA Y TRANSPARENTE):
+   Cuando el usuario pregunte por precios, costes de alta, suscripciones, licencias, comisiones de marketplace o API Keys, NUNCA evadas la respuesta. Da las cifras oficiales exactas de inmediato, de forma transparente y explicando el valor:
+   a) Imprentas y Talleres Gráficos (Red de Producción):
+      - Licencia anual de taller / imprenta: 500 € / año (sin cuotas mensuales ocultas).
+      - Comisión de Marketplace: 4% sobre cada trabajo adjudicado / transaccionado en la red.
+      - Qué incluye: Acceso total al Control Plane (https://control.printprice.pro/), calibrador de maquinaria (offset y digital), catálogo de sustratos, tiempos de corte (SLA), recepción de archivos con preflight certificado y motor logístico con flete calculado.
+   b) Desarrolladores, Integradores y Agentes IA (API & MCP Server):
+      - Plan API Keys / Servidor MCP: 45 € / mes para acceso programático continuo vía REST API y servidor Model Context Protocol (https://mcp.printprice.pro/mcp) con credenciales propias (X-API-Key / Bearer).
+   c) Autores y Editoriales (Compradores de Impresión):
+      - CERO SUSCRIPCIONES MENSUALES OBLIGATORIAS: Acceso libre para cotizar en Price it (5-Axis BPE), verificar geometría de lomo (SPINE-01) y auditar archivos en Fix it (Preflight 6-Axis). Solo pagan por la producción adjudicada (modelo pay-as-you-go).
+   - Presupuestos de fabricación en 5 ejes técnicos (papel por kg, planchas CTP, puesta a punto, horas de prensa y transporte EPAL segregado).
    - Cobertura Multi-Imprenta: los talleres adscritos compiten en calidad y coste sin alterar las matrices de cálculo del cliente.
 
 2. PERFILES Y RECORRIDOS:

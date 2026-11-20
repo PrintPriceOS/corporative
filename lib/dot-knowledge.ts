@@ -482,48 +482,85 @@ Calculate your exact spine width and open-cover template in Budget or via the MC
     lower.includes('precio') ||
     lower.includes('precios') ||
     lower.includes('tarifa') ||
+    lower.includes('tarifas') ||
+    lower.includes('licencia') ||
+    lower.includes('licencias') ||
+    lower.includes('comision') ||
+    lower.includes('comisión') ||
+    lower.includes('api key') ||
+    lower.includes('api-key') ||
     lower.includes('planes') ||
     lower.includes('subscription') ||
-    lower.includes('suscripción')
+    lower.includes('suscripción') ||
+    lower.includes('suscripcion') ||
+    lower.includes('coste') ||
+    lower.includes('costes')
   ) {
     if (locale === 'es') {
       return {
         intent: 'contact_sales',
-        text: `**Modelo Comercial y Soporte:**
+        text: `**Modelo Comercial y Tarifas Oficiales de PrintPrice Pro:**
 
-En PrintPrice Pro **no exigimos suscripciones obligatorias** a compradores ni autores para cotizar o revisar archivos. Las operaciones en el Marketplace aplican comisiones transparentes por pedido completado, y disponemos de acuerdos marco para editoriales con alto volumen de tirada.
+1. **Imprentas y Talleres Gráficos:**
+   • **Licencia anual:** **500 € / año** (incluye acceso completo a Control Plane, calibrador de maquinaria, tarifas y catálogo de sustratos).
+   • **Comisión de Marketplace:** **4%** por cada trabajo adjudicado en la red de producción.
 
-¿Deseas hablar con nuestro equipo comercial o plantear un acuerdo de integración?`,
+2. **Desarrolladores y Agentes IA (API & MCP):**
+   • **Plan API Keys / Servidor MCP:** **45 € / mes** para acceso programático continuo vía REST API y servidor Model Context Protocol (*@ppos/mcp-server*).
+
+3. **Editoriales y Autores Independientes:**
+   • **Cero suscripciones mensuales obligatorias:** Cotización ilimitada en Price it (*5-Axis BPE*), cálculo de lomo (*SPINE-01*) y preflight PDF (*Fix it*). Solo pagas por la producción transaccionada.
+
+¿Necesitas información sobre alguna de estas modalidades o prefieres coordinar con el equipo comercial?`,
         ctas: [
-          { label: 'Formulario de Contacto / Ventas ➔', href: '/contact', external: false },
-          { label: 'Preguntas Frecuentes (FAQ) ↗', href: '/faq', external: false },
+          { label: 'Control Plane (Imprentas) ↗', href: 'https://control.printprice.pro/', external: true },
+          { label: 'Desarrolladores & API ➔', href: '/developers', external: false },
+          { label: 'Formulario de Contacto ➔', href: '/contact', external: false },
         ],
       };
     }
     if (locale === 'de') {
       return {
         intent: 'contact_sales',
-        text: `**Vertriebsmodell und Support:**
+        text: `**Offizielles Geschäftsmodell und Tarife von PrintPrice Pro:**
 
-Bei PrintPrice Pro gibt es **keine verpflichtenden Abonnements** für Kunden und Verlage, um Preise zu kalkulieren oder PDFs zu prüfen. Transaktionen im Marketplace erfolgen auf transparenter Auftragsbasis mit Rahmenvereinbarungen für Großkunden.
+1. **Druckereien und grafische Werkstätten:**
+   • **Jahreslizenz:** **500 € / Jahr** (inklusive vollem Zugang zu Control Plane, Maschinenkalibrierung, Tarifen und Substratkatalog).
+   • **Marketplace-Transaktionsgebühr:** **4%** pro vermitteltem Druckauftrag im Netzwerk.
 
-Möchten Sie mit unserem Vertriebsteam sprechen oder eine Partnerschaft vereinbaren?`,
+2. **Entwickler & KI-Agenten (API & MCP):**
+   • **API-Keys / MCP-Server-Plan:** **45 € / Monat** für fortlaufenden programmatischen Zugriff via REST-API und Model Context Protocol (*@ppos/mcp-server*).
+
+3. **Verlage und unabhängige Autoren:**
+   • **Keine monatliche Pflicht-Abonnements:** Kostenlose Kalkulation mit Price it (*5-Axis BPE*), Buchrücken-Berechnung (*SPINE-01*) und PDF-Preflight (*Fix it*). Sie zahlen nur pro beauftragter Druckauflage.
+
+Möchten Sie sich anmelden oder ein Gespräch mit unserem Vertriebsteam vereinbaren?`,
         ctas: [
-          { label: 'Kontakt- und Anfrageformular ➔', href: '/contact', external: false },
-          { label: 'Häufige Fragen (FAQ) ↗', href: '/faq', external: false },
+          { label: 'Control Plane (Druckereien) ↗', href: 'https://control.printprice.pro/', external: true },
+          { label: 'Entwickler & API ➔', href: '/developers', external: false },
+          { label: 'Vertriebsteam kontaktieren ➔', href: '/contact', external: false },
         ],
       };
     }
     return {
       intent: 'contact_sales',
-      text: `**Commercial Model & Support:**
+      text: `**Official Commercial Pricing & Licensing Model:**
 
-PrintPrice Pro requires **no compulsory subscriptions** for buyers or authors to quote jobs or inspect artwork. Marketplace production orders operate on transparent per-job terms, with enterprise volume agreements available for publishers.
+1. **Printhouses & Graphic Workshops:**
+   • **Annual License:** **€500 / year** (includes full access to Control Plane, machine calibration, rates, and substrate catalog).
+   • **Marketplace Fee:** **4%** per awarded print order transacted in the production network.
 
-Would you like to connect with our enterprise sales and partnerships team?`,
+2. **Developers & AI Agents (API & MCP):**
+   • **API Keys / MCP Server Plan:** **€45 / month** for continuous programmatic access via REST API and Model Context Protocol (*@ppos/mcp-server*).
+
+3. **Publishers & Independent Authors:**
+   • **No mandatory monthly subscription:** Free unlimited access to Price it (*5-Axis BPE*), spine geometry (*SPINE-01*), and PDF preflight (*Fix it*). Pay-as-you-go per awarded production run.
+
+Would you like to register or get in touch with our sales team?`,
       ctas: [
+        { label: 'Control Plane (Printhouses) ↗', href: 'https://control.printprice.pro/', external: true },
+        { label: 'Developers & API ➔', href: '/developers', external: false },
         { label: 'Contact Sales Team ➔', href: '/contact', external: false },
-        { label: 'Frequently Asked Questions (FAQ) ↗', href: '/faq', external: false },
       ],
     };
   }

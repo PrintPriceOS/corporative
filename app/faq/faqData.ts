@@ -111,6 +111,14 @@ export const FAQ_REGISTRY: FaqItem[] = [
     docsUrl: 'https://docs.printprice.pro/docs/engines/logistics-cubing-engine#multi-destination-dispatch',
     tags: ['split-dispatch', 'distributors', 'zeitfracht', 'vva', 'direct-to-bookstore']
   },
+  {
+    id: 'editorial-pricing-subscription',
+    role: 'editorial',
+    questionKey: 'faq.hub.q_pricing_publishers',
+    answerKey: 'faq.hub.a_pricing_publishers',
+    docsUrl: 'https://docs.printprice.pro/docs/engines/pricing-intelligence-engine#no-subscription',
+    tags: ['no-subscription', 'publishers', 'authors', 'pay-per-run', 'free-calculator', 'marketplace']
+  },
 
   // =========================================================================
   // 3. PRINTHOUSES & INDUSTRIAL NODES (IMPRENTAS & TALLERES GRÁFICOS)
@@ -162,6 +170,22 @@ export const FAQ_REGISTRY: FaqItem[] = [
     answerKey: 'faq.hub.a_printhouse_6',
     docsUrl: 'https://docs.printprice.pro/docs/engines/routing-decision-engine#plant-oee-scoring',
     tags: ['oee', 'machine-capacity', 'sla-monitoring', 'downtime', 'scheduling']
+  },
+  {
+    id: 'printhouse-pricing-license',
+    role: 'printhouse',
+    questionKey: 'faq.hub.q_pricing_printhouse',
+    answerKey: 'faq.hub.a_pricing_printhouse',
+    docsUrl: 'https://docs.printprice.pro/docs/platform/printhouse-onboarding#license-and-fees',
+    tags: ['pricing', 'license', '500-eur', '4-percent', 'marketplace-fee', 'control-plane', 'onboarding']
+  },
+  {
+    id: 'developer-pricing-api-mcp',
+    role: 'printhouse',
+    questionKey: 'faq.hub.q_pricing_developers',
+    answerKey: 'faq.hub.a_pricing_developers',
+    docsUrl: 'https://docs.printprice.pro/docs/api/mcp-server-and-skills#pricing',
+    tags: ['api-keys', 'mcp-server', '45-eur', 'developer-plan', 'ai-agents', 'integration']
   },
 
   // =========================================================================

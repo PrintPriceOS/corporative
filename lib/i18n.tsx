@@ -338,6 +338,12 @@ export interface Translations {
     a_logistics_5: string;
     q_logistics_6: string;
     a_logistics_6: string;
+    q_pricing_printhouse: string;
+    a_pricing_printhouse: string;
+    q_pricing_developers: string;
+    a_pricing_developers: string;
+    q_pricing_publishers: string;
+    a_pricing_publishers: string;
   };
   footer: {
     brandDesc: string;

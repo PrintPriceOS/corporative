@@ -331,6 +331,12 @@ export const de: Translations = {
     a_logistics_5: 'Ja, nach Abschluss der Verpackung an der Versandrampe der Druckerei druckt der Logistikdienst standardisierte A6-Versandaufkleber mit GS1-128 Barcodes, Paket-Tracking-Nummern und offizielle internationale CMR-Frachtbriefe. Speditionsfahrer quittieren die Ablieferung digital (POD) oder scannen den SSCC-Code zur sofortigen Auszahlungsfreigabe.',
     q_logistics_6: 'Warum sind Frachtkosten auf Rechnungen strikt von den Fertigungskosten getrennt?',
     a_logistics_6: 'Die Trennung von Produktion und Logistik sichert 100 % Preistransparenz und schützt Druckereien vor schwankenden Speditionstarifen, Treibstoffzuschlägen oder Mautkosten. Auftraggeber sehen die exakte Kostenherleitung basierend auf Gewicht, Entfernung und Palettenstellplätzen, während Frachtführer dedizierte automatisierte Auszahlungen erhalten.',
+    q_pricing_printhouse: 'Welche Lizenzen und Gebühren fallen für Druckereien im PrintPrice Pro Netzwerk an?',
+    a_pricing_printhouse: 'Qualifizierte Druckereien und Werkstätten erhalten Zugang zum Control Plane über eine Jahreslizenz von 500 € / Jahr, ohne versteckte monatliche Gebühren. Über den Marketplace wird eine Erfolgsgebühr von 4 % ausschließlich auf tatsächlich vermittelte und produzierte Druckaufträge erhoben, inklusive zertifiziertem Preflight und gesicherter Auszahlung.',
+    q_pricing_developers: 'Was kosten API-Keys und der MCP-Server-Zugang für Entwickler und KI-Agenten?',
+    a_pricing_developers: 'Der Entwickler- und KI-Tarif für ERP-Anbindungen und Systemaufrufe über den offiziellen Model Context Protocol (MCP) Server kostet 45 € / Monat und ermöglicht fortlaufenden programmatischen Zugriff via REST-API und Streamable HTTP mit eigenen Zugangsdaten (X-API-Key / Bearer).',
+    q_pricing_publishers: 'Müssen Verlage oder Autoren eine monatliche Abonnementgebühr bezahlen?',
+    a_pricing_publishers: 'Nein. Für Verlage und unabhängige Autoren gibt es keinerlei monatliche Pflicht-Abonnements. Sie nutzen Price it (5-Axis BPE), die Buchrückenberechnung (SPINE-01) und den PDF-Preflight (Fix it) kostenfrei und zahlen lediglich die Fertigung und den Transport beauftragter Druckauflagen im Marketplace.',
   },
   footer: {
     brandDesc: 'Ihr Buch, von der Datei zum Papier. Betriebssoftware und technische Vernetzung für Autoren, Verlage, Druckereien und Lieferanten.',

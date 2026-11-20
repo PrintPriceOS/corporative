@@ -331,6 +331,12 @@ export const en: Translations = {
     a_logistics_5: 'Yes, upon packing completion at the printhouse dispatch dock, the logistics service outputs standardized A6 shipping labels with GS1-128 barcodes, multi-piece tracking IDs, and official International CMR consignment notes. Drivers sign digital proof-of-delivery (POD) on glass or scan the master SSCC barcode to initiate immediate settlement.',
     q_logistics_6: 'Why are industrial freight costs strictly decoupled from print manufacturing costs on client invoices?',
     a_logistics_6: 'Decoupling manufacturing from logistics ensures 100% transparent pricing and protects printhouses from bearing freight price volatility or courier surcharges (fuel adjustments, toll fees, residential delivery premiums). Clients see exact transport derivations based on weight, distance, and pallet footprint, while carriers receive dedicated automated disbursements.',
+    q_pricing_printhouse: 'What are the official licenses and fees to join the PrintPrice Pro print network?',
+    a_pricing_printhouse: 'Certified graphic workshops access Control Plane with an annual license of €500 / year, with no hidden monthly fees. A 4% success fee is charged exclusively on awarded print orders transacted through the Marketplace, covering automated order orchestration, certified preflight audits, and guaranteed payout.',
+    q_pricing_developers: 'How much does API Keys and MCP server access cost for developers and AI agents?',
+    a_pricing_developers: 'The Developer & AI Agent plan for ERP integration and autonomous agent calls via the official Model Context Protocol (MCP) server costs €45 / month, providing continuous programmatic access via REST API and Streamable HTTP with dedicated credentials (X-API-Key / Bearer).',
+    q_pricing_publishers: 'Do publishers or independent authors need to pay any monthly subscription fees?',
+    a_pricing_publishers: 'No. Publishers and authors have zero mandatory monthly subscriptions. They have free, unlimited access to Price it (5-Axis BPE), SPINE-01 spine calculation, and Fix it (6-Axis Preflight), paying strictly for the manufacturing and freight of orders they award on the Marketplace.',
   },
   footer: {
     brandDesc: 'Your book, from file to print. Operating software and technical connectivity for authors, publishers, plants and suppliers.',
