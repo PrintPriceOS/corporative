@@ -293,24 +293,38 @@ export async function generateDottyReply(
       },
     };
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 12000); // 12s timeout
+    let lastStatus = 0;
+    let data: any = null;
 
-    const res = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestBody),
-      signal: controller.signal,
-    });
-    clearTimeout(timeout);
+    // Up to 2 attempts for resilience against temporary Google 503/429 spikes
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 12000); // 12s timeout
 
-    if (!res.ok) {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+        signal: controller.signal,
+      });
+      clearTimeout(timeout);
+
+      lastStatus = res.status;
+      if (res.ok) {
+        data = await res.json();
+        break;
+      }
+
       const errText = await res.text();
-      console.warn(`[DOTTY-LLM] Gemini request failed (${res.status}): ${errText}`);
+      console.warn(`[DOTTY-LLM] Gemini request attempt ${attempt} failed (${res.status}): ${errText}`);
+
+      if (attempt === 1 && (res.status === 503 || res.status === 429)) {
+        await new Promise((r) => setTimeout(r, 600));
+        continue;
+      }
+
       throw new Error(`Gemini API returned ${res.status}`);
     }
-
-    const data = await res.json();
     const candidateText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!candidateText) {
