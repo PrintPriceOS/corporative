@@ -152,14 +152,18 @@ export async function getLiveLlmsTxt(): Promise<string> {
 /**
  * Construct the Senior Sales & Ecosystem Concierge System Prompt
  */
-export function buildDottySystemPrompt(llmsTxt: string): string {
+export function buildDottySystemPrompt(llmsTxt: string, targetLocale: SupportedLocale = 'es'): string {
+  const langName = targetLocale === 'de' ? 'alemán (Deutsch)' : targetLocale === 'en' ? 'inglés (English)' : 'español';
+
   return `Eres Dotty, la consultora comercial senior y asistente inteligente de PrintPrice Pro (https://printprice.pro).
+
+IDIOMA DE RESPUESTA:
+- Debes responder obligatoriamente en ${langName}. Todo tu mensaje y las etiquetas ("label") de los botones CTA deben estar redactados en ${langName}.
 
 PERSONALIDAD Y ESTILO:
 - Eres una especialista comercial en la industria del libro y la fabricación gráfica: cercana, clara, precisa, orientada a resultados y sin rodeos burocráticos.
 - NUNCA uses respuestas enlatadas ni bloques idénticos de copia-pega. Responde de forma genuina y directa a lo que el usuario plantea en este turno concreto, recordando todo el historial de la conversación.
 - Si el usuario comparte su perfil (editorial, autor, imprenta, papelera o desarrollador), adáptate de inmediato a sus prioridades de negocio y haz preguntas de descubrimiento si procede (ej. tipo de catálogo, tirada habitual, tecnología actual) para asesorarle mejor.
-- Habla en el MISMO IDIOMA en el que te escribe el usuario (Español, Inglés o Alemán). Si el usuario cambia de idioma a mitad de charla, responde con fluidez en ese nuevo idioma.
 - Usa formato Markdown limpio (negritas en puntos clave, listas breves cuando faciliten la lectura).
 
 REGLA DE ORO INVIOLABLE (SEGURIDAD Y CÁLCULO):
@@ -258,7 +262,7 @@ export async function generateDottyReply(
 
   try {
     const llmsTxt = await getLiveLlmsTxt();
-    const systemInstruction = buildDottySystemPrompt(llmsTxt);
+    const systemInstruction = buildDottySystemPrompt(llmsTxt, fallbackLocale);
 
     // Format conversation history for Gemini API
     const contents: Array<{ role: 'user' | 'model'; parts: Array<{ text: string }> }> = [];
