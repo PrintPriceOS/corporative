@@ -7,6 +7,7 @@ import { Container } from '@/components/ui/Container';
 import { CodeBlock } from '@/components/ui/CodeBlock';
 import { HeroPlatform } from '@/components/monolith/HeroPlatform';
 import { ActionCTA } from '@/components/monolith/ActionCTA';
+import { McpShowcaseSection } from '@/components/monolith/McpShowcaseSection';
 import { Icon } from '@/components/ui/Icon';
 import { SystemCardHover } from '@/components/ui/effects/SystemCardHover';
 import { useLocale } from '@/lib/i18n';
@@ -353,6 +354,12 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
           title: 'API Overview & OpenAPI 3.1 Bundles',
           desc: 'Mapa completo de endpoints en producción, descarga de especificaciones YAML y políticas de acceso.',
           href: 'https://docs.printprice.pro/docs/api/overview'
+        },
+        {
+          badge: 'AI & MCP',
+          title: 'Model Context Protocol & Skills',
+          desc: 'Gateway oficial MCP para Claude Desktop, Cursor y agentes autónomos conectando BPE, Spine, Cubing y Preflight.',
+          href: 'https://docs.printprice.pro/docs/api/mcp-server-and-skills'
         }
       ],
       ctaFinalTitle: '¿Listo para conectar tu ERP, e-commerce o flujo editorial?',
@@ -456,6 +463,12 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
           title: 'API Overview & OpenAPI 3.1 Bundles',
           desc: 'Master production endpoint inventory, downloadable OpenAPI YAML specifications, and partner onboarding gates.',
           href: 'https://docs.printprice.pro/docs/api/overview'
+        },
+        {
+          badge: 'AI & MCP',
+          title: 'Model Context Protocol & Skills',
+          desc: 'Official Model Context Protocol server for Claude Desktop, Cursor, and autonomous agents connecting BPE, Spine, Cubing, and Preflight.',
+          href: 'https://docs.printprice.pro/docs/api/mcp-server-and-skills'
         }
       ],
       ctaFinalTitle: 'Ready to connect your ERP, storefront, or publishing workflow?',
@@ -559,6 +572,12 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
           title: 'API Overview & OpenAPI 3.1 Bundles',
           desc: 'Vollständiges Endpunktverzeichnis, OpenAPI-YAML-Downloads und Partner-Authentifizierung.',
           href: 'https://docs.printprice.pro/docs/api/overview'
+        },
+        {
+          badge: 'AI & MCP',
+          title: 'Model Context Protocol & Skills',
+          desc: 'Offizieller MCP-Server für Claude Desktop, Cursor und autonome Agenten zur Anbindung von BPE, Spine, Cubing und Preflight.',
+          href: 'https://docs.printprice.pro/docs/api/mcp-server-and-skills'
         }
       ],
       ctaFinalTitle: 'Bereit, Ihr ERP, Ihren Shop oder Ihr Verlagssystem anzubinden?',
@@ -1183,6 +1202,9 @@ print("Evidence ID:", result["evidenceId"], "Best Offer:", result["offers"][0]["
           ))}
         </div>
       </Section>
+
+      {/* MCP SERVER SHOWCASE */}
+      <McpShowcaseSection id="mcp-server" />
 
       {/* 6. CTA FINAL */}
       <ActionCTA

@@ -211,6 +211,16 @@ export const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
+                <a href="https://mcp.printprice.pro/" target="_blank" rel="noopener noreferrer" style={linkStyle}>
+                  {dict.footer.mcpServerLabel}
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/PrintPriceOS/ppos-mcp-server" target="_blank" rel="noopener noreferrer" style={linkStyle}>
+                  {dict.footer.mcpNpmLabel}
+                </a>
+              </li>
+              <li>
                 <a href="https://docs.printprice.pro/docs/platform/paper-supplier-hub" target="_blank" rel="noopener noreferrer" style={linkStyle}>
                   {dict.nav.paperHub} ↗
                 </a>

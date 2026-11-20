@@ -68,6 +68,13 @@ export const Header: React.FC = () => {
       href: 'https://docs.printprice.pro/docs/platform/paper-supplier-hub',
       external: true,
     },
+    {
+      title: dict.nav.mcpServer,
+      desc: dict.nav.mcpServerDesc,
+      badge: 'MCP · AI',
+      href: 'https://mcp.printprice.pro/',
+      external: true,
+    },
   ];
 
   const STAKEHOLDERS = [
@@ -489,6 +496,15 @@ export const Header: React.FC = () => {
               {locale === 'es' ? 'Docs' : locale === 'de' ? 'Doku' : 'Docs'} ↗
             </a>
 
+            <a
+              href="https://mcp.printprice.pro/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'inherit', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}
+            >
+              MCP Server ↗
+            </a>
+
             <Link href="/faq" style={{ color: 'inherit', textDecoration: 'none', whiteSpace: 'nowrap', flexShrink: 0 }}>
               FAQ
             </Link>
@@ -681,6 +697,9 @@ export const Header: React.FC = () => {
             </Link>
             <a href="https://docs.printprice.pro/docs/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
               {dict.nav.docs} ↗
+            </a>
+            <a href="https://mcp.printprice.pro/" target="_blank" rel="noopener noreferrer" onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
+              {dict.nav.mcpServer} ↗
             </a>
             <a href="https://control.printprice.pro/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-primary)', textDecoration: 'none' }}>
               Control Plane ({locale === 'es' ? 'Imprentas' : locale === 'de' ? 'Druckereien' : 'Printers'}) ↗

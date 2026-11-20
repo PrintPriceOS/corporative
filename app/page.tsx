@@ -8,6 +8,7 @@ import { HeroPlatform } from '@/components/monolith/HeroPlatform';
 import { ActionCTA } from '@/components/monolith/ActionCTA';
 import { CorporateBlueprintSection } from '@/components/blueprints/CorporateBlueprintSection';
 import { EnterpriseComparisonMatrix } from '@/components/comparisons/EnterpriseComparisonMatrix';
+import { McpShowcaseSection } from '@/components/monolith/McpShowcaseSection';
 import { useLocale } from '@/lib/i18n';
 import { Calculator, ShieldCheck, Factory, BookOpen, Library, Settings, FileText, PackageCheck, Truck, Layers, Scale, TrendingUp, ArrowUpRight } from 'lucide-react';
 
@@ -795,6 +796,11 @@ export default function Home() {
       </section>
 
       <EnterpriseComparisonMatrix />
+
+      {/* 
+        SECCIÓN MCP SERVER & MODEL CONTEXT PROTOCOL
+      */}
+      <McpShowcaseSection id="mcp-section" />
 
       {/* 
         SECCIÓN ARQUITECTURA CAD INDUSTRIAL (THE OPERATING SYSTEM FOR MODERN PRINT INFRASTRUCTURE)

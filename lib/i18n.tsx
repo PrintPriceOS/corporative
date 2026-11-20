@@ -38,6 +38,8 @@ export interface Translations {
     developersDesc: string;
     paperHub: string;
     paperHubDesc: string;
+    mcpServer: string;
+    mcpServerDesc: string;
     faq: string;
     faqDesc: string;
     contact: string;
@@ -353,12 +355,29 @@ export interface Translations {
     printItLabel: string;
     mockupLabel: string;
     controlPlaneLabel: string;
+    mcpServerLabel: string;
+    mcpNpmLabel: string;
     termsOfService: string;
     privacyPolicy: string;
     legalNotice: string;
     followX: string;
     connectLinkedIn: string;
     facebookPage: string;
+  };
+  mcpSection: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    description: string;
+    pill1: string;
+    pill2: string;
+    pill3: string;
+    remoteEndpoint: string;
+    cliPackage: string;
+    ctaPrimary: string;
+    ctaSecondary: string;
+    copy: string;
+    copied: string;
   };
 }
 
