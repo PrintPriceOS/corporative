@@ -33,6 +33,24 @@ export default function ContactPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
 
+  // Commercial Lead Qualification Form & ROI Calculator State
+  const [leadProfile, setLeadProfile] = useState<'print_house' | 'publisher' | 'developer' | 'paper_supplier'>('print_house');
+  const [companyName, setCompanyName] = useState('');
+  const [contactName, setContactName] = useState('');
+  const [email, setEmail] = useState('');
+  const [country, setCountry] = useState('');
+  const [estimatedVolume, setEstimatedVolume] = useState('15.000 € - 50.000 € / mes');
+  const [message, setMessage] = useState('');
+  const [leadSubmitting, setLeadSubmitting] = useState(false);
+  const [leadError, setLeadError] = useState<string | null>(null);
+  const [leadSuccess, setLeadSuccess] = useState<{
+    leadId: string;
+    planLabel: string;
+    assignedChannel: string;
+    confirmationText: string;
+  } | null>(null);
+  const [roiMonthlyVolume, setRoiMonthlyVolume] = useState<number>(20000);
+
   const texts = {
     es: {
       heroLabel: 'ROUTING OPERATIVO / ASISTENCIA TÉCNICA',
@@ -233,6 +251,14 @@ export default function ContactPage() {
   useEffect(() => {
     setMounted(true);
     trackEvent(events.CONSULT_VIEW);
+
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const prof = params.get('profile');
+      if (prof === 'print_house' || prof === 'publisher' || prof === 'developer' || prof === 'paper_supplier') {
+        setLeadProfile(prof);
+      }
+    }
 
     const historyRaw = typeof window !== 'undefined' ? localStorage.getItem('ppos_telemetry_history') || '[]' : '[]';
     try {
@@ -474,6 +500,316 @@ export default function ContactPage() {
               <p style={{ color: 'var(--text-primary)', fontSize: '1.15rem', fontWeight: 800 }}>{channel.val}</p>
             </div>
           ))}
+        </div>
+      </Section>
+
+      {/* EMBEDED COMMERCIAL LEAD QUALIFICATION & ROI CALCULATOR */}
+      <Section id="lead-qualification" variant="secondary">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2.5rem', alignItems: 'start' }}>
+          {/* Left Column: Qualified Lead Form (<15 min SLA) */}
+          <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)', padding: '2.5rem' }}>
+            <div className="technical-text" style={{ fontSize: '0.72rem', fontWeight: 900, color: 'var(--accent-primary)', letterSpacing: '0.14em', marginBottom: '0.5rem' }}>
+              {locale === 'de' ? 'DIREKTE QUALIFIZIERUNG · SLA < 15 MIN' : locale === 'en' ? 'FAST-TRACK QUALIFICATION · SLA < 15 MIN' : 'ALTA Y CUALIFICACIÓN DIRECTA · SLA < 15 MIN'}
+            </div>
+            <h3 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: '0.75rem', letterSpacing: '-0.02em' }}>
+              {locale === 'de'
+                ? 'Starten Sie Ihre kommerzielle Aktivierung'
+                : locale === 'en'
+                ? 'Request Commercial Onboarding & Licensing'
+                : 'Solicita tu Activación Comercial o Licencia'}
+            </h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.55, marginBottom: '1.5rem' }}>
+              {locale === 'de'
+                ? 'Wählen Sie Ihr Profil. Unser Spezialistenteam antwortet mit Ihren Zugangsdaten in unter 15 Minuten.'
+                : locale === 'en'
+                ? 'Select your profile below. Our specialist desk responds with your onboarding credentials in under 15 minutes.'
+                : 'Selecciona tu perfil. Nuestro equipo especialista te responde con tus credenciales de activación en menos de 15 minutos.'}
+            </p>
+
+            {/* Profile Selector Pills with Official Pricing */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.6rem', marginBottom: '1.5rem' }}>
+              {[
+                {
+                  id: 'print_house' as const,
+                  label: locale === 'de' ? 'Druckerei / Werkstatt' : locale === 'en' ? 'Printhouse / Plant' : 'Imprenta / Taller',
+                  tier: locale === 'de' ? '500 €/Jahr + 4% Mkt' : locale === 'en' ? '€500/yr + 4% Mkt' : '500 €/año + 4% Mkt',
+                },
+                {
+                  id: 'publisher' as const,
+                  label: locale === 'de' ? 'Verlag / Autor' : locale === 'en' ? 'Publisher / Author' : 'Editorial / Autor',
+                  tier: locale === 'de' ? '0 €/Monat (Pay-per-Run)' : locale === 'en' ? '€0/mo (Pay-per-Run)' : '0 €/mes (Pago por uso)',
+                },
+                {
+                  id: 'developer' as const,
+                  label: locale === 'de' ? 'Entwickler API / MCP' : locale === 'en' ? 'Developer API / MCP' : 'Desarrollador API / MCP',
+                  tier: locale === 'de' ? '45 €/Monat (API & MCP)' : locale === 'en' ? '€45/mo (API & MCP)' : '45 €/mes (API & MCP)',
+                },
+                {
+                  id: 'paper_supplier' as const,
+                  label: locale === 'de' ? 'Papierlieferant' : locale === 'en' ? 'Paper Supplier' : 'Proveedor de Papel',
+                  tier: 'Paper Supplier Hub',
+                },
+              ].map((p) => (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => setLeadProfile(p.id)}
+                  style={{
+                    textAlign: 'left',
+                    padding: '0.75rem 0.9rem',
+                    background: leadProfile === p.id ? 'rgba(220, 0, 0, 0.12)' : 'var(--bg-secondary)',
+                    border: leadProfile === p.id ? '1px solid var(--accent-primary)' : '1px solid var(--border-color)',
+                    color: 'var(--text-primary)',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  <div style={{ fontSize: '0.82rem', fontWeight: 800 }}>{p.label}</div>
+                  <div className="technical-text" style={{ fontSize: '0.68rem', color: 'var(--accent-primary)', fontWeight: 700, marginTop: '0.2rem' }}>
+                    {p.tier}
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            {leadSuccess ? (
+              <div style={{ padding: '1.75rem', background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.4)' }}>
+                <div className="technical-text" style={{ fontSize: '0.72rem', fontWeight: 900, color: '#10b981', letterSpacing: '0.12em', marginBottom: '0.5rem' }}>
+                  ✓ {leadSuccess.leadId} · SLA &lt; 15 MIN
+                </div>
+                <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+                  {leadSuccess.planLabel}
+                </div>
+                <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.55, margin: 0 }}>
+                  {leadSuccess.confirmationText.replace(/\*\*/g, '')}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setLeadSuccess(null);
+                    setMessage('');
+                  }}
+                  style={{
+                    marginTop: '1.25rem',
+                    padding: '0.5rem 1rem',
+                    background: 'var(--bg-secondary)',
+                    border: '1px solid var(--border-color)',
+                    color: 'var(--text-primary)',
+                    fontSize: '0.78rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {locale === 'de' ? 'Neue Anfrage senden' : locale === 'en' ? 'Submit another inquiry' : 'Enviar otra consulta'}
+                </button>
+              </div>
+            ) : (
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  setLeadError(null);
+                  setLeadSubmitting(true);
+                  try {
+                    const res = await fetch('/api/leads', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        profile: leadProfile,
+                        companyName,
+                        contactName,
+                        email,
+                        country,
+                        estimatedVolume,
+                        message,
+                        locale,
+                      }),
+                    });
+                    const data = await res.json();
+                    if (!res.ok || !data.ok) {
+                      setLeadError(data.error || 'Error submitting request');
+                    } else {
+                      setLeadSuccess(data);
+                    }
+                  } catch {
+                    setLeadError('Network error submitting inquiry');
+                  } finally {
+                    setLeadSubmitting(false);
+                  }
+                }}
+                style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+              >
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
+                  <input
+                    type="text"
+                    required
+                    minLength={2}
+                    maxLength={100}
+                    value={companyName}
+                    onChange={(e) => setCompanyName(e.target.value)}
+                    placeholder={locale === 'de' ? 'Unternehmen / Verlag / Druckerei *' : locale === 'en' ? 'Company / Printhouse / Publisher *' : 'Empresa / Imprenta / Editorial *'}
+                    style={{ padding: '0.75rem 0.9rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', fontSize: '0.85rem' }}
+                  />
+                  <input
+                    type="text"
+                    required
+                    minLength={2}
+                    maxLength={100}
+                    value={contactName}
+                    onChange={(e) => setContactName(e.target.value)}
+                    placeholder={locale === 'de' ? 'Ansprechpartner *' : locale === 'en' ? 'Contact Name *' : 'Nombre de contacto *'}
+                    style={{ padding: '0.75rem 0.9rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', fontSize: '0.85rem' }}
+                  />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
+                  <input
+                    type="email"
+                    required
+                    maxLength={140}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder={locale === 'de' ? 'Geschäftliche E-Mail *' : locale === 'en' ? 'Business Email *' : 'Email corporativo *'}
+                    style={{ padding: '0.75rem 0.9rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', fontSize: '0.85rem' }}
+                  />
+                  <input
+                    type="text"
+                    required
+                    minLength={2}
+                    maxLength={50}
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                    placeholder={locale === 'de' ? 'Land (z. B. Deutschland, Spanien) *' : locale === 'en' ? 'Country (e.g. Spain, Germany, UK) *' : 'País (ej. España, Alemania) *'}
+                    style={{ padding: '0.75rem 0.9rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', fontSize: '0.85rem' }}
+                  />
+                </div>
+
+                <textarea
+                  rows={3}
+                  maxLength={800}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder={
+                    locale === 'de'
+                      ? 'Maschinenpark (Offset B1/B2, Digital), monatliches Druckvolumen oder API/MCP-Anwendungsfall...'
+                      : locale === 'en'
+                      ? 'Press fleet (Offset B1/B2, Digital), monthly print volume, or API/MCP integration scope...'
+                      : 'Parque de maquinaria (Offset B1/B2, Digital), tiradas habituales o alcance de integración API/MCP...'
+                  }
+                  style={{ padding: '0.75rem 0.9rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', fontSize: '0.85rem', resize: 'vertical' }}
+                />
+
+                {leadError && (
+                  <div style={{ color: '#ef4444', fontSize: '0.8rem', fontWeight: 700 }}>
+                    {leadError}
+                  </div>
+                )}
+
+                <Button type="submit" size="lg" disabled={leadSubmitting}>
+                  {leadSubmitting
+                    ? locale === 'de'
+                      ? 'Wird gesendet...'
+                      : locale === 'en'
+                      ? 'Submitting...'
+                      : 'Enviando solicitud...'
+                    : locale === 'de'
+                    ? 'Qualifizierte Anfrage senden (SLA < 15 Min) ➔'
+                    : locale === 'en'
+                    ? 'Submit Qualified Request (SLA < 15 min) ➔'
+                    : 'Enviar Solicitud Cualificada (SLA < 15 min) ➔'}
+                </Button>
+              </form>
+            )}
+          </div>
+
+          {/* Right Column: Interactive B2B ROI & Transparent Fee Calculator */}
+          <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)', padding: '2.5rem' }}>
+            <div className="technical-text" style={{ fontSize: '0.72rem', fontWeight: 900, color: 'var(--accent-primary)', letterSpacing: '0.14em', marginBottom: '0.5rem' }}>
+              {locale === 'de' ? 'ROI- & GEBÜHRENRECHNER (TRANSPARENZ)' : locale === 'en' ? 'TRANSPARENT ROI & FEE CALCULATOR' : 'CALCULADORA DE ROI Y TRANSPARENCIA COMERCIAL'}
+            </div>
+            <h3 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: '0.75rem', letterSpacing: '-0.02em' }}>
+              {locale === 'de'
+                ? '500 €/Jahr + 4 % vs. Traditionelle Broker (15 %)'
+                : locale === 'en'
+                ? '€500/yr + 4% vs. Traditional Print Brokers (15%)'
+                : '500 €/año + 4 % frente a Brokers y SaaS Legacy (15 %)'}
+            </h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.55, marginBottom: '1.5rem' }}>
+              {locale === 'de'
+                ? 'Simulieren Sie Ihre jährliche Ersparnis im Vergleich zu klassischen Druckvermittlern (15 % Marge + 350 €/Monat ERP-Gebühr).'
+                : locale === 'en'
+                ? 'Simulate your annual net savings compared to traditional print brokers (15% commission + €350/mo legacy SaaS fee).'
+                : 'Simula el ahorro neto anual de tu imprenta o editorial frente a intermediarios tradicionales (15 % comisión + 350 €/mes cuota SaaS).'}
+            </p>
+
+            <div style={{ marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                <span className="technical-text" style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-muted)' }}>
+                  {locale === 'de' ? 'MONATLICHES DRUCKVOLUMEN' : locale === 'en' ? 'MONTHLY TRANSACTED PRINT VOLUME' : 'VOLUMEN MENSUAL TRANSACCIONADO'}
+                </span>
+                <span style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--accent-primary)' }}>
+                  {roiMonthlyVolume.toLocaleString('es-ES')} € / {locale === 'de' ? 'Monat' : locale === 'en' ? 'mo' : 'mes'}
+                </span>
+              </div>
+              <input
+                type="range"
+                min={5000}
+                max={100000}
+                step={5000}
+                value={roiMonthlyVolume}
+                onChange={(e) => setRoiMonthlyVolume(Number(e.target.value))}
+                style={{ width: '100%', accentColor: 'var(--accent-primary)', cursor: 'pointer' }}
+              />
+            </div>
+
+            {(() => {
+              const annualVol = roiMonthlyVolume * 12;
+              const pposAnnualCost = 500 + Math.round(annualVol * 0.04);
+              const legacyAnnualCost = 350 * 12 + Math.round(annualVol * 0.15);
+              const netAnnualSavings = legacyAnnualCost - pposAnnualCost;
+
+              return (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <div style={{ padding: '1.25rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+                      <div className="technical-text" style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontWeight: 800 }}>
+                        {locale === 'de' ? 'BROKER / LEGACY SAAS (15% + 350€/M)' : locale === 'en' ? 'TRADITIONAL BROKER (15% + €350/MO)' : 'BROKER / SAAS LEGACY (15% + 350€/M)'}
+                      </div>
+                      <div style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-secondary)', marginTop: '0.4rem' }}>
+                        {legacyAnnualCost.toLocaleString('es-ES')} € / {locale === 'de' ? 'Jahr' : locale === 'en' ? 'yr' : 'año'}
+                      </div>
+                    </div>
+
+                    <div style={{ padding: '1.25rem', background: 'rgba(220, 0, 0, 0.08)', border: '1px solid var(--accent-primary)' }}>
+                      <div className="technical-text" style={{ fontSize: '0.68rem', color: 'var(--accent-primary)', fontWeight: 900 }}>
+                        PRINTPRICE PRO (500€/AÑO + 4%)
+                      </div>
+                      <div style={{ fontSize: '1.35rem', fontWeight: 900, color: 'var(--text-primary)', marginTop: '0.4rem' }}>
+                        {pposAnnualCost.toLocaleString('es-ES')} € / {locale === 'de' ? 'Jahr' : locale === 'en' ? 'yr' : 'año'}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ padding: '1.35rem', background: 'var(--bg-secondary)', borderLeft: '4px solid #10b981', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <div className="technical-text" style={{ fontSize: '0.72rem', fontWeight: 900, color: '#10b981' }}>
+                        {locale === 'de' ? 'NETTO-ERSPARNIS PRO JAHR' : locale === 'en' ? 'NET ANNUAL MARGIN RETAINED' : 'AHORRO NETO ANUAL RETENIDO'}
+                      </div>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
+                        {locale === 'de'
+                          ? `Bei ${annualVol.toLocaleString('es-ES')} € Jahresvolumen`
+                          : locale === 'en'
+                          ? `On €${annualVol.toLocaleString('es-ES')} annual print volume`
+                          : `Sobre ${annualVol.toLocaleString('es-ES')} € de producción anual`}
+                      </div>
+                    </div>
+                    <div style={{ fontSize: '1.65rem', fontWeight: 900, color: '#10b981' }}>
+                      +{netAnnualSavings.toLocaleString('es-ES')} €
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
         </div>
       </Section>
 

@@ -66,6 +66,22 @@ export const VERIFIED_ECOSYSTEM_URLS: Record<string, { label: { es: string; en: 
     label: { es: 'Contactar con el Equipo Comercial ➔', en: 'Contact Sales Team ➔', de: 'Vertriebsteam kontaktieren ➔' },
     external: false,
   },
+  '/contact?profile=print_house': {
+    label: { es: 'Alta de Imprenta (500 €/año) ➔', en: 'Printhouse Onboarding (€500/yr) ➔', de: 'Druckerei-Anmeldung (500 €/Jahr) ➔' },
+    external: false,
+  },
+  '/contact?profile=developer': {
+    label: { es: 'Solicitar Plan API & MCP (45 €/mes) ➔', en: 'Request API & MCP Plan (€45/mo) ➔', de: 'API & MCP Plan anfordern (45 €/Monat) ➔' },
+    external: false,
+  },
+  '/contact?profile=publisher': {
+    label: { es: 'Atención a Editoriales (0 €/mes) ➔', en: 'Publisher Desk (€0/mo) ➔', de: 'Verlagsberatung (0 €/Monat) ➔' },
+    external: false,
+  },
+  '/contact?profile=paper_supplier': {
+    label: { es: 'Alta en Paper Supplier Hub ➔', en: 'Paper Supplier Hub Onboarding ➔', de: 'Paper Supplier Hub Anmeldung ➔' },
+    external: false,
+  },
   '/for-publishers': {
     label: { es: 'Solución para Editoriales ➔', en: 'Solutions for Publishers ➔', de: 'Lösungen für Verlage ➔' },
     external: false,
@@ -229,6 +245,10 @@ REGLAS PARA CTAS (CALL TO ACTION):
   https://docs.printprice.pro/
   https://docs.printprice.pro/docs/api/mcp-server-and-skills
   /contact
+  /contact?profile=print_house
+  /contact?profile=developer
+  /contact?profile=publisher
+  /contact?profile=paper_supplier
   /for-publishers
   /for-authors
   /for-printhouses

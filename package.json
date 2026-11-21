@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "concierge:stats": "node scripts/concierge_stats.mjs"
+    "concierge:stats": "node scripts/concierge_stats.mjs",
+    "leads:stats": "node scripts/leads_stats.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
