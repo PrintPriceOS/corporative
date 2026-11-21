@@ -126,8 +126,9 @@ export const DotFloatingChatWidget: React.FC = () => {
         .filter((m) => m.text && m.text.trim())
         .map((m) => ({
           role: m.sender === 'user' ? 'user' : 'assistant',
-          content: m.text,
-        }));
+          content: m.text.slice(0, 800),
+        }))
+        .slice(-6);
 
       const res = await fetch('/api/concierge', {
         method: 'POST',
@@ -142,8 +143,11 @@ export const DotFloatingChatWidget: React.FC = () => {
       let replyText = '';
       let replyCtas: ChatCta[] | undefined;
 
-      if (res.ok) {
-        const data = await res.json();
+      const data = await res.json().catch(() => null);
+      if (res.ok && data?.reply) {
+        replyText = data.reply;
+        replyCtas = data.ctas;
+      } else if ((res.status === 400 || res.status === 429) && data?.reply) {
         replyText = data.reply;
         replyCtas = data.ctas;
       } else {
@@ -578,6 +582,7 @@ export const DotFloatingChatWidget: React.FC = () => {
           >
             <input
               type="text"
+              maxLength={500}
               value={inputValue}
               onChange={handleInputChange}
               onFocus={handleInputFocus}
